@@ -1,0 +1,112 @@
+﻿.app-header {
+    height: 72.8px;
+    padding: 16px 32px;
+    background: #fff;
+    border-bottom: 0.8px solid #E5E7EB;
+    box-sizing: border-box;
+}
+
+.app-header-title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 28px;
+    color: #1E2939;
+}
+
+.app-search {
+    width: 256px;
+}
+
+.app-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #99A1AF;
+    font-size: 16px;
+}
+
+.app-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 16px 8px 40px;
+    border: 0.8px solid #D1D5DC;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #0A0A0A;
+}
+
+    .app-search-input::placeholder {
+        color: rgba(10, 10, 10, 0.5);
+    }
+
+.app-icon-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #364153;
+}
+
+.app-notification-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    top: 4px;
+    right: 6px;
+    background: #FB2C36;
+    border-radius: 50%;
+}
+
+.app-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #D1D5DC;
+}
+
+.app-time {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: #101828;
+}
+
+.app-date {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #6A7282;
+}
+
+.app-lang-btn {
+    gap: 6px;
+    padding: 6px 10px;
+    background: #F3F4F6;
+    border: 0.8px solid #E5E7EB;
+    border-radius: 10px;
+}
+
+.app-lang-flag {
+    font-size: 16px;
+}
+
+.app-lang-code {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    color: #4A5565;
+}
+.app-lang-flag-img {
+    width: 16px;
+    height: auto;
+}
+
+.dropdown-flag-img {
+    width: 16px;
+    height: auto;
+}

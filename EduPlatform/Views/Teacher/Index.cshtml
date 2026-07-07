@@ -1,0 +1,94 @@
+﻿@model EduPlatform.ViewModels.TeacherProfileViewModel
+@{
+    ViewData["Title"] = "Անձնական էջ";
+}
+
+<div class="teacher-profile-card">
+    <div class="teacher-profile-banner position-relative">
+        <span class="banner-blur banner-blur-1"></span>
+        <span class="banner-blur banner-blur-2"></span>
+        <span class="banner-blur banner-blur-3"></span>
+        <svg class="banner-wave" viewBox="0 0 1440 100" preserveAspectRatio="none">
+            <path fill="#ffffff" d="M0,20 C400,10 900,70 1440,90 L1440,100 L0,100 Z"></path>
+        </svg>
+    </div>
+
+    <div class="teacher-profile-info p-4 pt-4">
+        <h1 class="teacher-profile-name mb-0">@Model.FullName</h1>
+        <p class="teacher-profile-role mt-1">@Model.Role</p>
+
+        <div class="d-flex align-items-center flex-wrap gap-3 mt-3">
+            <div class="teacher-profile-avatar-wrap position-relative flex-shrink-0">
+                <div class="teacher-profile-avatar" style="background-image:url('@Model.PhotoUrl')"></div>
+                <div class="voluntary-certification position-absolute d-flex align-items-center justify-content-center"
+                     data-bs-toggle="tooltip" data-bs-placement="top" title="@Model.VoluntaryCertification">
+                    <i class="bi bi-patch-check-fill"></i>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 flex-grow-1">
+                <div class="profile-chip chip-blue d-flex align-items-center gap-2 p-2">
+                    <div class="chip-icon d-flex align-items-center justify-content-center flex-shrink-0"><i class="bi bi-envelope-fill"></i></div>
+                    <div>
+                        <div class="chip-label">Էլ. հասցե</div>
+                        <div class="chip-value">@Model.Email</div>
+                    </div>
+                </div>
+
+                <div class="profile-chip chip-purple d-flex align-items-center gap-2 p-2">
+                    <div class="chip-icon d-flex align-items-center justify-content-center flex-shrink-0"><i class="bi bi-building"></i></div>
+                    <div>
+                        <div class="chip-label">Դպրոց</div>
+                        <div class="chip-value">@Model.SchoolName</div>
+                    </div>
+                </div>
+
+                <div class="profile-chip chip-green d-flex align-items-center gap-2 p-2">
+                    <div class="chip-icon d-flex align-items-center justify-content-center flex-shrink-0"><i class="bi bi-book-half"></i></div>
+                    <div>
+                        <div class="chip-label">Առարկա</div>
+                        <div class="chip-value">@Model.Subjects</div>
+                    </div>
+                </div>
+
+                <div class="profile-chip chip-orange d-flex align-items-center gap-2 p-2">
+                    <div class="chip-icon d-flex align-items-center justify-content-center flex-shrink-0"><i class="bi bi-award-fill"></i></div>
+                    <div>
+                        <div class="chip-label">Տարակարգ</div>
+                        <div class="chip-value">@Model.DigitLevel</div>
+                    </div>
+                </div>
+
+                <div class="profile-chip chip-indigo d-flex align-items-center gap-2 p-2">
+                    <div class="chip-icon d-flex align-items-center justify-content-center flex-shrink-0"><i class="bi bi-telephone-fill"></i></div>
+                    <div>
+                        <div class="chip-label">Հեռախոս</div>
+                        <div class="chip-value">@Model.PhoneNumber</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="teacher-profile-bio d-flex align-items-start gap-3 mt-3 p-3">
+            <div class="bio-icon d-flex align-items-center justify-content-center flex-shrink-0"><i class="bi bi-info-circle-fill"></i></div>
+            <div>
+                <div class="bio-label">Մասնագիտական նվաճումներ</div>
+                <p class="bio-text mb-0">@Model.ProfessionalAchievements</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/teacher-profile.css" />
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+                new bootstrap.Tooltip(el);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,247 @@
+﻿:root {
+    --sidebar-width: 320px;
+    --sidebar-collapsed-width: 80px;
+}
+
+body {
+    margin: 0;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: sticky;
+    z-index: 10;
+    overflow: visible;
+    top: 0;
+    transition: width .2s ease;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FDFDFF 7.14%, #FAFBFF 14.29%, #F8F8FF 21.43%, #F5F6FF 28.57%, #F3F4FF 35.71%, #F0F2FF 42.86%, #EEF0FF 50%, #EBEDFF 57.14%, #E9EBFF 64.29%, #E7E9FF 71.43%, #E4E7FF 78.57%, #E2E4FF 85.71%, #DFE2FF 92.86%, #DDE0FF 100%);
+    box-shadow: 0px 10px 15px -3px rgba(0,0,0,.1), 0px 4px 6px -4px rgba(0,0,0,.1);
+}
+
+/* ── Top bar (flag + IP) ──────────────────────────────────────────── */
+.sidebar-topbar {
+    background: #8789FF;
+    padding: 8px 24px;
+}
+
+.sidebar-ip {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 17px;
+    color: #fff;
+}
+
+.sidebar-flag {
+    width: 28px;
+    height: 16px;
+}
+
+/* ── Logo (text is baked into the image itself) ──────────────────── */
+.sidebar-brand {
+    padding: 24px 32px;
+}
+
+.sidebar-logo {
+    width: 160px;
+    height: 105.56px;
+}
+
+/* ── Icons ─────────────────────────────────────────────────────────── */
+.sidebar-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.sidebar-icon-lg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+/* ── Top-level items ──────────────────────────────────────────────── */
+.sidebar-item {
+    margin-top: 16px;
+    padding: 0 8px;
+}
+
+    .sidebar-item:first-child {
+        margin-top: 0;
+    }
+
+.sidebar-link {
+    color: #4A5565; /* icon color, inherited by the SVG via currentColor */
+    padding: 16px;
+    border-radius: 10px;
+}
+
+    .sidebar-link .sidebar-label {
+        color: #364153; /* text color — explicit, overrides the link's own color */
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+/* ── Submenu items ────────────────────────────────────────────────── */
+.sidebar-submenu {
+    display: none;
+    padding: 4px 0 4px 24px;
+}
+
+    .sidebar-submenu li {
+        margin-top: 4px;
+    }
+
+        .sidebar-submenu li:first-child {
+            margin-top: 0;
+        }
+
+    .sidebar-submenu a {
+        color: #6A7282;
+        padding: 12px 16px;
+        border-radius: 10px;
+    }
+        .sidebar-submenu a:hover {
+            background: #F3F4F6;
+        }
+
+        .sidebar-submenu a span {
+            color: #364153;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+/* ── Header inside the flyout submenu (parent's own name) — collapsed only ── */
+.sidebar-submenu-header {
+    display: none;
+    font-weight: 700;
+    font-size: 14px;
+    color: #364153;
+    padding: 8px 16px;
+    border-bottom: 1px solid #eee;
+}
+
+
+.sidebar.collapsed .sidebar-submenu-header {
+    display: block;
+}
+
+/* ── Tooltip for leaf items (no submenu) — collapsed only ─────────── */
+.sidebar-tooltip {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-item:hover .sidebar-tooltip {
+    display: block;
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 8px;
+    background: #fff;
+    box-shadow: 2px 2px 8px rgba(0,0,0,.12);
+    border-radius: 999px;
+    padding: 8px 16px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 14px;
+    color: #364153;
+}
+
+/* ── Active (selected) item ───────────────────────────────────────── */
+.sidebar-link.active,
+.sidebar-submenu a.active {
+    background: #fff;
+    border-left: 4px solid #6D72EA;
+    box-sizing: border-box;
+    color: #6D72EA;
+}
+
+    .sidebar-link.active .sidebar-label,
+    .sidebar-submenu a.active span {
+        color: #6D72EA;
+    }
+
+/* ── Caret rotation ───────────────────────────────────────────────── */
+.sidebar-caret {
+    transition: transform .2s ease;
+}
+
+.sidebar-item.open .sidebar-caret {
+    transform: rotate(180deg);
+}
+
+.sidebar-item.open .sidebar-submenu {
+    display: block;
+}
+
+/* ── Collapse toggle button ───────────────────────────────────────── */
+.sidebar-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: calc(100% - 2rem);
+    background: #6369D4;
+    box-shadow: 0px 4px 6px -1px rgba(0,0,0,.1), 0px 2px 4px -2px rgba(0,0,0,.1);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #fff;
+    border: none;
+}
+
+.sidebar.collapsed .sidebar-toggle-btn {
+    width: 48px;
+    height: 44px;
+    padding: 12px 16px;
+}
+
+.sidebar.collapsed .sidebar-toggle-label {
+    display: none;
+}
+
+/* ── Collapsed state ──────────────────────────────────────────────── */
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+    .sidebar.collapsed .sidebar-label,
+    .sidebar.collapsed .sidebar-caret {
+        display: none;
+    }
+
+    .sidebar.collapsed .sidebar-topbar {
+        display: none !important;
+    }
+
+    .sidebar.collapsed .sidebar-logo {
+        width: 40px;
+        height: 26.39px;
+    }
+
+    .sidebar.collapsed .sidebar-brand {
+        padding: 8px 0;
+    }
+
+    .sidebar.collapsed .sidebar-link {
+        justify-content: center;
+    }
+
+        .sidebar.collapsed .sidebar-link.active {
+            border: 1.6px solid #6D72EA;
+            background: #fff;
+        }
+
+    .sidebar.collapsed .sidebar-item:hover .sidebar-submenu {
+        display: block;
+        position: absolute;
+        left: 100%;
+        top: 0;
+        width: 220px;
+        background: #fff;
+        box-shadow: 2px 2px 8px rgba(0,0,0,.12);
+        z-index: 9999;
+        padding: 8px !important;
+    }

@@ -1,8 +1,10 @@
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using EduPlatform.Data;
+using EduPlatform.Services;
 using Serilog;
 using StackExchange.Redis;
 
@@ -24,6 +26,10 @@ builder.Services.AddDbContext<EduPlatformDbContext>(options =>
 // Redis
 builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
     ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis") + ",abortConnect=false"));
+
+// IP geolocation (used by the sidebar flag)
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IIpGeolocationService, IpGeolocationService>();
 
 // SignalR + Redis backplane
 builder.Services.AddSignalR()
@@ -80,6 +86,12 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("TeacherOrPupil", p => p.RequireRole("Teacher", "Pupil"));
 });
 
+// Localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "");
+
+// Sidebar menu builder (localized)
+builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -92,14 +104,21 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseAuthentication();   // ← added
+var supportedCultures = new[] { "hy", "ru", "en" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("hy")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+app.UseRequestLocalization(localizationOptions);
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Teacher}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.Run();

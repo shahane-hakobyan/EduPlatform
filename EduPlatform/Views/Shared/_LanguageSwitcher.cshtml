@@ -1,0 +1,45 @@
+﻿@{
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var (currentFlagCode, currentCode) = currentCulture switch
+    {
+        "ru" => ("ru", "РУС"),
+        "en" => ("gb", "ENG"),
+        _ => ("am", "ՀԱՅ"),
+    };
+    var returnUrl = Context.Request.Path.Value;
+}
+<div class="dropdown">
+    <button type="button" class="app-lang-btn d-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="~/images/flags/@(currentFlagCode).svg" class="app-lang-flag-img" alt="@currentCode" />
+        <span class="app-lang-code">@currentCode</span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+            <form asp-controller="Home" asp-action="SetLanguage" method="post">
+                <input type="hidden" name="culture" value="hy" />
+                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                    <img src="~/images/flags/am.svg" class="dropdown-flag-img" alt="AM" /> Հայերեն
+                </button>
+            </form>
+        </li>
+        <li>
+            <form asp-controller="Home" asp-action="SetLanguage" method="post">
+                <input type="hidden" name="culture" value="ru" />
+                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                    <img src="~/images/flags/ru.svg" class="dropdown-flag-img" alt="RU" /> Русский
+                </button>
+            </form>
+        </li>
+        <li>
+            <form asp-controller="Home" asp-action="SetLanguage" method="post">
+                <input type="hidden" name="culture" value="en" />
+                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                    <img src="~/images/flags/gb.svg" class="dropdown-flag-img" alt="GB" /> English
+                </button>
+            </form>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,62 @@
+﻿@model List<EduPlatform.Models.SidebarMenuItem>
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    var currentPath = Context.Request.Path.Value;
+}
+
+<aside class="sidebar d-flex flex-column bg-light" id="sidebar">
+
+    <div class="sidebar-topbar d-flex align-items-center gap-2 px-3 py-2">
+        <img src="~/images/flags/@(ViewBag.CountryCode).svg" class="sidebar-flag" alt="@ViewBag.CountryCode" />
+        <span class="sidebar-ip">IP: @ViewBag.UserIp</span>
+    </div>
+
+    <div class="sidebar-brand text-center">
+        <a href="https://dshh.am/am" target="_blank" rel="noopener noreferrer">
+            <img src="~/images/logo.png" class="sidebar-logo" alt="Textbook and ICT Revolving Fund" />
+        </a>
+    </div>
+
+    <ul class="list-unstyled flex-grow-1 mb-0">
+        @foreach (var item in Model)
+        {
+            var hasActiveChild = item.Children.Any(c => c.Url == currentPath);
+            <li class="sidebar-item position-relative @(hasActiveChild ? "open" : "")">
+                <a href="@(item.Url ?? "#")" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 text-decoration-none text-nowrap @(currentPath == item.Url ? "active" : "")">
+                    @Html.Raw(item.IconSvg)
+                    <span class="sidebar-label">@item.Label</span>
+                    @if (item.Children.Any())
+                    {
+                        <i class="bi bi-chevron-down sidebar-caret ms-auto"></i>
+                    }
+                </a>
+
+                @if (!item.Children.Any())
+                {
+                    <span class="sidebar-tooltip">@item.Label</span>
+                }
+
+                @if (item.Children.Any())
+                {
+                    <ul class="sidebar-submenu list-unstyled ps-4">
+                        <li class="sidebar-submenu-header">@item.Label</li>
+                        @foreach (var child in item.Children)
+                        {
+                            <li>
+                                <a href="@child.Url" class="d-flex align-items-center gap-2 py-2 text-decoration-none @(currentPath == child.Url ? "active" : "")">
+                                    @Html.Raw(child.IconSvg)
+                                    <span>@child.Label</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ul>
+
+    <button type="button" class="btn btn-primary sidebar-toggle-btn m-3" id="sidebarToggle" aria-label="Toggle menu">
+        <i class="bi bi-chevron-left"></i>
+        <span class="sidebar-toggle-label">@Localizer["Close"]</span>
+    </button>
+</aside>
