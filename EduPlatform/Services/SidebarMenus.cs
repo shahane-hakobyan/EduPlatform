@@ -7,6 +7,7 @@ namespace EduPlatform.Services
     public interface ISidebarMenuBuilder
     {
         List<SidebarMenuItem> ForTeacher();
+        List<SidebarMenuItem> FooterForTeacher();
     }
 
     public class SidebarMenuBuilder : ISidebarMenuBuilder
@@ -27,7 +28,8 @@ namespace EduPlatform.Services
 
         private SidebarMenuItem Logout() =>
             new() { Label = _l["Logout"], IconSvg = SidebarIcons.Logout, Url = "/Account/Logout" };
-
+        private SidebarMenuItem Settings(string url) =>
+            new() { Label = _l["Settings"], IconSvg = SidebarIcons.Settings, Url = url };
         private SidebarMenuItem AvailableMaterials(string baseUrl) => new()
         {
             Label = _l["AvailableMaterials"],
@@ -41,34 +43,26 @@ namespace EduPlatform.Services
             }
         };
 
-        // ── Teacher composition ──────────────────────────────────────────
-        public List<SidebarMenuItem> ForTeacher() => new()
-        {
+        public List<SidebarMenuItem> ForTeacher() => new() {
             PersonalPage("/Teacher"),
             AvailableMaterials("/Teacher"),
-            new()
-            {
-                Label = _l["MyBookshelf"], IconSvg = SidebarIcons.Repository,
-                Children =
-                {
-                    new() { Label = _l["MyTools"],             IconSvg = SidebarIcons.Tools,            Url = "/Teacher/Repository/Tools" },
-                    new() { Label = _l["MyCreatedMaterials"],  IconSvg = SidebarIcons.CreatedMaterials, Url = "/Teacher/Repository/CreatedMaterials" },
-                    new() { Label = _l["MyExpertise"],         IconSvg = SidebarIcons.Expertise,        Url = "/Teacher/Repository/Expertise" },
-                    new() { Label = _l["Assignments"],         IconSvg = SidebarIcons.Assignments,      Url = "/Teacher/Repository/Assignments" },
-                }
-            },
-            new()
-            {
-                Label = _l["StudentAssessment"], IconSvg = SidebarIcons.Assessment,
-                Children =
-                {
-                    new() { Label = _l["MyLogbook"],   IconSvg = SidebarIcons.Journal, Url = "/Teacher/Assessment/Journal" },
-                    new() { Label = _l["AIAssessment"], IconSvg = SidebarIcons.AbScore, Url = "/Teacher/Assessment/AbScore" },
-                }
-            },
+            new() { Label = _l["MyBookshelf"], IconSvg = SidebarIcons.Repository, Children = {
+                new() { Label = _l["MyTools"], IconSvg = SidebarIcons.Tools, Url = "/Teacher/Repository/Tools" },
+                new() { Label = _l["MyCreatedMaterials"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Teacher/Repository/CreatedMaterials" },
+                new() { Label = _l["MyExpertise"], IconSvg = SidebarIcons.Expertise, Url = "/Teacher/Repository/Expertise" },
+                new() { Label = _l["Assignments"], IconSvg = SidebarIcons.Assignments, Url = "/Teacher/Repository/Assignments" },
+            }},
+            new() { Label = _l["StudentAssessment"], IconSvg = SidebarIcons.Assessment, Children = {
+                new() { Label = _l["MyLogbook"], IconSvg = SidebarIcons.Journal, Url = "/Teacher/Assessment/Journal" },
+                new() { Label = _l["AIAssessment"], IconSvg = SidebarIcons.AIScore, Url = "/Teacher/Assessment/AIScore" },
+            }},
             Groups("/Teacher/Groups"),
-            new() { Label = _l["AIChat"],        IconSvg = SidebarIcons.AbChat,     Url = "/Teacher/AbChat" },
-            new() { Label = _l["MyStatistics"],  IconSvg = SidebarIcons.Statistics, Url = "/Teacher/Statistics" },
+            new() { Label = _l["AIChat"], IconSvg = SidebarIcons.AbChat, Url = "/Teacher/AbChat" },
+        };
+
+         public List<SidebarMenuItem> FooterForTeacher() => new() {
+            new() { Label = _l["MyStatistics"], IconSvg = SidebarIcons.Statistics, Url = "/Teacher/Statistics" },
+            Settings("/Teacher/Settings"),
             Logout(),
         };
     }

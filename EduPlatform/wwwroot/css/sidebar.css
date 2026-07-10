@@ -14,14 +14,19 @@ body {
     z-index: 10;
     overflow: visible;
     top: 0;
-    transition: width .2s ease;
-    background: linear-gradient(180deg, #FFFFFF 0%, #FDFDFF 7.14%, #FAFBFF 14.29%, #F8F8FF 21.43%, #F5F6FF 28.57%, #F3F4FF 35.71%, #F0F2FF 42.86%, #EEF0FF 50%, #EBEDFF 57.14%, #E9EBFF 64.29%, #E7E9FF 71.43%, #E4E7FF 78.57%, #E2E4FF 85.71%, #DFE2FF 92.86%, #DDE0FF 100%);
-    box-shadow: 0px 10px 15px -3px rgba(0,0,0,.1), 0px 4px 6px -4px rgba(0,0,0,.1);
+    transition: width .2s ease, background .2s ease;
+    background: linear-gradient(180deg, var(--sidebar-gradient-start) 0%, var(--sidebar-gradient-end) 100%);
+    box-shadow: var(--shadow-md);
 }
 
-/* ── Top bar (flag + IP) ──────────────────────────────────────────── */
+.sidebar-footer-menu {
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    margin-top: 8px;
+}
+
 .sidebar-topbar {
-    background: #8789FF;
+    background: var(--sidebar-topbar-bg);
     padding: 8px 24px;
 }
 
@@ -37,7 +42,6 @@ body {
     height: 16px;
 }
 
-/* ── Logo (text is baked into the image itself) ──────────────────── */
 .sidebar-brand {
     padding: 24px 32px;
 }
@@ -47,7 +51,6 @@ body {
     height: 105.56px;
 }
 
-/* ── Icons ─────────────────────────────────────────────────────────── */
 .sidebar-icon {
     width: 20px;
     height: 20px;
@@ -60,7 +63,6 @@ body {
     flex-shrink: 0;
 }
 
-/* ── Top-level items ──────────────────────────────────────────────── */
 .sidebar-item {
     margin-top: 16px;
     padding: 0 8px;
@@ -71,19 +73,18 @@ body {
     }
 
 .sidebar-link {
-    color: #4A5565; /* icon color, inherited by the SVG via currentColor */
+    color: var(--icon-color);
     padding: 16px;
     border-radius: 10px;
 }
 
     .sidebar-link .sidebar-label {
-        color: #364153; /* text color — explicit, overrides the link's own color */
+        color: var(--text-secondary);
         font-weight: 400;
         font-size: 16px;
         line-height: 22px;
     }
 
-/* ── Submenu items ────────────────────────────────────────────────── */
 .sidebar-submenu {
     display: none;
     padding: 4px 0 4px 24px;
@@ -98,37 +99,35 @@ body {
         }
 
     .sidebar-submenu a {
-        color: #6A7282;
+        color: var(--text-muted);
         padding: 12px 16px;
         border-radius: 10px;
     }
+
         .sidebar-submenu a:hover {
-            background: #F3F4F6;
+            background: var(--surface-alt);
         }
 
         .sidebar-submenu a span {
-            color: #364153;
+            color: var(--text-secondary);
             font-weight: 400;
             font-size: 14px;
             line-height: 20px;
         }
 
-/* ── Header inside the flyout submenu (parent's own name) — collapsed only ── */
 .sidebar-submenu-header {
     display: none;
     font-weight: 700;
     font-size: 14px;
-    color: #364153;
+    color: var(--text-secondary);
     padding: 8px 16px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border);
 }
-
 
 .sidebar.collapsed .sidebar-submenu-header {
     display: block;
 }
 
-/* ── Tooltip for leaf items (no submenu) — collapsed only ─────────── */
 .sidebar-tooltip {
     display: none;
 }
@@ -140,31 +139,29 @@ body {
     top: 50%;
     transform: translateY(-50%);
     margin-left: 8px;
-    background: #fff;
-    box-shadow: 2px 2px 8px rgba(0,0,0,.12);
+    background: var(--tooltip-bg);
+    box-shadow: var(--shadow-sm);
     border-radius: 999px;
     padding: 8px 16px;
     white-space: nowrap;
     z-index: 1000;
     font-size: 14px;
-    color: #364153;
+    color: var(--text-secondary);
 }
 
-/* ── Active (selected) item ───────────────────────────────────────── */
 .sidebar-link.active,
 .sidebar-submenu a.active {
-    background: #fff;
-    border-left: 4px solid #6D72EA;
+    background: var(--surface);
+    border-left: 4px solid var(--accent);
     box-sizing: border-box;
-    color: #6D72EA;
+    color: var(--accent);
 }
 
     .sidebar-link.active .sidebar-label,
     .sidebar-submenu a.active span {
-        color: #6D72EA;
+        color: var(--accent);
     }
 
-/* ── Caret rotation ───────────────────────────────────────────────── */
 .sidebar-caret {
     transition: transform .2s ease;
 }
@@ -177,15 +174,14 @@ body {
     display: block;
 }
 
-/* ── Collapse toggle button ───────────────────────────────────────── */
 .sidebar-toggle-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     width: calc(100% - 2rem);
-    background: #6369D4;
-    box-shadow: 0px 4px 6px -1px rgba(0,0,0,.1), 0px 2px 4px -2px rgba(0,0,0,.1);
+    background: var(--accent-strong);
+    box-shadow: var(--shadow-sm);
     border-radius: 10px;
     padding: 12px 16px;
     color: #fff;
@@ -202,7 +198,6 @@ body {
     display: none;
 }
 
-/* ── Collapsed state ──────────────────────────────────────────────── */
 .sidebar.collapsed {
     width: var(--sidebar-collapsed-width);
 }
@@ -230,8 +225,8 @@ body {
     }
 
         .sidebar.collapsed .sidebar-link.active {
-            border: 1.6px solid #6D72EA;
-            background: #fff;
+            border: 1.6px solid var(--accent);
+            background: var(--surface);
         }
 
     .sidebar.collapsed .sidebar-item:hover .sidebar-submenu {
@@ -240,8 +235,8 @@ body {
         left: 100%;
         top: 0;
         width: 220px;
-        background: #fff;
-        box-shadow: 2px 2px 8px rgba(0,0,0,.12);
+        background: var(--tooltip-bg);
+        box-shadow: var(--shadow-sm);
         z-index: 9999;
         padding: 8px !important;
     }

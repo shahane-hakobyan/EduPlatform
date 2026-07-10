@@ -2,6 +2,8 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 @{
     var currentPath = Context.Request.Path.Value;
+    if (string.IsNullOrEmpty(currentPath) || currentPath == "/") currentPath = "/Teacher";
+    var footerItems = (List<EduPlatform.Models.SidebarMenuItem>)ViewBag.FooterItems;
 }
 
 <aside class="sidebar d-flex flex-column bg-light" id="sidebar">
@@ -51,6 +53,21 @@
                         }
                     </ul>
                 }
+            </li>
+        }
+    </ul>
+
+    @* Pinned group — Statistics / Settings / Logout — separated from the main
+       scrollable menu by a divider, sitting directly above the collapse button. *@
+    <ul class="sidebar-footer-menu list-unstyled mb-0">
+        @foreach (var item in footerItems)
+        {
+            <li class="sidebar-item position-relative">
+                <a href="@(item.Url ?? "#")" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 text-decoration-none text-nowrap @(currentPath == item.Url ? "active" : "")">
+                    @Html.Raw(item.IconSvg)
+                    <span class="sidebar-label">@item.Label</span>
+                </a>
+                <span class="sidebar-tooltip">@item.Label</span>
             </li>
         }
     </ul>

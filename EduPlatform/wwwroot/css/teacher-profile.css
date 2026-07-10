@@ -1,6 +1,6 @@
 ﻿.teacher-profile-card {
-    background: #fff;
-    box-shadow: 0px 10px 15px -3px rgba(0,0,0,.1), 0px 4px 6px -4px rgba(0,0,0,.1);
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
     border-radius: 16px;
     overflow: hidden;
 }
@@ -48,14 +48,18 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 25px; 
+    height: 25px;
     display: block;
 }
 
+    .banner-wave path {
+        fill: var(--surface);
+    }
+
 .teacher-profile-info {
     position: relative;
-    margin-top: -45px; 
-    padding-top: 0 !important; 
+    margin-top: -45px;
+    padding-top: 0 !important;
     z-index: 1;
 }
 
@@ -63,7 +67,7 @@
     font-weight: 700;
     font-size: 30px;
     line-height: 36px;
-    color: #101828;
+    color: var(--text-primary);
 }
 
 .teacher-profile-role {
@@ -81,11 +85,16 @@
     width: 80px;
     height: 80px;
     border-radius: 16px;
-    background-color: #fff;
+    background-color: var(--surface);
     background-size: cover;
     background-position: center;
-    border: 4px solid #fff;
-    box-shadow: 0px 20px 25px -5px rgba(0,0,0,.1), 0px 8px 10px -6px rgba(0,0,0,.1);
+    border: 4px solid var(--surface);
+    transition: transform .2s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+.teacher-profile-avatar-wrap:hover .teacher-profile-avatar {
+    transform: scale(1.06);
 }
 
 .voluntary-certification {
@@ -94,9 +103,9 @@
     right: -4px;
     bottom: -4px;
     background: linear-gradient(135deg, #4ADE80 0%, #22C55E 100%);
-    border: 1.6px solid #fff;
+    border: 1.6px solid var(--surface);
     border-radius: 50%;
-    box-shadow: 0px 10px 15px -3px rgba(0,0,0,.1), 0px 4px 6px -4px rgba(0,0,0,.1);
+    box-shadow: var(--shadow-md);
     color: #fff;
     font-size: 12px;
     cursor: pointer;
@@ -107,7 +116,12 @@
     border: 0.8px solid;
     min-width: 220px;
     flex: 1 1 220px;
+    transition: border-color .2s ease, box-shadow .2s ease;
 }
+
+    .profile-chip:hover {
+        box-shadow: 0px 4px 6px -4px rgba(0,0,0,.3), 0px 2px 4px -2px rgba(0,0,0,.2);
+    }
 
 .chip-icon {
     width: 28px;
@@ -120,18 +134,18 @@
 .chip-label {
     font-size: 12px;
     line-height: 16px;
-    color: #6A7282;
+    color: var(--text-muted);
 }
 
 .chip-value {
     font-size: 12px;
     line-height: 16px;
-    color: #1E2939;
+    color: var(--text-primary);
 }
 
 .chip-blue {
-    background: linear-gradient(135deg, #EFF6FF, #EEF2FF);
-    border-color: #DBEAFE;
+    background: linear-gradient(135deg, var(--chip-blue-start), var(--chip-blue-end));
+    border-color: var(--chip-blue-border);
 }
 
     .chip-blue .chip-icon {
@@ -139,8 +153,8 @@
     }
 
 .chip-purple {
-    background: linear-gradient(135deg, #FAF5FF, #FDF2F8);
-    border-color: #F3E8FF;
+    background: linear-gradient(135deg, var(--chip-purple-start), var(--chip-purple-end));
+    border-color: var(--chip-purple-border);
 }
 
     .chip-purple .chip-icon {
@@ -148,8 +162,8 @@
     }
 
 .chip-green {
-    background: linear-gradient(135deg, #ECFDF5, #F0FDFA);
-    border-color: #D0FAE5;
+    background: linear-gradient(135deg, var(--chip-green-start), var(--chip-green-end));
+    border-color: var(--chip-green-border);
 }
 
     .chip-green .chip-icon {
@@ -157,8 +171,8 @@
     }
 
 .chip-orange {
-    background: linear-gradient(135deg, #FFF7ED, #FEF2F2);
-    border-color: #FFEDD4;
+    background: linear-gradient(135deg, var(--chip-orange-start), var(--chip-orange-end));
+    border-color: var(--chip-orange-border);
 }
 
     .chip-orange .chip-icon {
@@ -166,8 +180,8 @@
     }
 
 .chip-indigo {
-    background: linear-gradient(135deg, #EEF2FF, #F5F3FF);
-    border-color: #E0E7FF;
+    background: linear-gradient(135deg, var(--chip-indigo-start), var(--chip-indigo-end));
+    border-color: var(--chip-indigo-border);
 }
 
     .chip-indigo .chip-icon {
@@ -175,8 +189,8 @@
     }
 
 .teacher-profile-bio {
-    background: linear-gradient(135deg, #ECFDF5, #F0FDFA);
-    border: 0.8px solid #D0FAE5;
+    background: linear-gradient(135deg, var(--chip-green-start), var(--chip-green-end));
+    border: 0.8px solid var(--chip-green-border);
     border-radius: 14px;
 }
 
@@ -192,12 +206,12 @@
 .bio-label {
     font-weight: 500;
     font-size: 12px;
-    color: #6A7282;
+    color: var(--text-muted);
 }
 
 .bio-text {
     font-weight: 500;
     font-size: 12px;
     line-height: 18px;
-    color: #1E2939;
+    color: var(--text-primary);
 }

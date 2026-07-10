@@ -1,3 +1,84 @@
-﻿body {
+﻿:root {
+    --surface: #ffffff;
+    --surface-alt: #F3F4F6;
+    --border: #E5E7EB;
+    --border-strong: #D1D5DC;
+    --text-primary: #101828;
+    --text-secondary: #364153;
+    --text-muted: #6A7282;
+    --text-faint: #99A1AF;
+    --icon-color: #4A5565;
+    --accent: #6D72EA;
+    --accent-strong: #6369D4;
+    --sidebar-gradient-start: #FFFFFF;
+    --sidebar-gradient-end: #DDE0FF;
+    --sidebar-topbar-bg: #8789FF;
+    --tooltip-bg: #ffffff;
+    --input-bg: #ffffff;
+    --input-text: #0A0A0A;
+    --avatar-bg: #D1D5DC;
+    --shadow-sm: 0px 4px 6px -1px rgba(0,0,0,.1), 0px 2px 4px -2px rgba(0,0,0,.1);
+    --shadow-md: 0px 10px 15px -3px rgba(0,0,0,.1), 0px 4px 6px -4px rgba(0,0,0,.1);
+    --shadow-lg: 0px 20px 25px -5px rgba(0,0,0,.1), 0px 8px 10px -6px rgba(0,0,0,.1);
+    --chip-blue-start: #EFF6FF;
+    --chip-blue-end: #EEF2FF;
+    --chip-blue-border: #DBEAFE;
+    --chip-purple-start: #FAF5FF;
+    --chip-purple-end: #FDF2F8;
+    --chip-purple-border: #F3E8FF;
+    --chip-green-start: #ECFDF5;
+    --chip-green-end: #F0FDFA;
+    --chip-green-border: #D0FAE5;
+    --chip-orange-start: #FFF7ED;
+    --chip-orange-end: #FEF2F2;
+    --chip-orange-border: #FFEDD4;
+    --chip-indigo-start: #EEF2FF;
+    --chip-indigo-end: #F5F3FF;
+    --chip-indigo-border: #E0E7FF;
+}
+
+[data-theme="dark"] {
+    --surface: #1E2130;
+    --surface-alt: #262A3D;
+    --border: #333750;
+    --border-strong: #3D4160;
+    --text-primary: #F3F4F6;
+    --text-secondary: #D1D5DC;
+    --text-muted: #9AA1B5;
+    --text-faint: #6B7186;
+    --icon-color: #C4C8DA;
+    --accent: #8A8FF0;
+    --accent-strong: #7377E0;
+    --sidebar-gradient-start: #1A1C2B;
+    --sidebar-gradient-end: #2B2E4A;
+    --sidebar-topbar-bg: #5B5DC7;
+    --tooltip-bg: #262A3D;
+    --input-bg: #262A3D;
+    --input-text: #F3F4F6;
+    --avatar-bg: #3D4160;
+    --shadow-sm: 0px 4px 6px -1px rgba(0,0,0,.5), 0px 2px 4px -2px rgba(0,0,0,.5);
+    --shadow-md: 0px 10px 15px -3px rgba(0,0,0,.5), 0px 4px 6px -4px rgba(0,0,0,.5);
+    --shadow-lg: 0px 20px 25px -5px rgba(0,0,0,.5), 0px 8px 10px -6px rgba(0,0,0,.5);
+    --chip-blue-start: #16223A;
+    --chip-blue-end: #1A1F3D;
+    --chip-blue-border: #274370;
+    --chip-purple-start: #2A1F38;
+    --chip-purple-end: #33202E;
+    --chip-purple-border: #452C57;
+    --chip-green-start: #102A22;
+    --chip-green-end: #12312B;
+    --chip-green-border: #1D4A3B;
+    --chip-orange-start: #332216;
+    --chip-orange-end: #331A18;
+    --chip-orange-border: #4A3320;
+    --chip-indigo-start: #1E2140;
+    --chip-indigo-end: #241F3E;
+    --chip-indigo-border: #30345C;
+}
+
+body {
     font-family: 'Noto Sans Armenian', Arial, sans-serif;
+    background: var(--surface);
+    color: var(--text-primary);
+    transition: background .2s ease, color .2s ease;
 }

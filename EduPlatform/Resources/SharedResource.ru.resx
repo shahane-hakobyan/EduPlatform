@@ -118,4 +118,14 @@
   <data name="Logout" xml:space="preserve"><value>Выйти</value></data>
   <data name="Search" xml:space="preserve"><value>Поиск</value></data>
   <data name="Close" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="Settings" xml:space="preserve"><value>Настройки</value></data>
+  <data name="BackToSite" xml:space="preserve"><value>Вернуться на сайт</value></data>
+  <data name="Email" xml:space="preserve"><value>Эл. почта</value></data>
+  <data name="PhoneNumber" xml:space="preserve"><value>Телефон</value></data>
+  <data name="EducationalInstitution" xml:space="preserve"><value>Учебное заведение</value></data>
+  <data name="Subject" xml:space="preserve"><value>Предмет</value></data>
+  <data name="DigitLevel" xml:space="preserve"><value>Категория</value></data>
+  <data name="ProfessionalAchievements" xml:space="preserve"><value>Профессиональные достижения</value></data>
+  <data name="TeacherRole" xml:space="preserve"><value>Учитель</value></data>
+
 </root>

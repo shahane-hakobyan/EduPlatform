@@ -1,8 +1,8 @@
 ﻿.app-header {
     height: 72.8px;
     padding: 16px 32px;
-    background: #fff;
-    border-bottom: 0.8px solid #E5E7EB;
+    background: var(--surface);
+    border-bottom: 0.8px solid var(--border);
     box-sizing: border-box;
 }
 
@@ -10,7 +10,7 @@
     font-weight: 700;
     font-size: 18px;
     line-height: 28px;
-    color: #1E2939;
+    color: var(--text-primary);
 }
 
 .app-search {
@@ -22,7 +22,7 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #99A1AF;
+    color: var(--text-faint);
     font-size: 16px;
 }
 
@@ -30,14 +30,15 @@
     width: 100%;
     box-sizing: border-box;
     padding: 8px 16px 8px 40px;
-    border: 0.8px solid #D1D5DC;
+    border: 0.8px solid var(--border-strong);
     border-radius: 10px;
     font-size: 16px;
-    color: #0A0A0A;
+    background: var(--input-bg);
+    color: var(--input-text);
 }
 
     .app-search-input::placeholder {
-        color: rgba(10, 10, 10, 0.5);
+        color: var(--text-faint);
     }
 
 .app-icon-btn {
@@ -49,7 +50,7 @@
     background: none;
     border: none;
     font-size: 24px;
-    color: #364153;
+    color: var(--icon-color);
 }
 
 .app-notification-dot {
@@ -66,28 +67,28 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #D1D5DC;
+    background: var(--avatar-bg);
 }
 
 .app-time {
     font-weight: 700;
     font-size: 14px;
     line-height: 20px;
-    color: #101828;
+    color: var(--text-primary);
 }
 
 .app-date {
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
-    color: #6A7282;
+    color: var(--text-muted);
 }
 
 .app-lang-btn {
     gap: 6px;
     padding: 6px 10px;
-    background: #F3F4F6;
-    border: 0.8px solid #E5E7EB;
+    background: var(--surface-alt);
+    border: 0.8px solid var(--border);
     border-radius: 10px;
 }
 
@@ -99,8 +100,9 @@
     font-weight: 700;
     font-size: 12px;
     letter-spacing: 0.3px;
-    color: #4A5565;
+    color: var(--icon-color);
 }
+
 .app-lang-flag-img {
     width: 16px;
     height: auto;
@@ -109,4 +111,17 @@
 .dropdown-flag-img {
     width: 16px;
     height: auto;
+}
+
+/* ── Dark mode toggle icon swap ───────────────────────────────────── */
+.app-theme-toggle .bi-sun {
+    display: none;
+}
+
+[data-theme="dark"] .app-theme-toggle .bi-moon-stars {
+    display: none;
+}
+
+[data-theme="dark"] .app-theme-toggle .bi-sun {
+    display: inline-block;
 }

@@ -1,6 +1,4 @@
 using Hangfire;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using EduPlatform.Data;
@@ -16,7 +14,6 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .Enrich.FromLogContext()
     .WriteTo.Console());
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 // EF Core
@@ -42,50 +39,6 @@ builder.Services.AddHangfire(config => config
     .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHangfireServer();
 
-// Authentication — cookie + OIDC against AuthServer
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-})
-.AddCookie(options =>
-{
-    options.Cookie.Name = "eduplatform_session";
-    options.ExpireTimeSpan = TimeSpan.FromHours(8);
-    options.SlidingExpiration = true;
-})
-.AddOpenIdConnect(options =>
-{
-    var oidc = builder.Configuration.GetSection("OpenIdConnect");
-    options.Authority = oidc["Authority"];
-    options.ClientId = oidc["ClientId"];
-    options.ClientSecret = oidc["ClientSecret"];
-    options.ResponseType = "code";
-    options.SaveTokens = true;
-    options.Scope.Clear();
-    options.Scope.Add("openid");
-    options.Scope.Add("profile");
-    options.Scope.Add("email");
-    options.Scope.Add("roles");
-    options.Scope.Add("offline_access");
-    options.GetClaimsFromUserInfoEndpoint = false;
-    options.TokenValidationParameters.ValidateIssuer = false;
-    options.RequireHttpsMetadata = false; // dev only — self-signed cert
-    options.BackchannelHttpHandler = new HttpClientHandler
-    {
-        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-    };
-});
-
-// Authorization policies
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("SchoolOnly", p => p.RequireRole("School"));
-    options.AddPolicy("TeacherOnly", p => p.RequireRole("Teacher"));
-    options.AddPolicy("PupilOnly", p => p.RequireRole("Pupil"));
-    options.AddPolicy("TeacherOrPupil", p => p.RequireRole("Teacher", "Pupil"));
-});
-
 // Localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "");
 
@@ -94,7 +47,6 @@ builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -110,9 +62,6 @@ var localizationOptions = new RequestLocalizationOptions()
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
 app.UseRequestLocalization(localizationOptions);
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapStaticAssets();
 

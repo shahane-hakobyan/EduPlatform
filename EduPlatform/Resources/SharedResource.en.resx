@@ -113,9 +113,19 @@
   <data name="MyLogbook" xml:space="preserve"><value>My Journal</value></data>
   <data name="AIAssessment" xml:space="preserve"><value>AI Assessment</value></data>
   <data name="Groups" xml:space="preserve"><value>Groups</value></data>
-  <data name="AIChat" xml:space="preserve"><value>AB Chat</value></data>
+  <data name="AIChat" xml:space="preserve"><value>AI Chat</value></data>
   <data name="MyStatistics" xml:space="preserve"><value>My Statistics</value></data>
   <data name="Logout" xml:space="preserve"><value>Log Out</value></data>
   <data name="Search" xml:space="preserve"><value>Search</value></data>
   <data name="Close" xml:space="preserve"><value>Close</value></data>
+  <data name="Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="BackToSite" xml:space="preserve"><value>Back to site</value></data>
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="PhoneNumber" xml:space="preserve"><value>Phone</value></data>
+  <data name="EducationalInstitution" xml:space="preserve"><value>Educational Institution</value></data>
+  <data name="Subject" xml:space="preserve"><value>Subject</value></data>
+  <data name="DigitLevel" xml:space="preserve"><value>Qualification Category</value></data>
+  <data name="ProfessionalAchievements" xml:space="preserve"><value>Professional Achievements</value></data>
+  <data name="TeacherRole" xml:space="preserve"><value>Teacher</value></data>
+
 </root>

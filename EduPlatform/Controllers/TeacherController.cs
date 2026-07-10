@@ -17,6 +17,7 @@ namespace EduPlatform.Controllers
         public IActionResult Index()
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
 
             // TODO: replace with a real call into AuthServer's profile data
             // once the login/OIDC integration is actually wired up.

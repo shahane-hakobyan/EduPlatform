@@ -118,5 +118,14 @@
   <data name="Logout" xml:space="preserve"><value>Դուրս գալ</value></data>
   <data name="Search" xml:space="preserve"><value>Որոնել</value></data>
   <data name="Close" xml:space="preserve"><value>Փակել</value></data>
-  
+  <data name="Settings" xml:space="preserve"><value>Կարգավորումներ</value></data>
+  <data name="BackToSite" xml:space="preserve"><value>Վերադառնալ կայք</value></data>
+  <data name="Email" xml:space="preserve"><value>էլփոստ</value></data>
+  <data name="PhoneNumber" xml:space="preserve"><value>Հեռախոս</value></data>
+  <data name="EducationalInstitution" xml:space="preserve"><value>Ուսումնական հաստատություն</value></data>
+  <data name="Subject" xml:space="preserve"><value>Առարկա</value></data>
+  <data name="DigitLevel" xml:space="preserve"><value>Տարակարգ</value></data>
+  <data name="ProfessionalAchievements" xml:space="preserve"><value>Մասնագիտական նվաճումներ</value></data>
+  <data name="TeacherRole" xml:space="preserve"><value>Ուսուցիչ</value></data>
+
 </root>
