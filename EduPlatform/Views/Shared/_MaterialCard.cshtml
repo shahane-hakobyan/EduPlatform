@@ -1,0 +1,38 @@
+﻿@model EduPlatform.ViewModels.MaterialCardViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+
+<div class="material-card-wide">
+    <div class="material-card-wide-image" data-full-image="@Model.ThumbnailUrl">
+        @if (!string.IsNullOrEmpty(Model.ThumbnailUrl))
+        {
+            <img src="@Model.ThumbnailUrl" alt="@string.Join(", ", Model.Subjects)" />
+        }
+        else
+        {
+            <div class="material-card-wide-placeholder cover-@Model.ColorVariant">
+                <i class="bi bi-tablet material-card-placeholder-icon"></i>
+            </div>
+        }
+    </div>
+
+    <div class="material-card-wide-content">
+        <h3 class="material-card-wide-title" data-bs-toggle="tooltip" data-bs-placement="top" title="@string.Join(", ", Model.Subjects)">@string.Join(", ", Model.Subjects)</h3>
+        <p class="material-card-wide-authors" data-bs-toggle="tooltip" data-bs-placement="top" title="@Model.Authors">@Model.Authors</p>
+        <p class="material-card-wide-publisher">@Model.Publisher</p>
+
+        <div class="material-card-wide-meta d-flex gap-3">
+            <span>@string.Join(", ", Model.Grades)</span>
+            <span>@Model.Pages @Localizer["Pages"]</span>
+            <span>@Model.Year</span>
+        </div>
+
+        <div class="material-card-actions">
+            <a href="@Model.ViewUrl" class="material-card-view-btn d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-eye"></i> @Localizer["View"]
+            </a>
+            <a href="@Model.DownloadUrl" download class="material-card-download-btn d-flex align-items-center justify-content-center">
+                <i class="bi bi-download"></i>
+            </a>
+        </div>
+    </div>
+</div>

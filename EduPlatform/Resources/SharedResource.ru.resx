@@ -127,5 +127,15 @@
   <data name="DigitLevel" xml:space="preserve"><value>Категория</value></data>
   <data name="ProfessionalAchievements" xml:space="preserve"><value>Профессиональные достижения</value></data>
   <data name="TeacherRole" xml:space="preserve"><value>Учитель</value></data>
+  <data name="Grade" xml:space="preserve"><value>Класс</value></data>
+  <data name="Author" xml:space="preserve"><value>Имя и фамилия автора</value></data>
+  <data name="PublicationYear" xml:space="preserve"><value>Год публикации</value></data>
+  <data name="Publisher" xml:space="preserve"><value>Издатель</value></data>
+  <data name="Grid" xml:space="preserve"><value>	Сеть</value></data>
+  <data name="ListView" xml:space="preserve"><value>	Список</value></data>
+  <data name="Pages" xml:space="preserve"><value>Страницы</value></data>
+  <data name="View" xml:space="preserve"><value>Смотреть</value></data>
+  <data name="Total" xml:space="preserve"><value>Общий</value></data>
+
 
 </root>

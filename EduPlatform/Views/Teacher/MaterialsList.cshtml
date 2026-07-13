@@ -1,0 +1,69 @@
+﻿@model EduPlatform.ViewModels.MaterialsPageViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="materials-header d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center gap-3">
+        <div class="materials-header-icon d-flex align-items-center justify-content-center">
+            <i class="bi bi-book"></i>
+        </div>
+        <div>
+            <h1 class="materials-title mb-0">@Model.Title</h1>
+        </div>
+    </div>
+    <div class="materials-count-badge text-center">
+        <div class="materials-count-label">@Localizer["Total"]</div>
+        <div class="materials-count-value">@Model.TotalCount</div>
+    </div>
+</div>
+
+<div class="materials-filter-bar d-flex flex-wrap align-items-center gap-2 mb-3">
+    <div class="materials-search position-relative flex-grow-1">
+        <i class="bi bi-search materials-search-icon"></i>
+        <input type="text" class="materials-search-input" placeholder="@Localizer["Search"]" />
+    </div>
+
+    @foreach (var filter in Model.Filters)
+    {
+        <select class="materials-filter-select" data-filter-key="@filter.Key">
+            <option value="">@filter.Label</option>
+        </select>
+    }
+</div>
+
+<div class="d-flex justify-content-end mb-3">
+    <div class="materials-view-toggle btn-group" role="group">
+        <button type="button" class="btn materials-view-btn active" data-view="grid">
+            <i class="bi bi-grid-3x3-gap"></i> @Localizer["Grid"]
+        </button>
+        <button type="button" class="btn materials-view-btn" data-view="list">
+            <i class="bi bi-list-ul"></i> @Localizer["ListView"]
+        </button>
+    </div>
+</div>
+
+<div class="materials-grid">
+    @foreach (var material in Model.Materials)
+    {
+        <partial name="_MaterialCard" model="material" />
+    }
+</div>
+
+@if (!Model.Materials.Any())
+{
+    <div class="materials-empty text-center py-5">
+        <i class="bi bi-inbox materials-empty-icon"></i>
+        <p class="materials-empty-text">@Localizer["NoMaterialsSaved"]</p>
+    </div>
+}
+
+<div id="materialImagePreview" class="material-image-preview"></div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/materials.css" />
+}
+@section Scripts {
+    <script src="~/js/materials.js"></script>
+}

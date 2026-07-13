@@ -127,5 +127,16 @@
   <data name="DigitLevel" xml:space="preserve"><value>Qualification Category</value></data>
   <data name="ProfessionalAchievements" xml:space="preserve"><value>Professional Achievements</value></data>
   <data name="TeacherRole" xml:space="preserve"><value>Teacher</value></data>
+  <data name="Grade" xml:space="preserve"><value>Grade</value></data>
+  <data name="Author" xml:space="preserve"><value>Author's name, surname</value></data>
+  <data name="PublicationYear" xml:space="preserve"><value>Year of publication</value></data>
+  <data name="Publisher" xml:space="preserve"><value> Publisher</value></data>
+  <data name="Grid" xml:space="preserve"><value>	Grid</value></data>
+  <data name="ListView" xml:space="preserve"><value>	List</value></data>
+  <data name="Pages" xml:space="preserve"><value>Pages</value></data>
+  <data name="View" xml:space="preserve"><value>View</value></data>
+  <data name="Total" xml:space="preserve"><value>Total</value></data>
+
+
 
 </root>

@@ -127,5 +127,16 @@
   <data name="DigitLevel" xml:space="preserve"><value>Տարակարգ</value></data>
   <data name="ProfessionalAchievements" xml:space="preserve"><value>Մասնագիտական նվաճումներ</value></data>
   <data name="TeacherRole" xml:space="preserve"><value>Ուսուցիչ</value></data>
+  <data name="Grade" xml:space="preserve"><value>Դասարան</value></data>
+  <data name="Author" xml:space="preserve"><value>Հեղինակի անուն, ազգանուն</value></data>
+  <data name="PublicationYear" xml:space="preserve"><value>Հրատարակման տարեթիվ</value></data>
+  <data name="Publisher" xml:space="preserve"><value>	Հրատարակչություն</value></data>
+  <data name="Grid" xml:space="preserve"><value>	Ցանց</value></data>
+  <data name="ListView" xml:space="preserve"><value>	Ցուցակ</value></data>
+  <data name="Pages" xml:space="preserve"><value>	Էջ</value></data>
+  <data name="View" xml:space="preserve"><value>Դիտել</value></data>
+  <data name="Total" xml:space="preserve"><value>Ընհանուր</value></data>
+
+
 
 </root>
