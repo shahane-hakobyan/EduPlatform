@@ -136,6 +136,17 @@
   <data name="Pages" xml:space="preserve"><value>Страницы</value></data>
   <data name="View" xml:space="preserve"><value>Смотреть</value></data>
   <data name="Total" xml:space="preserve"><value>Общий</value></data>
+  <data name="Material" xml:space="preserve"><value>Материал</value></data>
+  <data name="Actions" xml:space="preserve"><value>Действия</value></data>
+  <data name="Delete" xml:space="preserve"><value>Удалить</value></data>
+  <data name="ConfirmDeleteMaterial" xml:space="preserve"><value>Вы уверены?</value></data>
+  <data name="OtherTextbooks" xml:space="preserve"><value>Другие учебники</value></data>
+  <data name="FictionBooks" xml:space="preserve"><value>Художественные книги</value></data>
+  <data name="PopularScienceBooks" xml:space="preserve"><value>Научно-популярные книги</value></data>
+  <data name="MaterialType" xml:space="preserve"><value>Тип материала</value></data>
+  <data name="NoMaterialsSaved" xml:space="preserve"><value>Тип материала</value></data>
+  <data name="Language" xml:space="preserve"><value>Язык</value></data>
+
 
 
 </root>

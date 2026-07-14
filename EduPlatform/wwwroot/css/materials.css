@@ -1,11 +1,12 @@
-﻿/* ── Page wrapper ─────────────────────────────────────────────────── */
+﻿/* ════════════════════════════════════════════════════════════════════
+   PAGE WRAPPER & HEADER
+   ════════════════════════════════════════════════════════════════════ */
 .materials-page-wrap {
     background: linear-gradient(135deg, #F9FAFB 0%, #FAF5FF 100%);
     padding: 24px;
     border-radius: 24px;
 }
 
-/* ── Header ───────────────────────────────────────────────────────── */
 .materials-header {
     background: var(--surface);
     border: 0.8px solid #F3E8FF;
@@ -56,7 +57,9 @@
     color: #fff;
 }
 
-/* ── Filter bar ───────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════
+   FILTER BAR
+   ════════════════════════════════════════════════════════════════════ */
 .materials-filter-bar {
     background: var(--surface);
     border: 0.8px solid #F3E8FF;
@@ -107,7 +110,9 @@
     color: var(--text-secondary);
 }
 
-/* ── Grid/list view toggle ────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════
+   GRID / LIST VIEW TOGGLE
+   ════════════════════════════════════════════════════════════════════ */
 .materials-view-toggle {
     background: #F3F4F6;
     border-radius: 14px;
@@ -133,7 +138,9 @@
         color: #4A5565;
     }
 
-/* ── Grid — exactly 4 cards per row ───────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════
+   GRID — exactly 4 cards per row
+   ════════════════════════════════════════════════════════════════════ */
 .materials-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -150,7 +157,9 @@
     margin-top: 8px;
 }
 
-/* ── Material card (image left, content right — same treatment for every image) ── */
+/* ════════════════════════════════════════════════════════════════════
+   MATERIAL CARD (image left, content right)
+   ════════════════════════════════════════════════════════════════════ */
 .material-card-wide {
     display: flex;
     flex-direction: row;
@@ -161,11 +170,41 @@
     box-shadow: 0px 4px 6px -1px rgba(0,0,0,.1), 0px 2px 4px -2px rgba(0,0,0,.1);
     transition: box-shadow .2s ease;
     height: 210px;
+    animation: card-slide-up .4s ease both;
 }
 
     .material-card-wide:hover {
         box-shadow: var(--shadow-md);
     }
+
+    /* Slight stagger so a row of cards doesn't pop in as one flat block */
+    .material-card-wide:nth-child(4n+1) {
+        animation-delay: 0s;
+    }
+
+    .material-card-wide:nth-child(4n+2) {
+        animation-delay: .05s;
+    }
+
+    .material-card-wide:nth-child(4n+3) {
+        animation-delay: .1s;
+    }
+
+    .material-card-wide:nth-child(4n+4) {
+        animation-delay: .15s;
+    }
+
+@keyframes card-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 .material-card-wide-image {
     flex: 0 0 auto;
@@ -263,7 +302,25 @@
     flex-shrink: 0;
 }
 
-/* ── Cover color variants (used as placeholder background when no thumbnail exists) ── */
+.material-card-delete-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background: var(--surface-alt);
+    color: var(--icon-color);
+    border: none;
+    flex-shrink: 0;
+    transition: background .2s ease, color .2s ease;
+}
+
+    .material-card-delete-btn:hover {
+        background: #FEE2E2;
+        color: #DC2626;
+    }
+
+/* ════════════════════════════════════════════════════════════════════
+   COVER COLOR VARIANTS (placeholder background when no thumbnail exists)
+   ════════════════════════════════════════════════════════════════════ */
 .cover-blue {
     background: linear-gradient(135deg, #2B7FFF 0%, #155DFC 100%);
 }
@@ -304,7 +361,9 @@
     background: linear-gradient(135deg, #FE9A00 0%, #E17100 100%);
 }
 
-/* ── Hover preview — shared element, follows the cursor, shows the full image ── */
+/* ════════════════════════════════════════════════════════════════════
+   HOVER PREVIEW — shared element, follows the cursor, shows full image
+   ════════════════════════════════════════════════════════════════════ */
 .material-image-preview {
     display: none;
     position: fixed;
@@ -324,3 +383,153 @@
         max-height: 100%;
         border-radius: 6px;
     }
+
+/* ════════════════════════════════════════════════════════════════════
+   LIST VIEW (TABLE)
+   ════════════════════════════════════════════════════════════════════ */
+.materials-list-view {
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px -1px rgba(0,0,0,.1), 0px 2px 4px -2px rgba(0,0,0,.1);
+}
+
+.materials-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .materials-table thead tr {
+        background: linear-gradient(90deg, #6369D4, #6D72EA);
+    }
+
+    .materials-table thead th {
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+        text-align: left;
+        padding: 14px 20px;
+    }
+
+    .materials-table tbody tr {
+        border-bottom: 1px solid var(--border);
+    }
+
+        .materials-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+    .materials-table td {
+        padding: 14px 20px;
+        vertical-align: middle;
+    }
+
+.materials-table-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 18px;
+    flex-shrink: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .materials-table-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+.materials-table-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.materials-table-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.materials-table-chip {
+    display: inline-block;
+    background: var(--surface-alt);
+    color: #6D72EA;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.materials-table-author {
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   LIBRARY TABS (Figma spec)
+   ════════════════════════════════════════════════════════════════════ */
+.library-tabs-card {
+    background: #fff;
+    border: 0.8px solid #F3E8FF;
+    box-shadow: 0px 4px 6px -1px rgba(0,0,0,.1), 0px 2px 4px -2px rgba(0,0,0,.1);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.library-tabs-row {
+    display: flex;
+    border-bottom: 0.8px solid #F3F4F6;
+}
+
+.library-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 16px;
+    background: none;
+    border: none;
+    border-bottom: 1.6px solid transparent;
+    font-weight: 700;
+    font-size: 14px;
+    color: #4A5565;
+}
+
+    .library-tab-btn.active {
+        background: rgba(238,242,255,0.5);
+        border-bottom-color: #6369D4;
+        color: #6369D4;
+    }
+
+.library-tabs-count-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #F9FAFB;
+}
+
+.library-tabs-count-label {
+    font-size: 12px;
+    color: #6A7282;
+}
+
+.library-tabs-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: #6369D4;
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    border-radius: 999px;
+}

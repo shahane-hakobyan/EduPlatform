@@ -24,7 +24,7 @@
         {
             var hasActiveChild = item.Children.Any(c => c.Url == currentPath);
             <li class="sidebar-item position-relative @(hasActiveChild ? "open" : "")">
-                <a href="@(item.Url ?? "#")" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 text-decoration-none text-nowrap @(currentPath == item.Url ? "active" : "")">
+                <a href="@(item.Url ?? "#")" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 text-decoration-none text-nowrap @((currentPath == item.Url || hasActiveChild) ? "active" : "")">
                     @Html.Raw(item.IconSvg)
                     <span class="sidebar-label">@item.Label</span>
                     @if (item.Children.Any())

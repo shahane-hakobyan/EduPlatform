@@ -27,12 +27,15 @@
         </div>
 
         <div class="material-card-actions">
-            <a href="@Model.ViewUrl" class="material-card-view-btn d-flex align-items-center justify-content-center gap-2">
+            <a href="@Model.ViewUrl" class="material-card-view-btn d-flex align-items-center justify-content-center gap-2" target="_blank" rel="noopener noreferrer">
                 <i class="bi bi-eye"></i> @Localizer["View"]
             </a>
             <a href="@Model.DownloadUrl" download class="material-card-download-btn d-flex align-items-center justify-content-center">
                 <i class="bi bi-download"></i>
             </a>
+            <button type="button" class="material-card-delete-btn d-flex align-items-center justify-content-center" data-material-id="@Model.Id" data-confirm-text="@Localizer["ConfirmDeleteMaterial"]" title="@Localizer["Delete"]">
+                <i class="bi bi-trash"></i>
+            </button>
         </div>
     </div>
 </div>

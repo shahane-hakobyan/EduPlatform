@@ -8,16 +8,33 @@
         sidebar.classList.add('collapsed');
     }
 
+    // Enable the width transition only after the initial state above is
+    // applied, so restoring from localStorage doesn't visibly animate —
+    // it snaps directly to the right width, then future clicks animate normally.
+    requestAnimationFrame(function () {
+        sidebar.classList.add('sidebar-transitions-enabled');
+    });
+
     // Collapse/expand button
     toggle.addEventListener('click', function () {
         sidebar.classList.toggle('collapsed');
-        localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+        const isNowCollapsed = sidebar.classList.contains('collapsed');
+        localStorage.setItem('sidebarCollapsed', isNowCollapsed);
 
-        // Closing the sidebar should also close any open submenu,
-        // so it doesn't reopen stuck in the wrong mode
-        document.querySelectorAll('.sidebar-item.open').forEach(function (item) {
-            item.classList.remove('open');
-        });
+        if (isNowCollapsed) {
+            // Collapsing: close any open submenu so it doesn't stay stuck open
+            document.querySelectorAll('.sidebar-item.open').forEach(function (item) {
+                item.classList.remove('open');
+            });
+        } else {
+            // Expanding: restore the active section's submenu being open,
+            // same as what the server originally rendered on page load.
+            document.querySelectorAll('.sidebar-item').forEach(function (item) {
+                if (item.querySelector('.sidebar-submenu a.active')) {
+                    item.classList.add('open');
+                }
+            });
+        }
     });
 
     // Click-to-toggle submenus (expanded state only — collapsed state uses CSS hover instead)

@@ -136,7 +136,14 @@
   <data name="Pages" xml:space="preserve"><value>Pages</value></data>
   <data name="View" xml:space="preserve"><value>View</value></data>
   <data name="Total" xml:space="preserve"><value>Total</value></data>
-
-
-
+  <data name="Material" xml:space="preserve"><value>Material</value></data>
+  <data name="Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="ConfirmDeleteMaterial" xml:space="preserve"><value>Are you sure?</value></data>
+  <data name="OtherTextbooks" xml:space="preserve"><value>Other Textbooks</value></data>
+  <data name="FictionBooks" xml:space="preserve"><value>Fiction Books</value></data>
+  <data name="PopularScienceBooks" xml:space="preserve"><value>Popular Science Books</value></data>
+  <data name="MaterialType" xml:space="preserve"><value>Material type</value></data>
+  <data name="NoMaterialsSaved" xml:space="preserve"><value>Not materials saved</value></data>
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
 </root>

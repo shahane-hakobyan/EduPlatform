@@ -136,6 +136,16 @@
   <data name="Pages" xml:space="preserve"><value>	Էջ</value></data>
   <data name="View" xml:space="preserve"><value>Դիտել</value></data>
   <data name="Total" xml:space="preserve"><value>Ընհանուր</value></data>
+  <data name="Material" xml:space="preserve"><value>Նյութ</value></data>
+  <data name="Actions" xml:space="preserve"><value>Գործողություններ</value></data>
+  <data name="Delete" xml:space="preserve"><value>Ջնջել</value></data>
+  <data name="ConfirmDeleteMaterial" xml:space="preserve"><value>Համոզվա՞ծ եք</value></data>
+  <data name="OtherTextbooks" xml:space="preserve"><value>Այլ դասագրքեր</value></data>
+  <data name="FictionBooks" xml:space="preserve"><value>Գեղարվեստական գրքեր</value></data>
+  <data name="PopularScienceBooks" xml:space="preserve"><value>Գիտահանրամատչելի գրքեր</value></data>
+  <data name="MaterialType" xml:space="preserve"><value>Նյութի տեսակ</value></data>
+  <data name="NoMaterialsSaved" xml:space="preserve"><value>Չկան նյութեր</value></data>
+  <data name="Language" xml:space="preserve"><value>Լեզու</value></data>
 
 
 

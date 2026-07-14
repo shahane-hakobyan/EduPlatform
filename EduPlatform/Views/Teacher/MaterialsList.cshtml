@@ -51,6 +51,61 @@
     }
 </div>
 
+<div class="materials-list-view" style="display:none;">
+    <table class="materials-table">
+        <thead>
+            <tr>
+                <th>@Localizer["Material"]</th>
+                <th>@Localizer["Subject"]</th>
+                <th>@Localizer["Author"]</th>
+                <th>@Localizer["Grade"]</th>
+                <th>@Localizer["Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var material in Model.Materials)
+            {
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="materials-table-icon cover-@material.ColorVariant">
+                                @if (!string.IsNullOrEmpty(material.ThumbnailUrl))
+                                {
+                                    <img src="@material.ThumbnailUrl" alt="@string.Join(", ", material.Subjects)" />
+                                }
+                                else
+                                {
+                                    <i class="bi bi-tablet"></i>
+                                }
+                            </div>
+                            <div>
+                                <div class="materials-table-title">@string.Join(", ", material.Subjects)</div>
+                                <div class="materials-table-sub">@material.Year &middot; @material.Pages @Localizer["Pages"]</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="materials-table-chip">@string.Join(", ", material.Subjects)</span></td>
+                    <td class="materials-table-author">@material.Authors</td>
+                    <td>@string.Join(", ", material.Grades)</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="@material.ViewUrl" class="material-card-view-btn d-flex align-items-center justify-content-center gap-2" target="_blank" rel="noopener noreferrer">
+                                <i class="bi bi-eye"></i> @Localizer["View"]
+                            </a>
+                            <a href="@material.DownloadUrl" download class="material-card-download-btn d-flex align-items-center justify-content-center">
+                                <i class="bi bi-download"></i>
+                            </a>
+                            <button type="button" class="material-card-delete-btn d-flex align-items-center justify-content-center" data-material-id="@material.Id" data-confirm-text="@Localizer["ConfirmDeleteMaterial"]" title="@Localizer["Delete"]">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
 @if (!Model.Materials.Any())
 {
     <div class="materials-empty text-center py-5">

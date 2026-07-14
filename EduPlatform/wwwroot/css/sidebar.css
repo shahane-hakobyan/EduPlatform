@@ -170,7 +170,7 @@ body {
     transform: rotate(180deg);
 }
 
-.sidebar-item.open .sidebar-submenu {
+.sidebar:not(.collapsed) .sidebar-item.open .sidebar-submenu {
     display: block;
 }
 
