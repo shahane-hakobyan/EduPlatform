@@ -35,6 +35,9 @@
     --chip-indigo-start: #EEF2FF;
     --chip-indigo-end: #F5F3FF;
     --chip-indigo-border: #E0E7FF;
+    --accent-soft-bg: rgba(238, 242, 255, 0.5);
+    --danger: #DC2626;
+    --danger-soft-bg: #FEE2E2;
 }
 
 [data-theme="dark"] {
@@ -74,6 +77,9 @@
     --chip-indigo-start: #1E2140;
     --chip-indigo-end: #241F3E;
     --chip-indigo-border: #30345C;
+    --accent-soft-bg: rgba(99, 105, 212, 0.18);
+    --danger: #F87171;
+    --danger-soft-bg: rgba(220, 38, 38, 0.2);
 }
 
 body {

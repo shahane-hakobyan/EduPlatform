@@ -9,7 +9,7 @@
 
 .materials-header {
     background: var(--surface);
-    border: 0.8px solid #F3E8FF;
+    border: 0.8px solid var(--border);
     box-shadow: 0px 10px 15px -3px rgba(0,0,0,.1), 0px 4px 6px -4px rgba(0,0,0,.1);
     border-radius: 24px;
     padding: 24px;
@@ -62,7 +62,7 @@
    ════════════════════════════════════════════════════════════════════ */
 .materials-filter-bar {
     background: var(--surface);
-    border: 0.8px solid #F3E8FF;
+    border: 0.8px solid var(--border);
     box-shadow: 0px 10px 15px -3px rgba(0,0,0,.1), 0px 4px 6px -4px rgba(0,0,0,.1);
     border-radius: 24px;
     padding: 20px;
@@ -86,7 +86,7 @@
     max-width: 100%;
     box-sizing: border-box;
     padding: 8px 12px 8px 36px;
-    border: 0.8px solid #E5E7EB;
+    border: 0.8px solid var(--border);
     border-radius: 14px;
     font-size: 14px;
     background: var(--input-bg);
@@ -103,7 +103,7 @@
     max-width: 260px;
     height: 36px;
     padding: 8px 32px 8px 12px;
-    border: 0.8px solid #E5E7EB;
+    border: 0.8px solid var(--border);
     border-radius: 14px;
     font-size: 12px;
     background: var(--input-bg);
@@ -114,7 +114,7 @@
    GRID / LIST VIEW TOGGLE
    ════════════════════════════════════════════════════════════════════ */
 .materials-view-toggle {
-    background: #F3F4F6;
+    background: var(--surface-alt);
     border-radius: 14px;
     padding: 4px;
     gap: 6px;
@@ -129,13 +129,13 @@
 
     .materials-view-btn.active {
         background: #fff;
-        color: #6D72EA;
+        color: var(--accent);
         box-shadow: 0px 1px 3px rgba(0,0,0,.1), 0px 1px 2px -1px rgba(0,0,0,.1);
     }
 
     .materials-view-btn:not(.active) {
-        background: #EDEDED;
-        color: #4A5565;
+        background: var(--surface-alt);
+        color: var(--icon-color);
     }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -177,7 +177,6 @@
         box-shadow: var(--shadow-md);
     }
 
-    /* Slight stagger so a row of cards doesn't pop in as one flat block */
     .material-card-wide:nth-child(4n+1) {
         animation-delay: 0s;
     }
@@ -314,8 +313,8 @@
 }
 
     .material-card-delete-btn:hover {
-        background: #FEE2E2;
-        color: #DC2626;
+        background: var(--danger-soft-bg);
+        color: var(--danger);
     }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -458,7 +457,7 @@
 .materials-table-chip {
     display: inline-block;
     background: var(--surface-alt);
-    color: #6D72EA;
+    color: var(--accent);
     font-size: 12px;
     font-weight: 600;
     padding: 4px 10px;
@@ -474,8 +473,8 @@
    LIBRARY TABS (Figma spec)
    ════════════════════════════════════════════════════════════════════ */
 .library-tabs-card {
-    background: #fff;
-    border: 0.8px solid #F3E8FF;
+    background: var(--surface);
+    border: 0.8px solid var(--border);
     box-shadow: 0px 4px 6px -1px rgba(0,0,0,.1), 0px 2px 4px -2px rgba(0,0,0,.1);
     border-radius: 16px;
     overflow: hidden;
@@ -483,7 +482,7 @@
 
 .library-tabs-row {
     display: flex;
-    border-bottom: 0.8px solid #F3F4F6;
+    border-bottom: 0.8px solid var(--border);
 }
 
 .library-tab-btn {
@@ -498,13 +497,13 @@
     border-bottom: 1.6px solid transparent;
     font-weight: 700;
     font-size: 14px;
-    color: #4A5565;
+    color: var(--text-secondary);
 }
 
     .library-tab-btn.active {
-        background: rgba(238,242,255,0.5);
-        border-bottom-color: #6369D4;
-        color: #6369D4;
+        background: var(--accent-soft-bg);
+        border-bottom-color: var(--accent);
+        color: var(--accent);
     }
 
 .library-tabs-count-row {
@@ -512,12 +511,12 @@
     align-items: center;
     gap: 8px;
     padding: 8px 16px;
-    background: #F9FAFB;
+    background: var(--surface-alt);
 }
 
 .library-tabs-count-label {
     font-size: 12px;
-    color: #6A7282;
+    color: var(--text-muted);
 }
 
 .library-tabs-count-badge {
@@ -527,7 +526,7 @@
     min-width: 22px;
     height: 22px;
     padding: 0 6px;
-    background: #6369D4;
+    background: var(--accent);
     color: #fff;
     font-weight: 700;
     font-size: 12px;

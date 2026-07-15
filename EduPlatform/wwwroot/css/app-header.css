@@ -53,6 +53,116 @@
     color: var(--icon-color);
 }
 
+/* ── Shared white-pill surface (theme toggle + view-website button) ─── */
+.pill-surface {
+    background: #FFFFFF;
+    border: 1px solid rgba(109, 114, 234, 0.25);
+    box-shadow: 0px 1px 4px rgba(109, 114, 234, 0.12);
+    border-radius: 999px;
+    transition: box-shadow .2s ease, transform .15s ease;
+}
+
+    .pill-surface:hover {
+        box-shadow: 0px 2px 8px rgba(109, 114, 234, 0.22);
+        transform: translateY(-1px);
+    }
+
+[data-theme="dark"] .pill-surface {
+    background: var(--surface);
+    border-color: rgba(109, 114, 234, 0.35);
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, .3);
+}
+
+/* ── Pill-style icon button (theme toggle only) ──────────────────────── */
+.app-icon-btn-pill {
+    width: 35px;
+    height: 35px;
+}
+
+    .app-icon-btn-pill.app-theme-toggle i {
+        font-size: 18px;
+    }
+
+    .app-icon-btn-pill.app-theme-toggle .bi-sun {
+        color: #FFB703;
+    }
+
+    .app-icon-btn-pill.app-theme-toggle .bi-moon-stars {
+        color: #1E2130;
+    }
+
+    .app-icon-btn-pill i {
+        color: var(--accent);
+        font-size: 16px;
+    }
+
+/* ── "View Website" pill (home link) ─────────────────────────────────── */
+.app-view-website-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 35px;
+    padding: 0 16px 0 12px;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.app-view-website-dot {
+    position: relative;
+    width: 7px;
+    height: 7px;
+    flex: none;
+}
+
+    .app-view-website-dot::before,
+    .app-view-website-dot::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--accent);
+        border-radius: 50%;
+    }
+
+    .app-view-website-dot::before {
+        opacity: .75;
+        animation: view-website-ping 1.8s ease-out infinite;
+    }
+
+@keyframes view-website-ping {
+    0% {
+        transform: scale(1);
+        opacity: .75;
+    }
+
+    70% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+.app-view-website-icon,
+.app-view-website-arrow {
+    font-size: 11px;
+    color: var(--accent);
+}
+
+.app-view-website-arrow {
+    opacity: .45;
+}
+
+.app-view-website-label {
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.125px;
+    color: var(--accent);
+    white-space: nowrap;
+}
+
 .app-notification-dot {
     position: absolute;
     width: 8px;

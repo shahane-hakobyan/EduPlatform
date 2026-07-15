@@ -1,5 +1,5 @@
-﻿using EduPlatform.Models;
-using EduPlatform.Services;
+﻿using EduPlatform.Services;
+using EduPlatform.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduPlatform.ViewComponents

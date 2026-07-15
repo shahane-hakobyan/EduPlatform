@@ -1,4 +1,4 @@
-﻿namespace EduPlatform.Services
+﻿namespace EduPlatform.Helpers
 {
     public static class SidebarIcons
     {
@@ -45,7 +45,7 @@
             </svg>
             """;
 
-        public const string AbChat = """
+        public const string AIChat = """
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sidebar-icon-lg" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
@@ -73,7 +73,7 @@
             </svg>
             """;
 
-        public const string Guides = """
+        public const string MethodologicalGuidelines = """
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" class="sidebar-icon" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5 11.6666L6.25 9.24996C6.38589 8.98007 6.5926 8.75221 6.84801 8.59075C7.10341 8.42928 7.39791 8.34029 7.7 8.33329H16.6667M16.6667 8.33329C16.9213 8.33284 17.1726 8.39074 17.4014 8.50253C17.6301 8.61432 17.8302 8.77703 17.9863 8.97818C18.1424 9.17933 18.2503 9.41357 18.3018 9.66292C18.3533 9.91227 18.347 10.1701 18.2833 10.4166L17 15.4166C16.9071 15.7763 16.6968 16.0946 16.4024 16.321C16.108 16.5475 15.7464 16.6691 15.375 16.6666H3.33333C2.8913 16.6666 2.46738 16.491 2.15482 16.1785C1.84226 15.8659 1.66666 15.442 1.66666 15V4.16662C1.66666 3.7246 1.84226 3.30067 2.15482 2.98811C2.46738 2.67555 2.8913 2.49996 3.33333 2.49996H6.58333C6.86207 2.49723 7.13704 2.56445 7.38308 2.69547C7.62912 2.8265 7.83836 3.01715 7.99166 3.24996L8.66666 4.24996C8.81842 4.4804 9.02502 4.66956 9.26791 4.80046C9.51081 4.93136 9.78241 4.99991 10.0583 4.99996H15C15.442 4.99996 15.8659 5.17555 16.1785 5.48811C16.4911 5.80067 16.6667 6.2246 16.6667 6.66662V8.33329Z" />
             </svg>

@@ -1,7 +1,7 @@
-﻿using EduPlatform.Models;
+﻿using EduPlatform.Helpers;
+using EduPlatform.Resources;
 using EduPlatform.Services;
 using EduPlatform.ViewModels;
-using EduPlatform.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 
@@ -50,7 +50,7 @@ namespace EduPlatform.Controllers
                 "Textbooks" => new MaterialsPageViewModel
                 {
                     Title = _l["Textbooks"],
-                    Filters = StandardMaterialFilters(),
+                    Filters = MaterialFilters.Standard(_l),
                     TotalCount = 5,
                     Materials = new()
             {
@@ -126,10 +126,10 @@ namespace EduPlatform.Controllers
                 },
             }
                 },
-                "Guides" => new MaterialsPageViewModel
+                "MethodologicalGuidelines" => new MaterialsPageViewModel
                 {
                     Title = _l["MethodologicalGuidelines"],
-                    Filters = StandardMaterialFilters(),
+                    Filters = MaterialFilters.Standard(_l),
                     TotalCount = 3,
                     Materials = new()
             {
@@ -177,10 +177,10 @@ namespace EduPlatform.Controllers
                 },
             }
                 },
-                "Other" => new MaterialsPageViewModel
+                "OtherEducationalMaterials" => new MaterialsPageViewModel
                 {
                     Title = _l["OtherEducationalMaterials"],
-                    Filters = OtherMaterialsFilters(),
+                    Filters = MaterialFilters.Other(_l),
                     TotalCount = 3,
                     Materials = new()
             {
@@ -233,7 +233,7 @@ namespace EduPlatform.Controllers
 
             if (vm == null) return NotFound();
 
-            return View("MaterialsList", vm);
+            return View("~/Views/Shared/Materials/MaterialsList.cshtml", vm);
         }
 
         public IActionResult Library()
@@ -248,8 +248,7 @@ namespace EduPlatform.Controllers
             Content = new MaterialsPageViewModel
             {
                 Title = _l["OtherTextbooks"],
-                Subtitle = _l["OtherTextbooksSubtitle"],
-                Filters = LibraryTextbookFilters(),
+                Filters = MaterialFilters.LibraryTextbook(_l),
                 TotalCount = 3,
                 Materials = new()
                 {
@@ -303,8 +302,7 @@ namespace EduPlatform.Controllers
             Content = new MaterialsPageViewModel
             {
                 Title = _l["FictionBooks"],
-                Subtitle = _l["FictionBooksSubtitle"],
-                Filters = LibraryFictionFilters(),
+                Filters = MaterialFilters.LibraryFiction(_l),
                 TotalCount = 3,
                 Materials = new()
                 {
@@ -358,8 +356,7 @@ namespace EduPlatform.Controllers
             Content = new MaterialsPageViewModel
             {
                 Title = _l["PopularScienceBooks"],
-                Subtitle = _l["PopularScienceBooksSubtitle"],
-                Filters = LibraryFictionFilters(),
+                Filters = MaterialFilters.LibraryFiction(_l),
                 TotalCount = 2,
                 Materials = new()
                 {
@@ -396,28 +393,8 @@ namespace EduPlatform.Controllers
         }
     };
 
-            return View("Library", tabs);
+            return View("~/Views/Shared/Materials/Library.cshtml", tabs);
         }
 
-        private List<MaterialFilterOption> StandardMaterialFilters() => new() {
-            new() { Key = "subject", Label = _l["Subject"] },
-            new() { Key = "grade", Label = _l["Grade"] },
-            new() { Key = "author", Label = _l["Author"] },
-            new() { Key = "year", Label = _l["PublicationYear"] },
-            new() { Key = "publisher", Label = _l["Publisher"] },
-        };
-
-        private List<MaterialFilterOption> OtherMaterialsFilters() =>
-            StandardMaterialFilters().Append(new() { Key = "type", Label = _l["MaterialType"] }).ToList();
-
-        private List<MaterialFilterOption> LibraryTextbookFilters() =>
-            StandardMaterialFilters().Append(new() { Key = "language", Label = _l["Language"] }).ToList();
-
-        private List<MaterialFilterOption> LibraryFictionFilters() => new() {
-            new() { Key = "author", Label = _l["Author"] },
-            new() { Key = "year", Label = _l["PublicationYear"] },
-            new() { Key = "publisher", Label = _l["Publisher"] },
-            new() { Key = "language", Label = _l["Language"] },
-        };
     }
 }
