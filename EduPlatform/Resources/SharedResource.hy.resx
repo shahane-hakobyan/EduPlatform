@@ -146,6 +146,14 @@
   <data name="MaterialType" xml:space="preserve"><value>Նյութի տեսակ</value></data>
   <data name="NoMaterialsSaved" xml:space="preserve"><value>Չկան նյութեր</value></data>
   <data name="Language" xml:space="preserve"><value>Լեզու</value></data>
+  <data name="PersonalInformation" xml:space="preserve"><value>Անձնական տվյալներ</value></data>
+  <data name="AddPhoto" xml:space="preserve"><value>Ավելացնել նկար</value></data>
+  <data name="DeletePhoto" xml:space="preserve"><value>Հեռացնել նկարը</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Չեղարկել</value></data>
+  <data name="Save" xml:space="preserve"><value>Պահպանել</value></data>
+  <data name="EditProfile" xml:space="preserve"><value>Խմբագրել էջը</value></data>
+  <data name="VoluntaryCertification" xml:space="preserve"><value>Կամավոր ատեստավորում</value></data>
+  <data name="FullName" xml:space="preserve"><value>Անուն, ազգանուն</value></data>
 
 
 

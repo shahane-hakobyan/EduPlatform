@@ -38,6 +38,8 @@
     --accent-soft-bg: rgba(238, 242, 255, 0.5);
     --danger: #DC2626;
     --danger-soft-bg: #FEE2E2;
+    --info: #1665D8;
+    --info-soft-bg: #E8F1FC;
 }
 
 [data-theme="dark"] {
@@ -80,6 +82,8 @@
     --accent-soft-bg: rgba(99, 105, 212, 0.18);
     --danger: #F87171;
     --danger-soft-bg: rgba(220, 38, 38, 0.2);
+    --info: #5B93E8;
+    --info-soft-bg: rgba(22, 101, 216, 0.2);
 }
 
 body {

@@ -1,0 +1,690 @@
+﻿/* ── Read-view card ──────────────────────────────────────────────── */
+.schedule-card {
+    background: var(--surface);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    padding: 24px;
+    margin-top: 24px;
+}
+
+.schedule-title {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text-primary);
+}
+
+.schedule-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.schedule-edit-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-alt);
+    border: none;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--accent);
+}
+
+.schedule-current-day-row {
+    padding: 4px 0;
+}
+
+.schedule-current-day-name {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.schedule-current-day-accent {
+    width: 4px;
+    height: 22px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+.schedule-current-day-meta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-soft-bg);
+    color: var(--accent-strong);
+    font-weight: 700;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 999px;
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+/* ── Assigned-period card ─────────────────────────────────────────── */
+.schedule-card-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    min-height: 82px;
+    background: linear-gradient(135deg, #F8FAFF 0%, #F6F9FF 25%, #F4F7FF 50%, #F2F6FF 75%, #F0F4FF 100%);
+    border: 1.6px solid #E0E7FF;
+    border-radius: 24px;
+}
+
+.schedule-card-icon-badge {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    box-shadow: 0px 4px 6px rgba(99, 105, 212, .2);
+    border-radius: 14px;
+    font-weight: 900;
+    font-size: 20px;
+    color: var(--accent-strong);
+}
+
+.schedule-card-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.schedule-card-badges {
+    display: flex;
+    gap: 8px;
+}
+
+.schedule-card-time-pill {
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 10px;
+    background: rgba(99, 105, 212, .1);
+    border-radius: 6px;
+    font-weight: 900;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent-strong);
+}
+
+.schedule-card-room-pill {
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 10px;
+    background: rgba(249, 115, 22, .1);
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: .5px;
+    color: #F97316;
+}
+
+.schedule-card-class-name {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--accent-strong);
+    text-decoration: underline;
+}
+
+.schedule-card-subject-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+.schedule-card-note-bubble {
+    position: absolute;
+    top: -6px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #BD00FF;
+    border: 2px solid #000;
+    border-radius: 50% 50% 50% 4px;
+    color: #fff;
+    font-size: 11px;
+    cursor: help;
+}
+
+/* ── Free-period card ─────────────────────────────────────────────── */
+.schedule-card-free {
+    background: var(--chip-green-start);
+    border: 0.8px solid var(--chip-green-border);
+}
+
+.schedule-card-top {
+    display: flex;
+    align-items: center;
+}
+
+.schedule-period-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.schedule-period-badge-free {
+    background: #22C55E;
+}
+
+.schedule-time-badge {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-strong);
+    background: var(--surface);
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.schedule-free-text {
+    font-weight: 700;
+    font-size: 14px;
+    color: #16A34A;
+    margin-top: 8px;
+}
+
+.schedule-free-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.schedule-empty-icon {
+    font-size: 40px;
+    color: var(--text-faint);
+}
+
+.schedule-empty-text {
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+/* ── Right week panel ─────────────────────────────────────────────── */
+.schedule-week-panel {
+    width: 220px;
+    background: var(--surface-alt);
+    border-radius: 14px;
+    padding: 12px;
+}
+
+.schedule-week-header {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: 8px;
+}
+
+.schedule-week-row {
+    width: 100%;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+}
+
+    .schedule-week-row.selected {
+        border-color: var(--accent);
+        box-shadow: var(--shadow-sm);
+    }
+
+.schedule-week-row-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+.schedule-week-row-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.schedule-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.schedule-badge-purple {
+    background: var(--accent);
+}
+
+.schedule-badge-green {
+    background: #22C55E;
+}
+
+.schedule-week-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+    padding-top: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.schedule-week-footer-row strong {
+    color: var(--text-primary);
+}
+
+/* ── Edit panel (slides in from the right) ───────────────────────── */
+.schedule-edit-panel {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 560px;
+    max-width: 100vw;
+    background: var(--surface);
+    box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, .25);
+    z-index: 3001;
+    transform: translateX(100%);
+    transition: transform .3s ease;
+}
+
+    .schedule-edit-panel.open {
+        transform: translateX(0);
+    }
+
+.schedule-edit-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 0.8px solid var(--border);
+    flex-shrink: 0;
+}
+
+.schedule-edit-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.schedule-edit-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+    box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, .1), 0px 2px 4px -2px rgba(0, 0, 0, .1);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.schedule-edit-title {
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text-primary);
+}
+
+.schedule-edit-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.schedule-edit-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 14px;
+    background: var(--surface-alt);
+    border: none;
+    color: var(--icon-color);
+    flex-shrink: 0;
+}
+
+.schedule-edit-hint {
+    font-size: 11px;
+    color: var(--text-faint);
+    padding: 12px 24px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.schedule-edit-form {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0 16px 16px;
+}
+
+.schedule-edit-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Assigned-period card: white bg, light-indigo border */
+.schedule-edit-row {
+    background: var(--surface);
+    border: 1.6px solid var(--chip-indigo-border);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, .1), 0px 1px 2px -1px rgba(0, 0, 0, .1);
+    border-radius: 16px;
+    padding: 12px 16px;
+}
+
+    /* Free-period card: lighter, neutral gray, no shadow */
+    .schedule-edit-row.is-free {
+        background: rgba(249, 250, 251, .6);
+        border: 1.6px solid var(--surface-alt);
+        box-shadow: none;
+    }
+
+.schedule-edit-period-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 14px;
+    background: var(--accent-strong);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.schedule-edit-row.is-free .schedule-edit-period-badge {
+    background: var(--border);
+    color: var(--text-muted);
+}
+
+.schedule-edit-remove-btn,
+.schedule-edit-add-class-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 10px;
+}
+
+.schedule-edit-remove-btn {
+    color: var(--text-faint);
+}
+
+.schedule-edit-add-class-btn {
+    color: var(--accent-strong);
+}
+
+.schedule-edit-row:not(.is-free) .schedule-edit-add-class-btn {
+    display: none;
+}
+
+.schedule-edit-free-indicator {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 0 0;
+    font-size: 12px;
+    color: var(--text-faint);
+}
+
+.schedule-edit-row.is-free .schedule-edit-free-indicator {
+    display: flex;
+}
+
+.schedule-edit-fields {
+    display: none;
+    margin-top: 12px;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.schedule-edit-row:not(.is-free) .schedule-edit-fields {
+    display: flex;
+}
+
+.schedule-edit-field-label {
+    display: block;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.schedule-edit-input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 38px;
+    padding: 0 12px;
+    background: var(--surface);
+    border: 0.8px solid var(--border);
+    border-radius: 14px;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.schedule-edit-make-free-btn {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-decoration: underline;
+}
+
+.schedule-add-period-btn {
+    width: 100%;
+    margin-top: 12px;
+    background: none;
+    border: 1.6px dashed var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    color: var(--accent);
+    font-size: 13px;
+}
+
+.schedule-edit-footer {
+    display: flex;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 0.8px solid var(--border);
+    flex-shrink: 0;
+}
+
+.schedule-edit-cancel-btn {
+    flex: 1;
+    height: 42px;
+    background: var(--surface);
+    border: 0.8px solid var(--border);
+    border-radius: 14px;
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.schedule-edit-save-btn {
+    flex: 1;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(90deg, var(--accent-strong), var(--accent));
+    box-shadow: 0px 10px 15px -3px rgba(99, 105, 212, .2), 0px 4px 6px -4px rgba(99, 105, 212, .2);
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* ── Custom time range picker ─────────────────────────────────────── */
+.time-range-picker {
+    position: relative;
+}
+
+.time-picker-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    height: 32px;
+    padding: 0 10px;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    color: var(--text-faint);
+    font-size: 12px;
+}
+
+    .time-picker-display.has-value {
+        color: var(--text-primary);
+        border-color: var(--accent);
+    }
+
+.time-picker-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 10;
+    width: 140px;
+    padding: 8px 12px;
+    background: var(--surface);
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, .15);
+    border-radius: 8px;
+}
+
+    .time-picker-dropdown.open {
+        display: block;
+    }
+
+.time-picker-steppers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.time-picker-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.time-picker-arrow {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-picker-value-display {
+    font-size: 20px;
+    color: var(--text-primary);
+    min-width: 22px;
+    text-align: center;
+}
+
+.time-picker-colon {
+    font-size: 20px;
+    color: var(--text-primary);
+    padding: 0 2px;
+}
+
+.time-picker-ampm {
+    display: flex;
+    margin-top: 8px;
+}
+
+.time-picker-ampm-btn {
+    flex: 1;
+    height: 24px;
+    background: none;
+    border: 1px solid var(--accent);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+    .time-picker-ampm-btn:first-child {
+        border-radius: 6px 0 0 6px;
+        border-right: none;
+    }
+
+    .time-picker-ampm-btn:last-child {
+        border-radius: 0 6px 6px 0;
+    }
+
+    .time-picker-ampm-btn.active {
+        background: var(--accent-soft-bg);
+        color: var(--accent-strong);
+    }
+
+.time-range-toggle {
+    display: flex;
+    margin-top: 8px;
+}
+
+.time-range-toggle-btn {
+    flex: 1;
+    height: 24px;
+    background: none;
+    border: 1px solid var(--accent);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+    .time-range-toggle-btn:first-child {
+        border-radius: 6px 0 0 6px;
+        border-right: none;
+    }
+
+    .time-range-toggle-btn:last-child {
+        border-radius: 0 6px 6px 0;
+    }
+
+    .time-range-toggle-btn.active {
+        background: var(--accent-soft-bg);
+        color: var(--accent-strong);
+    }

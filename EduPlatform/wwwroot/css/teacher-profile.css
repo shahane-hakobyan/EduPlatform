@@ -3,6 +3,7 @@
     box-shadow: var(--shadow-md);
     border-radius: 16px;
     overflow: hidden;
+    position: relative;
 }
 
 .teacher-profile-banner {
@@ -214,4 +215,21 @@
     font-size: 12px;
     line-height: 18px;
     color: var(--text-primary);
+}
+.teacher-profile-edit-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 5;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: none;
+    box-shadow: var(--shadow-sm);
+    color: var(--accent);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

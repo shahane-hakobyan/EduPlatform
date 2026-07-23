@@ -146,7 +146,13 @@
   <data name="MaterialType" xml:space="preserve"><value>Тип материала</value></data>
   <data name="NoMaterialsSaved" xml:space="preserve"><value>Тип материала</value></data>
   <data name="Language" xml:space="preserve"><value>Язык</value></data>
-
-
+  <data name="PersonalInformation" xml:space="preserve"><value>Личная информация</value></data>
+  <data name="AddPhoto" xml:space="preserve"><value>Добавить фото</value></data>
+  <data name="DeletePhoto" xml:space="preserve"><value>Удалить фото</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Отмена</value></data>
+  <data name="Save" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="EditProfile" xml:space="preserve"><value>Редактировать профиль</value></data>
+  <data name="VoluntaryCertification" xml:space="preserve"><value>Добровольная сертификация</value></data>
+  <data name="FullName" xml:space="preserve"><value>Имя, фамилия</value></data>
 
 </root>

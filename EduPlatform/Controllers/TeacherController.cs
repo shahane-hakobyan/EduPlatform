@@ -1,8 +1,11 @@
-﻿using EduPlatform.Helpers;
+﻿using EduPlatform.Data;
+using EduPlatform.Helpers;
+using EduPlatform.Models;
 using EduPlatform.Resources;
 using EduPlatform.Services;
 using EduPlatform.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace EduPlatform.Controllers
@@ -11,17 +14,22 @@ namespace EduPlatform.Controllers
     {
         private readonly ISidebarMenuBuilder _menuBuilder;
         private readonly IStringLocalizer<SharedResource> _l;
+        private readonly EduPlatformDbContext _db;
 
-        public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer)
+        private const string CurrentTeacherName = "Հարություն Գրիգորյան"; // stand-in until real auth exists
+
+        public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer, EduPlatformDbContext db)
         {
             _menuBuilder = menuBuilder;
             _l = localizer;
+            _db = db;
         }
 
         public IActionResult Index()
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
             ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+            ViewBag.Schedule = BuildScheduleViewModel(null);
 
             var profile = new TeacherProfileViewModel
             {
@@ -40,7 +48,130 @@ namespace EduPlatform.Controllers
             return View(profile);
         }
 
-        public IActionResult Materials(string id)
+        [HttpGet]
+        public IActionResult ScheduleDayContent(string day)
+        {
+            return PartialView("_TeacherSchedule", BuildScheduleViewModel(day));
+        }
+
+        [HttpGet]
+        public IActionResult ScheduleEdit(string day)
+        {
+            var selectedDay = Enum.Parse<ScheduleDay>(day);
+
+            var entries = _db.ScheduleEntries
+                .Where(e => e.TeacherName == CurrentTeacherName && e.Day == selectedDay)
+                .OrderBy(e => e.PeriodNumber)
+                .ToList();
+
+            var vm = new ScheduleEditViewModel
+            {
+                Day = day,
+                DayLabel = _l[day],
+                Rows = entries.Select(e => new ScheduleEditRowViewModel
+                {
+                    PeriodNumber = e.PeriodNumber,
+                    StartTime = e.StartTime.ToString("HH:mm"),
+                    EndTime = e.EndTime.ToString("HH:mm"),
+                    IsFree = e.SubjectId == null,
+                    SubjectId = e.SubjectId,
+                    SchoolClassId = e.SchoolClassId,
+                    RoomNumber = e.RoomNumber,
+                    Notes = e.Notes
+                }).ToList(),
+                Subjects = _db.TeacherSubjects
+                    .Where(ts => ts.TeacherName == CurrentTeacherName)
+                    .Select(ts => new SelectOption { Id = ts.SubjectId, Label = ts.Subject.Name })
+                    .ToList(),
+                Classes = _db.TeacherClasses
+                    .Where(tc => tc.TeacherName == CurrentTeacherName)
+                    .Select(tc => new SelectOption { Id = tc.SchoolClassId, Label = tc.SchoolClass.Name })
+                    .ToList()
+            };
+
+            return PartialView("_ScheduleEditModal", vm);
+        }
+
+        public class ScheduleSaveRequest
+        {
+            public string Day { get; set; } = "";
+            public List<ScheduleEditRowViewModel> Rows { get; set; } = new();
+        }
+
+        [HttpPost]
+        public IActionResult ScheduleSave([FromBody] ScheduleSaveRequest request)
+        {
+            var selectedDay = Enum.Parse<ScheduleDay>(request.Day);
+
+            var existing = _db.ScheduleEntries.Where(e => e.TeacherName == CurrentTeacherName && e.Day == selectedDay);
+            _db.ScheduleEntries.RemoveRange(existing);
+
+            foreach (var row in request.Rows)
+            {
+                _db.ScheduleEntries.Add(new ScheduleEntry
+                {
+                    TeacherName = CurrentTeacherName,
+                    Day = selectedDay,
+                    PeriodNumber = row.PeriodNumber,
+                    StartTime = TimeOnly.Parse(row.StartTime!),
+                    EndTime = TimeOnly.Parse(row.EndTime!),
+                    SubjectId = row.IsFree ? null : row.SubjectId,
+                    SchoolClassId = row.IsFree ? null : row.SchoolClassId,
+                    RoomNumber = row.IsFree ? null : row.RoomNumber,
+                    Notes = row.Notes
+                });
+            }
+
+            _db.SaveChanges();
+            return Json(new { success = true });
+        }
+
+        private ScheduleReadViewModel BuildScheduleViewModel(string? day)
+        {
+            var allEntries = _db.ScheduleEntries
+                .Where(e => e.TeacherName == CurrentTeacherName)
+                .Include(e => e.Subject)
+                .Include(e => e.SchoolClass)
+                .ToList();
+
+            var selectedDayValue = day ?? ScheduleDay.Monday.ToString();
+
+            var days = Enum.GetValues<ScheduleDay>()
+                .Select(d => new ScheduleDayViewModel
+                {
+                    Day = d.ToString(),
+                    DayLabel = _l[d.ToString()],
+                    ClassCount = allEntries.Count(e => e.Day == d && e.SubjectId != null),
+                    FreeCount = allEntries.Count(e => e.Day == d && e.SubjectId == null),
+                    IsSelected = d.ToString() == selectedDayValue
+                })
+                .ToList();
+
+            var selectedDay = Enum.Parse<ScheduleDay>(selectedDayValue);
+
+            return new ScheduleReadViewModel
+            {
+                Days = days,
+                TotalClassCount = allEntries.Count(e => e.SubjectId != null),
+                TotalFreeCount = allEntries.Count(e => e.SubjectId == null),
+                SelectedDayEntries = allEntries
+                    .Where(e => e.Day == selectedDay)
+                    .OrderBy(e => e.PeriodNumber)
+                    .Select(e => new ScheduleEntryViewModel
+                    {
+                        Id = e.Id,
+                        PeriodNumber = e.PeriodNumber,
+                        TimeRange = $"{e.StartTime:HH:mm} – {e.EndTime:HH:mm}",
+                        IsFree = e.SubjectId == null,
+                        SubjectName = e.Subject?.Name,
+                        ClassName = e.SchoolClass?.Name,
+                        RoomNumber = e.RoomNumber,
+                        Notes = e.Notes
+                    })
+                    .ToList()
+            };
+        }
+public IActionResult Materials(string id)
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
             ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();

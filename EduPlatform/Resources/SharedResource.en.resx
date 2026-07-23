@@ -146,4 +146,12 @@
   <data name="MaterialType" xml:space="preserve"><value>Material type</value></data>
   <data name="NoMaterialsSaved" xml:space="preserve"><value>Not materials saved</value></data>
   <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="PersonalInformation" xml:space="preserve"><value>Personal information</value></data>
+  <data name="AddPhoto" xml:space="preserve"><value>Add photo</value></data>
+  <data name="DeletePhoto" xml:space="preserve"><value>Delete photo</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Save" xml:space="preserve"><value>Save</value></data>
+  <data name="EditProfile" xml:space="preserve"><value>Edit profile</value></data>
+  <data name="VoluntaryCertification" xml:space="preserve"><value>Voluntary Certification</value></data>
+  <data name="FullName" xml:space="preserve"><value>First name, last name</value></data>
 </root>

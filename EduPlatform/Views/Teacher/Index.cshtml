@@ -5,6 +5,10 @@
 }
 
 <div class="teacher-profile-card">
+    <button type="button" id="editProfileOpenBtn" class="teacher-profile-edit-btn" aria-label="@Localizer["EditProfile"]">
+        <i class="bi bi-pencil-fill"></i>
+    </button>
+
     <div class="teacher-profile-banner position-relative">
         <span class="banner-blur banner-blur-1"></span>
         <span class="banner-blur banner-blur-2"></span>
@@ -79,9 +83,15 @@
         </div>
     </div>
 </div>
+<partial name="_EditProfileModal" model="Model" />
+
+<partial name="_TeacherSchedule" model="(EduPlatform.ViewModels.ScheduleReadViewModel)ViewBag.Schedule" />
+<div id="scheduleEditModalContainer"></div>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/teacher-profile.css" />
+    <link rel="stylesheet" href="~/css/teacher-profile.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/edit-profile.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/teacher-schedule.css" asp-append-version="true" />
 }
 
 @section Scripts {
@@ -92,4 +102,6 @@
             });
         });
     </script>
+    <script src="~/js/edit-profile.js"></script>
+    <script src="~/js/teacher-schedule.js"></script>
 }
