@@ -61,7 +61,7 @@
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <button type="button" class="schedule-edit-add-class-btn">
-                                <i class="bi bi-plus-lg"></i> @Localizer["AddClass"]
+                                <i class="bi bi-plus-lg"></i> @Localizer["AddPeriod"]
                             </button>
                             <button type="button" class="schedule-edit-remove-btn">
                                 <i class="bi bi-trash"></i> @Localizer["Remove"]
@@ -90,18 +90,18 @@
                         </div>
                         <div class="d-flex gap-3">
                             <div class="flex-grow-1">
-                                <label class="schedule-edit-field-label">@Localizer["Class"] *</label>
+                                <label class="schedule-edit-field-label">@Localizer["Grade"] *</label>
                                 <select class="schedule-edit-input schedule-edit-class-select">
                                     <option value="">—</option>
-                                    @foreach (var c in Model.Classes)
+                                    @foreach (var c in Model.Grades)
                                     {
-                                        <option value="@c.Id" selected="@(c.Id == row.SchoolClassId)">@c.Label</option>
+                                        <option value="@c.Id" selected="@(c.Id == row.GradeId)">@c.Label</option>
                                     }
                                 </select>
                             </div>
                             <div class="flex-grow-1">
                                 <label class="schedule-edit-field-label">@Localizer["Room"]</label>
-                                <input type="text" class="schedule-edit-input schedule-edit-room-input" value="@row.RoomNumber" placeholder="@Localizer["RoomPlaceholder"]" />
+                                <input type="text" class="schedule-edit-input schedule-edit-room-input" value="@row.RoomNumber" placeholder="@Localizer["Room"]" />
                             </div>
                         </div>
                         <button type="button" class="schedule-edit-make-free-btn">@Localizer["MarkAsFree"]</button>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <button type="button" class="schedule-edit-add-class-btn">
-                            <i class="bi bi-plus-lg"></i> @Localizer["AddClass"]
+                            <i class="bi bi-plus-lg"></i> @Localizer["AddPeriod"]
                         </button>
                         <button type="button" class="schedule-edit-remove-btn">
                             <i class="bi bi-trash"></i> @Localizer["Remove"]
@@ -176,10 +176,10 @@
                     </div>
                     <div class="d-flex gap-3">
                         <div class="flex-grow-1">
-                            <label class="schedule-edit-field-label">@Localizer["Class"] *</label>
+                            <label class="schedule-edit-field-label">@Localizer["Grade"] *</label>
                             <select class="schedule-edit-input schedule-edit-class-select">
                                 <option value="">—</option>
-                                @foreach (var c in Model.Classes)
+                                @foreach (var c in Model.Grades)
                                 {
                                     <option value="@c.Id">@c.Label</option>
                                 }
@@ -187,7 +187,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <label class="schedule-edit-field-label">@Localizer["Room"]</label>
-                            <input type="text" class="schedule-edit-input schedule-edit-room-input" placeholder="@Localizer["RoomPlaceholder"]" />
+                            <input type="text" class="schedule-edit-input schedule-edit-room-input" placeholder="@Localizer["Room"]" />
                         </div>
                     </div>
                     <button type="button" class="schedule-edit-make-free-btn">@Localizer["MarkAsFree"]</button>

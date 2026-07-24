@@ -132,7 +132,7 @@
   <data name="PublicationYear" xml:space="preserve"><value>Год публикации</value></data>
   <data name="Publisher" xml:space="preserve"><value>Издатель</value></data>
   <data name="Grid" xml:space="preserve"><value>	Сеть</value></data>
-  <data name="ListView" xml:space="preserve"><value>	Список</value></data>
+  <data name="ListView" xml:space="preserve"><value>Список</value></data>
   <data name="Pages" xml:space="preserve"><value>Страницы</value></data>
   <data name="View" xml:space="preserve"><value>Смотреть</value></data>
   <data name="Total" xml:space="preserve"><value>Общий</value></data>
@@ -154,5 +154,31 @@
   <data name="EditProfile" xml:space="preserve"><value>Редактировать профиль</value></data>
   <data name="VoluntaryCertification" xml:space="preserve"><value>Добровольная сертификация</value></data>
   <data name="FullName" xml:space="preserve"><value>Имя, фамилия</value></data>
+
+  <data name="Schedule" xml:space="preserve"><value>Расписание</value></data>
+  <data name="ScheduleSubtitle" xml:space="preserve"><value>Еженедельное расписание</value></data>
+  <data name="Monday" xml:space="preserve"><value>Понедельник</value></data>
+  <data name="Tuesday" xml:space="preserve"><value>Вторник</value></data>
+  <data name="Wednesday" xml:space="preserve"><value>Среда</value></data>
+  <data name="Thursday" xml:space="preserve"><value>Четверг</value></data>
+  <data name="Friday" xml:space="preserve"><value>Пятница</value></data>
+  <data name="Saturday" xml:space="preserve"><value>Суббота</value></data>
+  <data name="Sunday" xml:space="preserve"><value>Воскресенье</value></data>
+  <data name="Classes" xml:space="preserve"><value>Учебные часы</value></data>
+  <data name="NoScheduleForDay" xml:space="preserve"><value>На этот день расписание отсутствует</value></data>
+  <data name="FreeHours" xml:space="preserve"><value>Свободные часы</value></data>
+  <data name="WeekDays" xml:space="preserve"><value>Дни недели</value></data>
+  <data name="Edit" xml:space="preserve"><value>Редактировать</value></data>
+  <data name="ScheduleEditTitle" xml:space="preserve"><value>Редактировать расписание</value></data>
+  <data name="ScheduleEditHint" xml:space="preserve"><value>Добавьте или измените учебные часы для каждого дня</value></data>
+  <data name="SelectTime" xml:space="preserve"><value>Выбрать время</value></data>
+  <data name="AddPeriod" xml:space="preserve"><value>Добавить учебный час</value></data>
+  <data name="Remove" xml:space="preserve"><value>Удалить</value></data>
+  <data name="FreePeriod" xml:space="preserve"><value>Свободный урок</value></data>
+  <data name="Room" xml:space="preserve"><value>Кабинет</value></data>
+  <data name="MarkAsFree" xml:space="preserve"><value>Отметить как свободный урок</value></data>
+  <data name="ScheduleNotesPlaceholder" xml:space="preserve"><value>Добавьте примечания к расписанию (необязательно)</value></data>
+  <data name="Notes" xml:space="preserve"><value>Примечания</value></data>
+
 
 </root>

@@ -9,6 +9,38 @@
         }
     });
 
+    // Grade name click → open pupil roster
+    document.addEventListener('click', function (e) {
+        const gradeBtn = e.target.closest('.schedule-card-grade-name');
+        if (!gradeBtn) return;
+        const gradeId = gradeBtn.getAttribute('data-grade-id');
+        fetch('/Teacher/GradeRoster?gradeId=' + encodeURIComponent(gradeId))
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('gradeRosterContainer').innerHTML = html;
+                requestAnimationFrame(function () {
+                    document.getElementById('gradeRosterModal').classList.add('open');
+                    document.getElementById('gradeRosterBackdrop').classList.add('open');
+                });
+                wireGradeRosterClose();
+            });
+    });
+
+    function wireGradeRosterClose() {
+        const modal = document.getElementById('gradeRosterModal');
+        const backdrop = document.getElementById('gradeRosterBackdrop');
+        const closeBtn = document.getElementById('gradeRosterCloseBtn');
+        function close() {
+            modal.classList.remove('open');
+            backdrop.classList.remove('open');
+            setTimeout(function () {
+                document.getElementById('gradeRosterContainer').innerHTML = '';
+            }, 200);
+        }
+        closeBtn.addEventListener('click', close);
+        backdrop.addEventListener('click', close);
+    }
+
     function initTooltips() {
         document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
             new bootstrap.Tooltip(el);
@@ -185,6 +217,7 @@
             });
             row.querySelector('.schedule-edit-make-free-btn').addEventListener('click', function () {
                 row.classList.add('is-free');
+                row.classList.remove('invalid');
             });
         }
 
@@ -199,6 +232,7 @@
             const templateRow = rowsContainer.querySelector('.schedule-edit-row-template');
             const clone = templateRow.cloneNode(true);
             clone.classList.remove('schedule-edit-row-template');
+            clone.classList.add('is-free');
             clone.style.display = '';
             clone.setAttribute('data-period', nextPeriod);
             clone.querySelector('.schedule-edit-period-badge').textContent = nextPeriod;
@@ -214,6 +248,24 @@
 
         form.addEventListener('submit', function (e) {
             e.preventDefault();
+
+            // A non-free row must have both subject and grade — highlight & block if not
+            let hasInvalid = false;
+            rowsContainer.querySelectorAll('.schedule-edit-row:not(.schedule-edit-row-template)').forEach(function (row) {
+                row.classList.remove('invalid');
+                if (row.classList.contains('is-free')) return;
+                const subj = row.querySelector('.schedule-edit-subject-select');
+                const grade = row.querySelector('.schedule-edit-class-select');
+                if (!subj.value || !grade.value) {
+                    row.classList.add('invalid');
+                    hasInvalid = true;
+                }
+            });
+            if (hasInvalid) {
+                rowsContainer.querySelector('.schedule-edit-row.invalid')
+                    .scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
 
             const day = form.getAttribute('data-day');
             const rows = Array.from(rowsContainer.querySelectorAll('.schedule-edit-row:not(.schedule-edit-row-template)')).map(function (row) {
@@ -235,7 +287,7 @@
                     endTime: endTime,
                     isFree: isFree,
                     subjectId: subjectSelect && subjectSelect.value ? parseInt(subjectSelect.value, 10) : null,
-                    schoolClassId: classSelect && classSelect.value ? parseInt(classSelect.value, 10) : null,
+                    gradeId: classSelect && classSelect.value ? parseInt(classSelect.value, 10) : null,
                     roomNumber: roomInput ? roomInput.value : null,
                     notes: notesInput ? notesInput.value : null
                 };

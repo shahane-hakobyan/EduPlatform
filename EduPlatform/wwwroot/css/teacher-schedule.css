@@ -79,7 +79,15 @@
     background: linear-gradient(135deg, #F8FAFF 0%, #F6F9FF 25%, #F4F7FF 50%, #F2F6FF 75%, #F0F4FF 100%);
     border: 1.6px solid #E0E7FF;
     border-radius: 24px;
+    transition: transform .15s ease, box-shadow .15s ease;
 }
+    .schedule-card-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 8px 16px -4px rgba(99, 105, 212, .18);
+    }
+    .schedule-card-free:hover {
+        box-shadow: 0px 8px 16px -4px rgba(34, 197, 94, .18);
+    }
 
 .schedule-card-icon-badge {
     flex-shrink: 0;
@@ -136,33 +144,42 @@
     color: #F97316;
 }
 
-.schedule-card-class-name {
+.schedule-card-grade-name {
+    align-self: flex-start; 
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
     font-weight: 700;
     font-size: 18px;
-    color: var(--accent-strong);
-    text-decoration: underline;
+    color: var(--text-primary);
+    cursor: pointer;
 }
 
+    .schedule-card-grade-name:hover {
+        text-decoration: underline;
+        color: var(--accent-strong);
+    }
+
 .schedule-card-subject-name {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 13px;
-    color: var(--text-primary);
+    color: var(--text-muted);
 }
 
 .schedule-card-note-bubble {
     position: absolute;
-    top: -6px;
+    top: 10px;
     right: 12px;
     width: 24px;
     height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #BD00FF;
-    border: 2px solid #000;
-    border-radius: 50% 50% 50% 4px;
-    color: #fff;
-    font-size: 11px;
+    background: var(--accent-soft-bg);
+    color: var(--accent-strong);
+    border-radius: 8px;
+    font-size: 12px;
     cursor: help;
 }
 
@@ -688,3 +705,116 @@
         background: var(--accent-soft-bg);
         color: var(--accent-strong);
     }
+.grade-roster-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .3);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 3000;
+}
+
+    .grade-roster-backdrop.open {
+        display: block;
+    }
+
+.grade-roster-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 460px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    background: var(--surface);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, .25);
+    z-index: 3001;
+    padding: 24px;
+}
+
+    .grade-roster-modal.open {
+        display: block;
+    }
+
+.grade-roster-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.grade-roster-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    background: var(--accent-soft-bg);
+    color: var(--accent-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.grade-roster-title {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.grade-roster-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.grade-roster-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    border: none;
+    color: var(--icon-color);
+}
+
+.grade-roster-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.grade-roster-pupil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+
+    .grade-roster-pupil:hover {
+        background: var(--accent-soft-bg);
+    }
+
+.grade-roster-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--surface-alt);
+}
+
+.grade-roster-name {
+    font-size: 13px;
+    color: var(--text-primary);
+    text-align: center;
+}
+.schedule-edit-row.invalid {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 1px var(--danger);
+}

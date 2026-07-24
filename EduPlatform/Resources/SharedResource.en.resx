@@ -130,9 +130,9 @@
   <data name="Grade" xml:space="preserve"><value>Grade</value></data>
   <data name="Author" xml:space="preserve"><value>Author's name, surname</value></data>
   <data name="PublicationYear" xml:space="preserve"><value>Year of publication</value></data>
-  <data name="Publisher" xml:space="preserve"><value> Publisher</value></data>
+  <data name="Publisher" xml:space="preserve"><value>Publisher</value></data>
   <data name="Grid" xml:space="preserve"><value>	Grid</value></data>
-  <data name="ListView" xml:space="preserve"><value>	List</value></data>
+  <data name="ListView" xml:space="preserve"><value>List</value></data>
   <data name="Pages" xml:space="preserve"><value>Pages</value></data>
   <data name="View" xml:space="preserve"><value>View</value></data>
   <data name="Total" xml:space="preserve"><value>Total</value></data>
@@ -154,4 +154,31 @@
   <data name="EditProfile" xml:space="preserve"><value>Edit profile</value></data>
   <data name="VoluntaryCertification" xml:space="preserve"><value>Voluntary Certification</value></data>
   <data name="FullName" xml:space="preserve"><value>First name, last name</value></data>
+
+  <data name="Schedule" xml:space="preserve"><value>Schedule</value></data>
+  <data name="ScheduleSubtitle" xml:space="preserve"><value>Weekly Schedule</value></data>
+  <data name="Monday" xml:space="preserve"><value>Monday</value></data>
+  <data name="Tuesday" xml:space="preserve"><value>Tuesday</value></data>
+  <data name="Wednesday" xml:space="preserve"><value>Wednesday</value></data>
+  <data name="Thursday" xml:space="preserve"><value>Thursday</value></data>
+  <data name="Friday" xml:space="preserve"><value>Friday</value></data>
+  <data name="Saturday" xml:space="preserve"><value>Saturday</value></data>
+  <data name="Sunday" xml:space="preserve"><value>Sunday</value></data>
+  <data name="Classes" xml:space="preserve"><value>Class Periods</value></data>
+  <data name="NoScheduleForDay" xml:space="preserve"><value>No schedule for this day</value></data>
+  <data name="FreeHours" xml:space="preserve"><value>Free Hours</value></data>
+  <data name="WeekDays" xml:space="preserve"><value>Weekdays</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="ScheduleEditTitle" xml:space="preserve"><value>Edit Schedule</value></data>
+  <data name="ScheduleEditHint" xml:space="preserve"><value>Add or edit class periods for each day</value></data>
+  <data name="SelectTime" xml:space="preserve"><value>Select Time</value></data>
+  <data name="AddPeriod" xml:space="preserve"><value>Add Class Period</value></data>
+  <data name="Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="FreePeriod" xml:space="preserve"><value>Free Period</value></data>
+  <data name="Room" xml:space="preserve"><value>Classroom</value></data>
+  <data name="MarkAsFree" xml:space="preserve"><value>Mark as Free Period</value></data>
+  <data name="ScheduleNotesPlaceholder" xml:space="preserve"><value>Add notes about the schedule (optional)</value></data>
+  <data name="Notes" xml:space="preserve"><value>Notes</value></data>
+
+
 </root>

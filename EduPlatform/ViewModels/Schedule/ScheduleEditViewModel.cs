@@ -6,7 +6,7 @@
         public string DayLabel { get; set; } = "";
         public List<ScheduleEditRowViewModel> Rows { get; set; } = new();
         public List<SelectOption> Subjects { get; set; } = new();
-        public List<SelectOption> Classes { get; set; } = new();
+        public List<SelectOption> Grades { get; set; } = new();
     }
 
     public class SelectOption

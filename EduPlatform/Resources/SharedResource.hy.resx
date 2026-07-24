@@ -130,12 +130,12 @@
   <data name="Grade" xml:space="preserve"><value>Դասարան</value></data>
   <data name="Author" xml:space="preserve"><value>Հեղինակի անուն, ազգանուն</value></data>
   <data name="PublicationYear" xml:space="preserve"><value>Հրատարակման տարեթիվ</value></data>
-  <data name="Publisher" xml:space="preserve"><value>	Հրատարակչություն</value></data>
+  <data name="Publisher" xml:space="preserve"><value>Հրատարակչություն</value></data>
   <data name="Grid" xml:space="preserve"><value>	Ցանց</value></data>
-  <data name="ListView" xml:space="preserve"><value>	Ցուցակ</value></data>
+  <data name="ListView" xml:space="preserve"><value>Ցուցակ</value></data>
   <data name="Pages" xml:space="preserve"><value>	Էջ</value></data>
   <data name="View" xml:space="preserve"><value>Դիտել</value></data>
-  <data name="Total" xml:space="preserve"><value>Ընհանուր</value></data>
+  <data name="Total" xml:space="preserve"><value>Ընդհանուր</value></data>
   <data name="Material" xml:space="preserve"><value>Նյութ</value></data>
   <data name="Actions" xml:space="preserve"><value>Գործողություններ</value></data>
   <data name="Delete" xml:space="preserve"><value>Ջնջել</value></data>
@@ -154,6 +154,31 @@
   <data name="EditProfile" xml:space="preserve"><value>Խմբագրել էջը</value></data>
   <data name="VoluntaryCertification" xml:space="preserve"><value>Կամավոր ատեստավորում</value></data>
   <data name="FullName" xml:space="preserve"><value>Անուն, ազգանուն</value></data>
+  
+  <data name="Schedule" xml:space="preserve"><value>Դասացուցակ</value></data>
+  <data name="ScheduleSubtitle" xml:space="preserve"><value>Շաբաթական դասացուցակ</value></data>
+  <data name="Monday" xml:space="preserve"><value>Երկուշաբթի</value></data>
+  <data name="Tuesday" xml:space="preserve"><value>Երեքշաբթի</value></data>
+  <data name="Wednesday" xml:space="preserve"><value>Չորեքշաբթի</value></data>
+  <data name="Thursday" xml:space="preserve"><value>Հինգշաբթի</value></data>
+  <data name="Friday" xml:space="preserve"><value>Ուրբաթ</value></data>
+  <data name="Saturday" xml:space="preserve"><value>Շաբաթ</value></data>
+  <data name="Sunday" xml:space="preserve"><value>Կիրակի</value></data>
+  <data name="Classes" xml:space="preserve"><value>Դասաժամ</value></data>
+  <data name="NoScheduleForDay" xml:space="preserve"><value>Այս օրվա համար դասացուցակ չկա</value></data>
+  <data name="FreeHours" xml:space="preserve"><value>Ազատ ժամեր</value></data>
+  <data name="WeekDays" xml:space="preserve"><value>Շաբաթվա օրեր</value></data>
+  <data name="Edit" xml:space="preserve"><value>Խմբագրել</value></data>
+  <data name="ScheduleEditTitle" xml:space="preserve"><value>Խմբագրել դասացուցակը</value></data>
+  <data name="ScheduleEditHint" xml:space="preserve"><value>Ավելացրեք կամ խմբագրեք դասաժամերը յուրաքանչյուր օրվա համար</value></data>
+  <data name="SelectTime" xml:space="preserve"><value>Ընտրել ժամը</value></data>
+  <data name="AddPeriod" xml:space="preserve"><value>Ավելացնել դասաժամ</value></data>
+  <data name="Remove" xml:space="preserve"><value>Հեռացնել</value></data>
+  <data name="FreePeriod" xml:space="preserve"><value>Ազատ ժամ</value></data>
+  <data name="Room" xml:space="preserve"><value>Դասասենյակ</value></data>
+  <data name="MarkAsFree" xml:space="preserve"><value>Նշել որպես ազատ ժամ</value></data>
+  <data name="ScheduleNotesPlaceholder" xml:space="preserve"><value>Ավելացրեք նշումներ դասացուցակի վերաբերյալ</value></data>
+  <data name="Notes" xml:space="preserve"><value>Նշումներ</value></data>
 
 
 

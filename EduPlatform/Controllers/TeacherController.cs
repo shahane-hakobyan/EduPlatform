@@ -16,7 +16,7 @@ namespace EduPlatform.Controllers
         private readonly IStringLocalizer<SharedResource> _l;
         private readonly EduPlatformDbContext _db;
 
-        private const string CurrentTeacherName = "Հարություն Գրիգորյան"; // stand-in until real auth exists
+        private const string CurrentTeacherUserId = "11111111-1111-1111-1111-111111111111"; // stand-in until real auth exists
 
         public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer, EduPlatformDbContext db)
         {
@@ -59,8 +59,8 @@ namespace EduPlatform.Controllers
         {
             var selectedDay = Enum.Parse<ScheduleDay>(day);
 
-            var entries = _db.ScheduleEntries
-                .Where(e => e.TeacherName == CurrentTeacherName && e.Day == selectedDay)
+            var entries = _db.ScheduleLessons
+                .Where(e => e.TeacherUserId == CurrentTeacherUserId && e.Day == selectedDay)
                 .OrderBy(e => e.PeriodNumber)
                 .ToList();
 
@@ -73,19 +73,19 @@ namespace EduPlatform.Controllers
                     PeriodNumber = e.PeriodNumber,
                     StartTime = e.StartTime.ToString("HH:mm"),
                     EndTime = e.EndTime.ToString("HH:mm"),
-                    IsFree = e.SubjectId == null,
+                    IsFree = e.IsFree,
                     SubjectId = e.SubjectId,
-                    SchoolClassId = e.SchoolClassId,
+                    GradeId = e.GradeId,
                     RoomNumber = e.RoomNumber,
                     Notes = e.Notes
                 }).ToList(),
                 Subjects = _db.TeacherSubjects
-                    .Where(ts => ts.TeacherName == CurrentTeacherName)
+                    .Where(ts => ts.TeacherUserId == CurrentTeacherUserId)
                     .Select(ts => new SelectOption { Id = ts.SubjectId, Label = ts.Subject.Name })
                     .ToList(),
-                Classes = _db.TeacherClasses
-                    .Where(tc => tc.TeacherName == CurrentTeacherName)
-                    .Select(tc => new SelectOption { Id = tc.SchoolClassId, Label = tc.SchoolClass.Name })
+                Grades = _db.TeacherGrades
+                    .Where(tc => tc.TeacherUserId == CurrentTeacherUserId)
+                    .Select(tc => new SelectOption { Id = tc.GradeId, Label = tc.Grade.Name })
                     .ToList()
             };
 
@@ -103,20 +103,21 @@ namespace EduPlatform.Controllers
         {
             var selectedDay = Enum.Parse<ScheduleDay>(request.Day);
 
-            var existing = _db.ScheduleEntries.Where(e => e.TeacherName == CurrentTeacherName && e.Day == selectedDay);
-            _db.ScheduleEntries.RemoveRange(existing);
+            var existing = _db.ScheduleLessons.Where(e => e.TeacherUserId == CurrentTeacherUserId && e.Day == selectedDay);
+            _db.ScheduleLessons.RemoveRange(existing);
 
             foreach (var row in request.Rows)
             {
-                _db.ScheduleEntries.Add(new ScheduleEntry
+                _db.ScheduleLessons.Add(new ScheduleLesson
                 {
-                    TeacherName = CurrentTeacherName,
+                    TeacherUserId = CurrentTeacherUserId,
                     Day = selectedDay,
                     PeriodNumber = row.PeriodNumber,
                     StartTime = TimeOnly.Parse(row.StartTime!),
                     EndTime = TimeOnly.Parse(row.EndTime!),
+                    IsFree = row.IsFree,
                     SubjectId = row.IsFree ? null : row.SubjectId,
-                    SchoolClassId = row.IsFree ? null : row.SchoolClassId,
+                    GradeId = row.IsFree ? null : row.GradeId,
                     RoomNumber = row.IsFree ? null : row.RoomNumber,
                     Notes = row.Notes
                 });
@@ -128,10 +129,10 @@ namespace EduPlatform.Controllers
 
         private ScheduleReadViewModel BuildScheduleViewModel(string? day)
         {
-            var allEntries = _db.ScheduleEntries
-                .Where(e => e.TeacherName == CurrentTeacherName)
+            var allEntries = _db.ScheduleLessons
+                .Where(e => e.TeacherUserId == CurrentTeacherUserId)
                 .Include(e => e.Subject)
-                .Include(e => e.SchoolClass)
+                .Include(e => e.Grade)
                 .ToList();
 
             var selectedDayValue = day ?? ScheduleDay.Monday.ToString();
@@ -141,8 +142,8 @@ namespace EduPlatform.Controllers
                 {
                     Day = d.ToString(),
                     DayLabel = _l[d.ToString()],
-                    ClassCount = allEntries.Count(e => e.Day == d && e.SubjectId != null),
-                    FreeCount = allEntries.Count(e => e.Day == d && e.SubjectId == null),
+                    ClassCount = allEntries.Count(e => e.Day == d && !e.IsFree),
+                    FreeCount = allEntries.Count(e => e.Day == d && e.IsFree),
                     IsSelected = d.ToString() == selectedDayValue
                 })
                 .ToList();
@@ -152,8 +153,8 @@ namespace EduPlatform.Controllers
             return new ScheduleReadViewModel
             {
                 Days = days,
-                TotalClassCount = allEntries.Count(e => e.SubjectId != null),
-                TotalFreeCount = allEntries.Count(e => e.SubjectId == null),
+                TotalClassCount = allEntries.Count(e => !e.IsFree),
+                TotalFreeCount = allEntries.Count(e => e.IsFree),
                 SelectedDayEntries = allEntries
                     .Where(e => e.Day == selectedDay)
                     .OrderBy(e => e.PeriodNumber)
@@ -162,16 +163,36 @@ namespace EduPlatform.Controllers
                         Id = e.Id,
                         PeriodNumber = e.PeriodNumber,
                         TimeRange = $"{e.StartTime:HH:mm} – {e.EndTime:HH:mm}",
-                        IsFree = e.SubjectId == null,
+                        IsFree = e.IsFree,
                         SubjectName = e.Subject?.Name,
-                        ClassName = e.SchoolClass?.Name,
+                        GradeName = e.Grade?.Name,
                         RoomNumber = e.RoomNumber,
-                        Notes = e.Notes
+                        Notes = e.Notes,
+                        GradeId = e.GradeId
                     })
                     .ToList()
             };
         }
-public IActionResult Materials(string id)
+
+        [HttpGet]
+        public IActionResult GradeRoster(int gradeId)
+        {
+            var grade = _db.Grades.FirstOrDefault(g => g.Id == gradeId);
+
+            var vm = new GradeRosterViewModel
+            {
+                GradeName = grade?.Name ?? "",
+                Pupils = Enumerable.Range(1, 8).Select(i => new RosterPupilViewModel
+                {
+                    Name = $"{_l["Pupil"]} {i}",
+                    PhotoUrl = "/images/avatar-placeholder.jpg"
+                }).ToList()
+            };
+
+            return PartialView("_GradeRoster", vm);
+        }
+
+        public IActionResult Materials(string id)
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
             ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
