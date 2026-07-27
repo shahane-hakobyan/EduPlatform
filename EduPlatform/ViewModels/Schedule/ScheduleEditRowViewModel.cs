@@ -6,8 +6,8 @@
         public string? StartTime { get; set; }
         public string? EndTime { get; set; }
         public bool IsFree { get; set; } = true;
-        public int? SubjectId { get; set; }
-        public int? GradeId { get; set; }
+        public List<int> SubjectIds { get; set; } = new();
+        public List<int> GradeIds { get; set; } = new();
         public string? RoomNumber { get; set; }
         public string? Notes { get; set; }
     }

@@ -61,6 +61,8 @@ namespace EduPlatform.Controllers
 
             var entries = _db.ScheduleLessons
                 .Where(e => e.TeacherUserId == CurrentTeacherUserId && e.Day == selectedDay)
+                .Include(e => e.LessonSubjects)
+                .Include(e => e.LessonGrades)
                 .OrderBy(e => e.PeriodNumber)
                 .ToList();
 
@@ -74,8 +76,8 @@ namespace EduPlatform.Controllers
                     StartTime = e.StartTime.ToString("HH:mm"),
                     EndTime = e.EndTime.ToString("HH:mm"),
                     IsFree = e.IsFree,
-                    SubjectId = e.SubjectId,
-                    GradeId = e.GradeId,
+                    SubjectIds = e.LessonSubjects.Select(ls => ls.SubjectId).ToList(),
+                    GradeIds = e.LessonGrades.Select(lg => lg.GradeId).ToList(),
                     RoomNumber = e.RoomNumber,
                     Notes = e.Notes
                 }).ToList(),
@@ -108,7 +110,7 @@ namespace EduPlatform.Controllers
 
             foreach (var row in request.Rows)
             {
-                _db.ScheduleLessons.Add(new ScheduleLesson
+                var lesson = new ScheduleLesson
                 {
                     TeacherUserId = CurrentTeacherUserId,
                     Day = selectedDay,
@@ -116,11 +118,15 @@ namespace EduPlatform.Controllers
                     StartTime = TimeOnly.Parse(row.StartTime!),
                     EndTime = TimeOnly.Parse(row.EndTime!),
                     IsFree = row.IsFree,
-                    SubjectId = row.IsFree ? null : row.SubjectId,
-                    GradeId = row.IsFree ? null : row.GradeId,
                     RoomNumber = row.IsFree ? null : row.RoomNumber,
                     Notes = row.Notes
-                });
+                };
+                if (!row.IsFree)
+                {
+                    lesson.LessonSubjects = row.SubjectIds.Select(id => new LessonSubject { SubjectId = id }).ToList();
+                    lesson.LessonGrades = row.GradeIds.Select(id => new LessonGrade { GradeId = id }).ToList();
+                }
+                _db.ScheduleLessons.Add(lesson);
             }
 
             _db.SaveChanges();
@@ -130,10 +136,10 @@ namespace EduPlatform.Controllers
         private ScheduleReadViewModel BuildScheduleViewModel(string? day)
         {
             var allEntries = _db.ScheduleLessons
-                .Where(e => e.TeacherUserId == CurrentTeacherUserId)
-                .Include(e => e.Subject)
-                .Include(e => e.Grade)
-                .ToList();
+                  .Where(e => e.TeacherUserId == CurrentTeacherUserId)
+                  .Include(e => e.LessonSubjects).ThenInclude(ls => ls.Subject)
+                  .Include(e => e.LessonGrades).ThenInclude(lg => lg.Grade)
+                  .ToList();
 
             var selectedDayValue = day ?? ScheduleDay.Monday.ToString();
 
@@ -164,11 +170,10 @@ namespace EduPlatform.Controllers
                         PeriodNumber = e.PeriodNumber,
                         TimeRange = $"{e.StartTime:HH:mm} – {e.EndTime:HH:mm}",
                         IsFree = e.IsFree,
-                        SubjectName = e.Subject?.Name,
-                        GradeName = e.Grade?.Name,
+                        SubjectNames = e.LessonSubjects.Select(ls => ls.Subject.Name).ToList(),
+                        Grades = e.LessonGrades.Select(lg => new GradeChip { Id = lg.GradeId, Name = lg.Grade.Name }).ToList(),
                         RoomNumber = e.RoomNumber,
-                        Notes = e.Notes,
-                        GradeId = e.GradeId
+                        Notes = e.Notes
                     })
                     .ToList()
             };

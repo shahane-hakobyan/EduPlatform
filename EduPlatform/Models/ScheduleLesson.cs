@@ -10,15 +10,10 @@
         public int PeriodNumber { get; set; }             
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
-
         public bool IsFree { get; set; }
-        public int? GradeId { get; set; }                
-        public Grade? Grade { get; set; }
-
-        public int? SubjectId { get; set; }               
-        public Subject? Subject { get; set; }
-
         public string? RoomNumber { get; set; }          
         public string? Notes { get; set; }
+        public List<LessonSubject> LessonSubjects { get; set; } = new();
+        public List<LessonGrade> LessonGrades { get; set; } = new();
     }
 }

@@ -68,6 +68,52 @@ namespace EduPlatform.Migrations
                     b.ToTable("Institutions");
                 });
 
+            modelBuilder.Entity("EduPlatform.Models.LessonGrade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GradeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScheduleLessonId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GradeId");
+
+                    b.HasIndex("ScheduleLessonId");
+
+                    b.ToTable("LessonGrades");
+                });
+
+            modelBuilder.Entity("EduPlatform.Models.LessonSubject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ScheduleLessonId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScheduleLessonId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("LessonSubjects");
+                });
+
             modelBuilder.Entity("EduPlatform.Models.PupilGrade", b =>
                 {
                     b.Property<int>("Id")
@@ -104,9 +150,6 @@ namespace EduPlatform.Migrations
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<int?>("GradeId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsFree")
                         .HasColumnType("bit");
 
@@ -122,20 +165,11 @@ namespace EduPlatform.Migrations
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
 
-                    b.Property<int?>("SubjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TeacherUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SubjectId");
-
-                    b.HasIndex("GradeId", "Day", "PeriodNumber")
-                        .IsUnique()
-                        .HasFilter("[GradeId] IS NOT NULL");
 
                     b.HasIndex("TeacherUserId", "Day", "PeriodNumber")
                         .IsUnique();
@@ -215,6 +249,44 @@ namespace EduPlatform.Migrations
                     b.Navigation("Institution");
                 });
 
+            modelBuilder.Entity("EduPlatform.Models.LessonGrade", b =>
+                {
+                    b.HasOne("EduPlatform.Models.Grade", "Grade")
+                        .WithMany()
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduPlatform.Models.ScheduleLesson", "ScheduleLesson")
+                        .WithMany("LessonGrades")
+                        .HasForeignKey("ScheduleLessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Grade");
+
+                    b.Navigation("ScheduleLesson");
+                });
+
+            modelBuilder.Entity("EduPlatform.Models.LessonSubject", b =>
+                {
+                    b.HasOne("EduPlatform.Models.ScheduleLesson", "ScheduleLesson")
+                        .WithMany("LessonSubjects")
+                        .HasForeignKey("ScheduleLessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduPlatform.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ScheduleLesson");
+
+                    b.Navigation("Subject");
+                });
+
             modelBuilder.Entity("EduPlatform.Models.PupilGrade", b =>
                 {
                     b.HasOne("EduPlatform.Models.Grade", "Grade")
@@ -224,23 +296,6 @@ namespace EduPlatform.Migrations
                         .IsRequired();
 
                     b.Navigation("Grade");
-                });
-
-            modelBuilder.Entity("EduPlatform.Models.ScheduleLesson", b =>
-                {
-                    b.HasOne("EduPlatform.Models.Grade", "Grade")
-                        .WithMany("ScheduleLessons")
-                        .HasForeignKey("GradeId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("EduPlatform.Models.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Grade");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("EduPlatform.Models.TeacherGrade", b =>
@@ -265,14 +320,16 @@ namespace EduPlatform.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("EduPlatform.Models.Grade", b =>
-                {
-                    b.Navigation("ScheduleLessons");
-                });
-
             modelBuilder.Entity("EduPlatform.Models.Institution", b =>
                 {
                     b.Navigation("Grades");
+                });
+
+            modelBuilder.Entity("EduPlatform.Models.ScheduleLesson", b =>
+                {
+                    b.Navigation("LessonGrades");
+
+                    b.Navigation("LessonSubjects");
                 });
 #pragma warning restore 612, 618
         }

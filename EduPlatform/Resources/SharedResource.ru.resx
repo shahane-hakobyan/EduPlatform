@@ -172,6 +172,7 @@
   <data name="ScheduleEditTitle" xml:space="preserve"><value>Редактировать расписание</value></data>
   <data name="ScheduleEditHint" xml:space="preserve"><value>Добавьте или измените учебные часы для каждого дня</value></data>
   <data name="SelectTime" xml:space="preserve"><value>Выбрать время</value></data>
+  <data name="Select" xml:space="preserve"><value>Выбрать</value></data>
   <data name="AddPeriod" xml:space="preserve"><value>Добавить учебный час</value></data>
   <data name="Remove" xml:space="preserve"><value>Удалить</value></data>
   <data name="FreePeriod" xml:space="preserve"><value>Свободный урок</value></data>
@@ -179,6 +180,7 @@
   <data name="MarkAsFree" xml:space="preserve"><value>Отметить как свободный урок</value></data>
   <data name="ScheduleNotesPlaceholder" xml:space="preserve"><value>Добавьте примечания к расписанию (необязательно)</value></data>
   <data name="Notes" xml:space="preserve"><value>Примечания</value></data>
+  <data name="Pupils" xml:space="preserve"><value>Студенты</value></data>
 
 
 </root>

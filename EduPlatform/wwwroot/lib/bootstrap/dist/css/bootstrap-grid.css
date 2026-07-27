@@ -45,12 +45,18 @@
   }
 }
 :root {
-  --bs-breakpoint-xs: 0;
-  --bs-breakpoint-sm: 576px;
-  --bs-breakpoint-md: 768px;
-  --bs-breakpoint-lg: 992px;
-  --bs-breakpoint-xl: 1200px;
-  --bs-breakpoint-xxl: 1400px;
+    --bs-breakpoint-xs: 0;
+    --bs-breakpoint-sm: 576px;
+    --bs-breakpoint-md: 768px;
+    --bs-breakpoint-lg: 992px;
+    --bs-breakpoint-xl: 1200px;
+    --bs-breakpoint-xxl: 1400px;
+    --free-bg: #F0FDF4;
+    --free-bg-2: #ECFDF5;
+    --free-border: #BBF7D0;
+    --free-pill-bg: #dcfce7;
+    --free-text: #22c55e;
+    --free-text-strong: #15803d;
 }
 
 .row {

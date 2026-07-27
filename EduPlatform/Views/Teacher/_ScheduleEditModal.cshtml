@@ -38,13 +38,13 @@
                                     <div class="time-picker-steppers">
                                         <div class="time-picker-col">
                                             <button type="button" class="time-picker-arrow time-picker-hour-up"><i class="bi bi-chevron-up"></i></button>
-                                            <div class="time-picker-value-display time-picker-hour-display">09</div>
+                                            <input type="text" inputmode="numeric" maxlength="2" class="time-picker-value-display time-picker-hour-display" value="09" />
                                             <button type="button" class="time-picker-arrow time-picker-hour-down"><i class="bi bi-chevron-down"></i></button>
                                         </div>
                                         <div class="time-picker-colon">:</div>
                                         <div class="time-picker-col">
                                             <button type="button" class="time-picker-arrow time-picker-minute-up"><i class="bi bi-chevron-up"></i></button>
-                                            <div class="time-picker-value-display time-picker-minute-display">00</div>
+                                            <input type="text" inputmode="numeric" maxlength="2" class="time-picker-value-display time-picker-minute-display" value="00" />
                                             <button type="button" class="time-picker-arrow time-picker-minute-down"><i class="bi bi-chevron-down"></i></button>
                                         </div>
                                     </div>
@@ -70,19 +70,27 @@
                     </div>
 
                     <div class="schedule-edit-free-indicator">
-                        <i class="bi bi-calendar-week"></i> @Localizer["FreePeriod"]
+                        <i class="bi bi-cup-hot"></i> @Localizer["FreePeriod"]
                     </div>
 
                     <div class="schedule-edit-fields">
                         <div>
                             <label class="schedule-edit-field-label">@Localizer["Subject"] *</label>
-                            <select class="schedule-edit-input schedule-edit-subject-select">
-                                <option value="">—</option>
-                                @foreach (var s in Model.Subjects)
-                                {
-                                    <option value="@s.Id" selected="@(s.Id == row.SubjectId)">@s.Label</option>
-                                }
-                            </select>
+                            <div class="ms-dropdown schedule-edit-subject-ms">
+                                <button type="button" class="ms-dropdown-toggle">
+                                    <span class="ms-dropdown-label" data-placeholder="@Localizer["Select"]">@Localizer["Select"]</span>
+                                    <i class="bi bi-chevron-down ms-dropdown-caret"></i>
+                                </button>
+                                <div class="ms-dropdown-menu">
+                                    @foreach (var s in Model.Subjects)
+                                    {
+                                        <button type="button" class="ms-option @(row.SubjectIds.Contains(s.Id) ? "selected" : "")" data-id="@s.Id">
+                                            <span class="ms-option-text">@s.Label</span>
+                                            <i class="bi bi-check2 ms-option-check"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <label class="schedule-edit-field-label">@Localizer["Notes"]</label>
@@ -91,16 +99,24 @@
                         <div class="d-flex gap-3">
                             <div class="flex-grow-1">
                                 <label class="schedule-edit-field-label">@Localizer["Grade"] *</label>
-                                <select class="schedule-edit-input schedule-edit-class-select">
-                                    <option value="">—</option>
-                                    @foreach (var c in Model.Grades)
-                                    {
-                                        <option value="@c.Id" selected="@(c.Id == row.GradeId)">@c.Label</option>
-                                    }
-                                </select>
+                                <div class="ms-dropdown schedule-edit-grade-ms">
+                                    <button type="button" class="ms-dropdown-toggle">
+                                        <span class="ms-dropdown-label" data-placeholder="@Localizer["Select"]">@Localizer["Select"]</span>
+                                        <i class="bi bi-chevron-down ms-dropdown-caret"></i>
+                                    </button>
+                                    <div class="ms-dropdown-menu">
+                                        @foreach (var c in Model.Grades)
+                                        {
+                                            <button type="button" class="ms-option @(row.GradeIds.Contains(c.Id) ? "selected" : "")" data-id="@c.Id">
+                                                <span class="ms-option-text">@c.Label</span>
+                                                <i class="bi bi-check2 ms-option-check"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
                             </div>
                             <div class="flex-grow-1">
-                                <label class="schedule-edit-field-label">@Localizer["Room"]</label>
+                                <label class="schedule-edit-field-label">@Localizer["Room"] *</label>
                                 <input type="text" class="schedule-edit-input schedule-edit-room-input" value="@row.RoomNumber" placeholder="@Localizer["Room"]" />
                             </div>
                         </div>
@@ -124,13 +140,13 @@
                                 <div class="time-picker-steppers">
                                     <div class="time-picker-col">
                                         <button type="button" class="time-picker-arrow time-picker-hour-up"><i class="bi bi-chevron-up"></i></button>
-                                        <div class="time-picker-value-display time-picker-hour-display">09</div>
+                                        <input type="text" inputmode="numeric" maxlength="2" class="time-picker-value-display time-picker-hour-display" value="09" />
                                         <button type="button" class="time-picker-arrow time-picker-hour-down"><i class="bi bi-chevron-down"></i></button>
                                     </div>
                                     <div class="time-picker-colon">:</div>
                                     <div class="time-picker-col">
                                         <button type="button" class="time-picker-arrow time-picker-minute-up"><i class="bi bi-chevron-up"></i></button>
-                                        <div class="time-picker-value-display time-picker-minute-display">00</div>
+                                        <input type="text" inputmode="numeric" maxlength="2" class="time-picker-value-display time-picker-minute-display" value="00" />
                                         <button type="button" class="time-picker-arrow time-picker-minute-down"><i class="bi bi-chevron-down"></i></button>
                                     </div>
                                 </div>
@@ -156,19 +172,27 @@
                 </div>
 
                 <div class="schedule-edit-free-indicator">
-                    <i class="bi bi-calendar-week"></i> @Localizer["FreePeriod"]
+                    <i class="bi bi-cup-hot"></i> @Localizer["FreePeriod"]
                 </div>
 
                 <div class="schedule-edit-fields">
                     <div>
                         <label class="schedule-edit-field-label">@Localizer["Subject"] *</label>
-                        <select class="schedule-edit-input schedule-edit-subject-select">
-                            <option value="">—</option>
-                            @foreach (var s in Model.Subjects)
-                            {
-                                <option value="@s.Id">@s.Label</option>
-                            }
-                        </select>
+                        <div class="ms-dropdown schedule-edit-subject-ms">
+                            <button type="button" class="ms-dropdown-toggle">
+                                <span class="ms-dropdown-label" data-placeholder="@Localizer["Select"]">@Localizer["Select"]</span>
+                                <i class="bi bi-chevron-down ms-dropdown-caret"></i>
+                            </button>
+                            <div class="ms-dropdown-menu">
+                                @foreach (var s in Model.Subjects)
+                                {
+                                    <button type="button" class="ms-option" data-id="@s.Id">
+                                        <span class="ms-option-text">@s.Label</span>
+                                        <i class="bi bi-check2 ms-option-check"></i>
+                                    </button>
+                                }
+                            </div>
+                        </div>
                     </div>
                     <div>
                         <label class="schedule-edit-field-label">@Localizer["Notes"]</label>
@@ -177,16 +201,24 @@
                     <div class="d-flex gap-3">
                         <div class="flex-grow-1">
                             <label class="schedule-edit-field-label">@Localizer["Grade"] *</label>
-                            <select class="schedule-edit-input schedule-edit-class-select">
-                                <option value="">—</option>
-                                @foreach (var c in Model.Grades)
-                                {
-                                    <option value="@c.Id">@c.Label</option>
-                                }
-                            </select>
+                            <div class="ms-dropdown schedule-edit-grade-ms">
+                                <button type="button" class="ms-dropdown-toggle">
+                                    <span class="ms-dropdown-label" data-placeholder="@Localizer["Select"]">@Localizer["Select"]</span>
+                                    <i class="bi bi-chevron-down ms-dropdown-caret"></i>
+                                </button>
+                                <div class="ms-dropdown-menu">
+                                    @foreach (var c in Model.Grades)
+                                    {
+                                        <button type="button" class="ms-option" data-id="@c.Id">
+                                            <span class="ms-option-text">@c.Label</span>
+                                            <i class="bi bi-check2 ms-option-check"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
                         </div>
                         <div class="flex-grow-1">
-                            <label class="schedule-edit-field-label">@Localizer["Room"]</label>
+                            <label class="schedule-edit-field-label">@Localizer["Room"] *</label>
                             <input type="text" class="schedule-edit-input schedule-edit-room-input" placeholder="@Localizer["Room"]" />
                         </div>
                     </div>

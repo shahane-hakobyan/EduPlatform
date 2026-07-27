@@ -172,6 +172,7 @@
   <data name="ScheduleEditTitle" xml:space="preserve"><value>Խմբագրել դասացուցակը</value></data>
   <data name="ScheduleEditHint" xml:space="preserve"><value>Ավելացրեք կամ խմբագրեք դասաժամերը յուրաքանչյուր օրվա համար</value></data>
   <data name="SelectTime" xml:space="preserve"><value>Ընտրել ժամը</value></data>
+  <data name="Select" xml:space="preserve"><value>Ընտրել</value></data>
   <data name="AddPeriod" xml:space="preserve"><value>Ավելացնել դասաժամ</value></data>
   <data name="Remove" xml:space="preserve"><value>Հեռացնել</value></data>
   <data name="FreePeriod" xml:space="preserve"><value>Ազատ ժամ</value></data>
@@ -179,6 +180,7 @@
   <data name="MarkAsFree" xml:space="preserve"><value>Նշել որպես ազատ ժամ</value></data>
   <data name="ScheduleNotesPlaceholder" xml:space="preserve"><value>Ավելացրեք նշումներ դասացուցակի վերաբերյալ</value></data>
   <data name="Notes" xml:space="preserve"><value>Նշումներ</value></data>
+  <data name="Pupils" xml:space="preserve"><value>աշակերտ</value></data>
 
 
 

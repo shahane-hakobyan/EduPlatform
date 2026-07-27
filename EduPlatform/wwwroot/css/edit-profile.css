@@ -4,12 +4,18 @@
     inset: 0;
     background: rgba(0, 0, 0, .4);
     z-index: 3000;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
     .edit-profile-backdrop.open {
         display: block;
     }
 
+.field-invalid {
+    border-color: var(--danger) !important;
+    box-shadow: 0 0 0 1px var(--danger);
+}
 .edit-profile-modal {
     display: none;
     position: fixed;

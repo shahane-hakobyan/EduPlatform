@@ -40,6 +40,7 @@
                                 <span class="schedule-time-badge">@entry.TimeRange</span>
                             </div>
                             <div class="schedule-free-text">@Localizer["FreePeriod"]</div>
+                            <div class="schedule-free-sub">@Localizer["Classes"] @entry.PeriodNumber</div>
 
                             @if (!string.IsNullOrEmpty(entry.Notes))
                             {
@@ -61,10 +62,13 @@
                                         <span class="schedule-card-room-pill">@Localizer["Room"] @entry.RoomNumber</span>
                                     }
                                 </div>
-                                <button type="button" class="schedule-card-grade-name" data-grade-id="@entry.GradeId">
-                                    @entry.GradeName
-                                </button>
-                                <div class="schedule-card-subject-name">@entry.SubjectName</div>
+                                <div class="schedule-card-grades">
+                                    @foreach (var g in entry.Grades)
+                                    {
+                                        <button type="button" class="schedule-card-grade-name" data-grade-id="@g.Id">@g.Name</button>
+                                    }
+                                </div>
+                                <div class="schedule-card-subject-name">@string.Join(", ", entry.SubjectNames)</div>
                             </div>
 
                             @if (!string.IsNullOrEmpty(entry.Notes))
