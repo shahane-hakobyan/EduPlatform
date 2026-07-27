@@ -181,5 +181,7 @@
   <data name="ScheduleNotesPlaceholder" xml:space="preserve"><value>Add notes about the schedule (optional)</value></data>
   <data name="Notes" xml:space="preserve"><value>Notes</value></data>
   <data name="Pupils" xml:space="preserve"><value>Pupils</value></data>
+  <data name="Start" xml:space="preserve"><value>Start</value></data>
+  <data name="End" xml:space="preserve"><value>End</value></data>
 
 </root>

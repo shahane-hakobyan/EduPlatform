@@ -47,17 +47,10 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "");
 // Sidebar menu builder (localized)
 builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
 
-// EduPlatform sits behind the Gateway (YARP), which owns login/session and
-// forwards the user's OpenIddict-issued access token as a Bearer header on
-// every proxied request. EduPlatform validates that token itself, the same
-// way the other downstream services (ocr, ibook, crossword, learn, ...) do.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Authority = builder.Configuration["Authentication:Authority"];
-        // Generic token shared across all downstream services for now, so no
-        // audience is enforced. Revisit if EduPlatform gets its own OpenIddict
-        // resource/audience later.
         options.TokenValidationParameters.ValidateAudience = false;
         options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
     });
@@ -65,6 +58,11 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<EduPlatformDbContext>();
+    db.Database.Migrate();
+}
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
