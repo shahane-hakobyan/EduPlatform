@@ -44,7 +44,7 @@ namespace EduPlatform.Services
         };
 
         public List<SidebarMenuItem> ForTeacher() => new() {
-            PersonalPage("/Teacher"),
+            PersonalPage("/Teacher/Index"),
             AvailableMaterials("/Teacher"),
             new() { Label = _l["MyBookshelf"], IconSvg = SidebarIcons.Repository, Children = {
                 new() { Label = _l["MyTools"], IconSvg = SidebarIcons.Tools, Url = "/Teacher/Repository/MyTools" },
