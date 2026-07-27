@@ -9,6 +9,7 @@
         public string? ThumbnailUrl { get; set; }
         public string Authors { get; set; } = "";
         public string Publisher { get; set; } = "";
+        public string? Language { get; set; }
         public int Pages { get; set; }
         public int Year { get; set; }
         public string ViewUrl { get; set; } = "";

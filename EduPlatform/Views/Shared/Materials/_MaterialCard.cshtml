@@ -2,7 +2,7 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 
 <div class="material-card-wide">
-    <div class="material-card-wide-image" data-full-image="@Model.ThumbnailUrl">
+    <div class="material-card-wide-image material-card-cover" data-full-image="@Model.ThumbnailUrl">
         @if (!string.IsNullOrEmpty(Model.ThumbnailUrl))
         {
             <img src="@Model.ThumbnailUrl" alt="@string.Join(", ", Model.Subjects)" />
@@ -11,19 +11,32 @@
         {
             <div class="material-card-wide-placeholder cover-@Model.ColorVariant">
                 <i class="bi bi-tablet material-card-placeholder-icon"></i>
+                <span class="material-card-cover-decor"></span>
+                <span class="material-card-grade-pill">@string.Join(", ", Model.Grades)</span>
+                <span class="material-card-cover-title">@string.Join(", ", Model.Subjects)</span>
             </div>
         }
     </div>
 
     <div class="material-card-wide-content">
-        <h3 class="material-card-wide-title" data-bs-toggle="tooltip" data-bs-placement="top" title="@string.Join(", ", Model.Subjects)">@string.Join(", ", Model.Subjects)</h3>
+        @if (Model.Subjects.Any())
+        {
+            <span class="material-card-subject-chip" data-bs-toggle="tooltip" data-bs-placement="top" title="@string.Join(", ", Model.Subjects)">@string.Join(", ", Model.Subjects)</span>
+        }
+        else if (!string.IsNullOrEmpty(Model.Language))
+        {
+            <span class="material-card-subject-chip">@Model.Language</span>
+        }
         <p class="material-card-wide-authors" data-bs-toggle="tooltip" data-bs-placement="top" title="@Model.Authors">@Model.Authors</p>
         <p class="material-card-wide-publisher">@Model.Publisher</p>
 
-        <div class="material-card-wide-meta d-flex gap-3">
-            <span>@string.Join(", ", Model.Grades)</span>
-            <span>@Model.Pages @Localizer["Pages"]</span>
-            <span>@Model.Year</span>
+        <div class="material-card-wide-meta d-flex align-items-center gap-3">
+            @if (Model.Grades.Any())
+            {
+                <span><i class="bi bi-mortarboard-fill"></i> @string.Join(", ", Model.Grades)</span>
+            }
+            <span><i class="bi bi-calendar3"></i> @Model.Year</span>
+            <span><i class="bi bi-file-earmark-text"></i> @Model.Pages @Localizer["Pages"]</span>
         </div>
 
         <div class="material-card-actions">
