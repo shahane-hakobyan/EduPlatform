@@ -141,7 +141,7 @@ namespace EduPlatform.Controllers
                   .Include(e => e.LessonGrades).ThenInclude(lg => lg.Grade)
                   .ToList();
 
-            var selectedDayValue = day ?? ScheduleDay.Monday.ToString();
+            var selectedDayValue = day ?? CurrentScheduleDay().ToString();
 
             var days = Enum.GetValues<ScheduleDay>()
                 .Select(d => new ScheduleDayViewModel
@@ -195,6 +195,11 @@ namespace EduPlatform.Controllers
             };
 
             return PartialView("_GradeRoster", vm);
+        }
+        private static ScheduleDay CurrentScheduleDay()
+        {
+            var today = DateTime.Now.DayOfWeek;
+            return today == DayOfWeek.Sunday ? ScheduleDay.Sunday : (ScheduleDay)(int)today;
         }
 
         public IActionResult Materials(string id)
