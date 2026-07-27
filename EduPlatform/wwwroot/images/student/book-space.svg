@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="300" height="400" fill="#1E1B39"/>
+  <circle cx="220" cy="90" r="60" fill="#4D8AF0" opacity="0.7"/>
+  <text x="150" y="205" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="20" fill="#ffffff">Աստղագիտություն</text>
+</svg>

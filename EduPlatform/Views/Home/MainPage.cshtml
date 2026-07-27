@@ -1,0 +1,403 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Նորարարական Թվային Կրթական Լուծումներ";
+}
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Elearning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/student.css" asp-append-version="true" />
+</head>
+<body class="student-page">
+
+    <!-- ============ Header ============ -->
+    <header class="site-header">
+        <div class="container">
+            <a class="brand" asp-controller="Home" asp-action="MainPage">
+                <img class="brand-mark" src="~/images/student/logo.png" alt="Elearning" />
+            </a>
+
+            <nav class="main-nav">
+                <a asp-controller="Home" asp-action="Index">Մեր Մասին</a>
+                <a asp-controller="Home" asp-action="MainPage">Նորություններ</a>
+                <a asp-controller="Home" asp-action="Privacy">Հետադարձ Կապ</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="search" placeholder="Փնտրել..." aria-label="Փնտրել" />
+                    <svg class="search-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="6.125" cy="6.125" r="5.104" stroke="#99A1AF" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9.7 9.7L12.833 12.833" stroke="#99A1AF" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="lang-switch">
+                    <span class="flag">🇦🇲</span>
+                    <span class="lang-code">ՀԱՅ</span>
+                </span>
+                <a href="https://mainlogin.dshh.am:15107/Login/Login" class="login-btn">Մուտք</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ Hero ============ -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-copy">
+                <span class="badge-pill">ՆԵՐԳՐԱՎՎԱԾ ԿՐԹՈՒԹՅԱՆ</span>
+                <h1 class="hero-title">
+                    Նորարարական<br />
+                    <span class="accent">Թվային</span> Կրթական<br />
+                    Լուծումներ
+                </h1>
+                <p class="hero-text">
+                    Ժամանակակից կրթական համակարգ, որը հնարավորություն է տալիս սովորել ցանկացած պահի, ցանկացած տեղից՝ որակյալ և հասանելի թվային մեթոդների միջոցով:
+                </p>
+                <a href="#library" class="btn-hero">
+                    Սկսել Հիմա
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+
+            <div class="hero-media">
+                <img src="~/images/student/hero.png" alt="Ուսանողուհի սովորում է լապտոպով" />
+                <div class="hero-stat-card">
+                    <span class="icon-circle stat-blue">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H6C4.93913 15 3.92172 15.4214 3.17157 16.1716C2.42143 16.9217 2 17.9391 2 19V21"/>
+                            <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z"/>
+                            <path d="M22 21V19C21.9993 18.1137 21.7044 17.2528 21.1614 16.5523C20.6184 15.8519 19.8581 15.3516 19 15.13"/>
+                            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88"/>
+                        </svg>
+                    </span>
+                    <span class="stat-text">
+                        <span class="stat-label">Սովորողներ</span>
+                        <strong class="stat-value">10,000+</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Library / feature cards ============ -->
+    <section class="section section-alt" id="library">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Գրադարան</h2>
+                <p>
+                    Ուսումնական բովանդակության ամբողջական հավաքածու՝ թվային դասագրքերով, ամենօրյա
+                    նյութերով և առցանց ուսումնական աշխատանքների գործիքներով:
+                </p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="icon-circle blue">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </span>
+                    <h3>Դասընթացների կառավարում</h3>
+                    <p>Ճկուն կառավարման գործիքներ ուսումնական ծրագրերի արագ և հեշտ կազմակերպման համար:</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="icon-circle green">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </span>
+                    <h3>Հարուստ գրադարան</h3>
+                    <p>Հազարավոր թվային գրքեր և ուսումնական նյութեր՝ հասանելի ցանկացած սարքից:</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="icon-circle purple">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+                    </span>
+                    <h3>Ինտերակտիվ գործիքներ</h3>
+                    <p>Խաղային և գործնական վարժություններ, որոնք դարձնում են ուսուցումը հետաքրքիր:</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="icon-circle orange">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </span>
+                    <h3>Անվտանգ և հուսալի</h3>
+                    <p>Տվյալների պաշտպանության բարձր ստանդարտներ և շուրջօրյա տեխնիկական աջակցություն:</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Education management ============ -->
+    <section class="section">
+        <div class="container split">
+            <img class="edu-image" src="~/images/student/library.png" alt="Գրադարանի ինտերիեր" />
+
+            <div class="split-text">
+                <div class="section-heading align-left">
+                    <h2 class="edu-heading">Կրթության Կառավարում</h2>
+                </div>
+                <p>
+                    Ընդհանրական ուսուցման հարթակը ապահովում է դասընթացների հեշտ կառավարում, ուսանողների
+                    առաջընթացի հետևում և գնահատումների ինքնաշխատ ամփոփում՝ ուսուցիչների ժամանակի
+                    խնայողության համար:
+                </p>
+
+                <div class="check-grid">
+                    <div class="check-item">
+                        <span class="check-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.00004 14.6666C11.6819 14.6666 14.6667 11.6818 14.6667 7.99992C14.6667 4.31802 11.6819 1.33325 8.00004 1.33325C4.31814 1.33325 1.33337 4.31802 1.33337 7.99992C1.33337 11.6818 4.31814 14.6666 8.00004 14.6666Z" stroke="#2BDFA5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6 8.00008L7.33333 9.33341L10 6.66675" stroke="#2BDFA5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="check-text">Ինտերակտիվ խաղեր</span>
+                    </div>
+                    <div class="check-item">
+                        <span class="check-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.00004 14.6666C11.6819 14.6666 14.6667 11.6818 14.6667 7.99992C14.6667 4.31802 11.6819 1.33325 8.00004 1.33325C4.31814 1.33325 1.33337 4.31802 1.33337 7.99992C1.33337 11.6818 4.31814 14.6666 8.00004 14.6666Z" stroke="#2BDFA5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6 8.00008L7.33333 9.33341L10 6.66675" stroke="#2BDFA5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="check-text">Սիմուլյացիաներ</span>
+                    </div>
+                    <div class="check-item">
+                        <span class="check-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.00004 14.6666C11.6819 14.6666 14.6667 11.6818 14.6667 7.99992C14.6667 4.31802 11.6819 1.33325 8.00004 1.33325C4.31814 1.33325 1.33337 4.31802 1.33337 7.99992C1.33337 11.6818 4.31814 14.6666 8.00004 14.6666Z" stroke="#2BDFA5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6 8.00008L7.33333 9.33341L10 6.66675" stroke="#2BDFA5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="check-text">Տեսանյութեր</span>
+                    </div>
+                    <div class="check-item">
+                        <span class="check-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.00004 14.6666C11.6819 14.6666 14.6667 11.6818 14.6667 7.99992C14.6667 4.31802 11.6819 1.33325 8.00004 1.33325C4.31814 1.33325 1.33337 4.31802 1.33337 7.99992C1.33337 11.6818 4.31814 14.6666 8.00004 14.6666Z" stroke="#2BDFA5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6 8.00008L7.33333 9.33341L10 6.66675" stroke="#2BDFA5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="check-text">Ինքնուրույն ուսուցում</span>
+                    </div>
+                </div>
+
+                <a href="#" class="btn btn-edu">
+                    Իմանալ ավելին
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Team work (purple) ============ -->
+    <section class="section section-purple">
+        <div class="container split">
+            <div class="split-text">
+                <h2>Խմբային Աշխատանք</h2>
+                <p>
+                    Համատեղ նախագծերի վրա աշխատելու գործիքներ, որոնք ապահովում են ուսանողների միջև
+                    արդյունավետ հաղորդակցություն և գիտելիքների փոխանակում:
+                </p>
+
+                <div class="mini-feature-grid">
+                    <span class="mini-feature">
+                        <span class="mini-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 13C20 18 16.5 20.5 12.34 21.95C12.1222 22.0238 11.8855 22.0202 11.67 21.94C7.5 20.5 4 18 4 13V5.99996C4 5.73474 4.10536 5.48039 4.29289 5.29285C4.48043 5.10532 4.73478 4.99996 5 4.99996C7 4.99996 9.5 3.79996 11.24 2.27996C11.4519 2.09896 11.7214 1.99951 12 1.99951C12.2786 1.99951 12.5481 2.09896 12.76 2.27996C14.51 3.80996 17 4.99996 19 4.99996C19.2652 4.99996 19.5196 5.10532 19.7071 5.29285C19.8946 5.48039 20 5.73474 20 5.99996V13Z" stroke="#2BDFA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 12L11 14L15 10" stroke="#2BDFA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="mini-feature-text">Թիմային նախագծեր</span>
+                    </span>
+                    <span class="mini-feature">
+                        <span class="mini-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 13C20 18 16.5 20.5 12.34 21.95C12.1222 22.0238 11.8855 22.0202 11.67 21.94C7.5 20.5 4 18 4 13V5.99996C4 5.73474 4.10536 5.48039 4.29289 5.29285C4.48043 5.10532 4.73478 4.99996 5 4.99996C7 4.99996 9.5 3.79996 11.24 2.27996C11.4519 2.09896 11.7214 1.99951 12 1.99951C12.2786 1.99951 12.5481 2.09896 12.76 2.27996C14.51 3.80996 17 4.99996 19 4.99996C19.2652 4.99996 19.5196 5.10532 19.7071 5.29285C19.8946 5.48039 20 5.73474 20 5.99996V13Z" stroke="#2BDFA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 12L11 14L15 10" stroke="#2BDFA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="mini-feature-text">Փոխգործակցություն</span>
+                    </span>
+                    <span class="mini-feature">
+                        <span class="mini-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 13C20 18 16.5 20.5 12.34 21.95C12.1222 22.0238 11.8855 22.0202 11.67 21.94C7.5 20.5 4 18 4 13V5.99996C4 5.73474 4.10536 5.48039 4.29289 5.29285C4.48043 5.10532 4.73478 4.99996 5 4.99996C7 4.99996 9.5 3.79996 11.24 2.27996C11.4519 2.09896 11.7214 1.99951 12 1.99951C12.2786 1.99951 12.5481 2.09896 12.76 2.27996C14.51 3.80996 17 4.99996 19 4.99996C19.2652 4.99996 19.5196 5.10532 19.7071 5.29285C19.8946 5.48039 20 5.73474 20 5.99996V13Z" stroke="#2BDFA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 12L11 14L15 10" stroke="#2BDFA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="mini-feature-text">Կիսվել գիտելիքներով</span>
+                    </span>
+                    <span class="mini-feature">
+                        <span class="mini-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 13C20 18 16.5 20.5 12.34 21.95C12.1222 22.0238 11.8855 22.0202 11.67 21.94C7.5 20.5 4 18 4 13V5.99996C4 5.73474 4.10536 5.48039 4.29289 5.29285C4.48043 5.10532 4.73478 4.99996 5 4.99996C7 4.99996 9.5 3.79996 11.24 2.27996C11.4519 2.09896 11.7214 1.99951 12 1.99951C12.2786 1.99951 12.5481 2.09896 12.76 2.27996C14.51 3.80996 17 4.99996 19 4.99996C19.2652 4.99996 19.5196 5.10532 19.7071 5.29285C19.8946 5.48039 20 5.73474 20 5.99996V13Z" stroke="#2BDFA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 12L11 14L15 10" stroke="#2BDFA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="mini-feature-text">Համատեղ ստեղծագործություն</span>
+                    </span>
+                </div>
+
+                <div class="split-actions">
+                    <a href="#" class="btn btn-edu-light">
+                        Դիտել մանրամասն
+                    </a>
+                    <span class="slide-nav">
+                        <a href="#" class="slide-nav-btn" aria-label="Նախորդ սլայդ">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.5 15L7.5 10L12.5 5" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                        <a href="#" class="slide-nav-btn" aria-label="Հաջորդ սլայդ">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 15L12.5 10L7.5 5" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                    </span>
+                </div>
+            </div>
+
+            <img class="teamwork-image" src="~/images/student/teamwork.png" alt="Խմբային աշխատանք լապտոպներով" />
+        </div>
+
+        <div class="container">
+            <div class="carousel-dots">
+                <span></span>
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Interactive books ============ -->
+    <section class="section section-books">
+        <div class="container">
+            <div class="books-header">
+                <div class="books-header-text">
+                    <h2 class="books-heading">Ինտերակտիվ գրքեր</h2>
+                    <span class="books-heading-bar"></span>
+                    <p class="books-desc">Էլեկտրոնային ուսուցման թվային ամսագրերի ինտերակտիվ միջոցով, որ ուսումնասիրվում է հասանելիորեն և բազմակողմանիորեն:</p>
+                </div>
+                <a href="#" class="btn-books-all">
+                    <span class="btn-books-all-text">Բոլոր գրքերը</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.16663 10H15.8333" stroke="#6369D4" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10 4.16675L15.8333 10.0001L10 15.8334" stroke="#6369D4" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="books-grid">
+                <div class="book-card">
+                    <div class="book-cover book-cover-art">
+                        <span class="book-badge">ԱՐՎԵՍՏ</span>
+                    </div>
+                    <h3 class="book-title">Արվեստ և Մշակույթ</h3>
+                    <p class="book-author">Ա. Հովհաննիսյան</p>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="~/images/student/book-space.svg" alt="Տիեզերքի Գաղտնիքները" />
+                        <span class="book-badge">ԳԻՏՈՒԹՅՈՒՆ</span>
+                    </div>
+                    <h3 class="book-title">Տիեզերքի Գաղտնիքները</h3>
+                    <p class="book-author">Գ. Պետրոսյան</p>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="~/images/student/book-history.svg" alt="Հայոց Պատմություն" />
+                        <span class="book-badge">ՊԱՏՄՈՒԹՅՈՒՆ</span>
+                    </div>
+                    <h3 class="book-title">Հայոց Պատմություն</h3>
+                    <p class="book-author">Ն. Գրիգորյան</p>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover book-cover-biology">
+                        <span class="book-badge">ԲՆԱԳԻՏՈՒԹՅՈՒՆ</span>
+                    </div>
+                    <h3 class="book-title">Կենսաբանություն</h3>
+                    <p class="book-author">Դ. Ավետիսյան</p>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover book-cover-math">
+                        <span class="book-badge">ՄԱԹԵՄԱՏԻԿԱ</span>
+                    </div>
+                    <h3 class="book-title">Մաթեմատիկայի Աշխարհում</h3>
+                    <p class="book-author">Վ. Խաչատրյան</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CTA banner ============ -->
+    <section class="section section-cta">
+        <div class="container">
+            <div class="cta-banner">
+                <h2 class="cta-banner-heading">Միացեք գիտելիքի թվային աշխարհին հիմա</h2>
+                <p class="cta-banner-desc">Ստեղծեք ձեր հաշիվը և սկսեք օգտվել բոլոր կրթական նյութերից:</p>
+                <a href="#" class="btn-cta"><span class="btn-cta-text">Սկսել օգտվել հիմա</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Footer ============ -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <img class="footer-logo" src="~/images/student/logo.png" alt="Elearning" />
+                    <p>Հեշտ և ճկուն առցանց ուսուցման լուծում: Այս հարթակի միջոցով կրթությունը հասանելի է բոլորին, ցանկացած պահի:</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Ծրագիր</h4>
+                    <ul>
+                        <li><a href="#">Գրքեր</a></li>
+                        <li><a href="#">Տեսանյութեր</a></li>
+                        <li><a href="#" class="footer-link-accent">3D Տեսանյութեր</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Հարթակ</h4>
+                    <ul>
+                        <li><a asp-controller="Home" asp-action="Index">Մեր մասին</a></li>
+                        <li><a asp-controller="Home" asp-action="MainPage">Նորություններ</a></li>
+                        <li><a asp-controller="Home" asp-action="Privacy">Գաղտնիություն</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Կապ</h4>
+                    <ul class="footer-contact">
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6369D4" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <span>(+374) 99 999 999</span>
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6369D4" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                            <span>Elearning@gmail.com</span>
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6369D4" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>Երևան, Հայաստան</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom-wrap">
+                <div class="footer-bottom">
+                    <span class="footer-copyright">&copy; @DateTime.Now.Year E-learning | Առցանց կրթական համակարգ</span>
+                    <span class="legal-links">
+                        <a href="#">Օգտագործման պայմաններ</a>
+                        <a href="#">Անվտանգություն</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
