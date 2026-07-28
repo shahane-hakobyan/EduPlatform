@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using EduPlatform.Data;
 using EduPlatform.Services;
 using Serilog;
-using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,17 +21,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<EduPlatformDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Redis
-builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
-    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis") + ",abortConnect=false"));
+// In-memory cache (replaces Redis for the sidebar geolocation lookup)
+builder.Services.AddMemoryCache();
 
 // IP geolocation (used by the sidebar flag)
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IIpGeolocationService, IpGeolocationService>();
 
-// SignalR + Redis backplane
-builder.Services.AddSignalR()
-    .AddStackExchangeRedis(builder.Configuration.GetConnectionString("Redis")!);
+// SignalR (no Redis backplane - fine for a single server)
+builder.Services.AddSignalR();
 
 // Hangfire
 builder.Services.AddHangfire(config => config
@@ -63,6 +60,7 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<EduPlatformDbContext>();
     db.Database.Migrate();
 }
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -74,6 +72,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 var supportedCultures = new[] { "hy", "ru", "en" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture("hy")

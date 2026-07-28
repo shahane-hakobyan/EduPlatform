@@ -1,7 +1,9 @@
 using EduPlatform.Models;
+using EduPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace EduPlatform.Controllers
 {
@@ -35,6 +37,12 @@ namespace EduPlatform.Controllers
         public IActionResult Dashboard()
         {
             return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

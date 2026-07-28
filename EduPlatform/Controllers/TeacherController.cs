@@ -4,12 +4,14 @@ using EduPlatform.Models;
 using EduPlatform.Resources;
 using EduPlatform.Services;
 using EduPlatform.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace EduPlatform.Controllers
 {
+    [AllowAnonymous]
     public class TeacherController : Controller
     {
         private readonly ISidebarMenuBuilder _menuBuilder;
