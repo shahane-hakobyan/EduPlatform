@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using Hangfire;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using EduPlatform.Data;
@@ -30,13 +29,6 @@ builder.Services.AddScoped<IIpGeolocationService, IpGeolocationService>();
 
 // SignalR (no Redis backplane - fine for a single server)
 builder.Services.AddSignalR();
-
-// Hangfire
-builder.Services.AddHangfire(config => config
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddHangfireServer();
 
 // Localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "");
