@@ -89,7 +89,7 @@ namespace EduPlatform.Controllers
                     .ToList(),
                 Grades = _db.TeacherGrades
                     .Where(tc => tc.TeacherUserId == CurrentTeacherUserId)
-                    .Select(tc => new SelectOption { Id = tc.GradeId, Label = tc.Grade.Name })
+                    .Select(tc => new SelectOption { Id = tc.GradeId, Label = tc.Grade.GradeName })
                     .ToList()
             };
 
@@ -173,7 +173,7 @@ namespace EduPlatform.Controllers
                         TimeRange = $"{e.StartTime:HH:mm} – {e.EndTime:HH:mm}",
                         IsFree = e.IsFree,
                         SubjectNames = e.LessonSubjects.Select(ls => ls.Subject.Name).ToList(),
-                        Grades = e.LessonGrades.Select(lg => new GradeChip { Id = lg.GradeId, Name = lg.Grade.Name }).ToList(),
+                        Grades = e.LessonGrades.Select(lg => new GradeChip { Id = lg.GradeId, Name = lg.Grade.GradeName }).ToList(),
                         RoomNumber = e.RoomNumber,
                         Notes = e.Notes
                     })
@@ -188,7 +188,7 @@ namespace EduPlatform.Controllers
 
             var vm = new GradeRosterViewModel
             {
-                GradeName = grade?.Name ?? "",
+                GradeName = grade?.GradeName ?? "",
                 Pupils = Enumerable.Range(1, 8).Select(i => new RosterPupilViewModel
                 {
                     Name = $"{_l["Pupil"]} {i}",
