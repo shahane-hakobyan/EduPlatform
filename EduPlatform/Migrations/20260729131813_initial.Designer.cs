@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduPlatform.Migrations
 {
     [DbContext(typeof(EduPlatformDbContext))]
-    [Migration("20260724074257_initial")]
+    [Migration("20260729131813_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -33,16 +33,18 @@ namespace EduPlatform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("GradeName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<int>("InstitutionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("InstitutionId");
+                    b.HasIndex("InstitutionId", "GradeName")
+                        .IsUnique();
 
                     b.ToTable("Grades");
                 });
@@ -55,38 +57,79 @@ namespace EduPlatform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("DshhInstitutionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("KtakInstitutionId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("Place")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("KtakInstitutionId")
+                        .IsUnique();
+
                     b.ToTable("Institutions");
                 });
 
-            modelBuilder.Entity("EduPlatform.Models.PupilGrade", b =>
+            modelBuilder.Entity("EduPlatform.Models.LessonGrade", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ScheduleLessonId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("GradeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PupilUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("ScheduleLessonId", "GradeId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("GradeId");
+
+                    b.ToTable("LessonGrades");
+                });
+
+            modelBuilder.Entity("EduPlatform.Models.LessonSubject", b =>
+                {
+                    b.Property<int>("ScheduleLessonId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ScheduleLessonId", "SubjectId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("LessonSubjects");
+                });
+
+            modelBuilder.Entity("EduPlatform.Models.PupilGrade", b =>
+                {
+                    b.Property<string>("PupilUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GradeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AcademicYear")
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
+
+                    b.Property<string>("DshhPupilId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("PupilUserId", "GradeId", "AcademicYear");
 
                     b.HasIndex("GradeId");
 
@@ -101,43 +144,46 @@ namespace EduPlatform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AcademicYear")
+                        .IsRequired()
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
+
                     b.Property<int>("Day")
                         .HasColumnType("int");
+
+                    b.Property<string>("DshhTeacherId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<int?>("GradeId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsFree")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("PeriodNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("RoomNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
 
-                    b.Property<int?>("SubjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TeacherUserId")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubjectId");
-
-                    b.HasIndex("GradeId", "Day", "PeriodNumber")
-                        .IsUnique()
-                        .HasFilter("[GradeId] IS NOT NULL");
-
-                    b.HasIndex("TeacherUserId", "Day", "PeriodNumber")
+                    b.HasIndex("TeacherUserId", "AcademicYear", "Day", "PeriodNumber")
                         .IsUnique();
 
                     b.ToTable("ScheduleLessons");
@@ -153,29 +199,35 @@ namespace EduPlatform.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("EduPlatform.Models.TeacherGrade", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("TeacherUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("GradeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TeacherUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("AcademicYear")
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("DshhTeacherId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("TeacherUserId", "GradeId", "AcademicYear");
 
                     b.HasIndex("GradeId");
 
@@ -184,20 +236,18 @@ namespace EduPlatform.Migrations
 
             modelBuilder.Entity("EduPlatform.Models.TeacherSubject", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("TeacherUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TeacherUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("DshhTeacherId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeacherUserId", "SubjectId");
 
                     b.HasIndex("SubjectId");
 
@@ -215,6 +265,44 @@ namespace EduPlatform.Migrations
                     b.Navigation("Institution");
                 });
 
+            modelBuilder.Entity("EduPlatform.Models.LessonGrade", b =>
+                {
+                    b.HasOne("EduPlatform.Models.Grade", "Grade")
+                        .WithMany()
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduPlatform.Models.ScheduleLesson", "ScheduleLesson")
+                        .WithMany("LessonGrades")
+                        .HasForeignKey("ScheduleLessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Grade");
+
+                    b.Navigation("ScheduleLesson");
+                });
+
+            modelBuilder.Entity("EduPlatform.Models.LessonSubject", b =>
+                {
+                    b.HasOne("EduPlatform.Models.ScheduleLesson", "ScheduleLesson")
+                        .WithMany("LessonSubjects")
+                        .HasForeignKey("ScheduleLessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduPlatform.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ScheduleLesson");
+
+                    b.Navigation("Subject");
+                });
+
             modelBuilder.Entity("EduPlatform.Models.PupilGrade", b =>
                 {
                     b.HasOne("EduPlatform.Models.Grade", "Grade")
@@ -224,23 +312,6 @@ namespace EduPlatform.Migrations
                         .IsRequired();
 
                     b.Navigation("Grade");
-                });
-
-            modelBuilder.Entity("EduPlatform.Models.ScheduleLesson", b =>
-                {
-                    b.HasOne("EduPlatform.Models.Grade", "Grade")
-                        .WithMany("ScheduleLessons")
-                        .HasForeignKey("GradeId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("EduPlatform.Models.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Grade");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("EduPlatform.Models.TeacherGrade", b =>
@@ -265,14 +336,16 @@ namespace EduPlatform.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("EduPlatform.Models.Grade", b =>
-                {
-                    b.Navigation("ScheduleLessons");
-                });
-
             modelBuilder.Entity("EduPlatform.Models.Institution", b =>
                 {
                     b.Navigation("Grades");
+                });
+
+            modelBuilder.Entity("EduPlatform.Models.ScheduleLesson", b =>
+                {
+                    b.Navigation("LessonGrades");
+
+                    b.Navigation("LessonSubjects");
                 });
 #pragma warning restore 612, 618
         }

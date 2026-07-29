@@ -30,16 +30,18 @@ namespace EduPlatform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("GradeName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<int>("InstitutionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("InstitutionId");
+                    b.HasIndex("InstitutionId", "GradeName")
+                        .IsUnique();
 
                     b.ToTable("Grades");
                 });
@@ -52,62 +54,55 @@ namespace EduPlatform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("DshhInstitutionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("KtakInstitutionId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("Place")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("KtakInstitutionId")
+                        .IsUnique();
+
                     b.ToTable("Institutions");
                 });
 
             modelBuilder.Entity("EduPlatform.Models.LessonGrade", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ScheduleLessonId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("GradeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ScheduleLessonId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("ScheduleLessonId", "GradeId");
 
                     b.HasIndex("GradeId");
-
-                    b.HasIndex("ScheduleLessonId");
 
                     b.ToTable("LessonGrades");
                 });
 
             modelBuilder.Entity("EduPlatform.Models.LessonSubject", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("ScheduleLessonId")
                         .HasColumnType("int");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ScheduleLessonId");
+                    b.HasKey("ScheduleLessonId", "SubjectId");
 
                     b.HasIndex("SubjectId");
 
@@ -116,20 +111,22 @@ namespace EduPlatform.Migrations
 
             modelBuilder.Entity("EduPlatform.Models.PupilGrade", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("PupilUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("GradeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PupilUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("AcademicYear")
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("DshhPupilId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("PupilUserId", "GradeId", "AcademicYear");
 
                     b.HasIndex("GradeId");
 
@@ -144,8 +141,17 @@ namespace EduPlatform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AcademicYear")
+                        .IsRequired()
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
+
                     b.Property<int>("Day")
                         .HasColumnType("int");
+
+                    b.Property<string>("DshhTeacherId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
@@ -154,24 +160,27 @@ namespace EduPlatform.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("PeriodNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("RoomNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
 
                     b.Property<string>("TeacherUserId")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TeacherUserId", "Day", "PeriodNumber")
+                    b.HasIndex("TeacherUserId", "AcademicYear", "Day", "PeriodNumber")
                         .IsUnique();
 
                     b.ToTable("ScheduleLessons");
@@ -187,29 +196,35 @@ namespace EduPlatform.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("EduPlatform.Models.TeacherGrade", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("TeacherUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("GradeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TeacherUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("AcademicYear")
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("DshhTeacherId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("TeacherUserId", "GradeId", "AcademicYear");
 
                     b.HasIndex("GradeId");
 
@@ -218,20 +233,18 @@ namespace EduPlatform.Migrations
 
             modelBuilder.Entity("EduPlatform.Models.TeacherSubject", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("TeacherUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TeacherUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("DshhTeacherId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeacherUserId", "SubjectId");
 
                     b.HasIndex("SubjectId");
 
