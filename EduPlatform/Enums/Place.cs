@@ -1,9 +1,17 @@
 ﻿namespace EduPlatform.Models
 {
+    /// <summary>
+    /// Ուսումնական հաստատության տեսակը
+    /// </summary>
     public enum Place
     {
-        School = 1,   // դպրոց
-        Nmuh   = 2,   // նախնական մասնագիտական ուսումնական հաստատություն
-        Mmuh   = 3    // միջին մասնագիտական ուսումնական հաստատություն
+        /// <summary>Դպրոց</summary>
+        School = 1,
+
+        /// <summary>ՆՄՈՒՀ</summary>
+        Nmuh = 2,
+
+        /// <summary>ՄՄՈՒՀ</summary>
+        Mmuh = 3
     }
 }
