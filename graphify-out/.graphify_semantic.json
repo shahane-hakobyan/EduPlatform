@@ -1,0 +1,1283 @@
+{
+  "nodes": [
+    {
+      "id": "claude_claude_graphify_trigger",
+      "label": "Project graphify Trigger Instruction",
+      "file_type": "document",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_graphify_command",
+      "label": "/graphify Command",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_fast_path_query",
+      "label": "Fast Path: Existing Graph Query",
+      "file_type": "rationale",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step0_github_clone",
+      "label": "Step 0: GitHub Clone and Multi-Path Merge",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step1_install",
+      "label": "Step 1: Ensure graphify Is Installed",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step2_detect",
+      "label": "Step 2: Detect Files",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step2_5_video",
+      "label": "Step 2.5: Video and Audio Handling",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step3_extract",
+      "label": "Step 3: Extract Entities and Relationships",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step3_parta_ast",
+      "label": "Part A: Structural (AST) Extraction",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step3_partb_semantic",
+      "label": "Part B: Semantic Extraction via Subagents",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step3_partc_merge",
+      "label": "Part C: Merge AST + Semantic Extraction",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step4_build_graph",
+      "label": "Step 4: Build Graph, Cluster, Analyze, Generate Outputs",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step4_5_health_check",
+      "label": "Step 4.5: Graph Health Check",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step5_label_communities",
+      "label": "Step 5: Label Communities",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step6_obsidian_html",
+      "label": "Step 6: Generate Obsidian Vault + HTML",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_step9_manifest_cleanup",
+      "label": "Step 9: Save Manifest, Update Cost Tracker, Clean Up",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_honesty_rules",
+      "label": "Honesty Rules",
+      "file_type": "rationale",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_skill_no_api_key_rationale",
+      "label": "No API Key Required for Code-Only Extraction",
+      "file_type": "rationale",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_add_watch_add",
+      "label": "/graphify add <url>",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\add-watch.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_add_watch_watch",
+      "label": "--watch Background Rebuilder",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\add-watch.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_exports_neo4j",
+      "label": "Neo4j Export",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\exports.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_exports_falkordb",
+      "label": "FalkorDB Export",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\exports.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_exports_wiki",
+      "label": "Wiki Export",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\exports.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_exports_mcp_server",
+      "label": "MCP Server (graphify.serve)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\exports.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_exports_benchmark",
+      "label": "Token Reduction Benchmark",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\exports.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_extraction_spec_subagent_prompt",
+      "label": "Extraction Subagent Prompt",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\extraction-spec.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_extraction_spec_node_id_format",
+      "label": "Node ID Format Rule",
+      "file_type": "rationale",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\extraction-spec.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_extraction_spec_confidence_rubric",
+      "label": "Confidence Score Rubric",
+      "file_type": "rationale",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\extraction-spec.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_github_and_merge_clone",
+      "label": "GitHub Clone (graphify clone)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\github-and-merge.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_github_and_merge_cross_repo_merge",
+      "label": "Cross-Repo Graph Merge (graphify merge-graphs)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\github-and-merge.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_hooks_post_commit",
+      "label": "Post-Commit Hook (graphify hook install)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\hooks.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_hooks_claude_md_integration",
+      "label": "Native CLAUDE.md Integration (graphify claude install)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\hooks.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_query_bfs_dfs",
+      "label": "BFS/DFS Query Traversal",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\query.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_query_vocab_expansion",
+      "label": "Constrained Query Vocabulary Expansion",
+      "file_type": "rationale",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\query.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_query_save_result",
+      "label": "save-result Feedback Loop",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\query.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_query_path",
+      "label": "/graphify path",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\query.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_query_explain",
+      "label": "/graphify explain",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\query.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_transcribe_whisper",
+      "label": "Whisper Video/Audio Transcription",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\transcribe.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_update_incremental",
+      "label": "--update Incremental Re-extraction",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\update.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_update_cluster_only",
+      "label": "--cluster-only Re-clustering",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\update.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_skills_graphify_references_update_build_merge",
+      "label": "build_merge Replace-on-Re-extract",
+      "file_type": "rationale",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\update.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_project_overview",
+      "label": "EduPlatform Project CLAUDE.md Overview",
+      "file_type": "document",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_graphify_integration_rules",
+      "label": "graphify Integration Rules (Project CLAUDE.md)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_lib_jquery_license_jquery_library",
+      "label": "jQuery Library (MIT License)",
+      "file_type": "document",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_lib_jquery_validation_license_jquery_validation_library",
+      "label": "jQuery Validation Library (MIT License, Jorn Zaefferer)",
+      "file_type": "document",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_lib_jquery_validation_unobtrusive_license_jquery_validation_unobtrusive_library",
+      "label": "jQuery Validation Unobtrusive Library (MIT License, .NET Foundation)",
+      "file_type": "document",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_eduplatform_title",
+      "label": "EduPlatform README Title",
+      "file_type": "document",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_images_student_book_architecture_svg",
+      "label": "Book Cover Icon - Architecture (Armenian)",
+      "file_type": "image",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-architecture.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_images_student_book_architecture_architecture_subject",
+      "label": "Architecture (Course Subject/Category)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-architecture.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_images_student_book_history",
+      "label": "Book History Icon (Student Subject Card)",
+      "file_type": "image",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-history.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_images_student_book_literature_bookliteratureicon",
+      "label": "Book Literature Icon (Student)",
+      "file_type": "image",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-literature.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_images_student_book_space_bookspaceillustration",
+      "label": "Book Space Illustration (Astronomy)",
+      "file_type": "image",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-space.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "concept_astronomy",
+      "label": "Astronomy (Աստղագիտություն)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-space.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_images_student_hero_heroimage",
+      "label": "Student Hero Image",
+      "file_type": "image",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\hero.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_images_student_library_libraryimage",
+      "label": "Library Interior Photo (Student Section)",
+      "file_type": "image",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\library.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_images_student_logo_logo",
+      "label": "Textbook and ICT Revolving Fund Logo",
+      "file_type": "image",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\logo.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "eduplatform_wwwroot_images_student_teamwork_teamworkimage",
+      "label": "Teamwork Stock Photo (Student Section)",
+      "file_type": "image",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\teamwork.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "concept_teamwork_collaboration",
+      "label": "Teamwork / Collaboration Concept",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\teamwork.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "claude_claude_graphify_trigger",
+      "target": "claude_skills_graphify_skill_graphify_command",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_overview",
+      "target": "claude_graphify_integration_rules",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_graphify_integration_rules",
+      "target": "claude_skills_graphify_skill_graphify_command",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_graphify_integration_rules",
+      "target": "claude_skills_graphify_references_query_bfs_dfs",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_graphify_integration_rules",
+      "target": "claude_skills_graphify_references_query_path",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_graphify_integration_rules",
+      "target": "claude_skills_graphify_references_query_explain",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_graphify_integration_rules",
+      "target": "claude_skills_graphify_references_update_incremental",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_claude_graphify_trigger",
+      "target": "claude_graphify_integration_rules",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_fast_path_query",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step0_github_clone",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step1_install",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step2_detect",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step2_5_video",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step3_extract",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step3_extract",
+      "target": "claude_skills_graphify_skill_step3_parta_ast",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step3_extract",
+      "target": "claude_skills_graphify_skill_step3_partb_semantic",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step3_extract",
+      "target": "claude_skills_graphify_skill_step3_partc_merge",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step4_build_graph",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step4_5_health_check",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step5_label_communities",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step6_obsidian_html",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_skill_step9_manifest_cleanup",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_honesty_rules",
+      "target": "claude_skills_graphify_skill_graphify_command",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_no_api_key_rationale",
+      "target": "claude_skills_graphify_skill_step3_partb_semantic",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step2_5_video",
+      "target": "claude_skills_graphify_references_transcribe_whisper",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step0_github_clone",
+      "target": "claude_skills_graphify_references_github_and_merge_clone",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_references_github_and_merge_clone",
+      "target": "claude_skills_graphify_references_github_and_merge_cross_repo_merge",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\github-and-merge.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step6_obsidian_html",
+      "target": "claude_skills_graphify_references_exports_wiki",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step6_obsidian_html",
+      "target": "claude_skills_graphify_references_exports_neo4j",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step6_obsidian_html",
+      "target": "claude_skills_graphify_references_exports_falkordb",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step6_obsidian_html",
+      "target": "claude_skills_graphify_references_exports_mcp_server",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step6_obsidian_html",
+      "target": "claude_skills_graphify_references_exports_benchmark",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_references_add_watch_add",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_references_add_watch_watch",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_references_hooks_post_commit",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_references_hooks_claude_md_integration",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_references_query_bfs_dfs",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_references_query_path",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_references_query_explain",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_references_update_incremental",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_graphify_command",
+      "target": "claude_skills_graphify_references_update_cluster_only",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_skill_step3_partb_semantic",
+      "target": "claude_skills_graphify_references_extraction_spec_subagent_prompt",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_references_extraction_spec_node_id_format",
+      "target": "claude_skills_graphify_references_extraction_spec_subagent_prompt",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\extraction-spec.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_references_extraction_spec_confidence_rubric",
+      "target": "claude_skills_graphify_references_extraction_spec_subagent_prompt",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\extraction-spec.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_references_query_vocab_expansion",
+      "target": "claude_skills_graphify_references_query_bfs_dfs",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\query.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_references_query_bfs_dfs",
+      "target": "claude_skills_graphify_references_query_save_result",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\query.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_references_update_build_merge",
+      "target": "claude_skills_graphify_references_update_incremental",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\update.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_skills_graphify_references_add_watch_add",
+      "target": "claude_skills_graphify_references_add_watch_watch",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\add-watch.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_overview",
+      "target": "eduplatform_wwwroot_lib_jquery_license_jquery_library",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_overview",
+      "target": "eduplatform_wwwroot_lib_jquery_validation_license_jquery_validation_library",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_overview",
+      "target": "eduplatform_wwwroot_lib_jquery_validation_unobtrusive_license_jquery_validation_unobtrusive_library",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "eduplatform_wwwroot_lib_jquery_validation_license_jquery_validation_library",
+      "target": "eduplatform_wwwroot_lib_jquery_license_jquery_library",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "eduplatform_wwwroot_lib_jquery_validation_unobtrusive_license_jquery_validation_unobtrusive_library",
+      "target": "eduplatform_wwwroot_lib_jquery_license_jquery_library",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "eduplatform_wwwroot_lib_jquery_validation_unobtrusive_license_jquery_validation_unobtrusive_library",
+      "target": "eduplatform_wwwroot_lib_jquery_validation_license_jquery_validation_library",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_eduplatform_title",
+      "target": "claude_project_overview",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "eduplatform_wwwroot_images_student_book_architecture_svg",
+      "target": "eduplatform_wwwroot_images_student_book_architecture_architecture_subject",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-architecture.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "eduplatform_wwwroot_images_student_book_space_bookspaceillustration",
+      "target": "concept_astronomy",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-space.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "eduplatform_wwwroot_images_student_hero_heroimage",
+      "target": "eduplatform_views_home_index",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\hero.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "eduplatform_wwwroot_images_student_teamwork_teamworkimage",
+      "target": "concept_teamwork_collaboration",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\teamwork.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "graphify_build_pipeline",
+      "label": "graphify Build Pipeline (Steps 0-9)",
+      "nodes": [
+        "claude_skills_graphify_skill_step0_github_clone",
+        "claude_skills_graphify_skill_step1_install",
+        "claude_skills_graphify_skill_step2_detect",
+        "claude_skills_graphify_skill_step3_extract",
+        "claude_skills_graphify_skill_step4_build_graph",
+        "claude_skills_graphify_skill_step5_label_communities",
+        "claude_skills_graphify_skill_step6_obsidian_html",
+        "claude_skills_graphify_skill_step9_manifest_cleanup"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\SKILL.md"
+    },
+    {
+      "id": "graphify_query_command_family",
+      "label": "graphify Query/Path/Explain Command Family",
+      "nodes": [
+        "claude_skills_graphify_references_query_bfs_dfs",
+        "claude_skills_graphify_references_query_path",
+        "claude_skills_graphify_references_query_explain",
+        "claude_skills_graphify_references_query_save_result"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\.claude\\skills\\graphify\\references\\query.md"
+    },
+    {
+      "id": "aspnet_client_validation_stack",
+      "label": "ASP.NET Core Client-Side Validation Library Stack",
+      "nodes": [
+        "eduplatform_wwwroot_lib_jquery_license_jquery_library",
+        "eduplatform_wwwroot_lib_jquery_validation_license_jquery_validation_library",
+        "eduplatform_wwwroot_lib_jquery_validation_unobtrusive_license_jquery_validation_unobtrusive_library"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\lib\\jquery\\LICENSE.txt"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

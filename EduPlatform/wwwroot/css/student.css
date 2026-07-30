@@ -144,6 +144,11 @@ body.student-page {
   z-index: 40;
   background: #fff;
   border-bottom: 1px solid var(--color-border);
+  transition: box-shadow 0.25s ease;
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0px 4px 12px rgba(16, 24, 40, 0.08);
 }
 
 .site-header .container {
@@ -175,6 +180,7 @@ body.student-page {
 }
 
 .main-nav a {
+  position: relative;
   display: inline-flex;
   align-items: center;
   padding: 8px 16px;
@@ -186,12 +192,30 @@ body.student-page {
   letter-spacing: 0;
   color: #6A7282;
   white-space: nowrap;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
 }
 
 .main-nav a:hover {
   color: var(--color-primary);
   background: var(--color-bg-alt);
+}
+
+.main-nav a:hover::after {
+  transform: scaleX(1);
 }
 
 .header-actions {
@@ -240,6 +264,10 @@ body.student-page {
   pointer-events: none;
 }
 
+.lang-dropdown {
+  position: relative;
+}
+
 .lang-switch {
   box-sizing: border-box;
   display: flex;
@@ -251,15 +279,14 @@ body.student-page {
   background: #F3F4F6;
   border: 0.8px solid #E5E7EB;
   border-radius: 10px;
+  cursor: pointer;
 }
 
-.lang-switch .flag {
+.lang-switch .flag-img {
   width: 16px;
   height: 16px;
-  font-size: 16px;
-  line-height: 16px;
-  text-align: center;
-  color: #0A0A0A;
+  object-fit: cover;
+  border-radius: 2px;
 }
 
 .lang-switch .lang-code {
@@ -272,6 +299,58 @@ body.student-page {
   letter-spacing: 0.3px;
   text-align: center;
   color: #4A5565;
+}
+
+.lang-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 150px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.lang-dropdown-menu.show {
+  display: block;
+}
+
+.lang-dropdown-menu li,
+.lang-dropdown-menu form {
+  margin: 0;
+}
+
+.lang-switch-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  font-family: Arial, "Noto Sans Armenian", sans-serif;
+  font-size: 13px;
+  color: #1E2939;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lang-switch-item:hover {
+  background: #F3F4F6;
+}
+
+.lang-switch-item .flag-img {
+  width: 16px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
 }
 
 .login-btn {
@@ -408,6 +487,7 @@ body.student-page {
   display: flex;
   align-items: center;
   gap: 16px;
+  animation: float-card 4s ease-in-out infinite;
 }
 
 .hero-stat-card .icon-circle.stat-blue {
@@ -532,6 +612,12 @@ body.student-page {
   border-radius: 40px;
 
   text-align: left;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 20px 25px -5px rgba(16, 24, 40, 0.12), 0px 8px 10px -6px rgba(16, 24, 40, 0.1);
 }
 
 .feature-card .icon-circle {
@@ -540,6 +626,11 @@ body.student-page {
   border-radius: 24px;
   box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.feature-card:hover .icon-circle {
+  transform: scale(1.1) rotate(-4deg);
 }
 
 .feature-card .icon-circle svg {
@@ -651,6 +742,100 @@ h2.edu-heading::after {
   color: #fff;
 }
 
+.team-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.team-carousel-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.team-carousel-bg svg {
+  width: 100%;
+  height: 100%;
+}
+
+.team-carousel .container {
+  position: relative;
+  z-index: 1;
+}
+
+.team-carousel-slides {
+  position: relative;
+}
+
+.carousel-slide-content {
+  display: none;
+}
+
+.carousel-slide-content.is-active {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.carousel-slide-content.is-active.is-entering {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.carousel-slide-content.is-leaving {
+  display: block;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.team-carousel .split {
+  position: relative;
+  min-height: 560px;
+}
+
+.team-carousel-media {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  left: 656px;
+  top: 0;
+  max-width: 100%;
+
+  background: rgba(255, 255, 255, 0.00001);
+  box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-radius: 50px;
+  overflow: hidden;
+  opacity: 1;
+  flex-shrink: 0;
+}
+
+.team-carousel-media .carousel-slide-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.team-carousel-media .carousel-slide-img.is-active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
 .section-purple .section-heading p {
   color: rgba(255, 255, 255, 0.82);
 }
@@ -658,12 +843,12 @@ h2.edu-heading::after {
 .section-purple .split-text h2 {
   width: 560px;
   max-width: 100%;
-  height: 48px;
+  min-height: 48px;
 
   font-family: 'Noto Sans Armenian', sans-serif;
   font-weight: 900;
   font-size: 48px;
-  line-height: 48px;
+  line-height: 1.15;
   color: #FFFFFF;
   margin: 0;
 }
@@ -775,16 +960,24 @@ h2.edu-heading::after {
   align-items: center;
   width: 48px;
   height: 48px;
+  padding: 0;
 
   background: rgba(255, 255, 255, 0.1);
   border: 0.8px solid rgba(255, 255, 255, 0.1);
   border-radius: 9999px;
   color: #FFFFFF;
   flex-shrink: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.slide-nav-btn {
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .slide-nav-btn:hover {
   background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.08);
 }
 
 .carousel-dots {
@@ -805,6 +998,8 @@ h2.edu-heading::after {
   border-radius: 9999px;
   background: rgba(255, 255, 255, 0.3);
   flex-shrink: 0;
+  cursor: pointer;
+  transition: width 0.25s ease, background 0.25s ease;
 }
 
 .carousel-dots span.active {
@@ -812,16 +1007,6 @@ h2.edu-heading::after {
   background: #FFFFFF;
 }
 
-.section-purple .split img {
-  height: 400px;
-}
-
-.split img.teamwork-image {
-  width: 560px;
-  height: auto;
-  max-width: 100%;
-  aspect-ratio: 1 / 1;
-}
 
 /* ---------- Interactive books ---------- */
 .books-header {
@@ -936,6 +1121,28 @@ h2.edu-heading::after {
   overflow: hidden;
   box-shadow: 0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1);
   background: #EEF0FF;
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+
+.book-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(16, 24, 40, 0.6) 0%, rgba(16, 24, 40, 0) 50%);
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+  pointer-events: none;
+}
+
+.book-card:hover .book-cover,
+.book-card:focus-within .book-cover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0px 25px 30px -8px rgba(0, 0, 0, 0.18), 0px 10px 12px -6px rgba(0, 0, 0, 0.12);
+}
+
+.book-card:hover .book-cover::after,
+.book-card:focus-within .book-cover::after {
+  opacity: 1;
 }
 
 .book-cover-art {
@@ -954,11 +1161,50 @@ h2.edu-heading::after {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease-in-out;
 }
 
-.book-card:hover .book-cover img {
+.book-card:hover .book-cover img,
+.book-card:focus-within .book-cover img {
   transform: scale(1.05);
+}
+
+.book-cta {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  border-radius: 9999px;
+
+  background: #FFFFFF;
+  color: var(--color-primary);
+  font-family: 'Noto Sans Armenian', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 20px;
+  text-decoration: none;
+  white-space: nowrap;
+
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out, background 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.book-card:hover .book-cta,
+.book-card:focus-within .book-cta {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.book-cta:hover,
+.book-cta:focus-visible {
+  background: var(--color-primary);
+  color: #FFFFFF;
 }
 
 .book-badge {
@@ -1072,6 +1318,12 @@ h2.edu-heading::after {
 
   background: #FFFFFF;
   border-radius: 30px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-cta:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.18);
 }
 
 .btn-cta-text {
@@ -1243,6 +1495,17 @@ h2.edu-heading::after {
     grid-template-columns: 1fr;
   }
 
+  .team-carousel .split {
+    min-height: 0;
+  }
+
+  .team-carousel-media {
+    position: relative;
+    left: 0;
+    top: 0;
+    margin-top: 32px;
+  }
+
   .hero-media {
     order: -1;
   }
@@ -1285,5 +1548,85 @@ h2.edu-heading::after {
 
   .cta-banner {
     padding: 48px 24px;
+  }
+}
+
+/* ---------- Animations ---------- */
+@keyframes float-card {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Hero content plays its entrance animation immediately on load */
+.hero-copy > * {
+  opacity: 0;
+  animation: fade-up 0.7s ease forwards;
+}
+
+.hero-copy > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-copy > *:nth-child(2) { animation-delay: 0.15s; }
+.hero-copy > *:nth-child(3) { animation-delay: 0.25s; }
+.hero-copy > *:nth-child(4) { animation-delay: 0.35s; }
+
+.hero-media {
+  opacity: 0;
+  animation: fade-in 0.9s ease 0.2s forwards;
+}
+
+/* Scroll-triggered reveal: JS toggles .in-view once an element enters the viewport */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger.in-view > * {
+  animation: fade-up 0.6s ease forwards;
+}
+
+.reveal-stagger.in-view > *:nth-child(1) { animation-delay: 0s; }
+.reveal-stagger.in-view > *:nth-child(2) { animation-delay: 0.08s; }
+.reveal-stagger.in-view > *:nth-child(3) { animation-delay: 0.16s; }
+.reveal-stagger.in-view > *:nth-child(4) { animation-delay: 0.24s; }
+.reveal-stagger.in-view > *:nth-child(5) { animation-delay: 0.32s; }
+
+.reveal-stagger > * {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy > *,
+  .hero-media,
+  .reveal,
+  .reveal-stagger > * {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-stat-card {
+    animation: none !important;
+  }
+
+  .book-cover,
+  .book-cover img,
+  .book-cta {
+    transition: none !important;
   }
 }

@@ -1,0 +1,41 @@
+{
+  "nodes": [
+    {
+      "id": "eduplatform_wwwroot_images_student_book_space_bookspaceillustration",
+      "label": "Book Space Illustration (Astronomy)",
+      "file_type": "image",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-space.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "concept_astronomy",
+      "label": "Astronomy (Աստղագիտություն)",
+      "file_type": "concept",
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-space.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "eduplatform_wwwroot_images_student_book_space_bookspaceillustration",
+      "target": "concept_astronomy",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "C:\\Users\\User\\source\\repos\\EduPlatform\\EduPlatform\\wwwroot\\images\\student\\book-space.svg",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

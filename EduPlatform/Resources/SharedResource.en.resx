@@ -184,4 +184,99 @@
   <data name="Start" xml:space="preserve"><value>Start</value></data>
   <data name="End" xml:space="preserve"><value>End</value></data>
 
+  <data name="Home_PageTitle" xml:space="preserve"><value>Innovative Digital Educational Solutions</value></data>
+  <data name="Home_NavAbout" xml:space="preserve"><value>About Us</value></data>
+  <data name="Home_NavNews" xml:space="preserve"><value>News</value></data>
+  <data name="Home_NavContact" xml:space="preserve"><value>Contact</value></data>
+  <data name="Home_SearchPlaceholder" xml:space="preserve"><value>Search...</value></data>
+  <data name="Home_SearchAria" xml:space="preserve"><value>Search</value></data>
+  <data name="Home_Login" xml:space="preserve"><value>Log In</value></data>
+  <data name="Home_HeroBadge" xml:space="preserve"><value>ENGAGED EDUCATION</value></data>
+  <data name="Home_HeroTitle1" xml:space="preserve"><value>Innovative</value></data>
+  <data name="Home_HeroTitleAccent" xml:space="preserve"><value>Digital</value></data>
+  <data name="Home_HeroTitle2" xml:space="preserve"><value>Educational</value></data>
+  <data name="Home_HeroTitle3" xml:space="preserve"><value>Solutions</value></data>
+  <data name="Home_HeroText" xml:space="preserve"><value>A modern educational system that lets you learn anytime, anywhere, through quality and accessible digital methods.</value></data>
+  <data name="Home_HeroCta" xml:space="preserve"><value>Start Now</value></data>
+  <data name="Home_HeroImgAlt" xml:space="preserve"><value>A student studying with a laptop</value></data>
+  <data name="Home_StatLabel" xml:space="preserve"><value>Learners</value></data>
+  <data name="Home_LibraryHeading" xml:space="preserve"><value>Library</value></data>
+  <data name="Home_LibraryText" xml:space="preserve"><value>A complete collection of educational content, featuring digital textbooks, daily materials, and online learning tools.</value></data>
+  <data name="Home_Feature1Title" xml:space="preserve"><value>Course Management</value></data>
+  <data name="Home_Feature1Text" xml:space="preserve"><value>Flexible management tools for quickly and easily organizing curricula.</value></data>
+  <data name="Home_Feature2Title" xml:space="preserve"><value>Rich Library</value></data>
+  <data name="Home_Feature2Text" xml:space="preserve"><value>Thousands of digital books and learning materials, accessible from any device.</value></data>
+  <data name="Home_Feature3Title" xml:space="preserve"><value>Interactive Tools</value></data>
+  <data name="Home_Feature3Text" xml:space="preserve"><value>Playful, hands-on exercises that make learning engaging.</value></data>
+  <data name="Home_Feature4Title" xml:space="preserve"><value>Secure and Reliable</value></data>
+  <data name="Home_Feature4Text" xml:space="preserve"><value>High data protection standards and round-the-clock technical support.</value></data>
+  <data name="Home_EduImgAlt" xml:space="preserve"><value>Library interior</value></data>
+  <data name="Home_EduHeading" xml:space="preserve"><value>Education Management</value></data>
+  <data name="Home_EduText" xml:space="preserve"><value>A unified learning platform that provides easy course management, student progress tracking, and automatic grade summaries, saving teachers valuable time.</value></data>
+  <data name="Home_Check1" xml:space="preserve"><value>Interactive Games</value></data>
+  <data name="Home_Check2" xml:space="preserve"><value>Simulations</value></data>
+  <data name="Home_Check3" xml:space="preserve"><value>Videos</value></data>
+  <data name="Home_Check4" xml:space="preserve"><value>Self-Paced Learning</value></data>
+  <data name="Home_LearnMore" xml:space="preserve"><value>Learn More</value></data>
+  <data name="Home_TeamHeading" xml:space="preserve"><value>Teamwork</value></data>
+  <data name="Home_TeamText" xml:space="preserve"><value>Tools for working on joint projects that ensure effective communication and knowledge sharing among students.</value></data>
+  <data name="Home_MiniFeature1" xml:space="preserve"><value>Team Projects</value></data>
+  <data name="Home_MiniFeature2" xml:space="preserve"><value>Collaboration</value></data>
+  <data name="Home_MiniFeature3" xml:space="preserve"><value>Knowledge Sharing</value></data>
+  <data name="Home_MiniFeature4" xml:space="preserve"><value>Joint Creativity</value></data>
+  <data name="Home_ViewDetails" xml:space="preserve"><value>View Details</value></data>
+  <data name="Home_PrevSlide" xml:space="preserve"><value>Previous slide</value></data>
+  <data name="Home_NextSlide" xml:space="preserve"><value>Next slide</value></data>
+  <data name="Home_TeamImgAlt" xml:space="preserve"><value>Teamwork with laptops</value></data>
+  <data name="Home_BooksHeading" xml:space="preserve"><value>Interactive Books</value></data>
+  <data name="Home_BooksDesc" xml:space="preserve"><value>Explore digital learning magazines interactively, accessible and multifaceted.</value></data>
+  <data name="Home_AllBooks" xml:space="preserve"><value>All Books</value></data>
+  <data name="Home_ReadCta" xml:space="preserve"><value>Read</value></data>
+  <data name="Home_Book1Badge" xml:space="preserve"><value>ART</value></data>
+  <data name="Home_Book1Title" xml:space="preserve"><value>Art and Culture</value></data>
+  <data name="Home_Book1Author" xml:space="preserve"><value>A. Hovhannisyan</value></data>
+  <data name="Home_Book2Badge" xml:space="preserve"><value>SCIENCE</value></data>
+  <data name="Home_Book2Title" xml:space="preserve"><value>Secrets of the Universe</value></data>
+  <data name="Home_Book2Author" xml:space="preserve"><value>G. Petrosyan</value></data>
+  <data name="Home_Book3Badge" xml:space="preserve"><value>HISTORY</value></data>
+  <data name="Home_Book3Title" xml:space="preserve"><value>History of Armenia</value></data>
+  <data name="Home_Book3Author" xml:space="preserve"><value>N. Grigoryan</value></data>
+  <data name="Home_Book4Badge" xml:space="preserve"><value>NATURAL SCIENCE</value></data>
+  <data name="Home_Book4Title" xml:space="preserve"><value>Biology</value></data>
+  <data name="Home_Book4Author" xml:space="preserve"><value>D. Avetisyan</value></data>
+  <data name="Home_Book5Badge" xml:space="preserve"><value>MATHEMATICS</value></data>
+  <data name="Home_Book5Title" xml:space="preserve"><value>In the World of Mathematics</value></data>
+  <data name="Home_Book5Author" xml:space="preserve"><value>V. Khachatryan</value></data>
+  <data name="Home_CtaHeading" xml:space="preserve"><value>Join the Digital World of Knowledge Now</value></data>
+  <data name="Home_CtaText" xml:space="preserve"><value>Create your account and start using all the educational materials.</value></data>
+  <data name="Home_CtaButton" xml:space="preserve"><value>Start Using Now</value></data>
+  <data name="Home_FooterAboutText" xml:space="preserve"><value>An easy and flexible online learning solution. Through this platform, education is accessible to everyone, at any time.</value></data>
+  <data name="Home_FooterProgram" xml:space="preserve"><value>Program</value></data>
+  <data name="Home_FooterBooks" xml:space="preserve"><value>Books</value></data>
+  <data name="Home_FooterVideos" xml:space="preserve"><value>Videos</value></data>
+  <data name="Home_Footer3DVideos" xml:space="preserve"><value>3D Videos</value></data>
+  <data name="Home_FooterPlatform" xml:space="preserve"><value>Platform</value></data>
+  <data name="Home_FooterAboutLink" xml:space="preserve"><value>About Us</value></data>
+  <data name="Home_FooterPrivacy" xml:space="preserve"><value>Privacy</value></data>
+  <data name="Home_FooterContact" xml:space="preserve"><value>Contact</value></data>
+  <data name="Home_FooterAddress" xml:space="preserve"><value>Yerevan, Armenia</value></data>
+  <data name="Home_FooterTagline" xml:space="preserve"><value>Online Educational System</value></data>
+  <data name="Home_FooterTerms" xml:space="preserve"><value>Terms of Use</value></data>
+  <data name="Home_FooterSecurity" xml:space="preserve"><value>Security</value></data>
+
+  <data name="Home_Slide2Title" xml:space="preserve"><value>Learning Support</value></data>
+  <data name="Home_Slide2Text" xml:space="preserve"><value>We provide an accessible, adaptive environment with modern tools and an individual approach for every learner.</value></data>
+  <data name="Home_Slide2Feature1" xml:space="preserve"><value>Interactive Lessons</value></data>
+  <data name="Home_Slide2Feature2" xml:space="preserve"><value>Technical Support</value></data>
+  <data name="Home_Slide2Feature3" xml:space="preserve"><value>Personalized Learning</value></data>
+  <data name="Home_Slide2Feature4" xml:space="preserve"><value>Progress Assessment</value></data>
+  <data name="Home_Slide2ImgAlt" xml:space="preserve"><value>Student learning online</value></data>
+  <data name="Home_Slide3Title" xml:space="preserve"><value>Active Learning</value></data>
+  <data name="Home_Slide3Text" xml:space="preserve"><value>Interactive exercises, simulations, and real-world problem solving for active and effective learning.</value></data>
+  <data name="Home_Slide3Feature1" xml:space="preserve"><value>Interactive Exercises</value></data>
+  <data name="Home_Slide3Feature2" xml:space="preserve"><value>Hands-on Simulations</value></data>
+  <data name="Home_Slide3Feature3" xml:space="preserve"><value>Real-World Problems</value></data>
+  <data name="Home_Slide3Feature4" xml:space="preserve"><value>Skill Development</value></data>
+  <data name="Home_Slide3ImgAlt" xml:space="preserve"><value>Active learning in the classroom</value></data>
+
 </root>

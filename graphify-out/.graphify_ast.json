@@ -1,0 +1,953 @@
+{
+  "nodes": [
+    {
+      "id": "eduplatform",
+      "label": "EduPlatform.slnx",
+      "file_type": "code",
+      "source_file": "EduPlatform.slnx",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_eduplatform",
+      "label": "EduPlatform",
+      "file_type": "code",
+      "source_file": "EduPlatform/EduPlatform.csproj",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_controllers_homecontroller",
+      "label": "HomeController.cs",
+      "file_type": "code",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "csharp_namespace:d8806ae27771a7f0",
+      "label": "EduPlatform.Controllers",
+      "file_type": "code",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L6",
+      "type": "namespace",
+      "metadata": {
+        "kind": "csharp_namespace",
+        "namespace": "EduPlatform.Controllers"
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller",
+      "label": "HomeController",
+      "file_type": "code",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L8",
+      "metadata": {
+        "namespace": "EduPlatform.Controllers",
+        "scope_chain": [
+          "s132"
+        ]
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "controller",
+      "label": "Controller",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_mainpage",
+      "label": ".MainPage()",
+      "file_type": "code",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L13",
+      "metadata": {
+        "namespace": "EduPlatform.Controllers",
+        "scope_chain": [
+          "s132"
+        ]
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "iactionresult",
+      "label": "IActionResult",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "allowanonymous",
+      "label": "AllowAnonymous",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_index",
+      "label": ".Index()",
+      "file_type": "code",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L19",
+      "metadata": {
+        "namespace": "EduPlatform.Controllers",
+        "scope_chain": [
+          "s132"
+        ]
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_privacy",
+      "label": ".Privacy()",
+      "file_type": "code",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L24",
+      "metadata": {
+        "namespace": "EduPlatform.Controllers",
+        "scope_chain": [
+          "s132"
+        ]
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_error",
+      "label": ".Error()",
+      "file_type": "code",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L29",
+      "metadata": {
+        "namespace": "EduPlatform.Controllers",
+        "scope_chain": [
+          "s132"
+        ]
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "responsecache",
+      "label": "ResponseCache",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_dashboard",
+      "label": ".Dashboard()",
+      "file_type": "code",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L37",
+      "metadata": {
+        "namespace": "EduPlatform.Controllers",
+        "scope_chain": [
+          "s132"
+        ]
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_eduplatform",
+      "label": "EduPlatform.csproj",
+      "file_type": "code",
+      "source_file": "EduPlatform/EduPlatform.csproj",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "framework_net10_0",
+      "label": "net10.0",
+      "file_type": "concept",
+      "source_file": "EduPlatform/EduPlatform.csproj",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "nuget_microsoft_aspnetcore_authentication_jwtbearer",
+      "label": "Microsoft.AspNetCore.Authentication.JwtBearer (10.0.10)",
+      "file_type": "code",
+      "source_file": "EduPlatform/EduPlatform.csproj",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "sdk_microsoft_net_sdk_web",
+      "label": "Microsoft.NET.Sdk.Web",
+      "file_type": "concept",
+      "source_file": "EduPlatform/EduPlatform.csproj",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_models_errorviewmodel",
+      "label": "ErrorViewModel.cs",
+      "file_type": "code",
+      "source_file": "EduPlatform/Models/ErrorViewModel.cs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "csharp_namespace:ef1c81029521f38e",
+      "label": "EduPlatform.Models",
+      "file_type": "code",
+      "source_file": "EduPlatform/Models/ErrorViewModel.cs",
+      "source_location": "L1",
+      "type": "namespace",
+      "metadata": {
+        "kind": "csharp_namespace",
+        "namespace": "EduPlatform.Models"
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_models_errorviewmodel_eduplatform_models_errorviewmodel",
+      "label": "ErrorViewModel",
+      "file_type": "code",
+      "source_file": "EduPlatform/Models/ErrorViewModel.cs",
+      "source_location": "L3",
+      "metadata": {
+        "namespace": "EduPlatform.Models",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_program",
+      "label": "Program.cs",
+      "file_type": "code",
+      "source_file": "EduPlatform/Program.cs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings",
+      "label": "launchSettings.json",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_schema",
+      "label": "$schema",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_profiles",
+      "label": "profiles",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_profiles_http",
+      "label": "http",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_http_commandname",
+      "label": "commandName",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_http_dotnetrunmessages",
+      "label": "dotnetRunMessages",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L6",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_http_launchbrowser",
+      "label": "launchBrowser",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L7",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_http_applicationurl",
+      "label": "applicationUrl",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_http_environmentvariables",
+      "label": "environmentVariables",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L9",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_environmentvariables_aspnetcore_environment",
+      "label": "ASPNETCORE_ENVIRONMENT",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L10",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_profiles_https",
+      "label": "https",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L13",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_https_commandname",
+      "label": "commandName",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L14",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_https_dotnetrunmessages",
+      "label": "dotnetRunMessages",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L15",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_https_launchbrowser",
+      "label": "launchBrowser",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L16",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_https_applicationurl",
+      "label": "applicationUrl",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L17",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_properties_launchsettings_https_environmentvariables",
+      "label": "environmentVariables",
+      "file_type": "code",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_views_home_dashboard",
+      "label": "Dashboard.cshtml",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/Home/Dashboard.cshtml",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_views_home_index",
+      "label": "Index.cshtml",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/Home/Index.cshtml",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_views_home_mainpage",
+      "label": "MainPage.cshtml",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/Home/MainPage.cshtml",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_views_home_privacy",
+      "label": "Privacy.cshtml",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/Home/Privacy.cshtml",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_views_shared_error",
+      "label": "Error.cshtml",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/Shared/Error.cshtml",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_views_shared_layout",
+      "label": "_Layout.cshtml",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/Shared/_Layout.cshtml",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_views_shared_validationscriptspartial",
+      "label": "_ValidationScriptsPartial.cshtml",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/Shared/_ValidationScriptsPartial.cshtml",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_views_viewimports",
+      "label": "_ViewImports.cshtml",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/_ViewImports.cshtml",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_models",
+      "label": "EduPlatform.Models",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/_ViewImports.cshtml",
+      "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_views_viewstart",
+      "label": "_ViewStart.cshtml",
+      "file_type": "code",
+      "source_file": "EduPlatform/Views/_ViewStart.cshtml",
+      "source_location": null,
+      "_origin": "ast"
+    },
+    {
+      "id": "eduplatform_wwwroot_js_site",
+      "label": "site.js",
+      "file_type": "code",
+      "source_file": "EduPlatform/wwwroot/js/site.js",
+      "source_location": "L1",
+      "_origin": "ast"
+    }
+  ],
+  "edges": [
+    {
+      "source": "eduplatform",
+      "target": "eduplatform_eduplatform",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform.slnx",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller",
+      "target": "csharp_namespace:ef1c81029521f38e",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L1",
+      "weight": 1.0,
+      "metadata": {
+        "using_kind": "namespace",
+        "target_fqn": "EduPlatform.Models",
+        "scope_kind": "file"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller",
+      "target": "microsoft_aspnetcore_authorization",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "metadata": {
+        "using_kind": "namespace",
+        "target_fqn": "Microsoft.AspNetCore.Authorization",
+        "scope_kind": "file"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller",
+      "target": "microsoft_aspnetcore_mvc",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "metadata": {
+        "using_kind": "namespace",
+        "target_fqn": "Microsoft.AspNetCore.Mvc",
+        "scope_kind": "file"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller",
+      "target": "system_diagnostics",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "metadata": {
+        "using_kind": "namespace",
+        "target_fqn": "System.Diagnostics",
+        "scope_kind": "file"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller",
+      "target": "csharp_namespace:d8806ae27771a7f0",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller",
+      "target": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller",
+      "target": "controller",
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L8",
+      "weight": 1.0,
+      "metadata": {
+        "ref_token": "Controller"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller",
+      "target": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_mainpage",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_mainpage",
+      "target": "iactionresult",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "context": "return_type",
+      "metadata": {
+        "ref_token": "IActionResult"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_mainpage",
+      "target": "allowanonymous",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "context": "attribute",
+      "metadata": {
+        "ref_token": "AllowAnonymous"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller",
+      "target": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_index",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_index",
+      "target": "iactionresult",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L19",
+      "weight": 1.0,
+      "context": "return_type",
+      "metadata": {
+        "ref_token": "IActionResult"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller",
+      "target": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_privacy",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_privacy",
+      "target": "iactionresult",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L24",
+      "weight": 1.0,
+      "context": "return_type",
+      "metadata": {
+        "ref_token": "IActionResult"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller",
+      "target": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_error",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_error",
+      "target": "iactionresult",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L29",
+      "weight": 1.0,
+      "context": "return_type",
+      "metadata": {
+        "ref_token": "IActionResult"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_error",
+      "target": "allowanonymous",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L29",
+      "weight": 1.0,
+      "context": "attribute",
+      "metadata": {
+        "ref_token": "AllowAnonymous"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_error",
+      "target": "responsecache",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L29",
+      "weight": 1.0,
+      "context": "attribute",
+      "metadata": {
+        "ref_token": "ResponseCache"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller",
+      "target": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_dashboard",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_controllers_homecontroller_eduplatform_controllers_homecontroller_dashboard",
+      "target": "iactionresult",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Controllers/HomeController.cs",
+      "source_location": "L37",
+      "weight": 1.0,
+      "context": "return_type",
+      "metadata": {
+        "ref_token": "IActionResult"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_eduplatform",
+      "target": "framework_net10_0",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/EduPlatform.csproj",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_eduplatform",
+      "target": "nuget_microsoft_aspnetcore_authentication_jwtbearer",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/EduPlatform.csproj",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_eduplatform",
+      "target": "sdk_microsoft_net_sdk_web",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/EduPlatform.csproj",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_models_errorviewmodel",
+      "target": "csharp_namespace:ef1c81029521f38e",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Models/ErrorViewModel.cs",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_models_errorviewmodel",
+      "target": "eduplatform_models_errorviewmodel_eduplatform_models_errorviewmodel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Models/ErrorViewModel.cs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_program",
+      "target": "microsoft_aspnetcore_authentication_jwtbearer",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Program.cs",
+      "source_location": "L1",
+      "weight": 1.0,
+      "metadata": {
+        "using_kind": "namespace",
+        "target_fqn": "Microsoft.AspNetCore.Authentication.JwtBearer",
+        "scope_kind": "file"
+      },
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings",
+      "target": "eduplatform_properties_launchsettings_schema",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings",
+      "target": "eduplatform_properties_launchsettings_profiles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles",
+      "target": "eduplatform_properties_launchsettings_profiles_http",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_http",
+      "target": "eduplatform_properties_launchsettings_http_commandname",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_http",
+      "target": "eduplatform_properties_launchsettings_http_dotnetrunmessages",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_http",
+      "target": "eduplatform_properties_launchsettings_http_launchbrowser",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_http",
+      "target": "eduplatform_properties_launchsettings_http_applicationurl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_http",
+      "target": "eduplatform_properties_launchsettings_http_environmentvariables",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_http_environmentvariables",
+      "target": "eduplatform_properties_launchsettings_environmentvariables_aspnetcore_environment",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles",
+      "target": "eduplatform_properties_launchsettings_profiles_https",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_https",
+      "target": "eduplatform_properties_launchsettings_https_commandname",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_https",
+      "target": "eduplatform_properties_launchsettings_https_dotnetrunmessages",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_https",
+      "target": "eduplatform_properties_launchsettings_https_launchbrowser",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_https",
+      "target": "eduplatform_properties_launchsettings_https_applicationurl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_profiles_https",
+      "target": "eduplatform_properties_launchsettings_https_environmentvariables",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_properties_launchsettings_https_environmentvariables",
+      "target": "eduplatform_properties_launchsettings_environmentvariables_aspnetcore_environment",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Properties/launchSettings.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "eduplatform_views_viewimports",
+      "target": "eduplatform_models",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "EduPlatform/Views/_ViewImports.cshtml",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

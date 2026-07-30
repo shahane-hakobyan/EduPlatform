@@ -184,6 +184,99 @@
   <data name="Start" xml:space="preserve"><value>Սկիզբ</value></data>
   <data name="End" xml:space="preserve"><value>Ավարտ</value></data>
 
+  <data name="Home_PageTitle" xml:space="preserve"><value>Նորարարական Թվային Կրթական Լուծումներ</value></data>
+  <data name="Home_NavAbout" xml:space="preserve"><value>Մեր Մասին</value></data>
+  <data name="Home_NavNews" xml:space="preserve"><value>Նորություններ</value></data>
+  <data name="Home_NavContact" xml:space="preserve"><value>Հետադարձ Կապ</value></data>
+  <data name="Home_SearchPlaceholder" xml:space="preserve"><value>Փնտրել...</value></data>
+  <data name="Home_SearchAria" xml:space="preserve"><value>Փնտրել</value></data>
+  <data name="Home_Login" xml:space="preserve"><value>Մուտք</value></data>
+  <data name="Home_HeroBadge" xml:space="preserve"><value>ՆԵՐԳՐԱՎՎԱԾ ԿՐԹՈՒԹՅԱՆ</value></data>
+  <data name="Home_HeroTitle1" xml:space="preserve"><value>Նորարարական</value></data>
+  <data name="Home_HeroTitleAccent" xml:space="preserve"><value>Թվային</value></data>
+  <data name="Home_HeroTitle2" xml:space="preserve"><value>Կրթական</value></data>
+  <data name="Home_HeroTitle3" xml:space="preserve"><value>Լուծումներ</value></data>
+  <data name="Home_HeroText" xml:space="preserve"><value>Ժամանակակից կրթական համակարգ, որը հնարավորություն է տալիս սովորել ցանկացած պահի, ցանկացած տեղից՝ որակյալ և հասանելի թվային մեթոդների միջոցով:</value></data>
+  <data name="Home_HeroCta" xml:space="preserve"><value>Սկսել Հիմա</value></data>
+  <data name="Home_HeroImgAlt" xml:space="preserve"><value>Ուսանողուհի սովորում է լապտոպով</value></data>
+  <data name="Home_StatLabel" xml:space="preserve"><value>Սովորողներ</value></data>
+  <data name="Home_LibraryHeading" xml:space="preserve"><value>Գրադարան</value></data>
+  <data name="Home_LibraryText" xml:space="preserve"><value>Ուսումնական բովանդակության ամբողջական հավաքածու՝ թվային դասագրքերով, ամենօրյա նյութերով և առցանց ուսումնական աշխատանքների գործիքներով:</value></data>
+  <data name="Home_Feature1Title" xml:space="preserve"><value>Դասընթացների կառավարում</value></data>
+  <data name="Home_Feature1Text" xml:space="preserve"><value>Ճկուն կառավարման գործիքներ ուսումնական ծրագրերի արագ և հեշտ կազմակերպման համար:</value></data>
+  <data name="Home_Feature2Title" xml:space="preserve"><value>Հարուստ գրադարան</value></data>
+  <data name="Home_Feature2Text" xml:space="preserve"><value>Հազարավոր թվային գրքեր և ուսումնական նյութեր՝ հասանելի ցանկացած սարքից:</value></data>
+  <data name="Home_Feature3Title" xml:space="preserve"><value>Ինտերակտիվ գործիքներ</value></data>
+  <data name="Home_Feature3Text" xml:space="preserve"><value>Խաղային և գործնական վարժություններ, որոնք դարձնում են ուսուցումը հետաքրքիր:</value></data>
+  <data name="Home_Feature4Title" xml:space="preserve"><value>Անվտանգ և հուսալի</value></data>
+  <data name="Home_Feature4Text" xml:space="preserve"><value>Տվյալների պաշտպանության բարձր ստանդարտներ և շուրջօրյա տեխնիկական աջակցություն:</value></data>
+  <data name="Home_EduImgAlt" xml:space="preserve"><value>Գրադարանի ինտերիեր</value></data>
+  <data name="Home_EduHeading" xml:space="preserve"><value>Կրթության Կառավարում</value></data>
+  <data name="Home_EduText" xml:space="preserve"><value>Ընդհանրական ուսուցման հարթակը ապահովում է դասընթացների հեշտ կառավարում, ուսանողների առաջընթացի հետևում և գնահատումների ինքնաշխատ ամփոփում՝ ուսուցիչների ժամանակի խնայողության համար:</value></data>
+  <data name="Home_Check1" xml:space="preserve"><value>Ինտերակտիվ խաղեր</value></data>
+  <data name="Home_Check2" xml:space="preserve"><value>Սիմուլյացիաներ</value></data>
+  <data name="Home_Check3" xml:space="preserve"><value>Տեսանյութեր</value></data>
+  <data name="Home_Check4" xml:space="preserve"><value>Ինքնուրույն ուսուցում</value></data>
+  <data name="Home_LearnMore" xml:space="preserve"><value>Իմանալ ավելին</value></data>
+  <data name="Home_TeamHeading" xml:space="preserve"><value>Խմբային Աշխատանք</value></data>
+  <data name="Home_TeamText" xml:space="preserve"><value>Համատեղ նախագծերի վրա աշխատելու գործիքներ, որոնք ապահովում են ուսանողների միջև արդյունավետ հաղորդակցություն և գիտելիքների փոխանակում:</value></data>
+  <data name="Home_MiniFeature1" xml:space="preserve"><value>Թիմային նախագծեր</value></data>
+  <data name="Home_MiniFeature2" xml:space="preserve"><value>Փոխգործակցություն</value></data>
+  <data name="Home_MiniFeature3" xml:space="preserve"><value>Կիսվել գիտելիքներով</value></data>
+  <data name="Home_MiniFeature4" xml:space="preserve"><value>Համատեղ ստեղծագործություն</value></data>
+  <data name="Home_ViewDetails" xml:space="preserve"><value>Դիտել մանրամասն</value></data>
+  <data name="Home_PrevSlide" xml:space="preserve"><value>Նախորդ սլայդ</value></data>
+  <data name="Home_NextSlide" xml:space="preserve"><value>Հաջորդ սլայդ</value></data>
+  <data name="Home_TeamImgAlt" xml:space="preserve"><value>Խմբային աշխատանք լապտոպներով</value></data>
+  <data name="Home_BooksHeading" xml:space="preserve"><value>Ինտերակտիվ գրքեր</value></data>
+  <data name="Home_BooksDesc" xml:space="preserve"><value>Էլեկտրոնային ուսուցման թվային ամսագրերի ինտերակտիվ միջոցով, որ ուսումնասիրվում է հասանելիորեն և բազմակողմանիորեն:</value></data>
+  <data name="Home_AllBooks" xml:space="preserve"><value>Բոլոր գրքերը</value></data>
+  <data name="Home_ReadCta" xml:space="preserve"><value>Կարդալ</value></data>
+  <data name="Home_Book1Badge" xml:space="preserve"><value>ԱՐՎԵՍՏ</value></data>
+  <data name="Home_Book1Title" xml:space="preserve"><value>Արվեստ և Մշակույթ</value></data>
+  <data name="Home_Book1Author" xml:space="preserve"><value>Ա. Հովհաննիսյան</value></data>
+  <data name="Home_Book2Badge" xml:space="preserve"><value>ԳԻՏՈՒԹՅՈՒՆ</value></data>
+  <data name="Home_Book2Title" xml:space="preserve"><value>Տիեզերքի Գաղտնիքները</value></data>
+  <data name="Home_Book2Author" xml:space="preserve"><value>Գ. Պետրոսյան</value></data>
+  <data name="Home_Book3Badge" xml:space="preserve"><value>ՊԱՏՄՈՒԹՅՈՒՆ</value></data>
+  <data name="Home_Book3Title" xml:space="preserve"><value>Հայոց Պատմություն</value></data>
+  <data name="Home_Book3Author" xml:space="preserve"><value>Ն. Գրիգորյան</value></data>
+  <data name="Home_Book4Badge" xml:space="preserve"><value>ԲՆԱԳԻՏՈՒԹՅՈՒՆ</value></data>
+  <data name="Home_Book4Title" xml:space="preserve"><value>Կենսաբանություն</value></data>
+  <data name="Home_Book4Author" xml:space="preserve"><value>Դ. Ավետիսյան</value></data>
+  <data name="Home_Book5Badge" xml:space="preserve"><value>ՄԱԹԵՄԱՏԻԿԱ</value></data>
+  <data name="Home_Book5Title" xml:space="preserve"><value>Մաթեմատիկայի Աշխարհում</value></data>
+  <data name="Home_Book5Author" xml:space="preserve"><value>Վ. Խաչատրյան</value></data>
+  <data name="Home_CtaHeading" xml:space="preserve"><value>Միացեք գիտելիքի թվային աշխարհին հիմա</value></data>
+  <data name="Home_CtaText" xml:space="preserve"><value>Ստեղծեք ձեր հաշիվը և սկսեք օգտվել բոլոր կրթական նյութերից:</value></data>
+  <data name="Home_CtaButton" xml:space="preserve"><value>Սկսել օգտվել հիմա</value></data>
+  <data name="Home_FooterAboutText" xml:space="preserve"><value>Հեշտ և ճկուն առցանց ուսուցման լուծում: Այս հարթակի միջոցով կրթությունը հասանելի է բոլորին, ցանկացած պահի:</value></data>
+  <data name="Home_FooterProgram" xml:space="preserve"><value>Ծրագիր</value></data>
+  <data name="Home_FooterBooks" xml:space="preserve"><value>Գրքեր</value></data>
+  <data name="Home_FooterVideos" xml:space="preserve"><value>Տեսանյութեր</value></data>
+  <data name="Home_Footer3DVideos" xml:space="preserve"><value>3D Տեսանյութեր</value></data>
+  <data name="Home_FooterPlatform" xml:space="preserve"><value>Հարթակ</value></data>
+  <data name="Home_FooterAboutLink" xml:space="preserve"><value>Մեր մասին</value></data>
+  <data name="Home_FooterPrivacy" xml:space="preserve"><value>Գաղտնիություն</value></data>
+  <data name="Home_FooterContact" xml:space="preserve"><value>Կապ</value></data>
+  <data name="Home_FooterAddress" xml:space="preserve"><value>Երևան, Հայաստան</value></data>
+  <data name="Home_FooterTagline" xml:space="preserve"><value>Առցանց կրթական համակարգ</value></data>
+  <data name="Home_FooterTerms" xml:space="preserve"><value>Օգտագործման պայմաններ</value></data>
+  <data name="Home_FooterSecurity" xml:space="preserve"><value>Անվտանգություն</value></data>
 
+  <data name="Home_Slide2Title" xml:space="preserve"><value>Ուսուցման Աջակցություն</value></data>
+  <data name="Home_Slide2Text" xml:space="preserve"><value>Ապահովում ենք հասանելի և հարմարեցված միջավայր՝ ժամանակակից գործիքներով և անհատական մոտեցումով ամեն սովորողի համար:</value></data>
+  <data name="Home_Slide2Feature1" xml:space="preserve"><value>Ինտերակտիվ դասեր</value></data>
+  <data name="Home_Slide2Feature2" xml:space="preserve"><value>Տեխնոլոգիական աջակցություն</value></data>
+  <data name="Home_Slide2Feature3" xml:space="preserve"><value>Անհատականացված ուսուցում</value></data>
+  <data name="Home_Slide2Feature4" xml:space="preserve"><value>Առաջընթացի գնահատում</value></data>
+  <data name="Home_Slide2ImgAlt" xml:space="preserve"><value>Աշակերտ սովորում է առցանց</value></data>
+  <data name="Home_Slide3Title" xml:space="preserve"><value>Ակտիվ Ուսուցում</value></data>
+  <data name="Home_Slide3Text" xml:space="preserve"><value>Ինտերակտիվ վարժություններ, սիմուլյացիաներ և իրական խնդիրների լուծում՝ ակտիվ և արդյունավետ ուսուցման համար:</value></data>
+  <data name="Home_Slide3Feature1" xml:space="preserve"><value>Ինտերակտիվ վարժություններ</value></data>
+  <data name="Home_Slide3Feature2" xml:space="preserve"><value>Գործնական սիմուլյացիաներ</value></data>
+  <data name="Home_Slide3Feature3" xml:space="preserve"><value>Իրական խնդիրներ</value></data>
+  <data name="Home_Slide3Feature4" xml:space="preserve"><value>Հմտությունների զարգացում</value></data>
+  <data name="Home_Slide3ImgAlt" xml:space="preserve"><value>Դասարանում ակտիվ ուսուցում</value></data>
 
 </root>

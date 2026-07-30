@@ -70,6 +70,12 @@ var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture("hy")
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
+// Only honor an explicit language pick (cookie/querystring) — otherwise always default to Armenian,
+// instead of falling back to the browser's Accept-Language header.
+localizationOptions.RequestCultureProviders = new IRequestCultureProvider[]
+{
+    new CookieRequestCultureProvider(),
+};
 app.UseRequestLocalization(localizationOptions);
 
 app.MapStaticAssets();
