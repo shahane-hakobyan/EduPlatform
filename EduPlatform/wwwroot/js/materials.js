@@ -50,10 +50,6 @@
         btn.addEventListener('click', function () {
             const confirmText = btn.getAttribute('data-confirm-text') || 'Delete this material?';
             if (!confirm(confirmText)) return;
-
-            // TODO: replace with a real POST to /Teacher/Materials/Delete/{id} once
-            // the "saved to my page" backend exists — for now this just removes
-            // the card/row from the current view without persisting anything.
             const card = btn.closest('.material-card-wide') || btn.closest('tr');
             if (card) card.remove();
         });

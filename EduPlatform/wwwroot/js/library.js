@@ -1,5 +1,4 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    // Tab switching
     document.querySelectorAll('.library-tab-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.library-tab-btn').forEach(function (b) { b.classList.remove('active'); });
@@ -22,7 +21,6 @@
         });
     });
 
-    // Grid/List toggle — scoped per tab-pane, since each tab has its own set
     document.querySelectorAll('.library-tab-pane').forEach(function (pane) {
         const gridBtn = pane.querySelector('.materials-view-btn[data-view="grid"]');
         const listBtn = pane.querySelector('.materials-view-btn[data-view="list"]');
@@ -46,12 +44,10 @@
         }
     });
 
-    // Tooltips
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
         new bootstrap.Tooltip(el);
     });
 
-    // Hover image preview
     const preview = document.getElementById('materialImagePreview');
     if (preview) {
         document.querySelectorAll('.material-card-wide-image[data-full-image]').forEach(function (el) {
@@ -72,7 +68,6 @@
         });
     }
 
-    // Delete buttons
     document.querySelectorAll('.material-card-delete-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const confirmText = btn.getAttribute('data-confirm-text') || 'Delete this material?';

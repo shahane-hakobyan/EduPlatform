@@ -8,7 +8,6 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Logging
 builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)
     .Enrich.FromLogContext()
@@ -16,24 +15,19 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 
 builder.Services.AddControllersWithViews();
 
-// EF Core
 builder.Services.AddDbContext<EduPlatformDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// In-memory cache (replaces Redis for the sidebar geolocation lookup)
-builder.Services.AddMemoryCache();
+builder.Services.AddDistributedMemoryCache();
 
-// IP geolocation (used by the sidebar flag)
 builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<IIpGeolocationService, IpGeolocationService>();
 
-// SignalR (no Redis backplane - fine for a single server)
 builder.Services.AddSignalR();
 
-// Localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "");
 
-// Sidebar menu builder (localized)
 builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -70,8 +64,6 @@ var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture("hy")
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
-// Only honor an explicit language pick (cookie/querystring) — otherwise always default to Armenian,
-// instead of falling back to the browser's Accept-Language header.
 localizationOptions.RequestCultureProviders = new IRequestCultureProvider[]
 {
     new CookieRequestCultureProvider(),

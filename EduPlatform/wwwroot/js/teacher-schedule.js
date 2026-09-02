@@ -3,14 +3,6 @@
     wireDayRows();
     wireEditOpen();
 
-    // ---------------------------------------------------------------------
-    // Schedule timing rules
-    //   - the day starts at 08:15
-    //   - every period (a lesson OR a free hour) lasts 45 minutes
-    //   - breaks are 5 minutes, except the long 20 minute break that comes
-    //     right before the 4th period
-    // ---------------------------------------------------------------------
-
     const DAY_START_MINUTES = 8 * 60 + 15;
     const PERIOD_MINUTES = 45;
     const SHORT_BREAK_MINUTES = 5;
@@ -31,9 +23,6 @@
         return String(Math.floor(minutes / 60)).padStart(2, '0') + ':' + String(minutes % 60).padStart(2, '0');
     }
 
-    // Where period n would start if the whole day followed the standard
-    // pattern. Only used when there is no earlier row to chain off.
-    //   P1 08:15  P2 09:05  P3 09:55  P4 11:00  P5 11:50  P6 12:40 ...
     function absoluteStartForPeriod(n) {
         let start = DAY_START_MINUTES;
         for (let p = 2; p <= n; p++) {
@@ -42,9 +31,6 @@
         return start;
     }
 
-    // A free hour takes up a slot exactly like a lesson does, so the suggestion
-    // is chained off the end time of the latest earlier period — whether that
-    // period is free or a class, and even if the teacher changed it by hand.
     function suggestTimeForPeriod(periodNumber, rowsContainer) {
         const rows = rowsContainer.querySelectorAll('.schedule-edit-row:not(.schedule-edit-row-template)');
 
@@ -68,8 +54,6 @@
         };
     }
 
-    // After a row is removed, later periods shift down to fill the gap —
-    // only the badge/data-period changes, times stay exactly as they were.
     function renumberRows(rowsContainer) {
         const rows = rowsContainer.querySelectorAll('.schedule-edit-row:not(.schedule-edit-row-template)');
         rows.forEach(function (row, index) {
@@ -78,11 +62,7 @@
             row.querySelector('.schedule-edit-period-badge').textContent = periodNumber;
         });
     }
-    // ---------------------------------------------------------------------
-    // Global delegated handlers
-    // ---------------------------------------------------------------------
 
-    // Close any open time-picker dropdown when clicking outside of it
     document.addEventListener('click', function (e) {
         if (!e.target.closest('.time-range-picker')) {
             document.querySelectorAll('.time-picker-dropdown.open').forEach(function (d) {
@@ -91,7 +71,6 @@
         }
     });
 
-    // Grade number on a schedule card -> open the pupil roster popup
     document.addEventListener('click', function (e) {
         const gradeEl = e.target.closest('.schedule-card-grade-name');
         if (!gradeEl) return;
@@ -112,7 +91,6 @@
             });
     });
 
-    // Close the pupil roster popup
     document.addEventListener('click', function (e) {
         if (!e.target.closest('#gradeRosterBackdrop') && !e.target.closest('.grade-roster-close-btn')) return;
 
@@ -126,7 +104,6 @@
         }, 300);
     });
 
-    // Multi-select dropdown: toggle open / pick an option / close on outside click
     document.addEventListener('click', function (e) {
         const toggle = e.target.closest('.ms-dropdown-toggle');
         const option = e.target.closest('.ms-option');
@@ -154,16 +131,11 @@
         }
     });
 
-    // Typing in the room field clears its invalid state
     document.addEventListener('input', function (e) {
         if (e.target.classList.contains('schedule-edit-room-input')) {
             e.target.classList.remove('field-invalid');
         }
     });
-
-    // ---------------------------------------------------------------------
-    // Helpers
-    // ---------------------------------------------------------------------
 
     function initTooltips() {
         document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
@@ -225,10 +197,6 @@
         });
     }
 
-    // ---------------------------------------------------------------------
-    // Time range picker
-    // ---------------------------------------------------------------------
-
     function initTimeRangePicker(picker) {
         if (picker.dataset.wired) return;
         picker.dataset.wired = 'true';
@@ -286,8 +254,6 @@
             displayBtn.classList.remove('field-invalid');
         }
 
-        // A row that already carries a time — a saved lesson, or a freshly
-        // added period that got a suggested default — shows it right away.
         if (startInput.value || endInput.value) refreshDisplay();
 
         function step(field, delta) {
@@ -336,7 +302,6 @@
         picker.querySelector('.time-picker-minute-up').addEventListener('click', () => step('minute', 1));
         picker.querySelector('.time-picker-minute-down').addEventListener('click', () => step('minute', -1));
 
-        // Scroll the wheel over a field to change it
         hourDisplay.addEventListener('wheel', function (e) {
             e.preventDefault();
             step('hour', e.deltaY < 0 ? 1 : -1);
@@ -347,7 +312,6 @@
             step('minute', e.deltaY < 0 ? 1 : -1);
         }, { passive: false });
 
-        // Or just type into it
         function wireTyping(el, field, min, max) {
             el.addEventListener('input', function () {
                 el.value = el.value.replace(/[^0-9]/g, '').slice(0, 2);
@@ -371,10 +335,6 @@
         wireTyping(hourDisplay, 'hour', 1, 12);
         wireTyping(minuteDisplay, 'minute', 0, 59);
     }
-
-    // ---------------------------------------------------------------------
-    // Edit modal
-    // ---------------------------------------------------------------------
 
     function wireEditModal() {
         const backdrop = document.getElementById('scheduleEditBackdrop');
@@ -404,8 +364,6 @@
                 row.remove();
                 renumberRows(rowsContainer);
             });
-            // Switching a row between a class and a free hour never touches its
-            // time — the slot is the same length either way.
             row.querySelector('.schedule-edit-add-class-btn').addEventListener('click', function () {
                 row.classList.remove('is-free');
             });
@@ -423,8 +381,6 @@
                 ? Math.max(...Array.from(existingRows).map(r => parseInt(r.getAttribute('data-period'), 10))) + 1
                 : 1;
 
-            // Work out the suggestion from the rows that are already there,
-            // before the new one is appended.
             const suggested = suggestTimeForPeriod(nextPeriod, rowsContainer);
 
             const templateRow = rowsContainer.querySelector('.schedule-edit-row-template');
@@ -433,17 +389,12 @@
             clone.style.display = '';
             clone.setAttribute('data-period', nextPeriod);
             clone.querySelector('.schedule-edit-period-badge').textContent = nextPeriod;
-
-            // The picker reads these hidden inputs when it initialises, so the row
-            // opens already filled in. The teacher can still change it freely.
             clone.querySelector('.schedule-edit-start-time').value = suggested.start;
             clone.querySelector('.schedule-edit-end-time').value = suggested.end;
 
             rowsContainer.appendChild(clone);
             wireRow(clone);
 
-            // cloneNode copies attributes (including data-wired) but not listeners,
-            // so the flag has to be cleared before re-initialising.
             clone.querySelectorAll('.time-range-picker').forEach(function (picker) {
                 delete picker.dataset.wired;
                 initTimeRangePicker(picker);
@@ -473,7 +424,6 @@
                 const subjectIds = msSelectedIds(subjectDd);
                 const gradeIds = msSelectedIds(gradeDd);
 
-                // Every period needs a time; only a real class needs the rest.
                 if (!startInput.value || !endInput.value) {
                     displayBtn.classList.add('field-invalid');
                     hasError = true;

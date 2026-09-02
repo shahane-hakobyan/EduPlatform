@@ -32,8 +32,6 @@ namespace EduPlatform.Services
 
             var cacheKey = $"geo:country:{ip}";
 
-            // The sidebar flag is decoration - a lookup failure must never
-            // take down the page, so everything here degrades to the fallback.
             try
             {
                 if (_cache.TryGetValue<string>(cacheKey, out var cached) && cached is not null)

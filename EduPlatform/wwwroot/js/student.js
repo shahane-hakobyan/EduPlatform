@@ -102,7 +102,6 @@
       incomingText.classList.add("is-active", "is-entering");
       imgSlides[next].classList.add("is-active");
 
-      // Force a reflow so removing "is-entering" transitions instead of jumping.
       void incomingText.offsetWidth;
       incomingText.classList.remove("is-entering");
 

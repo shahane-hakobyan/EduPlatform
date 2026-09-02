@@ -18,7 +18,7 @@ namespace EduPlatform.Controllers
         private readonly IStringLocalizer<SharedResource> _l;
         private readonly EduPlatformDbContext _db;
 
-        private const string CurrentTeacherUserId = "11111111-1111-1111-1111-111111111111"; // stand-in until real auth exists
+        private const string CurrentTeacherUserId = "11111111-1111-1111-1111-111111111111"; 
 
         public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer, EduPlatformDbContext db)
         {
