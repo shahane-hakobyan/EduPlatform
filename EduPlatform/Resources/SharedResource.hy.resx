@@ -279,4 +279,9 @@
   <data name="Home_Slide3Feature4" xml:space="preserve"><value>Հմտությունների զարգացում</value></data>
   <data name="Home_Slide3ImgAlt" xml:space="preserve"><value>Դասարանում ակտիվ ուսուցում</value></data>
 
+  <data name="NoToolsSaved" xml:space="preserve"><value>Դուք դեռևս չունեք պահված գործիքներ։</value></data>
+  <data name="AddTool" xml:space="preserve"><value>Ավելացնել գործիք</value></data>
+  <data name="ToolsAvailable" xml:space="preserve"><value>գործիք հասանելի</value></data>
+  <data name="NewTool" xml:space="preserve"><value>Նոր գործիք</value></data>
+
 </root>

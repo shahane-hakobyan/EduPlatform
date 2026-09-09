@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-
-using Microsoft.AspNetCore.Localization;
-using Microsoft.EntityFrameworkCore;
 using EduPlatform.Data;
 using EduPlatform.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,13 +30,32 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "");
 
 builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+var authBuilder = builder.Services.AddAuthentication(options =>
+{
+    var defaultScheme = builder.Environment.IsDevelopment()
+        ? CookieAuthenticationDefaults.AuthenticationScheme
+        : JwtBearerDefaults.AuthenticationScheme;
+
+    options.DefaultScheme = defaultScheme;
+    options.DefaultChallengeScheme = defaultScheme;
+});
+
+if (builder.Environment.IsDevelopment())
+{
+    authBuilder.AddCookie(options =>
     {
-        options.Authority = builder.Configuration["Authentication:Authority"];
-        options.TokenValidationParameters.ValidateAudience = false;
-        options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+        options.LoginPath = "/Dev/Login";
+        options.Cookie.Name = "eduplatform_dev_auth";
     });
+}
+
+authBuilder.AddJwtBearer(options =>
+{
+    options.Authority = builder.Configuration["Authentication:Authority"];
+    options.TokenValidationParameters.ValidateAudience = false;
+    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+});
+
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

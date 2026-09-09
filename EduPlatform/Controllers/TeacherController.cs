@@ -8,23 +8,26 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System.Security.Claims;
 
 namespace EduPlatform.Controllers
 {
-    [AllowAnonymous]
+    [Authorize(Roles = "Teacher")]
     public class TeacherController : Controller
     {
         private readonly ISidebarMenuBuilder _menuBuilder;
         private readonly IStringLocalizer<SharedResource> _l;
         private readonly EduPlatformDbContext _db;
+        private readonly IConfiguration _config;
 
-        private const string CurrentTeacherUserId = "11111111-1111-1111-1111-111111111111"; 
+        private string CurrentTeacherUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-        public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer, EduPlatformDbContext db)
+        public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer, EduPlatformDbContext db, IConfiguration config)
         {
             _menuBuilder = menuBuilder;
             _l = localizer;
             _db = db;
+            _config = config;
         }
 
         public IActionResult Index()
@@ -400,6 +403,68 @@ namespace EduPlatform.Controllers
             return View("~/Views/Shared/Materials/MaterialsList.cshtml", vm);
         }
 
+        [HttpGet]
+        public IActionResult Repository(string id)
+        {
+            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+
+            return id switch
+            {
+                "MyTools" => View("~/Views/Teacher/Repository/MyTools.cshtml", new ToolsPageViewModel
+                {
+                    Tools = BuildTestTools(), 
+                    AddToolUrl = $"{_config["Authentication:Authority"]}/Tools"
+                }),
+                _ => NotFound()
+            };
+        }
+
+        private static List<ToolCardViewModel> BuildTestTools() => new()
+        {
+            new() {
+                Id = 1, Name = "Թղթապանակ",
+                Description = "Ստեղծե՛ք թվայնացված թղթապանակներ՝ բոլոր նյութերը հավաքելով մեկ վայրում։",
+                IconClass = "bi-folder2", ColorVariant = "blue",
+                Url = "https://gatewayapi.dshh.am:15106/ibook/"
+            },
+            new() {
+                Id = 2, Name = "Խաչբառ",
+                Description = "Ստեղծեք հետաքրքիր խաչբառներ՝ ձեր նախընտրած բովանդակությամբ։",
+                IconClass = "bi-grid-3x3-gap", ColorVariant = "purple",
+                Url = "https://gatewayapi.dshh.am:15106/crossword/choose_keyword_mode"
+            },
+            new() {
+                Id = 3, Name = "Նյութերի թվայնացում",
+                Description = "Թվայնացրե՛ք փաստաթղթերն ու գրքերը, հեշտացրե՛ք PDF ֆայլերի հետ աշխատանքը։",
+                IconClass = "bi-file-earmark-pdf", ColorVariant = "teal",
+                Url = "https://gatewayapi.dshh.am:15106/ibook/digital-book"
+            },
+            new() {
+                Id = 4, Name = "Գտիր զույգը",
+                Description = "Ստեղծե՛ք հիշողությունն ու ուշադրութունը մարզող ինտերակտիվ խաղ։",
+                IconClass = "bi-shuffle", ColorVariant = "orange",
+                Url = "https://gatewayapi.dshh.am:15106/pairmatch/"
+            },
+            new() {
+                Id = 5, Name = "ՀարցԱԲան",
+                Description = "Վերլուծե՛ք ցանկացած նյութ ԱԲ-ի օգնությամբ։",
+                IconClass = "bi-question-circle", ColorVariant = "indigo",
+                Url = "https://gatewayapi.dshh.am:15106/learn/"
+            },
+            new() {
+                Id = 6, Name = "Տեքստային խմբագրիչ",
+                Description = "Ուղղակի տեքստ հավաքեք ու ձևավորեք՝ աղյուսակներով և գրաֆիկներով։",
+                IconClass = "bi-file-earmark-text", ColorVariant = "green",
+                Url = "#" 
+            },
+            new() {
+                Id = 7, Name = "Մուլտիմեդիա նյութ",
+                Description = "Կցեք պատկեր, աուդիո ու վիդեո և գրեք նկարագրություն։",
+                IconClass = "bi-collection-play", ColorVariant = "pink",
+                Url = "#" 
+            },
+        };
         public IActionResult Library()
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();

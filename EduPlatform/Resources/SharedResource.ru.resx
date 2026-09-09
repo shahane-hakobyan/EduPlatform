@@ -279,4 +279,8 @@
   <data name="Home_Slide3Feature4" xml:space="preserve"><value>Развитие навыков</value></data>
   <data name="Home_Slide3ImgAlt" xml:space="preserve"><value>Активное обучение в классе</value></data>
 
+  <data name="NoToolsSaved" xml:space="preserve"><value>У вас пока нет сохраненных инструментов.</value></data>
+  <data name="AddTool" xml:space="preserve"><value>Добавить инструмент</value></data>
+  <data name="ToolsAvailable" xml:space="preserve"><value>Доступные инструменты</value></data>
+  <data name="NewTool" xml:space="preserve"><value>Новый инструмент</value></data>
 </root>

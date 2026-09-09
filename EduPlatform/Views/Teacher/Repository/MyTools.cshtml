@@ -1,0 +1,49 @@
+﻿@model EduPlatform.ViewModels.ToolsPageViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["MyTools"].Value;
+}
+
+<div class="tools-header d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="materials-title mb-1">@Localizer["MyTools"]</h1>
+        <p class="tools-subtitle mb-0">@Model.Tools.Count @Localizer["ToolsAvailable"]</p>
+    </div>
+    <a class="tools-empty-add-btn" href="@Model.AddToolUrl">
+        <i class="bi bi-plus-lg"></i> @Localizer["AddTool"]
+    </a>
+</div>
+
+@if (!Model.Tools.Any())
+{
+    <div class="materials-empty text-center py-5">
+        <i class="bi bi-inbox materials-empty-icon"></i>
+        <p class="materials-empty-text">@Localizer["NoToolsSaved"]</p>
+        <a class="tools-empty-add-btn" href="@Model.AddToolUrl">@Localizer["AddTool"]</a>
+    </div>
+}
+else
+{
+    <div class="materials-grid">
+        @foreach (var tool in Model.Tools)
+        {
+            <a href="@tool.Url" target="_blank" rel="noopener" class="tool-card">
+                <div class="tool-card-icon tint-@tool.ColorVariant">
+                    <i class="bi @tool.IconClass"></i>
+                </div>
+                <div class="tool-card-name">@tool.Name</div>
+                <div class="tool-card-desc">@tool.Description</div>
+            </a>
+        }
+        <a href="@Model.AddToolUrl" class="tool-card tool-card-add">
+            <div class="tool-card-add-icon"><i class="bi bi-plus-lg"></i></div>
+            <div class="tool-card-name">@Localizer["AddTool"]</div>
+            <div class="tool-card-desc">@Localizer["NewTool"]</div>
+        </a>
+    </div>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/materials.css" />
+    <link rel="stylesheet" href="~/css/tools.css" />
+}
