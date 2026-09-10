@@ -24,16 +24,21 @@
 }
 else
 {
-    <div class="materials-grid">
+    <div class="materials-grid tools-grid">
         @foreach (var tool in Model.Tools)
         {
-            <a href="@tool.Url" target="_blank" rel="noopener" class="tool-card">
-                <div class="tool-card-icon tint-@tool.ColorVariant">
-                    <i class="bi @tool.IconClass"></i>
-                </div>
-                <div class="tool-card-name">@tool.Name</div>
-                <div class="tool-card-desc">@tool.Description</div>
-            </a>
+            <div class="tool-card-wrap">
+                <button type="button" class="tool-card-remove" aria-label="@Localizer["Remove"]" onclick="removeToolCard(event, this)">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <a href="@tool.Url" target="_blank" rel="noopener" class="tool-card">
+                    <div class="tool-card-icon tint-@tool.ColorVariant">
+                        <i class="bi @tool.IconClass"></i>
+                    </div>
+                    <div class="tool-card-name">@tool.Name</div>
+                    <div class="tool-card-desc">@tool.Description</div>
+                </a>
+            </div>
         }
         <a href="@Model.AddToolUrl" class="tool-card tool-card-add">
             <div class="tool-card-add-icon"><i class="bi bi-plus-lg"></i></div>
@@ -46,4 +51,15 @@ else
 @section Styles {
     <link rel="stylesheet" href="~/css/materials.css" />
     <link rel="stylesheet" href="~/css/tools.css" />
+}
+
+@section Scripts {
+    <script>
+        function removeToolCard(event, btn) {
+            event.preventDefault();
+            event.stopPropagation();
+            btn.closest('.tool-card-wrap')?.remove();
+            // TODO: call the real delete endpoint once that's built — this only removes it visually for now
+        }
+    </script>
 }

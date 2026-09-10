@@ -283,4 +283,19 @@
   <data name="AddTool" xml:space="preserve"><value>Добавить инструмент</value></data>
   <data name="ToolsAvailable" xml:space="preserve"><value>Доступные инструменты</value></data>
   <data name="NewTool" xml:space="preserve"><value>Новый инструмент</value></data>
+
+  <data name="GridView" xml:space="preserve"><value>Сетка</value></data>
+  <data name="Date" xml:space="preserve"><value>Дата</value></data>
+  <data name="Views" xml:space="preserve"><value>Просмотры</value></data>
+  <data name="Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Status" xml:space="preserve"><value>Статус</value></data>
+  <data name="Assignment" xml:space="preserve"><value>Задание</value></data>
+  <data name="Draft" xml:space="preserve"><value>Черновик</value></data>
+  <data name="SearchByTitle" xml:space="preserve"><value>Поиск по названию</value></data>
+  <data name="Download" xml:space="preserve"><value>Скачать</value></data>
+  <data name="Share" xml:space="preserve"><value>Поделиться</value></data>
+  <data name="Duplicate" xml:space="preserve"><value>Дублировать</value></data>
+  <data name="SendMaterial" xml:space="preserve"><value>Отправить</value></data>
+  <data name="Statistics" xml:space="preserve"><value>Статистика</value></data>
+  <data name="MaterialTitle" xml:space="preserve"><value>Название материала</value></data>
 </root>

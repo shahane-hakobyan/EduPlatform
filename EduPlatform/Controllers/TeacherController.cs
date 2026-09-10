@@ -413,12 +413,68 @@ namespace EduPlatform.Controllers
             {
                 "MyTools" => View("~/Views/Teacher/Repository/MyTools.cshtml", new ToolsPageViewModel
                 {
-                    Tools = BuildTestTools(), 
+                    Tools = BuildTestTools(),
                     AddToolUrl = $"{_config["Authentication:Authority"]}/Tools"
+                }),
+                "MyCreatedMaterials" => View("~/Views/Teacher/Repository/MyCreatedMaterials.cshtml", new CreatedMaterialsPageViewModel
+                {
+                    Materials = BuildTestCreatedMaterials()
                 }),
                 _ => NotFound()
             };
         }
+
+        private static List<CreatedMaterialViewModel> BuildTestCreatedMaterials() => new()
+        {
+            new() {
+                Id = 1, Title = "Ատոմի Կառուցվածք", Subject = "Կենսաբանություն", Grade = "9-րդ դասարան",
+                Type = "Առաջադրանք", Status = "Սևագիր", Date = new DateOnly(2028, 2, 10),
+                Description = "Սովորողները կարդում են պատասխանում և կատարում նախագիծ",
+                IconClass = "bi-diagram-3", ColorVariant = "indigo"
+            },
+            new() {
+                Id = 2, Title = "Ֆոտոսինթեզ", Subject = "Կենսաբանություն", Grade = "9-րդ դասարան",
+                Type = "Առաջադրանք", Status = "Սևագիր", Date = new DateOnly(2028, 2, 10),
+                Description = "Սովորողները կարդում են պատասխանում և կատարում նախագիծ",
+                IconClass = "bi-diagram-3", ColorVariant = "indigo"
+            },
+            new() {
+                Id = 3, Title = "Մարդկանց Իրավունքներ", Subject = "Առարկա", Grade = "9-րդ դասարան",
+                Type = "Առաջադրանք", Status = "Սևագիր", Date = new DateOnly(2028, 2, 10),
+                Description = "Սովորողները կարդում են պատասխանում և կատարում նախագիծ",
+                IconClass = "bi-diagram-3", ColorVariant = "indigo"
+            },
+            new() {
+                Id = 4, Title = "Հայոց ցեղասպանություն", Subject = "Հայոց պատմություն", Grade = "9-րդ դասարան",
+                Type = "Առաջադրանք", Status = "Սևագիր", Date = new DateOnly(2028, 2, 10),
+                Description = "Սովորողները կարդում են պատասխանում և կատարում նախագիծ",
+                IconClass = "bi-diagram-3", ColorVariant = "indigo"
+            },
+            new() {
+                Id = 5, Title = "Ատոմի Կառուցվածք", Subject = "Կենսաբանություն", Grade = "9-րդ դասարան",
+                Type = "Առաջադրանք", Status = "Սևագիր", Date = new DateOnly(2028, 2, 10),
+                Description = "Սովորողները կարդում են պատասխանում և կատարում նախագիծ",
+                IconClass = "bi-diagram-3", ColorVariant = "indigo"
+            },
+            new() {
+                Id = 6, Title = "Ֆոտոսինթեզ", Subject = "Կենսաբանություն", Grade = "9-րդ դասարան",
+                Type = "Առաջադրանք", Status = "Սևագիր", Date = new DateOnly(2028, 2, 10),
+                Description = "Սովորողները կարդում են պատասխանում և կատարում նախագիծ",
+                IconClass = "bi-diagram-3", ColorVariant = "indigo"
+            },
+            new() {
+                Id = 7, Title = "Մարդկանց Իրավունքներ", Subject = "Առարկա", Grade = "9-րդ դասարան",
+                Type = "Առաջադրանք", Status = "Սևագիր", Date = new DateOnly(2028, 2, 10),
+                Description = "Սովորողները կարդում են պատասխանում և կատարում նախագիծ",
+                IconClass = "bi-diagram-3", ColorVariant = "indigo"
+            },
+            new() {
+                Id = 8, Title = "Հայոց ցեղասպանություն", Subject = "Հայոց պատմություն", Grade = "9-րդ դասարան",
+                Type = "Առաջադրանք", Status = "Սևագիր", Date = new DateOnly(2028, 2, 10),
+                Description = "Սովորողները կարդում են պատասխանում և կատարում նախագիծ",
+                IconClass = "bi-diagram-3", ColorVariant = "indigo"
+            },
+        };
 
         private static List<ToolCardViewModel> BuildTestTools() => new()
         {

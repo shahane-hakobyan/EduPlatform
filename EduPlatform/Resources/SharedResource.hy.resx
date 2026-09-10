@@ -284,4 +284,18 @@
   <data name="ToolsAvailable" xml:space="preserve"><value>գործիք հասանելի</value></data>
   <data name="NewTool" xml:space="preserve"><value>Նոր գործիք</value></data>
 
+  <data name="GridView" xml:space="preserve"><value>Ցանկ</value></data>
+  <data name="Date" xml:space="preserve"><value>Ամսաթիվ</value></data>
+  <data name="Views" xml:space="preserve"><value>Դիտումներ</value></data>
+  <data name="Type" xml:space="preserve"><value>Տեսակ</value></data>
+  <data name="Status" xml:space="preserve"><value>Կարգավիճակ</value></data>
+  <data name="Assignment" xml:space="preserve"><value>Առաջադրանք</value></data>
+  <data name="Draft" xml:space="preserve"><value>Սևագիր</value></data>
+  <data name="SearchByTitle" xml:space="preserve"><value>Որոնում ըստ վերնագրի</value></data>
+  <data name="Download" xml:space="preserve"><value>Ներբեռնել</value></data>
+  <data name="Share" xml:space="preserve"><value>Կիսվել</value></data>
+  <data name="Duplicate" xml:space="preserve"><value>Կրկնօրինակել</value></data>
+  <data name="SendMaterial" xml:space="preserve"><value>Ուղարկել</value></data>
+  <data name="Statistics" xml:space="preserve"><value>Վիճակագրություն</value></data>
+  <data name="MaterialTitle" xml:space="preserve"><value>Նյութի վերնագիր</value></data>
 </root>

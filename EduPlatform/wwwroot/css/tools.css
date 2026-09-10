@@ -24,6 +24,7 @@
     align-items: flex-start;
     gap: 10px;
     background: var(--surface);
+    border-top: 1px solid var(--border);
     border-radius: 16px;
     padding: 18px;
     box-shadow: 0px 4px 6px -1px rgba(0,0,0,.1), 0px 2px 4px -2px rgba(0,0,0,.1);
@@ -52,23 +53,50 @@
 }
 
 .tool-card-add {
+    box-sizing: border-box;
     align-items: center;
     justify-content: center;
     text-align: center;
-    border: 2px dashed var(--border);
+    padding: 24px 60px;
+    gap: 8px;
+    min-height: 130px;
+    border: 2px dashed var(--border-strong);
+    border-radius: 14px;
     box-shadow: none;
     background: transparent;
+    transition: border-color .2s ease, background .2s ease;
 }
 
+    .tool-card-add:hover {
+        border-color: var(--accent);
+        background: var(--surface-muted, #f0eefc);
+    }
+
 .tool-card-add-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    box-sizing: border-box;
     display: flex;
-    align-items: center;
+    flex-direction: row;
     justify-content: center;
-    background: var(--surface-muted, #f0eefc);
-    color: #6c4fd6;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-faint);
+    font-size: 17px;
+}
+
+.tool-card-add .tool-card-name {
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.tool-card-add .tool-card-desc {
+    font-weight: 400;
+    font-size: 11px;
+    color: var(--text-faint);
 }
 
 .tint-blue {
@@ -109,4 +137,53 @@
 .tint-indigo {
     background: #ece9ff;
     color: #615FFF;
+}
+.tool-card-wrap {
+    position: relative;
+    border-radius: 16px;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+    .tool-card-wrap:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
+
+        .tool-card-wrap:hover .tool-card {
+            box-shadow: none;
+        }
+
+.tool-card-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(.85);
+    transition: opacity .15s ease, transform .15s ease, background-color .15s ease, color .15s ease;
+    z-index: 2;
+}
+
+.tool-card-wrap:hover .tool-card-remove {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.tool-card-remove:hover {
+    background: var(--danger-soft-bg);
+    color: var(--danger);
+}
+.tools-grid > .tool-card-wrap {
+    align-self: start !important;
+    height: auto !important;
 }
