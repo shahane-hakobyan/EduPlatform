@@ -298,4 +298,55 @@
   <data name="SendMaterial" xml:space="preserve"><value>Send</value></data>
   <data name="Statistics" xml:space="preserve"><value>Statistics</value></data>
   <data name="MaterialTitle" xml:space="preserve"><value>Material title</value></data>
+
+  <data name="ViewAssignments" xml:space="preserve"><value>View Assignments</value></data>
+  <data name="CreateAssignment" xml:space="preserve"><value>Create Assignment</value></data>
+  <data name="CurrentAssignments" xml:space="preserve"><value>Current Assignments</value></data>
+  <data name="ArchivedAssignments" xml:space="preserve"><value>Archived Assignments</value></data>
+  <data name="ActiveLabel" xml:space="preserve"><value>active</value></data>
+  <data name="ArchivedLabel" xml:space="preserve"><value>archived</value></data>
+  <data name="SearchAssignments" xml:space="preserve"><value>Search Assignments</value></data>
+  <data name="Evaluation" xml:space="preserve"><value>Evaluation</value></data>
+  <data name="DueDate" xml:space="preserve"><value>Deadline</value></data>
+  <data name="AssignmentsCountSuffix" xml:space="preserve"><value>assignment</value></data>
+  <data name="ParticipantsShort" xml:space="preserve"><value>Learner</value></data>
+  <data name="CompletedShort" xml:space="preserve"><value>completed</value></data>
+  <data name="GradedShort" xml:space="preserve"><value>graded</value></data>
+  <data name="ArchiveAssignment" xml:space="preserve"><value>Archive</value></data>
+  <data name="ConfirmArchiveAssignment" xml:space="preserve"><value>Archive this assignment?</value></data>
+  <data name="NoAssignments" xml:space="preserve"><value>No assignments yet.</value></data>
+  <data name="NoArchivedAssignments" xml:space="preserve"><value>There are no archived tasks.</value></data>
+
+  <data name="CreateAssignmentSubtitle" xml:space="preserve"><value>Fill in all required fields</value></data>
+  <data name="AssignmentDetailsSection" xml:space="preserve"><value>Assignment Details</value></data>
+  <data name="AssignmentNameLabel" xml:space="preserve"><value>Name</value></data>
+  <data name="AssignmentNamePlaceholder" xml:space="preserve"><value>Enter the assignment name</value></data>
+  <data name="DescriptionLabel" xml:space="preserve"><value>Description</value></data>
+  <data name="DescriptionPlaceholder" xml:space="preserve"><value>Enter the description</value></data>
+  <data name="SubjectSearchPlaceholder" xml:space="preserve"><value>Search subject...</value></data>
+  <data name="GradeSearchPlaceholder" xml:space="preserve"><value>Search grade...</value></data>
+  <data name="AssignmentTypeSectionLabel" xml:space="preserve"><value>Assignment Type</value></data>
+  <data name="AssignmentTypeHint" xml:space="preserve"><value>You can select one or more</value></data>
+  <data name="GradingTypeSectionLabel" xml:space="preserve"><value>Grading Type</value></data>
+  <data name="AssignmentStartLabel" xml:space="preserve"><value>Assignment Start</value></data>
+  <data name="AssignmentDueLabel" xml:space="preserve"><value>Assignment Due Date</value></data>
+  <data name="SubmissionFormatSection" xml:space="preserve"><value>Answer Submission Format</value></data>
+  <data name="SubmissionFormatHint" xml:space="preserve"><value>You can select one or both</value></data>
+  <data name="TextAnswerOption" xml:space="preserve"><value>Text Answer</value></data>
+  <data name="TextAnswerOptionDesc" xml:space="preserve"><value>Students can write an answer</value></data>
+  <data name="FileAnswerOption" xml:space="preserve"><value>Attached File</value></data>
+  <data name="FileAnswerOptionDesc" xml:space="preserve"><value>Students can upload a file</value></data>
+  <data name="UploadFileSection" xml:space="preserve"><value>Upload File</value></data>
+  <data name="DropzoneCta" xml:space="preserve"><value>Click or drag a file</value></data>
+  <data name="DropzoneHint" xml:space="preserve"><value>PDF, Word, Excel, JPG, PNG · max 25 MB</value></data>
+  <data name="SendToStudentsSection" xml:space="preserve"><value>Send Assignment to Students</value></data>
+  <data name="MyClassesTab" xml:space="preserve"><value>My Classes</value></data>
+  <data name="MyGroupsTab" xml:space="preserve"><value>My Groups</value></data>
+  <data name="SelectedPupilsSuffix" xml:space="preserve"><value>students</value></data>
+  <data name="ClearAllLabel" xml:space="preserve"><value>Clear all</value></data>
+  <data name="SelectAllLabel" xml:space="preserve"><value>Select All</value></data>
+  <data name="SearchPupilPlaceholder" xml:space="preserve"><value>Search for a student...</value></data>
+  <data name="PupilsCountSuffix" xml:space="preserve"><value>students</value></data>
+  <data name="CancelBtn" xml:space="preserve"><value>Cancel</value></data>
+  <data name="SendAssignmentBtn" xml:space="preserve"><value>Send Assignment</value></data>
 </root>

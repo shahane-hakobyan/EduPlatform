@@ -201,6 +201,7 @@ namespace EduPlatform.Controllers
 
             return PartialView("_GradeRoster", vm);
         }
+
         private static ScheduleDay CurrentScheduleDay()
         {
             var today = DateTime.Now.DayOfWeek;
@@ -416,13 +417,38 @@ namespace EduPlatform.Controllers
                     Tools = BuildTestTools(),
                     AddToolUrl = $"{_config["Authentication:Authority"]}/Tools"
                 }),
-                "MyCreatedMaterials" => View("~/Views/Teacher/Repository/MyCreatedMaterials.cshtml", new CreatedMaterialsPageViewModel
+                "Assignments" => View("~/Views/Teacher/Repository/Assignments.cshtml", new AssignmentsPageViewModel
                 {
-                    Materials = BuildTestCreatedMaterials()
+                    Assignments = BuildTestAssignments(),
+                    CreateUrl = Url.Action(nameof(CreateAssignment))!
                 }),
                 _ => NotFound()
             };
         }
+
+        private static List<AssignmentCardViewModel> BuildTestAssignments() => new()
+{
+    new() {
+        Id = 1, Title = "Ծաղիկի կառուցվածք", Subject = "Կենսաբանություն", Grade = "8-րդ դասարան",
+        Type = "Թեստային", GradingType = "Հայտորոշիչ", DueDate = new DateTime(2028, 2, 10),
+        ParticipantCount = 6, CompletedCount = 5, GradedCount = 3, IsArchived = false
+    },
+    new() {
+        Id = 2, Title = "Ծաղիկի կառուցվածք", Subject = "Կենսաբանություն", Grade = "8-րդ դասարան",
+        Type = "Թեստային", GradingType = "Հայտորոշիչ", DueDate = new DateTime(2028, 2, 10),
+        ParticipantCount = 6, CompletedCount = 5, GradedCount = 3, IsArchived = false
+    },
+    new() {
+        Id = 3, Title = "Բջջի կառուցվածքը", Subject = "Կենսաբանություն", Grade = "8-րդ դասարան",
+        Type = "Ինքնուրույն աշխատանք", GradingType = "Ամփոփիչ", DueDate = new DateTime(2028, 2, 14),
+        ParticipantCount = 6, CompletedCount = 2, GradedCount = 0, IsArchived = false
+    },
+    new() {
+        Id = 4, Title = "Ֆոտոսինթեզի գործընթացը", Subject = "Կենսաբանություն", Grade = "8-րդ դասարան",
+        Type = "Թեստային", GradingType = "Հայտորոշիչ", DueDate = new DateTime(2026, 1, 20),
+        ParticipantCount = 6, CompletedCount = 6, GradedCount = 6, IsArchived = true
+    },
+};
 
         private static List<CreatedMaterialViewModel> BuildTestCreatedMaterials() => new()
         {
@@ -521,6 +547,7 @@ namespace EduPlatform.Controllers
                 Url = "#" 
             },
         };
+
         public IActionResult Library()
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
@@ -684,6 +711,51 @@ namespace EduPlatform.Controllers
     };
 
             return View("~/Views/Shared/Materials/Library.cshtml", tabs);
+        }
+
+        [HttpGet]
+        public IActionResult CreateAssignment()
+        {
+            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+
+            var grades = _db.TeacherGrades
+                .Where(tg => tg.TeacherUserId == CurrentTeacherUserId)
+                .Select(tg => new SelectOption { Id = tg.GradeId, Label = tg.Grade.GradeName })
+                .ToList();
+
+            var vm = new CreateAssignmentViewModel
+            {
+                Subjects = _db.TeacherSubjects
+                    .Where(ts => ts.TeacherUserId == CurrentTeacherUserId)
+                    .Select(ts => new SelectOption { Id = ts.SubjectId, Label = ts.Subject.Name })
+                    .ToList(),
+                Grades = grades,
+                AssignmentTypes = new() { "Թեստային", "Գործնական", "Լաբորատոր", "Նախագծային", "Տնային Աշխատանք", "Այլ" },
+                GradingTypes = new() { "Հայտորոշիչ", "Ձևավորող", "Ամփոփիչ" },
+                ClassGroups = grades.Select(g => new AssignmentClassGroupViewModel
+                {
+                    GradeId = g.Id,
+                    GradeName = g.Label,
+                    Pupils = Enumerable.Range(1, 8).Select(i => new RosterPupilViewModel
+                    {
+                        Name = $"{_l["Pupil"]} {i}",
+                        PhotoUrl = "/images/avatar-placeholder.jpg"
+                    }).ToList()
+                }).ToList(),
+                SubmitUrl = Url.Action(nameof(CreateAssignment))!,
+                CancelUrl = Url.Action(nameof(Repository), new { id = "Assignments" })!
+            };
+
+            return View("~/Views/Teacher/Repository/CreateAssignment.cshtml", vm);
+        }
+
+        [HttpPost]
+        public IActionResult CreateAssignment(CreateAssignmentViewModel _)
+        {
+            // No Assignment entity/table exists yet — this just returns to the list.
+            // Wire this up to a real save once the Assignment model + migration are added.
+            return RedirectToAction(nameof(Repository), new { id = "Assignments" });
         }
 
     }
