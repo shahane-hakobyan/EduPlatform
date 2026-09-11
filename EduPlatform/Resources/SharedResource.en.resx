@@ -349,4 +349,27 @@
   <data name="PupilsCountSuffix" xml:space="preserve"><value>students</value></data>
   <data name="CancelBtn" xml:space="preserve"><value>Cancel</value></data>
   <data name="SendAssignmentBtn" xml:space="preserve"><value>Send Assignment</value></data>
+
+  <data name="AddLabel" xml:space="preserve"><value>Add</value></data>
+  <data name="SearchPupilByNamePlaceholder" xml:space="preserve"><value>Search by name...</value></data>
+  <data name="GroupLabel" xml:space="preserve"><value>Group</value></data>
+  <data name="StatusLabel" xml:space="preserve"><value>Status</value></data>
+  <data name="SubmittedOn" xml:space="preserve"><value>Submitted</value></data>
+  <data name="SubmissionStatusGraded" xml:space="preserve"><value>Graded</value></data>
+  <data name="SubmissionStatusSubmitted" xml:space="preserve"><value>Submitted</value></data>
+  <data name="SubmissionStatusPending" xml:space="preserve"><value>Pending</value></data>
+  <data name="GradeLabel" xml:space="preserve"><value>Grade</value></data>
+  <data name="DownloadLabel" xml:space="preserve"><value>Download</value></data>
+  <data name="PointGrading" xml:space="preserve"><value>Point-based Grading</value></data>
+  <data name="FormativeGrading" xml:space="preserve"><value>Formative Grading</value></data>
+  <data name="PointsRangeLabel" xml:space="preserve"><value>Points (1–10)</value></data>
+  <data name="PointGradeVisibilityNote" xml:space="preserve"><value>The grade is visible only in the teacher's logbook</value></data>
+  <data name="ProtocolLabel" xml:space="preserve"><value>Feedback</value></data>
+  <data name="ProtocolPlaceholder" xml:space="preserve"><value>Enter the feedback</value></data>
+  <data name="FormativeGradeVisibilityNote" xml:space="preserve"><value>The student only sees the feedback</value></data>
+  <data name="SaveGradeBtn" xml:space="preserve"><value>Save Grade</value></data>
+
+  <data name="AddPupilsTitle" xml:space="preserve"><value>Add Students</value></data>
+  <data name="AlreadyAddedLabel" xml:space="preserve"><value>Already added</value></data>
+  <data name="AddSelectedBtn" xml:space="preserve"><value>Add Selected</value></data>
 </root>

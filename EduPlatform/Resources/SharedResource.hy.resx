@@ -349,4 +349,27 @@
   <data name="PupilsCountSuffix" xml:space="preserve"><value>սովորողի</value></data>
   <data name="CancelBtn" xml:space="preserve"><value>Չեղարկել</value></data>
   <data name="SendAssignmentBtn" xml:space="preserve"><value>Ուղարկել Առաջադրանքը</value></data>
+
+  <data name="AddLabel" xml:space="preserve"><value>Ավելացնել</value></data>
+  <data name="SearchPupilByNamePlaceholder" xml:space="preserve"><value>Փնտրել անունով...</value></data>
+  <data name="GroupLabel" xml:space="preserve"><value>Խումբ</value></data>
+  <data name="StatusLabel" xml:space="preserve"><value>Կարգավիճակ</value></data>
+  <data name="SubmittedOn" xml:space="preserve"><value>Ներկայացված</value></data>
+  <data name="SubmissionStatusGraded" xml:space="preserve"><value>Գնահատված</value></data>
+  <data name="SubmissionStatusSubmitted" xml:space="preserve"><value>Կատարված</value></data>
+  <data name="SubmissionStatusPending" xml:space="preserve"><value>Սպասվում է</value></data>
+  <data name="GradeLabel" xml:space="preserve"><value>Գնահատել</value></data>
+  <data name="DownloadLabel" xml:space="preserve"><value>Բեռնել</value></data>
+  <data name="PointGrading" xml:space="preserve"><value>Միավորային գնահատում</value></data>
+  <data name="FormativeGrading" xml:space="preserve"><value>Ձևավորող գնահատում</value></data>
+  <data name="PointsRangeLabel" xml:space="preserve"><value>Միավորներ (1–10)</value></data>
+  <data name="PointGradeVisibilityNote" xml:space="preserve"><value>Գնահատականը տեսանելի է միայն ուսուցչի մատյանում</value></data>
+  <data name="ProtocolLabel" xml:space="preserve"><value>Արձանագրություն</value></data>
+  <data name="ProtocolPlaceholder" xml:space="preserve"><value>Մուտքագրեք արձանագրությունը</value></data>
+  <data name="FormativeGradeVisibilityNote" xml:space="preserve"><value>Աշակերտը տեսնում է միայն արձանագրությունը</value></data>
+  <data name="SaveGradeBtn" xml:space="preserve"><value>Պահել գնահատումը</value></data>
+
+  <data name="AddPupilsTitle" xml:space="preserve"><value>Ավելացնել սովորողներ</value></data>
+  <data name="AlreadyAddedLabel" xml:space="preserve"><value>Ավելացված է</value></data>
+  <data name="AddSelectedBtn" xml:space="preserve"><value>Ավելացնել ընտրվածները</value></data>
 </root>

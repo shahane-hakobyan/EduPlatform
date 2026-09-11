@@ -426,27 +426,31 @@ namespace EduPlatform.Controllers
             };
         }
 
-        private static List<AssignmentCardViewModel> BuildTestAssignments() => new()
+        private List<AssignmentCardViewModel> BuildTestAssignments() => new()
 {
     new() {
         Id = 1, Title = "Ծաղիկի կառուցվածք", Subject = "Կենսաբանություն", Grade = "8-րդ դասարան",
         Type = "Թեստային", GradingType = "Հայտորոշիչ", DueDate = new DateTime(2028, 2, 10),
-        ParticipantCount = 6, CompletedCount = 5, GradedCount = 3, IsArchived = false
+        ParticipantCount = 6, CompletedCount = 5, GradedCount = 3, IsArchived = false,
+        ViewUrl = Url.Action(nameof(AssignmentDetail), new { id = 1 })!
     },
     new() {
         Id = 2, Title = "Ծաղիկի կառուցվածք", Subject = "Կենսաբանություն", Grade = "8-րդ դասարան",
         Type = "Թեստային", GradingType = "Հայտորոշիչ", DueDate = new DateTime(2028, 2, 10),
-        ParticipantCount = 6, CompletedCount = 5, GradedCount = 3, IsArchived = false
+        ParticipantCount = 6, CompletedCount = 5, GradedCount = 3, IsArchived = false,
+        ViewUrl = Url.Action(nameof(AssignmentDetail), new { id = 2 })!
     },
     new() {
         Id = 3, Title = "Բջջի կառուցվածքը", Subject = "Կենսաբանություն", Grade = "8-րդ դասարան",
         Type = "Ինքնուրույն աշխատանք", GradingType = "Ամփոփիչ", DueDate = new DateTime(2028, 2, 14),
-        ParticipantCount = 6, CompletedCount = 2, GradedCount = 0, IsArchived = false
+        ParticipantCount = 6, CompletedCount = 2, GradedCount = 0, IsArchived = false,
+        ViewUrl = Url.Action(nameof(AssignmentDetail), new { id = 3 })!
     },
     new() {
         Id = 4, Title = "Ֆոտոսինթեզի գործընթացը", Subject = "Կենսաբանություն", Grade = "8-րդ դասարան",
         Type = "Թեստային", GradingType = "Հայտորոշիչ", DueDate = new DateTime(2026, 1, 20),
-        ParticipantCount = 6, CompletedCount = 6, GradedCount = 6, IsArchived = true
+        ParticipantCount = 6, CompletedCount = 6, GradedCount = 6, IsArchived = true,
+        ViewUrl = Url.Action(nameof(AssignmentDetail), new { id = 4 })!
     },
 };
 
@@ -756,6 +760,93 @@ namespace EduPlatform.Controllers
             // No Assignment entity/table exists yet — this just returns to the list.
             // Wire this up to a real save once the Assignment model + migration are added.
             return RedirectToAction(nameof(Repository), new { id = "Assignments" });
+        }
+
+        [HttpGet]
+        public IActionResult AssignmentDetail(int id)
+        {
+            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+
+            var vm = new AssignmentDetailViewModel
+            {
+                Id = id,
+                Title = "Ծաղիկի կառուցվածք",
+                Subject = "Կենսաբանություն",
+                Grade = "9-րդ դասարան",
+                Type = "Գործնական",
+                GradingType = "Ձևավորող",
+                StartDate = new DateTime(2028, 3, 8),
+                DueDate = new DateTime(2028, 3, 15),
+                Description = "պատասխան ",
+                ArchiveUrl = "#",
+                Submissions = new()
+        {
+            new() {
+                Id = 1, PupilName = "Լուսինե Գրիգորյան", PhotoUrl = "/images/avatar-placeholder.jpg",
+                GradeName = "9-րդ դասարան", GroupName = "Խումբ Ա",
+                SubmittedDate = new DateTime(2028, 3, 10), Status = "Graded",
+                Score = 7, MaxScore = 10, ScoreFeedback = "Կարելի է ավելի լավ",
+                AttachmentFileName = "Լուսինե Գրիգորյան.pdf", AttachmentUrl = "#",
+                GradingMode = "Point"
+            },
+            new() {
+                Id = 2, PupilName = "Լիլիթ Բադոյան", PhotoUrl = "/images/avatar-placeholder.jpg",
+                GradeName = "9-րդ դասարան", GroupName = "Խումբ Ա",
+                SubmittedDate = new DateTime(2028, 3, 11), Status = "Submitted",
+                AttachmentFileName = "Լիլիթ Բադոյան.pdf", AttachmentUrl = "#",
+                GradingMode = "Formative"
+            },
+        }
+            };
+
+            var grades = _db.TeacherGrades
+                .Where(tg => tg.TeacherUserId == CurrentTeacherUserId)
+                .Select(tg => new SelectOption { Id = tg.GradeId, Label = tg.Grade.GradeName })
+                .ToList();
+
+            vm.AvailableGrades = grades.Select(g => new AssignmentClassGroupViewModel
+            {
+                GradeId = g.Id,
+                GradeName = g.Label,
+                Pupils = Enumerable.Range(1, 8).Select(i => new RosterPupilViewModel
+                {
+                    Name = $"{_l["Pupil"]} {i}",
+                    PhotoUrl = "/images/avatar-placeholder.jpg"
+                }).ToList()
+            }).ToList();
+
+            vm.AlreadyAddedPupilIds = vm.Submissions.Select(s => s.PupilName.GetHashCode()).ToList();
+
+            return View(vm);
+        }
+
+        public class SaveGradeRequest
+        {
+            public int SubmissionId { get; set; }
+            public string GradingMode { get; set; } = "Point";
+            public int? Score { get; set; }
+            public string? ProtocolText { get; set; }
+        }
+
+        [HttpPost]
+        public IActionResult SaveGrade([FromBody] SaveGradeRequest request)
+        {
+            // No submission/grade persistence yet — wire this to a real
+            // Submission entity once it exists in the DB.
+            return Json(new { success = true });
+        }
+        public class AddPupilsRequest
+        {
+            public int AssignmentId { get; set; }
+            public List<string> PupilNames { get; set; } = new();
+        }
+
+        [HttpPost]
+        public IActionResult AddPupilsToAssignment([FromBody] AddPupilsRequest request)
+        {
+            // No Submission entity yet — wire this to a real insert once it exists.
+            return Json(new { success = true, added = request.PupilNames.Count });
         }
 
     }

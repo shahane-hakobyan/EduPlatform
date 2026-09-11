@@ -611,3 +611,15 @@
         color: var(--text-faint);
         cursor: not-allowed;
     }
+.ca-pupil-item-disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.ca-pupil-already-badge {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-faint);
+    white-space: nowrap;
+}
