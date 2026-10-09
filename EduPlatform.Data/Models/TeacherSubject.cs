@@ -1,4 +1,4 @@
-﻿namespace EduPlatform.Models
+﻿namespace EduPlatform.Data.Models
 {
     /// <summary>
     /// Որ առարկաներն է ուսուցիչը դասավանդում

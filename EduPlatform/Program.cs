@@ -16,7 +16,9 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<EduPlatformDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    b => b.MigrationsAssembly("EduPlatform.Data")));
 
 builder.Services.AddDistributedMemoryCache();
 

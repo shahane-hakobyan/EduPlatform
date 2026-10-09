@@ -1,4 +1,4 @@
-using EduPlatform.Models;
+using EduPlatform.Data.Models;
 using EduPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;

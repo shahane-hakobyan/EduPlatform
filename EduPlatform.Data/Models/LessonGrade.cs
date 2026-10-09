@@ -1,4 +1,4 @@
-﻿namespace EduPlatform.Models
+﻿namespace EduPlatform.Data.Models
 {
     /// <summary>
     /// Կապող աղյուսակ՝ որ դասարաններն են մասնակցում տվյալ դասին:

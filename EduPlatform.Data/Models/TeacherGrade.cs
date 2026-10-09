@@ -1,4 +1,4 @@
-﻿namespace EduPlatform.Models
+﻿namespace EduPlatform.Data.Models
 {
     /// <summary>
     /// Որ դասարանների հետ է աշխատում ուսուցիչը՝ ըստ ուսումնական տարվա

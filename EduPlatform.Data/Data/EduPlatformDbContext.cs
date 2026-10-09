@@ -1,4 +1,4 @@
-﻿using EduPlatform.Models;
+﻿using EduPlatform.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduPlatform.Data

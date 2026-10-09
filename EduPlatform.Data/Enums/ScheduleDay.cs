@@ -1,4 +1,4 @@
-﻿namespace EduPlatform.Models
+﻿namespace EduPlatform.Data.Models
 {
     /// <summary>
     /// Շաբաթվա օրը դասացուցակում՝ Երկուշաբթի = 1 ... Կիրակի = 7:

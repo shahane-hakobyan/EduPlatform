@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="EduPlatform/EduPlatform.csproj" />
+  <Project Path="EduPlatform.Api/EduPlatform.Api.csproj" Id="fc460784-520f-42ab-8b2a-ed1dec6f4e41" />
+  <Project Path="EduPlatform.Data/EduPlatform.Data.csproj" Id="eaa1101e-1bc8-45c4-bdae-c349871a3789" />
+  <Project Path="EduPlatform/EduPlatform.Site.csproj" />
 </Solution>

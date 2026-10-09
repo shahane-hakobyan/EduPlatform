@@ -1,4 +1,4 @@
-﻿namespace EduPlatform.Models
+﻿namespace EduPlatform.Data.Models
 {
     /// <summary>
     /// Ուսուցչի շաբաթական դասացուցակի մեկ միավոր՝ կա՛մ իրական դաս, կա՛մ ազատ ժամ:

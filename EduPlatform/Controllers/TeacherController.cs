@@ -1,6 +1,6 @@
 ﻿using EduPlatform.Data;
 using EduPlatform.Helpers;
-using EduPlatform.Models;
+using EduPlatform.Data.Models;
 using EduPlatform.Resources;
 using EduPlatform.Services;
 using EduPlatform.ViewModels;
