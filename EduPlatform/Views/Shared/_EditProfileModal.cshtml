@@ -36,6 +36,15 @@
             </div>
 
             <div>
+                <label class="edit-profile-field-label">@Localizer["EducationalInstitution"]</label>
+                <input type="text" class="edit-profile-input" value="@Model.SchoolName" readonly />
+            </div>
+
+            <div>
+                <label class="edit-profile-field-label">@Localizer["Subject"]</label>
+                <input type="text" class="edit-profile-input" value="@Model.Subjects" readonly />
+            </div>
+            <div>
                 <label class="edit-profile-field-label">@Localizer["PhoneNumber"]</label>
                 <input type="tel" name="phoneNumber" class="edit-profile-input" value="@Model.PhoneNumber" />
             </div>
