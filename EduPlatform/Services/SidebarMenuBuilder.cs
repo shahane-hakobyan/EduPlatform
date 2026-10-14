@@ -30,22 +30,22 @@ namespace EduPlatform.Services
             new() { Label = _l["Logout"], IconSvg = SidebarIcons.Logout, Url = "/Account/Logout" };
         private SidebarMenuItem Settings(string url) =>
             new() { Label = _l["Settings"], IconSvg = SidebarIcons.Settings, Url = url };
-        private SidebarMenuItem AvailableMaterials(string baseUrl) => new()
+        private SidebarMenuItem MyLibrary(string baseUrl) => new()
         {
-            Label = _l["AvailableMaterials"],
-            IconSvg = SidebarIcons.AvailableMaterials,
+            Label = _l["MyLibrary"],
+            IconSvg = SidebarIcons.MyLibrary,
             Children =
             {
                 new() { Label = _l["Textbooks"],                  IconSvg = SidebarIcons.Textbooks,      Url = $"{baseUrl}/Materials/Textbooks" },
                 new() { Label = _l["MethodologicalGuidelines"],    IconSvg = SidebarIcons.MethodologicalGuidelines,          Url = $"{baseUrl}/Materials/MethodologicalGuidelines" },
                 new() { Label = _l["OtherEducationalMaterials"],   IconSvg = SidebarIcons.OtherMaterials,  Url = $"{baseUrl}/Materials/OtherEducationalMaterials" },
-                new() { Label = _l["Library"],                     IconSvg = SidebarIcons.Library,         Url = $"{baseUrl}/Library" },
+                new() { Label = _l["OtherBooks"],                     IconSvg = SidebarIcons.OtherBooks,         Url = $"{baseUrl}/OtherBooks" },
             }
         };
 
         public List<SidebarMenuItem> ForTeacher() => new() {
             PersonalPage("/Teacher/Index"),
-            AvailableMaterials("/Teacher"),
+            MyLibrary("/Teacher"),
             new() { Label = _l["MyBookshelf"], IconSvg = SidebarIcons.Repository, Children = {
                 new() { Label = _l["MyTools"], IconSvg = SidebarIcons.Tools, Url = "/Teacher/Repository/MyTools" },
                 new() { Label = _l["MyCreatedMaterials"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Teacher/Repository/MyCreatedMaterials" },

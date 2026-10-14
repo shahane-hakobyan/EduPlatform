@@ -1,7 +1,7 @@
-﻿@model List<LibraryTabViewModel>
+﻿@model List<OtherBooksTabViewModel>
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 @{
-    ViewData["Title"] = Localizer["Library"].Value;
+    ViewData["Title"] = Localizer["OtherBooks"].Value;
 }
 
 <div class="materials-header d-flex align-items-center justify-content-between mb-4">
@@ -9,7 +9,7 @@
         <div class="materials-header-icon d-flex align-items-center justify-content-center">
             <i class="bi bi-collection"></i>
         </div>
-        <h1 class="materials-title mb-0">@Localizer["Library"]</h1>
+        <h1 class="materials-title mb-0">@Localizer["OtherBooks"]</h1>
     </div>
 </div>
 

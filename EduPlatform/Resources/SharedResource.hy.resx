@@ -99,11 +99,11 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
   <data name="PersonalPage" xml:space="preserve"><value>Անձնական էջ</value></data>
-  <data name="AvailableMaterials" xml:space="preserve"><value>Առկա նյութեր</value></data>
+  <data name="MyLibrary" xml:space="preserve"><value>Իմ գրադարանը</value></data>
   <data name="Textbooks" xml:space="preserve"><value>Դասագրքեր</value></data>
   <data name="MethodologicalGuidelines" xml:space="preserve"><value>Մեթոդական ուղեցույցներ</value></data>
   <data name="OtherEducationalMaterials" xml:space="preserve"><value>Այլ ուսումնական նյութեր</value></data>
-  <data name="Library" xml:space="preserve"><value>Գրադարան</value></data>
+  <data name="OtherBooks" xml:space="preserve"><value>Այլ գրքեր</value></data>
   <data name="MyBookshelf" xml:space="preserve"><value>Իմ գրապահոցը</value></data>
   <data name="MyTools" xml:space="preserve"><value>Իմ գործիքները</value></data>
   <data name="MyCreatedMaterials" xml:space="preserve"><value>Իմ ստեղծած նյութերը</value></data>

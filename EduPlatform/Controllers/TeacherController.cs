@@ -552,12 +552,12 @@ namespace EduPlatform.Controllers
             },
         };
 
-        public IActionResult Library()
+        public IActionResult OtherBooks()
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
             ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
 
-            var tabs = new List<LibraryTabViewModel>
+            var tabs = new List<OtherBooksTabViewModel>
     {
         new() {
             Key = "other-textbooks",
@@ -714,7 +714,7 @@ namespace EduPlatform.Controllers
         }
     };
 
-            return View("~/Views/Shared/Materials/Library.cshtml", tabs);
+            return View("~/Views/Shared/Materials/OtherBooks.cshtml", tabs);
         }
 
         [HttpGet]
