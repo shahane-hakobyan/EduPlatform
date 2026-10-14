@@ -24,6 +24,11 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddHttpClient();
 
+builder.Services.AddHttpClient<ILibraryApiClient, LibraryApiClient>(c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["LibraryApi:BaseUrl"]!.TrimEnd('/') + "/");
+});
+
 builder.Services.AddScoped<IIpGeolocationService, IpGeolocationService>();
 
 builder.Services.AddSignalR();

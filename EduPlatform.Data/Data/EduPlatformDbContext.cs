@@ -22,6 +22,7 @@ namespace EduPlatform.Data
         public DbSet<TeacherSubject> TeacherSubjects => Set<TeacherSubject>();
         public DbSet<TeacherGrade> TeacherGrades => Set<TeacherGrade>();
         public DbSet<PupilGrade> PupilGrades => Set<PupilGrade>();
+        public DbSet<UserLibraryMaterial> UserLibraryMaterials => Set<UserLibraryMaterial>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -151,6 +152,17 @@ namespace EduPlatform.Data
                  .WithMany()
                  .HasForeignKey(x => x.GradeId)
                  .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ── Օգտատիրոջ պահված Library նյութեր ─────────────────────────
+            modelBuilder.Entity<UserLibraryMaterial>(e =>
+            {
+                e.Property(x => x.UserId).HasMaxLength(450);
+                e.Property(x => x.MaterialType).HasMaxLength(50);
+
+                // Նույն նյութը օգտատերը կարող է պահել միայն մեկ անգամ:
+                e.HasIndex(x => new { x.UserId, x.MaterialType, x.LibraryMaterialId })
+                 .IsUnique();
             });
         }
     }

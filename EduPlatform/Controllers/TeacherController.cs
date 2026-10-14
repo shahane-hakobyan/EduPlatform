@@ -19,15 +19,17 @@ namespace EduPlatform.Controllers
         private readonly IStringLocalizer<SharedResource> _l;
         private readonly EduPlatformDbContext _db;
         private readonly IConfiguration _config;
+        private readonly ILibraryApiClient _library;
 
         private string CurrentTeacherUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-        public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer, EduPlatformDbContext db, IConfiguration config)
+        public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer, EduPlatformDbContext db, IConfiguration config, ILibraryApiClient library)
         {
             _menuBuilder = menuBuilder;
             _l = localizer;
             _db = db;
             _config = config;
+            _library = library;
         }
 
         public IActionResult Index()
@@ -208,10 +210,85 @@ namespace EduPlatform.Controllers
             return today == DayOfWeek.Sunday ? ScheduleDay.Sunday : (ScheduleDay)(int)today;
         }
 
-        public IActionResult Materials(string id)
+        // «Իմ գրադարան» ենթամենյուի route → Library-ի MaterialKind
+        private static readonly Dictionary<string, string> LibraryTypeByRoute = new()
+        {
+            ["Textbooks"] = "Textbook",
+            ["MethodologicalGuidelines"] = "MethodicalGuide",
+            ["OtherEducationalMaterials"] = "OtherMaterial",
+        };
+
+        private static readonly string[] CardColors =
+            { "blue", "purple", "green", "orange", "pink", "red", "teal", "emerald", "indigo", "amber" };
+
+        /// <summary>
+        /// Ուսուցչի պահած նյութերը՝ EduPlatform-ի UserLibraryMaterials աղյուսակից,
+        /// իսկ նյութերի տվյալները՝ Library.Api-ից:
+        /// </summary>
+        private async Task<MaterialsPageViewModel> BuildSavedMaterialsPage(string route)
+        {
+            var type = LibraryTypeByRoute[route];
+
+            var saved = await _db.UserLibraryMaterials
+                .Where(x => x.UserId == CurrentTeacherUserId && x.MaterialType == type)
+                .OrderByDescending(x => x.SavedAt)
+                .ToListAsync();
+
+            var books = await _library.GetByIdsAsync(saved.Select(s => s.LibraryMaterialId));
+
+            if (books is not null)
+            {
+                // Library-ն պատասխանել է → այնտեղ ջնջված նյութերը հեռացնում ենք մեր աղյուսակից:
+                var existing = books.Select(b => b.Id).ToHashSet();
+                var orphans = saved.Where(s => !existing.Contains(s.LibraryMaterialId)).ToList();
+                if (orphans.Count > 0)
+                {
+                    _db.UserLibraryMaterials.RemoveRange(orphans);
+                    await _db.SaveChangesAsync();
+                }
+            }
+
+            // Library-ն անհասանելի է → ոչինչ չենք հեռացնում, ցուցակը դատարկ է ցույց տրվում:
+            var byId = (books ?? new()).ToDictionary(b => b.Id);
+
+            var cards = saved
+                .Where(s => byId.ContainsKey(s.LibraryMaterialId))
+                .Select(s => byId[s.LibraryMaterialId])
+                .Select(b => new MaterialCardViewModel
+                {
+                    Id = b.Id,
+                    Grades = b.Grades.OrderBy(g => g).Select(g => g.ToString()).ToList(),
+                    Subjects = b.Subjects,
+                    ColorVariant = CardColors[Math.Abs(b.Id) % CardColors.Length],
+                    ThumbnailUrl = b.CoverUrl,
+                    Authors = string.Join(", ", b.Authors),
+                    Publisher = b.PublisherName,
+                    Language = b.Language,
+                    Pages = b.Pages ?? 0,
+                    Year = b.PublishedYear,
+                    ViewUrl = b.ViewUrl ?? "",
+                    DownloadUrl = b.DownloadUrl ?? ""
+                })
+                .ToList();
+
+            return new MaterialsPageViewModel
+            {
+                Title = _l[route],
+                TotalCount = cards.Count,
+                Materials = cards
+            };
+        }
+
+        public async Task<IActionResult> Materials(string id)
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
             ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+
+            if (LibraryTypeByRoute.ContainsKey(id))
+            {
+                var page = await BuildSavedMaterialsPage(id);
+                return View("~/Views/Shared/Materials/MaterialsList.cshtml", page);
+            }
 
             MaterialsPageViewModel? vm = id switch
             {
@@ -542,13 +619,13 @@ namespace EduPlatform.Controllers
                 Id = 6, Name = "Տեքստային խմբագրիչ",
                 Description = "Ուղղակի տեքստ հավաքեք ու ձևավորեք՝ աղյուսակներով և գրաֆիկներով։",
                 IconClass = "bi-file-earmark-text", ColorVariant = "green",
-                Url = "#" 
+                Url = "#"
             },
             new() {
                 Id = 7, Name = "Մուլտիմեդիա նյութ",
                 Description = "Կցեք պատկեր, աուդիո ու վիդեո և գրեք նկարագրություն։",
                 IconClass = "bi-collection-play", ColorVariant = "pink",
-                Url = "#" 
+                Url = "#"
             },
         };
 
