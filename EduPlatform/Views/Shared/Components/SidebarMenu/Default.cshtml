@@ -22,7 +22,7 @@
     <ul class="list-unstyled flex-grow-1 mb-0">
         @foreach (var item in Model)
         {
-            var hasActiveChild = item.Children.Any(c => c.Url == currentPath);
+            var hasActiveChild = item.Children.Any(c => c.Url == currentPath || c.Children.Any(g => g.Url == currentPath));
             <li class="sidebar-item position-relative @(hasActiveChild ? "open" : "")">
                 <a href="@(item.Url ?? "#")" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 text-decoration-none text-nowrap @((currentPath == item.Url || hasActiveChild) ? "active" : "")">
                     @Html.Raw(item.IconSvg)
@@ -44,12 +44,38 @@
                         <li class="sidebar-submenu-header">@item.Label</li>
                         @foreach (var child in item.Children)
                         {
-                            <li>
-                                <a href="@child.Url" class="d-flex align-items-center gap-2 py-2 text-decoration-none @(currentPath == child.Url ? "active" : "")">
-                                    @Html.Raw(child.IconSvg)
-                                    <span>@child.Label</span>
-                                </a>
-                            </li>
+                            var childHasActive = child.Children.Any(g => g.Url == currentPath);
+
+                            if (child.Children.Any())
+                            {
+                                <li class="sidebar-subitem @(childHasActive ? "open" : "")">
+                                    <a href="#" class="sidebar-sublink d-flex align-items-center gap-2 py-2 text-decoration-none">
+                                        @Html.Raw(child.IconSvg)
+                                        <span>@child.Label</span>
+                                        <i class="bi bi-chevron-down sidebar-subcaret ms-auto"></i>
+                                    </a>
+                                    <ul class="sidebar-submenu-nested list-unstyled">
+                                        @foreach (var grand in child.Children)
+                                        {
+                                            <li>
+                                                <a href="@grand.Url" class="d-flex align-items-center gap-2 py-2 text-decoration-none @(currentPath == grand.Url ? "active" : "")">
+                                                    @Html.Raw(grand.IconSvg)
+                                                    <span>@grand.Label</span>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a href="@child.Url" class="d-flex align-items-center gap-2 py-2 text-decoration-none @(currentPath == child.Url ? "active" : "")">
+                                        @Html.Raw(child.IconSvg)
+                                        <span>@child.Label</span>
+                                    </a>
+                                </li>
+                            }
                         }
                     </ul>
                 }

@@ -372,4 +372,9 @@
   <data name="AddPupilsTitle" xml:space="preserve"><value>Добавить учеников</value></data>
   <data name="AlreadyAddedLabel" xml:space="preserve"><value>Уже добавлен</value></data>
   <data name="AddSelectedBtn" xml:space="preserve"><value>Добавить выбранных</value></data>
+
+  <data name="MyAssignments" xml:space="preserve"><value>Мои задания</value></data>
+  <data name="GivenAssignments" xml:space="preserve"><value>Выданные задания</value></data>
+  <data name="AssignmentBank" xml:space="preserve"><value>Банк заданий</value></data>
+  <data name="Messages" xml:space="preserve"><value>Сообщения</value></data>
 </root>

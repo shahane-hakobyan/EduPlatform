@@ -499,8 +499,17 @@ namespace EduPlatform.Controllers
                     Assignments = BuildTestAssignments(),
                     CreateUrl = Url.Action(nameof(CreateAssignment))!
                 }),
+                "AssignmentBank" => View("~/Views/Teacher/Repository/AssignmentBank.cshtml"),
                 _ => NotFound()
             };
+        }
+
+        [HttpGet]
+        public IActionResult Messages()
+        {
+            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+            return View("~/Views/Teacher/Messages.cshtml");
         }
 
         private List<AssignmentCardViewModel> BuildTestAssignments() => new()

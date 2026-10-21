@@ -372,4 +372,9 @@
   <data name="AddPupilsTitle" xml:space="preserve"><value>Ավելացնել սովորողներ</value></data>
   <data name="AlreadyAddedLabel" xml:space="preserve"><value>Ավելացված է</value></data>
   <data name="AddSelectedBtn" xml:space="preserve"><value>Ավելացնել ընտրվածները</value></data>
+
+  <data name="MyAssignments" xml:space="preserve"><value>Իմ առաջադրանքները</value></data>
+  <data name="GivenAssignments" xml:space="preserve"><value>Տրված առաջադրանքներ</value></data>
+  <data name="AssignmentBank" xml:space="preserve"><value>Առաջադրանքների շտեմարան</value></data>
+  <data name="Messages" xml:space="preserve"><value>Հաղորդագրություններ</value></data>
 </root>

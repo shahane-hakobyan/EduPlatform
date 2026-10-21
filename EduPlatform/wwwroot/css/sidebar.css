@@ -240,3 +240,29 @@ body {
         z-index: 9999;
         padding: 8px !important;
     }
+/* ── nested (third-level) submenu ── */
+.sidebar-subcaret {
+    transition: transform .2s ease;
+}
+
+.sidebar-submenu-nested {
+    display: none;
+    padding: 4px 0 0 16px;
+}
+
+    .sidebar-submenu-nested li {
+        margin-top: 4px;
+    }
+
+.sidebar-subitem.open > .sidebar-submenu-nested {
+    display: block;
+}
+
+.sidebar-subitem.open > .sidebar-sublink .sidebar-subcaret {
+    transform: rotate(180deg);
+}
+
+/* collapsed sidebar shows the fly-out fully expanded */
+.sidebar.collapsed .sidebar-submenu-nested {
+    display: block;
+}

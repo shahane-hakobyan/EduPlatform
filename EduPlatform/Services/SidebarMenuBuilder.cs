@@ -50,17 +50,21 @@ namespace EduPlatform.Services
                 new() { Label = _l["MyTools"], IconSvg = SidebarIcons.Tools, Url = "/Teacher/Repository/MyTools" },
                 new() { Label = _l["MyCreatedMaterials"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Teacher/Repository/MyCreatedMaterials" },
                 new() { Label = _l["MyExpertise"], IconSvg = SidebarIcons.Expertise, Url = "/Teacher/Repository/MyExpertise" },
-                new() { Label = _l["Assignments"], IconSvg = SidebarIcons.Assignments, Url = "/Teacher/Repository/Assignments" },
+                new() { Label = _l["MyAssignments"], IconSvg = SidebarIcons.Assignments, Children = {
+                    new() { Label = _l["GivenAssignments"], IconSvg = SidebarIcons.Assignments, Url = "/Teacher/Repository/Assignments" },
+                    new() { Label = _l["AssignmentBank"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Teacher/Repository/AssignmentBank" },
+                }},
             }},
             new() { Label = _l["StudentAssessment"], IconSvg = SidebarIcons.Assessment, Children = {
                 new() { Label = _l["MyLogbook"], IconSvg = SidebarIcons.Journal, Url = "/Teacher/Assessment/MyLogbook" },
                 new() { Label = _l["AIAssessment"], IconSvg = SidebarIcons.AIScore, Url = "/Teacher/Assessment/AIAssessment" },
             }},
             Groups("/Teacher/Groups"),
+            new() { Label = _l["Messages"], IconSvg = SidebarIcons.Messages, Url = "/Teacher/Messages" },
             new() { Label = _l["AIChat"], IconSvg = SidebarIcons.AIChat, Url = "/Teacher/AIChat" },
         };
 
-         public List<SidebarMenuItem> FooterForTeacher() => new() {
+        public List<SidebarMenuItem> FooterForTeacher() => new() {
             new() { Label = _l["MyStatistics"], IconSvg = SidebarIcons.Statistics, Url = "/Teacher/MyStatistics" },
             Settings("/Teacher/Settings"),
             Logout(),

@@ -46,4 +46,11 @@
             if (!wasOpen) item.classList.add('open');
         });
     });
+    document.querySelectorAll('.sidebar-subitem > .sidebar-sublink').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            link.parentElement.classList.toggle('open');
+        });
+    });
 });
