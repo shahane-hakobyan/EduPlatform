@@ -28,11 +28,6 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ILibraryApiClient, LibraryApiClient>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["LibraryApi:BaseUrl"]!.TrimEnd('/') + "/");
-
-    // Library.Api-ն Production-ում ընդունում է միայն բանալիով հարցումներ
-    var apiKey = builder.Configuration["LibraryApi:ApiKey"];
-    if (!string.IsNullOrEmpty(apiKey))
-        c.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
 });
 
 builder.Services.AddScoped<IIpGeolocationService, IpGeolocationService>();
@@ -46,8 +41,12 @@ builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
 // ── Մուտք ───────────────────────────────────────────────────────────────────
 // Production՝ AuthServer-ի JWT (մուտքի տրամաբանությունը կավարտի մեկ այլ ծրագրավորող):
 // Development՝ բոլոր այցելուները համարվում են մուտք գործած թեստային ուսուցիչ:
+// Development-ում կամ demo սերվերի "DemoAutoLogin": true դեպքում բոլորը համարվում են թեստային ուսուցիչ:
+// Իրական Production-ում այս կարգավորումը չպետք է լինի՝ օգտագործվում է միայն AuthServer-ի JWT-ը:
+var autoLogin = builder.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("DemoAutoLogin");
+
 var authBuilder = builder.Services.AddAuthentication(
-    builder.Environment.IsDevelopment() ? DevAutoAuthHandler.SchemeName : JwtBearerDefaults.AuthenticationScheme);
+    autoLogin ? DevAutoAuthHandler.SchemeName : JwtBearerDefaults.AuthenticationScheme);
 
 authBuilder.AddJwtBearer(options =>
 {
@@ -56,7 +55,7 @@ authBuilder.AddJwtBearer(options =>
     options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
 });
 
-if (builder.Environment.IsDevelopment())
+if (autoLogin)
     authBuilder.AddScheme<AuthenticationSchemeOptions, DevAutoAuthHandler>(DevAutoAuthHandler.SchemeName, _ => { });
 
 builder.Services.AddAuthorization();

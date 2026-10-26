@@ -26,9 +26,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
-// ՄԻԱՅՆ Development: թեստավորում առանց AuthServer-ի՝ X-Test-User / X-Test-Role header-ներով.
+// Development-ում կամ demo սերվերի "DemoAutoLogin": true դեպքում՝ թեստավորում առանց AuthServer-ի՝ X-Test-User / X-Test-Role header-ներով.
 // Եթե հարցումը X-Test-User header ունի՝ օգտագործվում է DevHeader-ը, այլապես՝ սովորական JWT-ը:
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("DemoAutoLogin"))
 {
     builder.Services.AddAuthentication(o =>
     {

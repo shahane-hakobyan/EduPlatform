@@ -13,13 +13,21 @@ namespace EduPlatform.Api.Auth;
 public class DevHeaderAuthHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,
     ILoggerFactory logger,
-    UrlEncoder encoder) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
+    UrlEncoder encoder,
+    IHostEnvironment env) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
     public const string SchemeName = "DevHeader";
+
+    // demo սերվերի (Production + DemoAutoLogin) համար թույլատրվում է ՄԻԱՅՆ այս թեստային օգտատերը,
+    // որպեսզի header-ով չլինի ներկայանալ ուրիշ օգտատիրոջ անունից
+    public const string TestUserId = "11111111-1111-1111-1111-111111111111";
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         if (!Request.Headers.TryGetValue("X-Test-User", out var userId) || string.IsNullOrWhiteSpace(userId))
+            return Task.FromResult(AuthenticateResult.NoResult());
+
+        if (!env.IsDevelopment() && userId.ToString() != TestUserId)
             return Task.FromResult(AuthenticateResult.NoResult());
 
         var role = Request.Headers["X-Test-Role"].FirstOrDefault() ?? "Teacher";
