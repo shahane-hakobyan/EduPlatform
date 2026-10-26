@@ -10,6 +10,7 @@ namespace EduPlatform.Api.Controllers
     /// <summary>
     /// Library-ի նյութերը «Իմ գրադարան»-ում պահելու / հեռացնելու API:
     /// Կանչվում է Library.Site-ից օգտատիրոջ տոկենով:
+    /// Պահվածները գրվում են EduPlatform-ի DB-ի UserLibraryMaterials աղյուսակում (UserId = AuthServer-ի "sub"):
     /// </summary>
     [ApiController]
     [Route("api/user-library")]
@@ -26,6 +27,19 @@ namespace EduPlatform.Api.Controllers
         private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
         public record SaveRequest(string MaterialType, int LibraryMaterialId);
+
+        public record SavedItem(string MaterialType, int LibraryMaterialId, DateTime SavedAt);
+
+        // GET api/user-library → ընթացիկ օգտատիրոջ բոլոր պահվածները (նորերը՝ առաջինը)
+        [HttpGet]
+        public async Task<ActionResult<List<SavedItem>>> GetMine()
+        {
+            return await _db.UserLibraryMaterials
+                .Where(x => x.UserId == UserId)
+                .OrderByDescending(x => x.SavedAt)
+                .Select(x => new SavedItem(x.MaterialType, x.LibraryMaterialId, x.SavedAt))
+                .ToListAsync();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Save([FromBody] SaveRequest req)

@@ -1,6 +1,8 @@
+using EduPlatform.Auth;
 using EduPlatform.Data;
 using EduPlatform.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Library.Site.Auth;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -37,24 +39,11 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "");
 
 builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
 
-var authBuilder = builder.Services.AddAuthentication(options =>
-{
-    var defaultScheme = builder.Environment.IsDevelopment()
-        ? CookieAuthenticationDefaults.AuthenticationScheme
-        : JwtBearerDefaults.AuthenticationScheme;
-
-    options.DefaultScheme = defaultScheme;
-    options.DefaultChallengeScheme = defaultScheme;
-});
-
-if (builder.Environment.IsDevelopment())
-{
-    authBuilder.AddCookie(options =>
-    {
-        options.LoginPath = "/Dev/Login";
-        options.Cookie.Name = "eduplatform_dev_auth";
-    });
-}
+// ── Մուտք ───────────────────────────────────────────────────────────────────
+// Production՝ AuthServer-ի JWT (մուտքի տրամաբանությունը կավարտի մեկ այլ ծրագրավորող):
+// Development՝ բոլոր այցելուները համարվում են մուտք գործած թեստային ուսուցիչ:
+var authBuilder = builder.Services.AddAuthentication(
+    builder.Environment.IsDevelopment() ? DevAutoAuthHandler.SchemeName : JwtBearerDefaults.AuthenticationScheme);
 
 authBuilder.AddJwtBearer(options =>
 {
@@ -62,6 +51,9 @@ authBuilder.AddJwtBearer(options =>
     options.TokenValidationParameters.ValidateAudience = false;
     options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
 });
+
+if (builder.Environment.IsDevelopment())
+    authBuilder.AddScheme<AuthenticationSchemeOptions, DevAutoAuthHandler>(DevAutoAuthHandler.SchemeName, _ => { });
 
 builder.Services.AddAuthorization();
 

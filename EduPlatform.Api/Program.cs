@@ -1,4 +1,6 @@
+using EduPlatform.Api.Auth;
 using EduPlatform.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +25,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
     });
 builder.Services.AddAuthorization();
+
+// ՄԻԱՅՆ Development: թեստավորում առանց AuthServer-ի՝ X-Test-User / X-Test-Role header-ներով.
+// Եթե հարցումը X-Test-User header ունի՝ օգտագործվում է DevHeader-ը, այլապես՝ սովորական JWT-ը:
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddAuthentication(o =>
+    {
+        o.DefaultScheme = "DevOrJwt";
+        o.DefaultAuthenticateScheme = "DevOrJwt";
+        o.DefaultChallengeScheme = "DevOrJwt";
+    })
+        .AddPolicyScheme("DevOrJwt", "Dev header or JWT", o =>
+            o.ForwardDefaultSelector = ctx =>
+                ctx.Request.Headers.ContainsKey("X-Test-User")
+                    ? DevHeaderAuthHandler.SchemeName
+                    : JwtBearerDefaults.AuthenticationScheme)
+        .AddScheme<AuthenticationSchemeOptions, DevHeaderAuthHandler>(DevHeaderAuthHandler.SchemeName, _ => { });
+}
 
 var app = builder.Build();
 
