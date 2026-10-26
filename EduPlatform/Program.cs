@@ -1,7 +1,6 @@
 using EduPlatform.Auth;
 using EduPlatform.Data;
 using EduPlatform.Services;
-using Library.Site.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
