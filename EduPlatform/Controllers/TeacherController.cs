@@ -225,6 +225,68 @@ namespace EduPlatform.Controllers
         /// Ուսուցչի պահած նյութերը՝ EduPlatform-ի UserLibraryMaterials աղյուսակից,
         /// իսկ նյութերի տվյալները՝ Library.Api-ից:
         /// </summary>
+        /// <summary>Library-ի OtherMaterial-ի տեսակի (Kind) անունը ընթացիկ լեզվով:</summary>
+        private string? KindLabel(string? kind) => kind switch
+        {
+            "Text" => _l["TextMaterial"].Value,
+            "Video" => _l["VideoMaterial"].Value,
+            "Audio" => _l["AudioMaterial"].Value,
+            "Image" => _l["ImageMaterial"].Value,
+            "ThreeD" => _l["ThreeDMaterial"].Value,
+            "Folder" => _l["Folder"].Value,
+            "Digitized" => _l["DigitizedMaterial"].Value,
+            "Crossword" => _l["Crossword"].Value,
+            "PairMatch" => _l["MatchingPairsGame"].Value,
+            "Learn" => _l["Quiz"].Value,
+            _ => null
+        };
+
+        /// <summary>Ֆիլտրերի ընտրելի արժեքները կազմվում են էջի նյութերից:</summary>
+        private List<MaterialFilterOption> BuildFilters(IReadOnlyCollection<MaterialCardViewModel> cards, params string[] keys)
+        {
+            var result = new List<MaterialFilterOption>();
+
+            foreach (var key in keys)
+            {
+                string label;
+                IEnumerable<string> values;
+
+                switch (key)
+                {
+                    case "subject":
+                        label = _l["Subject"]; values = cards.SelectMany(c => c.Subjects); break;
+                    case "grade":
+                        label = _l["Grade"]; values = cards.SelectMany(c => c.Grades); break;
+                    case "author":
+                        label = _l["Author"];
+                        values = cards.SelectMany(c => c.Authors.Split(", ", StringSplitOptions.RemoveEmptyEntries));
+                        break;
+                    case "year":
+                        label = _l["PublicationYear"]; values = cards.Select(c => c.Year.ToString()); break;
+                    case "publisher":
+                        label = _l["Publisher"]; values = cards.Select(c => c.Publisher); break;
+                    case "language":
+                        label = _l["Language"]; values = cards.Select(c => c.Language ?? ""); break;
+                    case "type":
+                        label = _l["MaterialType"]; values = cards.Select(c => c.TypeLabel ?? ""); break;
+                    default:
+                        continue;
+                }
+
+                var options = values
+                    .Where(v => !string.IsNullOrWhiteSpace(v))
+                    .Distinct()
+                    .OrderBy(v => int.TryParse(v, out var n) ? n : int.MaxValue)
+                    .ThenBy(v => v)
+                    .ToList();
+
+                if (options.Count > 0)
+                    result.Add(new MaterialFilterOption { Key = key, Label = label, Options = options });
+            }
+
+            return result;
+        }
+
         private async Task<MaterialsPageViewModel> BuildSavedMaterialsPage(string route)
         {
             var type = LibraryTypeByRoute[route];
@@ -257,6 +319,9 @@ namespace EduPlatform.Controllers
                 .Select(b => new MaterialCardViewModel
                 {
                     Id = b.Id,
+                    Title = b.Title,
+                    MaterialType = b.MaterialType,
+                    TypeLabel = KindLabel(b.Kind),
                     Grades = b.Grades.OrderBy(g => g).Select(g => g.ToString()).ToList(),
                     Subjects = b.Subjects,
                     ColorVariant = CardColors[Math.Abs(b.Id) % CardColors.Length],
@@ -271,10 +336,15 @@ namespace EduPlatform.Controllers
                 })
                 .ToList();
 
+            var filterKeys = route == "OtherEducationalMaterials"
+                ? new[] { "subject", "grade", "author", "year", "publisher", "type" }
+                : new[] { "subject", "grade", "author", "year", "publisher" };
+
             return new MaterialsPageViewModel
             {
                 Title = _l[route],
                 TotalCount = cards.Count,
+                Filters = BuildFilters(cards, filterKeys),
                 Materials = cards
             };
         }
@@ -291,6 +361,21 @@ namespace EduPlatform.Controllers
             }
 
             return NotFound();
+        }
+
+        public record RemoveSavedRequest(string MaterialType, int Id);
+
+        // «Իմ գրադարան»-ից նյութի հեռացում (Library-ի նյութը չի ջնջվում, միայն այս օգտատիրոջ պահվածը)
+        [HttpPost]
+        public async Task<IActionResult> RemoveSavedMaterial([FromBody] RemoveSavedRequest req)
+        {
+            await _db.UserLibraryMaterials
+                .Where(x => x.UserId == CurrentTeacherUserId
+                         && x.MaterialType == req.MaterialType
+                         && x.LibraryMaterialId == req.Id)
+                .ExecuteDeleteAsync();
+
+            return Ok();
         }
 
         [HttpGet]
@@ -355,13 +440,15 @@ namespace EduPlatform.Controllers
                 .Select(s => byId[s.LibraryMaterialId])
                 .ToList();
 
-            MaterialsPageViewModel TabContent(string category, string title)
+            MaterialsPageViewModel TabContent(string category, string title, params string[] filterKeys)
             {
                 var cards = ordered
                     .Where(b => b.Category == category)
                     .Select(b => new MaterialCardViewModel
                     {
                         Id = b.Id,
+                        Title = b.Title,
+                        MaterialType = b.MaterialType,
                         Grades = b.Grades.OrderBy(g => g).Select(g => g.ToString()).ToList(),
                         Subjects = b.Subjects,
                         ColorVariant = CardColors[Math.Abs(b.Id) % CardColors.Length],
@@ -376,14 +463,14 @@ namespace EduPlatform.Controllers
                     })
                     .ToList();
 
-                return new MaterialsPageViewModel { Title = title, TotalCount = cards.Count, Materials = cards };
+                return new MaterialsPageViewModel { Title = title, TotalCount = cards.Count, Filters = BuildFilters(cards, filterKeys), Materials = cards };
             }
 
             var tabs = new List<OtherBooksTabViewModel>
             {
-                new() { Key = "other-textbooks", Content = TabContent("Textbook", _l["OtherTextbooks"]) },
-                new() { Key = "fiction", Content = TabContent("Fiction", _l["FictionBooks"]) },
-                new() { Key = "popular-science", Content = TabContent("PopularScience", _l["PopularScienceBooks"]) },
+                new() { Key = "other-textbooks", Content = TabContent("Textbook", _l["OtherTextbooks"], "subject", "grade", "author", "year", "publisher", "language") },
+                new() { Key = "fiction", Content = TabContent("Fiction", _l["FictionBooks"], "author", "year", "publisher", "language") },
+                new() { Key = "popular-science", Content = TabContent("PopularScience", _l["PopularScienceBooks"], "author", "year", "publisher", "language") },
             };
 
             return View("~/Views/Shared/Materials/OtherBooks.cshtml", tabs);

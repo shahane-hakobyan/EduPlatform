@@ -1,13 +1,16 @@
 using EduPlatform.Data.Models;
 using EduPlatform.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace EduPlatform.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
+        [AllowAnonymous]
         public IActionResult MainPage()
         {
             return View();
@@ -18,6 +21,7 @@ namespace EduPlatform.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
@@ -35,6 +39,7 @@ namespace EduPlatform.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

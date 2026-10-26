@@ -377,4 +377,19 @@
   <data name="GivenAssignments" xml:space="preserve"><value>Выданные задания</value></data>
   <data name="AssignmentBank" xml:space="preserve"><value>Банк заданий</value></data>
   <data name="Messages" xml:space="preserve"><value>Сообщения</value></data>
+
+  <data name="TextMaterial" xml:space="preserve"><value>Текстовый материал</value></data>
+  <data name="VideoMaterial" xml:space="preserve"><value>Видеоматериал</value></data>
+  <data name="AudioMaterial" xml:space="preserve"><value>Аудиоматериал</value></data>
+  <data name="ImageMaterial" xml:space="preserve"><value>Изображение</value></data>
+  <data name="ThreeDMaterial" xml:space="preserve"><value>3D-материал</value></data>
+  <data name="Folder" xml:space="preserve"><value>Папка</value></data>
+  <data name="DigitizedMaterial" xml:space="preserve"><value>Оцифрованный материал</value></data>
+  <data name="Crossword" xml:space="preserve"><value>Кроссворд</value></data>
+  <data name="MatchingPairsGame" xml:space="preserve"><value>Игра «Найди пару»</value></data>
+  <data name="Quiz" xml:space="preserve"><value>Викторина</value></data>
+
+  <data name="Filters" xml:space="preserve"><value>Фильтры</value></data>
+  <data name="Apply" xml:space="preserve"><value>Применить</value></data>
+  <data name="ClearFilters" xml:space="preserve"><value>Сбросить фильтры</value></data>
 </root>

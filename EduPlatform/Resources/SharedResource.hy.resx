@@ -377,4 +377,19 @@
   <data name="GivenAssignments" xml:space="preserve"><value>Տրված առաջադրանքներ</value></data>
   <data name="AssignmentBank" xml:space="preserve"><value>Առաջադրանքների շտեմարան</value></data>
   <data name="Messages" xml:space="preserve"><value>Հաղորդագրություններ</value></data>
+
+  <data name="TextMaterial" xml:space="preserve"><value>Տեքստային նյութ</value></data>
+  <data name="VideoMaterial" xml:space="preserve"><value>Վիդեոնյութ</value></data>
+  <data name="AudioMaterial" xml:space="preserve"><value>Աուդիոնյութ</value></data>
+  <data name="ImageMaterial" xml:space="preserve"><value>Նկար/պատկեր նյութ</value></data>
+  <data name="ThreeDMaterial" xml:space="preserve"><value>3D նյութ</value></data>
+  <data name="Folder" xml:space="preserve"><value>Թղթապանակ</value></data>
+  <data name="DigitizedMaterial" xml:space="preserve"><value>Թվայնացված նյութ</value></data>
+  <data name="Crossword" xml:space="preserve"><value>Խաչբառ</value></data>
+  <data name="MatchingPairsGame" xml:space="preserve"><value>Զույգեր գտնելու խաղ</value></data>
+  <data name="Quiz" xml:space="preserve"><value>ՀարցԱԲան</value></data>
+
+  <data name="Filters" xml:space="preserve"><value>Ֆիլտրեր</value></data>
+  <data name="Apply" xml:space="preserve"><value>Կիրառել</value></data>
+  <data name="ClearFilters" xml:space="preserve"><value>Մաքրել ֆիլտրերը</value></data>
 </root>

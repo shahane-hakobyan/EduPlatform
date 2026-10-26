@@ -377,4 +377,19 @@
   <data name="GivenAssignments" xml:space="preserve"><value>Given Assignments</value></data>
   <data name="AssignmentBank" xml:space="preserve"><value>Assignment Bank</value></data>
   <data name="Messages" xml:space="preserve"><value>Messages</value></data>
+
+  <data name="TextMaterial" xml:space="preserve"><value>Text material</value></data>
+  <data name="VideoMaterial" xml:space="preserve"><value>Video material</value></data>
+  <data name="AudioMaterial" xml:space="preserve"><value>Audio material</value></data>
+  <data name="ImageMaterial" xml:space="preserve"><value>Image material</value></data>
+  <data name="ThreeDMaterial" xml:space="preserve"><value>3D material</value></data>
+  <data name="Folder" xml:space="preserve"><value>Folder</value></data>
+  <data name="DigitizedMaterial" xml:space="preserve"><value>Digitized material</value></data>
+  <data name="Crossword" xml:space="preserve"><value>Crossword</value></data>
+  <data name="MatchingPairsGame" xml:space="preserve"><value>Matching pairs game</value></data>
+  <data name="Quiz" xml:space="preserve"><value>Quiz</value></data>
+
+  <data name="Filters" xml:space="preserve"><value>Filters</value></data>
+  <data name="Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="ClearFilters" xml:space="preserve"><value>Clear filters</value></data>
 </root>

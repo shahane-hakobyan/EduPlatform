@@ -1,11 +1,19 @@
 ﻿@model EduPlatform.ViewModels.MaterialCardViewModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 
-<div class="material-card-wide">
+<div class="material-card-wide" data-saved-key="@Model.MaterialType-@Model.Id"
+     data-f-subject="@string.Join("|", Model.Subjects)"
+     data-f-grade="@string.Join("|", Model.Grades)"
+     data-f-author="@string.Join("|", Model.Authors.Split(", ", StringSplitOptions.RemoveEmptyEntries))"
+     data-f-year="@Model.Year"
+     data-f-publisher="@Model.Publisher"
+     data-f-language="@Model.Language"
+     data-f-type="@Model.TypeLabel"
+     data-f-search="@((Model.Title + " " + Model.Authors + " " + Model.Publisher).ToLowerInvariant())">
     <div class="material-card-wide-image material-card-cover" data-full-image="@Model.ThumbnailUrl">
         @if (!string.IsNullOrEmpty(Model.ThumbnailUrl))
         {
-            <img src="@Model.ThumbnailUrl" alt="@string.Join(", ", Model.Subjects)" />
+            <img src="@Model.ThumbnailUrl" alt="@Model.Title" />
         }
         else
         {
@@ -19,6 +27,7 @@
     </div>
 
     <div class="material-card-wide-content">
+        <h3 class="material-card-wide-title" title="@Model.Title">@Model.Title</h3>
         @if (Model.Subjects.Any())
         {
             <span class="material-card-subject-chip" data-bs-toggle="tooltip" data-bs-placement="top" title="@string.Join(", ", Model.Subjects)">@string.Join(", ", Model.Subjects)</span>
@@ -36,17 +45,30 @@
                 <span><i class="bi bi-mortarboard-fill"></i> @string.Join(", ", Model.Grades)</span>
             }
             <span><i class="bi bi-calendar3"></i> @Model.Year</span>
-            <span><i class="bi bi-file-earmark-text"></i> @Model.Pages @Localizer["Pages"]</span>
+            @if (Model.Pages > 0)
+            {
+                <span><i class="bi bi-file-earmark-text"></i> @Model.Pages @Localizer["Pages"]</span>
+            }
+            @if (!string.IsNullOrEmpty(Model.TypeLabel))
+            {
+                <span><i class="bi bi-tag"></i> @Model.TypeLabel</span>
+            }
         </div>
 
         <div class="material-card-actions">
-            <a href="@Model.ViewUrl" class="material-card-view-btn d-flex align-items-center justify-content-center gap-2" target="_blank" rel="noopener noreferrer">
-                <i class="bi bi-eye"></i> @Localizer["View"]
-            </a>
-            <a href="@Model.DownloadUrl" download class="material-card-download-btn d-flex align-items-center justify-content-center">
-                <i class="bi bi-download"></i>
-            </a>
-            <button type="button" class="material-card-delete-btn d-flex align-items-center justify-content-center" data-material-id="@Model.Id" data-confirm-text="@Localizer["ConfirmDeleteMaterial"]" title="@Localizer["Delete"]">
+            @if (!string.IsNullOrEmpty(Model.ViewUrl))
+            {
+                <a href="@Model.ViewUrl" class="material-card-view-btn d-flex align-items-center justify-content-center gap-2" target="_blank" rel="noopener noreferrer">
+                    <i class="bi bi-eye"></i> @Localizer["View"]
+                </a>
+            }
+            @if (!string.IsNullOrEmpty(Model.DownloadUrl))
+            {
+                <a href="@Model.DownloadUrl" download class="material-card-download-btn d-flex align-items-center justify-content-center">
+                    <i class="bi bi-download"></i>
+                </a>
+            }
+            <button type="button" class="material-card-delete-btn d-flex align-items-center justify-content-center" data-type="@Model.MaterialType" data-id="@Model.Id" data-confirm-text="@Localizer["ConfirmDeleteMaterial"]" title="@Localizer["Remove"]">
                 <i class="bi bi-trash"></i>
             </button>
         </div>

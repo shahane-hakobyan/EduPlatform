@@ -28,6 +28,11 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ILibraryApiClient, LibraryApiClient>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["LibraryApi:BaseUrl"]!.TrimEnd('/') + "/");
+
+    // Library.Api-ն Production-ում ընդունում է միայն բանալիով հարցումներ
+    var apiKey = builder.Configuration["LibraryApi:ApiKey"];
+    if (!string.IsNullOrEmpty(apiKey))
+        c.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
 });
 
 builder.Services.AddScoped<IIpGeolocationService, IpGeolocationService>();
