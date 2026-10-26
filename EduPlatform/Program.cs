@@ -98,4 +98,15 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=MainPage}/{id?}")
     .WithStaticAssets();
 
+// ԺԱՄԱՆԱԿԱՎՈՐ՝ ստուգելու համար, թե սերվերում ինչ build և ինչ կարգավորում է աշխատում: Ստուգելուց հետո ջնջել:
+app.MapGet("/diag", (HttpContext ctx) => Results.Json(new
+{
+    environment = app.Environment.EnvironmentName,
+    demoAutoLogin = builder.Configuration.GetValue<bool>("DemoAutoLogin"),
+    autoLoginActive = autoLogin,
+    authenticated = ctx.User.Identity?.IsAuthenticated == true,
+    scheme = ctx.User.Identity?.AuthenticationType,
+    name = ctx.User.Identity?.Name,
+    isTeacher = ctx.User.IsInRole("Teacher")
+}));
 app.Run();
