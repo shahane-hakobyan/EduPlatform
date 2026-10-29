@@ -5,6 +5,9 @@
         public List<AssignmentCardViewModel> Assignments { get; set; } = new();
         public string CreateUrl { get; set; } = "#";
 
+        /// <summary>Ֆիլտրերը՝ կազմվում են ուղարկված առաջադրանքների արժեքներից</summary>
+        public List<MaterialFilterOption> Filters { get; set; } = new();
+
         public List<AssignmentCardViewModel> Active => Assignments.Where(a => !a.IsArchived).ToList();
         public List<AssignmentCardViewModel> Archived => Assignments.Where(a => a.IsArchived).ToList();
     }
@@ -17,6 +20,12 @@
         public string Grade { get; set; } = "";
         public string Type { get; set; } = "";
         public string GradingType { get; set; } = "";
+
+        // առանձին արժեքներ՝ ֆիլտրերի համար (վերևի տողերը ցուցադրելու համար են)
+        public List<string> SubjectList { get; set; } = new();
+        public List<string> GradeList { get; set; } = new();
+        public List<string> TypeList { get; set; } = new();
+
         public DateTime DueDate { get; set; }
         public int ParticipantCount { get; set; }
         public int CompletedCount { get; set; }

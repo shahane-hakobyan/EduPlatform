@@ -68,12 +68,44 @@
         });
     });
 
-    // --- File dropzone ---
+    // --- Multi-select pills (assignment type) ---
+    document.querySelectorAll('[data-multi-select]').forEach(function (row) {
+        const fieldName = row.getAttribute('data-field-name');
+        const container = row.parentElement;
+        const otherValue = '32';   // AssignmentTypes.Other
+        const otherWrap = document.getElementById('caOtherTypeWrap');
+
+        row.querySelectorAll('button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const value = btn.getAttribute('data-value');
+                const nowActive = !btn.classList.contains('active');
+                btn.classList.toggle('active', nowActive);
+
+                const existing = container.querySelector('input[type="hidden"][name="' + fieldName + '"][value="' + value + '"]');
+                if (nowActive && !existing) {
+                    const hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = fieldName;
+                    hidden.value = value;
+                    container.appendChild(hidden);
+                } else if (!nowActive && existing) {
+                    existing.remove();
+                }
+
+                // «Այլ» ընտրելիս բացվում է տեքստի դաշտը
+                if (value === otherValue && otherWrap) {
+                    otherWrap.style.display = nowActive ? '' : 'none';
+                }
+            });
+        });
+    });
+
+    // --- File dropzone (մի քանի ֆայլ) ---
     const fileInput = document.getElementById('caFileInput');
     const fileNameEl = document.getElementById('caFileName');
     if (fileInput) {
         fileInput.addEventListener('change', function () {
-            fileNameEl.textContent = fileInput.files.length ? fileInput.files[0].name : '';
+            fileNameEl.textContent = Array.from(fileInput.files).map(function (f) { return f.name; }).join(', ');
         });
     }
 
@@ -147,6 +179,33 @@
                 const name = item.querySelector('.ca-pupil-name').textContent.toLowerCase();
                 item.style.display = name.includes(q) ? '' : 'none';
             });
+        });
+    }
+
+    // --- Ուղարկելուց առաջ՝ պարտադիր դաշտերի ստուգում ---
+    const form = document.getElementById('createAssignmentForm');
+    const clientError = document.getElementById('caClientError');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            const has = function (name) { return form.querySelectorAll('input[type="hidden"][name="' + name + '"]').length > 0; };
+            const typesHasOther = !!form.querySelector('input[type="hidden"][name="Types"][value="32"]');
+            const otherText = form.querySelector('input[name="OtherTypeText"]');
+
+            const ok =
+                has('SubjectIds') &&
+                has('GradeLevels') &&
+                has('Types') &&
+                (!typesHasOther || (otherText && otherText.value.trim() !== '')) &&
+                has('GradingType') && form.querySelector('input[name="GradingType"]').value !== '' &&
+                (form.querySelector('[name="AllowTextAnswer"]').checked || form.querySelector('[name="AllowFileAnswer"]').checked);
+
+            if (!ok) {
+                e.preventDefault();
+                if (clientError) {
+                    clientError.style.display = '';
+                    clientError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
         });
     }
 

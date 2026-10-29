@@ -5,7 +5,7 @@
     var totalPupils = Model.ClassGroups.Sum(g => g.Pupils.Count);
 }
 
-<form id="createAssignmentForm" method="post" action="@Model.SubmitUrl" class="create-assignment-page">
+<form id="createAssignmentForm" method="post" action="@Model.SubmitUrl" enctype="multipart/form-data" class="create-assignment-page">
     <div class="ca-topbar d-flex align-items-center gap-3 mb-3">
         <a href="@Model.CancelUrl" class="ca-back-btn d-flex align-items-center justify-content-center">
             <i class="bi bi-arrow-left"></i>
@@ -18,6 +18,12 @@
             <i class="bi bi-people"></i> <span id="caSelectedCountTop">0</span> @Localizer["SelectedPupilsSuffix"]
         </span>
     </div>
+
+    @if (!string.IsNullOrEmpty(Model.Error))
+    {
+        <div class="ca-error">@Model.Error</div>
+    }
+    <div class="ca-error" id="caClientError" style="display:none">@Localizer["AssignmentFormIncomplete"]</div>
 
     <div class="ca-section-card">
         <div class="ca-section-head">
@@ -53,12 +59,12 @@
 
             <div class="ca-field">
                 <label class="ca-label">@Localizer["Grade"] <span class="ca-required">*</span></label>
-                <div class="ca-chip-input" data-chip-input data-field-name="GradeIds">
+                <div class="ca-chip-input" data-chip-input data-field-name="GradeLevels">
                     <div class="ca-chip-list"></div>
                     <input type="text" class="ca-chip-search" placeholder="@Localizer["GradeSearchPlaceholder"]" />
                     <i class="bi bi-chevron-down ca-chip-caret"></i>
                     <div class="ca-chip-dropdown">
-                        @foreach (var g in Model.Grades)
+                        @foreach (var g in Model.GradeLevels)
                         {
                             <div class="ca-chip-option" data-value="@g.Id" data-label="@g.Label">@g.Label</div>
                         }
@@ -69,11 +75,14 @@
             <div class="ca-field">
                 <label class="ca-label">@Localizer["AssignmentTypeSectionLabel"] <span class="ca-required">*</span></label>
                 <p class="ca-hint">@Localizer["AssignmentTypeHint"]</p>
-                <div class="ca-pill-row" data-single-select data-field-name="Type">
+                <div class="ca-pill-row" data-multi-select data-field-name="Types">
                     @foreach (var t in Model.AssignmentTypes)
                     {
-                        <button type="button" class="ca-pill-btn" data-value="@t">@t</button>
+                        <button type="button" class="ca-pill-btn" data-value="@t.Id">@t.Label</button>
                     }
+                </div>
+                <div id="caOtherTypeWrap" class="mt-2" style="display:none">
+                    <input type="text" name="OtherTypeText" class="ca-input" maxlength="500" placeholder="@Localizer["OtherTypePlaceholder"]" />
                 </div>
             </div>
 
@@ -82,8 +91,8 @@
                 <div class="ca-radio-row" data-single-select data-field-name="GradingType">
                     @foreach (var g in Model.GradingTypes)
                     {
-                        <button type="button" class="ca-radio-btn">
-                            <span class="ca-radio-dot"></span> @g
+                        <button type="button" class="ca-radio-btn" data-value="@g.Id">
+                            <span class="ca-radio-dot"></span> @g.Label
                         </button>
                     }
                 </div>
@@ -140,7 +149,7 @@
         </div>
         <div class="ca-section-body">
             <label class="ca-dropzone" for="caFileInput">
-                <input type="file" id="caFileInput" name="Attachment" hidden />
+                <input type="file" id="caFileInput" name="Attachments" multiple hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.png,.jpg,.jpeg,.zip" />
                 <div class="ca-dropzone-icon"><i class="bi bi-cloud-arrow-up"></i></div>
                 <div class="ca-dropzone-cta">@Localizer["DropzoneCta"]</div>
                 <div class="ca-dropzone-hint">@Localizer["DropzoneHint"]</div>
@@ -198,7 +207,7 @@
                                 @foreach (var pupil in group.Pupils)
                                 {
                                     <label class="ca-pupil-item">
-                                        <input type="checkbox" name="PupilIds" value="@pupil.Name" data-pupil-checkbox />
+                                        <input type="checkbox" name="PupilIds" value="@pupil.UserId" data-pupil-checkbox />
                                         <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
                                         <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
                                         <span class="ca-pupil-name">@pupil.Name</span>

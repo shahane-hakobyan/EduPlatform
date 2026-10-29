@@ -67,8 +67,10 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+// EF-ի գործիքները (Add-Migration) հավելվածը միայն մոդելը կարդալու համար են գործարկում՝ այդ ժամանակ migration չենք կատարում
+if (!EF.IsDesignTime)
 {
+    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<EduPlatformDbContext>();
     db.Database.Migrate();
 }

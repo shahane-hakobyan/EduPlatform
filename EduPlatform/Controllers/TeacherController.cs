@@ -379,26 +379,145 @@ namespace EduPlatform.Controllers
         }
 
         [HttpGet]
-        public IActionResult Repository(string id)
+        public async Task<IActionResult> Repository(string id)
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
             ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
 
-            return id switch
+            switch (id)
             {
-                "MyTools" => View("~/Views/Teacher/Repository/MyTools.cshtml", new ToolsPageViewModel
+                case "MyTools":
+                    return View("~/Views/Teacher/Repository/MyTools.cshtml", new ToolsPageViewModel
+                    {
+                        Tools = new(),
+                        AddToolUrl = $"{_config["Authentication:Authority"]}/Tools"
+                    });
+
+                case "Assignments":
+                    return View("~/Views/Teacher/Repository/Assignments.cshtml", await BuildAssignmentsPage());
+
+                case "AssignmentBank":
+                    return View("~/Views/Teacher/Repository/AssignmentBank.cshtml");
+
+                default:
+                    return NotFound();
+            }
+        }
+
+        // ── «Տրված առաջադրանքներ» ────────────────────────────────────────────
+
+        private string AssignmentTypeLabel(AssignmentTypes type, string? otherText) => type switch
+        {
+            AssignmentTypes.Test => _l["AssignmentTypeTest"].Value,
+            AssignmentTypes.Practical => _l["AssignmentTypePractical"].Value,
+            AssignmentTypes.Laboratory => _l["AssignmentTypeLaboratory"].Value,
+            AssignmentTypes.Project => _l["AssignmentTypeProject"].Value,
+            AssignmentTypes.Homework => _l["AssignmentTypeHomework"].Value,
+            AssignmentTypes.Other => string.IsNullOrWhiteSpace(otherText) ? _l["AssignmentTypeOther"].Value : otherText.Trim(),
+            _ => ""
+        };
+
+        private string GradingTypeLabel(AssignmentGradingType type) => type switch
+        {
+            AssignmentGradingType.Diagnostic => _l["GradingDiagnostic"].Value,
+            AssignmentGradingType.Formative => _l["GradingFormative"].Value,
+            AssignmentGradingType.CurrentScore => _l["GradingCurrentScore"].Value,
+            _ => ""
+        };
+
+        private async Task<AssignmentsPageViewModel> BuildAssignmentsPage()
+        {
+            var rows = await _db.Assignments
+                .Where(a => a.TeacherUserId == CurrentTeacherUserId && !a.IsTemplate)
+                .OrderBy(a => a.DueDate)
+                .Select(a => new
                 {
-                    Tools = new(),
-                    AddToolUrl = $"{_config["Authentication:Authority"]}/Tools"
-                }),
-                "Assignments" => View("~/Views/Teacher/Repository/Assignments.cshtml", new AssignmentsPageViewModel
+                    a.Id,
+                    a.Title,
+                    a.Types,
+                    a.OtherTypeText,
+                    a.GradingType,
+                    a.StartDate,
+                    a.DueDate,
+                    a.IsArchived,
+                    Subjects = a.Subjects.Select(s => s.Subject.Name).ToList(),
+                    Levels = a.GradeLevels.Select(g => g.Level).OrderBy(l => l).ToList(),
+                    Participants = a.Recipients.Count(),
+                    Completed = a.Recipients.Count(r => r.Status != AssignmentRecipientStatus.Sent),
+                    Graded = a.Recipients.Count(r => r.Status == AssignmentRecipientStatus.Graded)
+                })
+                .ToListAsync();
+
+            var cards = rows.Select(r =>
+            {
+                var typeList = Enum.GetValues<AssignmentTypes>()
+                    .Where(t => t != AssignmentTypes.None && r.Types.HasFlag(t))
+                    .Select(t => AssignmentTypeLabel(t, r.OtherTypeText))
+                    .ToList();
+
+                var gradeList = r.Levels.Select(l => _l["GradeLevelFormat", l].Value).ToList();
+
+                return new AssignmentCardViewModel
                 {
-                    Assignments = new(),
-                    CreateUrl = Url.Action(nameof(CreateAssignment))!
-                }),
-                "AssignmentBank" => View("~/Views/Teacher/Repository/AssignmentBank.cshtml"),
-                _ => NotFound()
+                    Id = r.Id,
+                    Title = r.Title,
+                    Subject = string.Join(", ", r.Subjects),
+                    Grade = string.Join(", ", gradeList),
+                    Type = string.Join(", ", typeList),
+                    GradingType = GradingTypeLabel(r.GradingType),
+                    SubjectList = r.Subjects,
+                    GradeList = gradeList,
+                    TypeList = typeList,
+                    DueDate = r.DueDate ?? r.StartDate ?? DateTime.Today,
+                    ParticipantCount = r.Participants,
+                    CompletedCount = r.Completed,
+                    GradedCount = r.Graded,
+                    IsArchived = r.IsArchived,
+                    ViewUrl = Url.Action(nameof(AssignmentDetail), new { id = r.Id })!
+                };
+            }).ToList();
+
+            var filters = new List<MaterialFilterOption>
+            {
+                new() { Key = "subject", Label = _l["Subject"], Options = cards.SelectMany(c => c.SubjectList).Distinct().OrderBy(v => v).ToList() },
+                new()
+                {
+                    Key = "grade", Label = _l["Grade"],
+                    Options = rows.SelectMany(r => r.Levels).Distinct().OrderBy(l => l).Select(l => _l["GradeLevelFormat", l].Value).ToList()
+                },
+                new() { Key = "type", Label = _l["AssignmentTypeSectionLabel"], Options = cards.SelectMany(c => c.TypeList).Distinct().OrderBy(v => v).ToList() },
+                new() { Key = "gradingtype", Label = _l["GradingTypeSectionLabel"], Options = cards.Select(c => c.GradingType).Distinct().OrderBy(v => v).ToList() },
+                new()
+                {
+                    Key = "duedate", Label = _l["DueDate"],
+                    Options = cards.Select(c => c.DueDate.Date).Distinct().OrderBy(d => d).Select(d => d.ToString("dd.MM.yyyy")).ToList()
+                }
             };
+
+            return new AssignmentsPageViewModel
+            {
+                Assignments = cards,
+                Filters = filters.Where(f => f.Options.Count > 0).ToList(),
+                CreateUrl = Url.Action(nameof(CreateAssignment))!
+            };
+        }
+
+        public record ArchiveAssignmentRequest(int Id);
+
+        // «Արխիվացնել»՝ ընթացիկ առաջադրանքը տեղափոխվում է «Արխիվացված»
+        [HttpPost]
+        public async Task<IActionResult> ArchiveAssignment([FromBody] ArchiveAssignmentRequest req)
+        {
+            var affected = await _db.Assignments
+                .Where(a => a.Id == req.Id
+                         && a.TeacherUserId == CurrentTeacherUserId
+                         && !a.IsTemplate
+                         && !a.IsArchived)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(a => a.IsArchived, true)
+                    .SetProperty(a => a.ArchivedAt, DateTime.Now));
+
+            return affected > 0 ? Ok() : NotFound();
         }
 
         [HttpGet]
@@ -476,93 +595,338 @@ namespace EduPlatform.Controllers
             return View("~/Views/Shared/Materials/OtherBooks.cshtml", tabs);
         }
 
+        // ── Առաջադրանքի ստեղծում ─────────────────────────────────────────────
+
+        private const int MaxAttachments = 10;
+        private const long MaxAttachmentBytes = 25L * 1024 * 1024;
+
+        private static readonly HashSet<string> AllowedAttachmentExtensions = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt",
+            ".png", ".jpg", ".jpeg", ".zip"
+        };
+
+        private string AssignmentFilesRoot()
+        {
+            var configured = _config["AssignmentFiles:RootPath"];
+            if (!string.IsNullOrWhiteSpace(configured)) return configured;
+
+            var env = HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
+            return Path.Combine(env.ContentRootPath, "App_Data", "assignment-files");
+        }
+
+        private async Task<CreateAssignmentViewModel> BuildCreateAssignmentViewModel(string? error = null)
+        {
+            var subjects = await _db.TeacherSubjects
+                .Where(ts => ts.TeacherUserId == CurrentTeacherUserId)
+                .Select(ts => new SelectOption { Id = ts.SubjectId, Label = ts.Subject.Name })
+                .OrderBy(s => s.Label)
+                .ToListAsync();
+
+            // Մինչև AuthServer-ի հետ ինտեգրումը ուսուցչի առարկաների ցանկը կարող է դատարկ լինել՝ ցույց ենք տալիս բոլորը
+            if (subjects.Count == 0)
+            {
+                subjects = await _db.Subjects
+                    .Select(s => new SelectOption { Id = s.Id, Label = s.Name })
+                    .OrderBy(s => s.Label)
+                    .ToListAsync();
+            }
+
+            // Ուսուցչի դասարանները (վերջին ուսումնական տարով) և նրանց աշակերտները
+            var teacherGrades = (await _db.TeacherGrades
+                    .Where(tg => tg.TeacherUserId == CurrentTeacherUserId)
+                    .Select(tg => new { tg.GradeId, tg.Grade.GradeName, tg.AcademicYear })
+                    .ToListAsync())
+                .GroupBy(g => g.GradeId)
+                .Select(g => g.OrderByDescending(x => x.AcademicYear).First())
+                .OrderBy(g => g.GradeName)
+                .ToList();
+
+            var gradeIds = teacherGrades.Select(g => g.GradeId).ToList();
+            var pupilRows = await _db.PupilGrades
+                .Where(pg => gradeIds.Contains(pg.GradeId))
+                .Select(pg => new { pg.PupilUserId, pg.GradeId, pg.AcademicYear })
+                .ToListAsync();
+
+            var classGroups = teacherGrades.Select(g => new AssignmentClassGroupViewModel
+            {
+                GradeId = g.GradeId,
+                GradeName = g.GradeName,
+                // Անուններն ու նկարները AuthServer-ում են՝ առայժմ տեղապահներ
+                Pupils = pupilRows
+                    .Where(p => p.GradeId == g.GradeId && p.AcademicYear == g.AcademicYear)
+                    .OrderBy(p => p.PupilUserId)
+                    .Select((p, i) => new RosterPupilViewModel
+                    {
+                        UserId = p.PupilUserId,
+                        Name = $"{_l["Pupil"]} {i + 1}",
+                        PhotoUrl = "/images/avatar-placeholder.jpg"
+                    })
+                    .ToList()
+            }).ToList();
+
+            return new CreateAssignmentViewModel
+            {
+                Subjects = subjects,
+                GradeLevels = Enumerable.Range(1, 12)
+                    .Select(l => new SelectOption { Id = l, Label = _l["GradeLevelFormat", l].Value })
+                    .ToList(),
+                AssignmentTypes = new()
+                {
+                    new() { Id = (int)AssignmentTypes.Test, Label = _l["AssignmentTypeTest"] },
+                    new() { Id = (int)AssignmentTypes.Practical, Label = _l["AssignmentTypePractical"] },
+                    new() { Id = (int)AssignmentTypes.Laboratory, Label = _l["AssignmentTypeLaboratory"] },
+                    new() { Id = (int)AssignmentTypes.Project, Label = _l["AssignmentTypeProject"] },
+                    new() { Id = (int)AssignmentTypes.Homework, Label = _l["AssignmentTypeHomework"] },
+                    new() { Id = (int)AssignmentTypes.Other, Label = _l["AssignmentTypeOther"] }
+                },
+                GradingTypes = new()
+                {
+                    new() { Id = (int)AssignmentGradingType.Diagnostic, Label = _l["GradingDiagnostic"] },
+                    new() { Id = (int)AssignmentGradingType.Formative, Label = _l["GradingFormative"] },
+                    new() { Id = (int)AssignmentGradingType.CurrentScore, Label = _l["GradingCurrentScore"] }
+                },
+                ClassGroups = classGroups,
+                SubmitUrl = Url.Action(nameof(CreateAssignment))!,
+                CancelUrl = Url.Action(nameof(Repository), new { id = "Assignments" })!,
+                Error = error
+            };
+        }
+
         [HttpGet]
-        public IActionResult CreateAssignment()
+        public async Task<IActionResult> CreateAssignment()
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
             ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
 
-            var grades = _db.TeacherGrades
-                .Where(tg => tg.TeacherUserId == CurrentTeacherUserId)
-                .Select(tg => new SelectOption { Id = tg.GradeId, Label = tg.Grade.GradeName })
-                .ToList();
-
-            var vm = new CreateAssignmentViewModel
-            {
-                Subjects = _db.TeacherSubjects
-                    .Where(ts => ts.TeacherUserId == CurrentTeacherUserId)
-                    .Select(ts => new SelectOption { Id = ts.SubjectId, Label = ts.Subject.Name })
-                    .ToList(),
-                Grades = grades,
-                AssignmentTypes = new() { "Թեստային", "Գործնական", "Լաբորատոր", "Նախագծային", "Տնային Աշխատանք", "Այլ" },
-                GradingTypes = new() { "Հայտորոշիչ", "Ձևավորող", "Ամփոփիչ" },
-                ClassGroups = grades.Select(g => new AssignmentClassGroupViewModel
-                {
-                    GradeId = g.Id,
-                    GradeName = g.Label,
-                    Pupils = Enumerable.Range(1, 8).Select(i => new RosterPupilViewModel
-                    {
-                        Name = $"{_l["Pupil"]} {i}",
-                        PhotoUrl = "/images/avatar-placeholder.jpg"
-                    }).ToList()
-                }).ToList(),
-                SubmitUrl = Url.Action(nameof(CreateAssignment))!,
-                CancelUrl = Url.Action(nameof(Repository), new { id = "Assignments" })!
-            };
-
-            return View("~/Views/Teacher/Repository/CreateAssignment.cshtml", vm);
+            return View("~/Views/Teacher/Repository/CreateAssignment.cshtml", await BuildCreateAssignmentViewModel());
         }
 
         [HttpPost]
-        public IActionResult CreateAssignment(CreateAssignmentViewModel _)
+        [RequestSizeLimit(150_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 150_000_000)]
+        public async Task<IActionResult> CreateAssignment(CreateAssignmentRequest req)
         {
-            // No Assignment entity/table exists yet — this just returns to the list.
-            // Wire this up to a real save once the Assignment model + migration are added.
+            // ── ստուգում ─────────────────────────────────────────────────────
+            var types = req.Types
+                .Where(t => t != 0 && Enum.IsDefined(typeof(AssignmentTypes), t))
+                .Aggregate(AssignmentTypes.None, (acc, t) => acc | (AssignmentTypes)t);
+
+            var levels = req.GradeLevels.Where(l => l >= 1 && l <= 12).Distinct().ToList();
+            var subjectIds = req.SubjectIds.Distinct().ToList();
+            var pupilIds = req.PupilIds.Where(p => !string.IsNullOrWhiteSpace(p)).Distinct().ToList();
+
+            var forms = (req.AllowTextAnswer ? AssignmentResponseForms.Text : AssignmentResponseForms.None)
+                      | (req.AllowFileAnswer ? AssignmentResponseForms.File : AssignmentResponseForms.None);
+
+            var incomplete =
+                string.IsNullOrWhiteSpace(req.Title)
+                || subjectIds.Count == 0
+                || levels.Count == 0
+                || types == AssignmentTypes.None
+                || (types.HasFlag(AssignmentTypes.Other) && string.IsNullOrWhiteSpace(req.OtherTypeText))
+                || !Enum.IsDefined(typeof(AssignmentGradingType), req.GradingType)
+                || forms == AssignmentResponseForms.None
+                || pupilIds.Count == 0
+                || req.DueDate <= req.StartDate;
+
+            // ընտրված աշակերտները պետք է լինեն ՄԻԱՅՆ այս ուսուցչի դասարաններից
+            var teacherGradeIds = await _db.TeacherGrades
+                .Where(tg => tg.TeacherUserId == CurrentTeacherUserId)
+                .Select(tg => tg.GradeId)
+                .ToListAsync();
+
+            var pupilGrades = new List<(string PupilUserId, int GradeId)>();
+            var validSubjectIds = new List<int>();
+
+            if (!incomplete)
+            {
+                pupilGrades = (await _db.PupilGrades
+                        .Where(pg => pupilIds.Contains(pg.PupilUserId) && teacherGradeIds.Contains(pg.GradeId))
+                        .Select(pg => new { pg.PupilUserId, pg.GradeId })
+                        .ToListAsync())
+                    .GroupBy(p => p.PupilUserId)
+                    .Select(g => (PupilUserId: g.Key, GradeId: g.First().GradeId))
+                    .ToList();
+
+                validSubjectIds = await _db.Subjects
+                    .Where(s => subjectIds.Contains(s.Id))
+                    .Select(s => s.Id)
+                    .ToListAsync();
+            }
+
+            if (incomplete || pupilGrades.Count == 0 || validSubjectIds.Count == 0)
+            {
+                ViewBag.SidebarItems = _menuBuilder.ForTeacher();
+                ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+                return View("~/Views/Teacher/Repository/CreateAssignment.cshtml",
+                    await BuildCreateAssignmentViewModel(_l["AssignmentFormIncomplete"]));
+            }
+
+            // ── կցված ֆայլերը (սերվերի ֆայլային պահոցում) ─────────────────────
+            var attachments = req.Attachments.Where(f => f.Length > 0).ToList();
+            if (attachments.Count > MaxAttachments
+                || attachments.Any(f => f.Length > MaxAttachmentBytes
+                                        || !AllowedAttachmentExtensions.Contains(Path.GetExtension(f.FileName))))
+            {
+                ViewBag.SidebarItems = _menuBuilder.ForTeacher();
+                ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+                return View("~/Views/Teacher/Repository/CreateAssignment.cshtml",
+                    await BuildCreateAssignmentViewModel(_l["AssignmentFormIncomplete"]));
+            }
+
+            var root = AssignmentFilesRoot();
+            Directory.CreateDirectory(root);
+
+            var storedFiles = new List<(string FileName, string StoredName, string ContentType, long Size)>();
+            try
+            {
+                foreach (var file in attachments)
+                {
+                    var stored = $"{Guid.NewGuid():N}{Path.GetExtension(file.FileName).ToLowerInvariant()}";
+                    await using (var stream = System.IO.File.Create(Path.Combine(root, stored)))
+                        await file.CopyToAsync(stream);
+
+                    storedFiles.Add((Path.GetFileName(file.FileName), stored, file.ContentType, file.Length));
+                }
+
+                // ── պահպանում՝ ձևանմուշ (շտեմարան) + ուղարկված առաջադրանք ─────────
+                var now = DateTime.Now;
+
+                Assignment Make(bool isTemplate) => new()
+                {
+                    TeacherUserId = CurrentTeacherUserId,
+                    IsTemplate = isTemplate,
+                    Title = req.Title.Trim(),
+                    Description = string.IsNullOrWhiteSpace(req.Description) ? null : req.Description.Trim(),
+                    Types = types,
+                    OtherTypeText = types.HasFlag(AssignmentTypes.Other) ? req.OtherTypeText!.Trim() : null,
+                    GradingType = (AssignmentGradingType)req.GradingType,
+                    ResponseForms = forms,
+                    StartDate = isTemplate ? null : req.StartDate,
+                    DueDate = isTemplate ? null : req.DueDate,
+                    CreatedAt = now,
+                    UpdatedAt = now,
+                    Subjects = validSubjectIds.Select(id => new AssignmentSubject { SubjectId = id }).ToList(),
+                    GradeLevels = levels.Select(l => new AssignmentGradeLevel { Level = l }).ToList(),
+                    Files = storedFiles.Select(f => new AssignmentFile
+                    {
+                        FileName = f.FileName,
+                        StoredFileName = f.StoredName,
+                        ContentType = f.ContentType,
+                        SizeBytes = f.Size,
+                        UploadedAt = now
+                    }).ToList()
+                };
+
+                var template = Make(true);
+                var sent = Make(false);
+                sent.Template = template;
+                sent.Recipients = pupilGrades.Select(p => new AssignmentRecipient
+                {
+                    PupilUserId = p.PupilUserId,
+                    GradeId = p.GradeId,
+                    Status = AssignmentRecipientStatus.Sent,
+                    SentAt = now
+                }).ToList();
+
+                _db.Assignments.AddRange(template, sent);
+                await _db.SaveChangesAsync();
+            }
+            catch
+            {
+                // բազայի սխալի դեպքում ջնջում ենք արդեն գրված ֆայլերը
+                foreach (var f in storedFiles)
+                {
+                    try { System.IO.File.Delete(Path.Combine(root, f.StoredName)); } catch { }
+                }
+                throw;
+            }
+
             return RedirectToAction(nameof(Repository), new { id = "Assignments" });
         }
 
         [HttpGet]
-        public IActionResult AssignmentDetail(int id)
+        public async Task<IActionResult> AssignmentDetail(int id)
         {
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
             ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
 
+            var a = await _db.Assignments
+                .Where(x => x.Id == id && x.TeacherUserId == CurrentTeacherUserId && !x.IsTemplate)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.Title,
+                    x.Description,
+                    x.Types,
+                    x.OtherTypeText,
+                    x.GradingType,
+                    x.StartDate,
+                    x.DueDate,
+                    x.IsArchived,
+                    x.CreatedAt,
+                    Subjects = x.Subjects.Select(s => s.Subject.Name).ToList(),
+                    Levels = x.GradeLevels.Select(g => g.Level).OrderBy(l => l).ToList(),
+                    Recipients = x.Recipients.OrderBy(r => r.Id).Select(r => new
+                    {
+                        r.Id,
+                        r.PupilUserId,
+                        r.Status,
+                        r.SubmittedAt,
+                        r.AnswerText,
+                        r.Score,
+                        r.Feedback,
+                        GradeName = r.Grade != null ? r.Grade.GradeName : ""
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            if (a == null) return NotFound();
+
+            var typeLabels = Enum.GetValues<AssignmentTypes>()
+                .Where(t => t != AssignmentTypes.None && a.Types.HasFlag(t))
+                .Select(t => AssignmentTypeLabel(t, a.OtherTypeText));
+
             var vm = new AssignmentDetailViewModel
             {
-                Id = id,
-                Title = "Ծաղիկի կառուցվածք",
-                Subject = "Կենսաբանություն",
-                Grade = "9-րդ դասարան",
-                Type = "Գործնական",
-                GradingType = "Ձևավորող",
-                StartDate = new DateTime(2028, 3, 8),
-                DueDate = new DateTime(2028, 3, 15),
-                Description = "պատասխան ",
+                Id = a.Id,
+                Title = a.Title,
+                Subject = string.Join(", ", a.Subjects),
+                Grade = string.Join(", ", a.Levels.Select(l => _l["GradeLevelFormat", l].Value)),
+                Type = string.Join(", ", typeLabels),
+                GradingType = GradingTypeLabel(a.GradingType),
+                StartDate = a.StartDate ?? a.CreatedAt,
+                DueDate = a.DueDate ?? a.StartDate ?? a.CreatedAt,
+                Description = a.Description ?? "",
+                IsArchived = a.IsArchived,
                 ArchiveUrl = "#",
-                Submissions = new()
-        {
-            new() {
-                Id = 1, PupilName = "Լուսինե Գրիգորյան", PhotoUrl = "/images/avatar-placeholder.jpg",
-                GradeName = "9-րդ դասարան", GroupName = "Խումբ Ա",
-                SubmittedDate = new DateTime(2028, 3, 10), Status = "Graded",
-                Score = 7, MaxScore = 10, ScoreFeedback = "Կարելի է ավելի լավ",
-                AttachmentFileName = "Լուսինե Գրիգորյան.pdf", AttachmentUrl = "#",
-                GradingMode = "Point"
-            },
-            new() {
-                Id = 2, PupilName = "Լիլիթ Բադոյան", PhotoUrl = "/images/avatar-placeholder.jpg",
-                GradeName = "9-րդ դասարան", GroupName = "Խումբ Ա",
-                SubmittedDate = new DateTime(2028, 3, 11), Status = "Submitted",
-                AttachmentFileName = "Լիլիթ Բադոյան.pdf", AttachmentUrl = "#",
-                GradingMode = "Formative"
-            },
-        }
+                Submissions = a.Recipients.Select((r, i) => new PupilSubmissionViewModel
+                {
+                    Id = r.Id,
+                    PupilName = $"{_l["Pupil"]} {i + 1}",
+                    PhotoUrl = "/images/avatar-placeholder.jpg",
+                    GradeName = r.GradeName,
+                    GroupName = "",
+                    SubmittedDate = r.SubmittedAt,
+                    Status = r.Status switch
+                    {
+                        AssignmentRecipientStatus.Graded => "Graded",
+                        AssignmentRecipientStatus.Completed => "Submitted",
+                        _ => "Pending"
+                    },
+                    Score = r.Score.HasValue ? (int)r.Score.Value : null,
+                    ScoreFeedback = r.Feedback ?? "",
+                    ProtocolText = r.Feedback ?? "",
+                    GradingMode = a.GradingType == AssignmentGradingType.CurrentScore ? "Point" : "Formative"
+                }).ToList()
             };
 
-            var grades = _db.TeacherGrades
+            // «Ավելացնել» մոդալը դեռ ժամանակավոր է (Քայլ 4d)
+            var grades = await _db.TeacherGrades
                 .Where(tg => tg.TeacherUserId == CurrentTeacherUserId)
                 .Select(tg => new SelectOption { Id = tg.GradeId, Label = tg.Grade.GradeName })
-                .ToList();
+                .ToListAsync();
 
             vm.AvailableGrades = grades.Select(g => new AssignmentClassGroupViewModel
             {
@@ -574,8 +938,6 @@ namespace EduPlatform.Controllers
                     PhotoUrl = "/images/avatar-placeholder.jpg"
                 }).ToList()
             }).ToList();
-
-            vm.AlreadyAddedPupilIds = vm.Submissions.Select(s => s.PupilName.GetHashCode()).ToList();
 
             return View(vm);
         }

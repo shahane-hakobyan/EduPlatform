@@ -8,6 +8,8 @@
 
     public class RosterPupilViewModel
     {
+        /// <summary>Աշակերտի Id-ն AuthServer-ում («sub»)</summary>
+        public string UserId { get; set; } = "";
         public string Name { get; set; } = "";
         public string PhotoUrl { get; set; } = "";
     }

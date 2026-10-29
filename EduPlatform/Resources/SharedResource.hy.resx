@@ -392,4 +392,18 @@
   <data name="Filters" xml:space="preserve"><value>Ֆիլտրեր</value></data>
   <data name="Apply" xml:space="preserve"><value>Կիրառել</value></data>
   <data name="ClearFilters" xml:space="preserve"><value>Մաքրել ֆիլտրերը</value></data>
+
+  <data name="AssignmentTypeTest" xml:space="preserve"><value>Թեստային</value></data>
+  <data name="AssignmentTypePractical" xml:space="preserve"><value>Գործնական</value></data>
+  <data name="AssignmentTypeLaboratory" xml:space="preserve"><value>Լաբորատոր</value></data>
+  <data name="AssignmentTypeProject" xml:space="preserve"><value>Նախագծային</value></data>
+  <data name="AssignmentTypeHomework" xml:space="preserve"><value>Տնային աշխատանք</value></data>
+  <data name="AssignmentTypeOther" xml:space="preserve"><value>Այլ</value></data>
+  <data name="GradingDiagnostic" xml:space="preserve"><value>Հայտորոշիչ</value></data>
+  <data name="GradingFormative" xml:space="preserve"><value>Ձևավորող</value></data>
+  <data name="GradingCurrentScore" xml:space="preserve"><value>Ընթացիկ միավորային</value></data>
+  <data name="GradeLevelFormat" xml:space="preserve"><value>{0}-րդ դասարան</value></data>
+  <data name="AssignmentFormIncomplete" xml:space="preserve"><value>Լրացրեք բոլոր պարտադիր դաշտերը և ընտրեք առնվազն մեկ աշակերտ։</value></data>
+  <data name="OtherTypePlaceholder" xml:space="preserve"><value>Գրեք առաջադրանքի տեսակը</value></data>
+  <data name="Pupil" xml:space="preserve"><value>Աշակերտ</value></data>
 </root>

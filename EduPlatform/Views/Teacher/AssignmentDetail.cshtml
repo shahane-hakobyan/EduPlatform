@@ -78,7 +78,11 @@
                         <span class="ad-badge @badgeClass">@badgeLabel</span>
                     </div>
                     <div class="ad-submission-meta">
-                        @s.GradeName &middot; @Localizer["GroupLabel"] @s.GroupName
+                        @s.GradeName
+                        @if (!string.IsNullOrEmpty(s.GroupName))
+                        {
+                            <text> &middot; @Localizer["GroupLabel"] @s.GroupName</text>
+                        }
                         @if (s.SubmittedDate.HasValue)
                         {
                             <text> &middot; @Localizer["SubmittedOn"] @s.SubmittedDate.Value.ToString("dd.MM.yyyy")</text>

@@ -1,7 +1,13 @@
 ﻿@model EduPlatform.ViewModels.AssignmentCardViewModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 
-<div class="assignment-card" data-assignment-id="@Model.Id">
+<div class="assignment-card" data-assignment-id="@Model.Id"
+     data-f-subject="@string.Join("|", Model.SubjectList)"
+     data-f-grade="@string.Join("|", Model.GradeList)"
+     data-f-type="@string.Join("|", Model.TypeList)"
+     data-f-gradingtype="@Model.GradingType"
+     data-f-duedate="@Model.DueDate.ToString("dd.MM.yyyy")"
+     data-f-search="@((Model.Title + " " + Model.Subject).ToLowerInvariant())">
     <div class="assignment-card-topbar"></div>
     <div class="assignment-card-body">
         <div class="assignment-card-head">
@@ -46,7 +52,7 @@
             </a>
             @if (!Model.IsArchived)
             {
-                <button type="button" class="assignment-archive-btn" data-confirm-text="@Localizer["ConfirmArchiveAssignment"]" title="@Localizer["ArchiveAssignment"]">
+                <button type="button" class="assignment-archive-btn" data-assignment-id="@Model.Id" data-confirm-text="@Localizer["ConfirmArchiveAssignment"]" title="@Localizer["ArchiveAssignment"]">
                     <i class="bi bi-archive"></i>
                 </button>
             }

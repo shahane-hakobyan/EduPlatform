@@ -2,13 +2,15 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 @{
     ViewData["Title"] = Localizer["Assignments"].Value;
+    var uid = Guid.NewGuid().ToString("N")[..6];
 }
 
 <div class="assignments-header d-flex align-items-start justify-content-between mb-3">
     <div>
         <h1 class="materials-title mb-1">@Localizer["ViewAssignments"]</h1>
         <p class="tools-subtitle mb-0">
-            @Model.Active.Count @Localizer["ActiveLabel"] &middot; @Model.Archived.Count @Localizer["ArchivedLabel"]
+            <span id="assignmentsActiveCount">@Model.Active.Count</span> @Localizer["ActiveLabel"] &middot;
+            <span id="assignmentsArchivedCount">@Model.Archived.Count</span> @Localizer["ArchivedLabel"]
         </p>
     </div>
     <a href="@Model.CreateUrl" class="assignments-create-btn d-flex align-items-center gap-2">
@@ -25,50 +27,35 @@
     </button>
 </div>
 
-@{
-    var subjects = Model.Assignments.Select(a => a.Subject).Distinct().ToList();
-    var grades = Model.Assignments.Select(a => a.Grade).Distinct().ToList();
-    var types = Model.Assignments.Select(a => a.Type).Distinct().ToList();
-    var gradingTypes = Model.Assignments.Select(a => a.GradingType).Distinct().ToList();
-}
-
-<div class="assignments-filter-bar d-flex flex-wrap align-items-center gap-2 mb-3">
-    <div class="materials-search position-relative flex-grow-1">
+<div class="materials-filter-label">@Localizer["Filters"]</div>
+<div class="materials-filter-bar mb-3">
+    <div class="materials-search position-relative">
         <i class="bi bi-search materials-search-icon"></i>
-        <input type="text" class="materials-search-input" placeholder="@Localizer["SearchAssignments"]" />
+        <input type="text" class="materials-search-input materials-search-input-full" placeholder="@Localizer["SearchAssignments"]" />
     </div>
-    <select class="materials-filter-select" data-filter-key="subject">
-        <option value="">@Localizer["Subject"]</option>
-        @foreach (var s in subjects)
+    <div class="materials-filter-row d-flex flex-wrap align-items-center gap-2">
+        @foreach (var filter in Model.Filters)
         {
-            <option value="@s">@s</option>
+            <div class="dropdown materials-filter-dropdown" data-filter-key="@filter.Key">
+                <button class="btn materials-filter-select dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    @filter.Label
+                    <span class="materials-filter-badge" style="display:none">0</span>
+                </button>
+                <div class="dropdown-menu materials-filter-menu">
+                    @for (var i = 0; i < filter.Options.Count; i++)
+                    {
+                        var inputId = $"f-{uid}-{filter.Key}-{i}";
+                        <input type="checkbox" class="materials-filter-pill-input" value="@filter.Options[i]" id="@inputId" />
+                        <label class="materials-filter-pill" for="@inputId">@filter.Options[i]</label>
+                    }
+                </div>
+            </div>
         }
-    </select>
-    <select class="materials-filter-select" data-filter-key="grade">
-        <option value="">@Localizer["Grade"]</option>
-        @foreach (var g in grades)
-        {
-            <option value="@g">@g</option>
-        }
-    </select>
-    <select class="materials-filter-select" data-filter-key="type">
-        <option value="">@Localizer["Type"]</option>
-        @foreach (var t in types)
-        {
-            <option value="@t">@t</option>
-        }
-    </select>
-    <select class="materials-filter-select" data-filter-key="gradingType">
-        <option value="">@Localizer["Evaluation"]</option>
-        @foreach (var g in gradingTypes)
-        {
-            <option value="@g">@g</option>
-        }
-    </select>
-    <input type="date" class="assignments-date-input" placeholder="@Localizer["DueDate"]" />
-    <span class="assignments-result-count ms-auto" id="assignmentsResultCount">
-        @Model.Assignments.Count @Localizer["AssignmentsCountSuffix"]
-    </span>
+        <button type="button" class="materials-filter-apply-btn">@Localizer["Apply"]</button>
+        <a href="#" class="materials-filter-clear-btn" style="display:none">
+            <i class="bi bi-x-circle"></i> @Localizer["ClearFilters"]
+        </a>
+    </div>
 </div>
 
 <div id="assignments-tab-active" class="assignment-tab-pane active">

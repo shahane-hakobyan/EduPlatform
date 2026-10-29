@@ -392,4 +392,19 @@
   <data name="Filters" xml:space="preserve"><value>Filters</value></data>
   <data name="Apply" xml:space="preserve"><value>Apply</value></data>
   <data name="ClearFilters" xml:space="preserve"><value>Clear filters</value></data>
+  
+  <data name="AssignmentTypeTest" xml:space="preserve"><value>Test</value></data>
+  <data name="AssignmentTypePractical" xml:space="preserve"><value>Practical</value></data>
+  <data name="AssignmentTypeLaboratory" xml:space="preserve"><value>Laboratory</value></data>
+  <data name="AssignmentTypeProject" xml:space="preserve"><value>Project</value></data>
+  <data name="AssignmentTypeHomework" xml:space="preserve"><value>Homework</value></data>
+  <data name="AssignmentTypeOther" xml:space="preserve"><value>Other</value></data>
+  <data name="GradingDiagnostic" xml:space="preserve"><value>Diagnostic</value></data>
+  <data name="GradingFormative" xml:space="preserve"><value>Formative</value></data>
+  <data name="GradingCurrentScore" xml:space="preserve"><value>Current score</value></data>
+  <data name="GradeLevelFormat" xml:space="preserve"><value>Grade {0}</value></data>
+
+  <data name="AssignmentFormIncomplete" xml:space="preserve"><value>Fill in all required fields and select at least one pupil.</value></data>
+  <data name="OtherTypePlaceholder" xml:space="preserve"><value>Describe the assignment type</value></data>
+  <data name="Pupil" xml:space="preserve"><value>Pupil</value></data>
 </root>
