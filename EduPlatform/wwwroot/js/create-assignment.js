@@ -209,5 +209,31 @@
         });
     }
 
+    // --- Շտեմարանից բացելիս՝ նախալրացում (նույն կլիկներով, ինչ ձեռքով ընտրելիս) ---
+    (function () {
+        const el = document.getElementById('caPrefill');
+        if (!el) return;
+        let d;
+        try { d = JSON.parse(el.textContent); } catch (e) { return; }
+
+        function click(selector) {
+            const node = document.querySelector(selector);
+            if (node) node.click();
+        }
+
+        (d.subjectIds || []).forEach(function (v) {
+            click('[data-field-name="SubjectIds"] .ca-chip-option[data-value="' + v + '"]');
+        });
+        (d.gradeLevels || []).forEach(function (v) {
+            click('[data-field-name="GradeLevels"] .ca-chip-option[data-value="' + v + '"]');
+        });
+        (d.types || []).forEach(function (v) {
+            click('[data-multi-select] button[data-value="' + v + '"]');
+        });
+        if (d.gradingType) {
+            click('[data-single-select] button[data-value="' + d.gradingType + '"]');
+        }
+    })();
+
     refreshCounts();
 });

@@ -425,4 +425,11 @@
 	<data name="InitialScoreLabel" xml:space="preserve"><value>Initial score</value></data>
 	<data name="CurrentScoreLabel" xml:space="preserve"><value>Current score</value></data>
 	<data name="GradeFieldsRequired" xml:space="preserve"><value>Enter a score or feedback</value></data>
+
+	<data name="AssignmentBankTitle" xml:space="preserve"><value>Assignment bank</value></data>
+	<data name="AssignmentsCountLabel" xml:space="preserve"><value>assignments</value></data>
+	<data name="CreatedDate" xml:space="preserve"><value>Creation date</value></data>
+	<data name="SentTimes" xml:space="preserve"><value>Sent</value></data>
+	<data name="NoBankAssignments" xml:space="preserve"><value>The bank is empty</value></data>
+	<data name="OpenAndSendBtn" xml:space="preserve"><value>Open and send</value></data>
 </root>

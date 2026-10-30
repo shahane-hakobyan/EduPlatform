@@ -425,6 +425,13 @@
 	<data name="InitialScoreLabel" xml:space="preserve"><value>Начальный балл</value></data>
 	<data name="CurrentScoreLabel" xml:space="preserve"><value>Текущий балл</value></data>
 	<data name="GradeFieldsRequired" xml:space="preserve"><value>Укажите балл или обратную связь</value></data>
+
+	<data name="AssignmentBankTitle" xml:space="preserve"><value>Банк заданий</value></data>
+	<data name="AssignmentsCountLabel" xml:space="preserve"><value>заданий</value></data>
+	<data name="CreatedDate" xml:space="preserve"><value>Дата создания</value></data>
+	<data name="SentTimes" xml:space="preserve"><value>Отправлено</value></data>
+	<data name="NoBankAssignments" xml:space="preserve"><value>Банк пуст</value></data>
+	<data name="OpenAndSendBtn" xml:space="preserve"><value>Открыть и отправить</value></data>
 	
   
 </root>

@@ -1,0 +1,52 @@
+﻿@model EduPlatform.ViewModels.AssignmentBankCardViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+
+<div class="assignment-card" data-assignment-id="@Model.Id"
+     data-f-subject="@string.Join("|", Model.SubjectList)"
+     data-f-grade="@string.Join("|", Model.GradeList)"
+     data-f-type="@string.Join("|", Model.TypeList)"
+     data-f-gradingtype="@Model.GradingType"
+     data-f-created="@Model.CreatedAt.ToString("dd.MM.yyyy")"
+     data-f-search="@((Model.Title + " " + Model.Subject).ToLowerInvariant())">
+    <div class="assignment-card-topbar"></div>
+    <div class="assignment-card-body">
+        <div class="assignment-card-head">
+            <div class="assignment-card-icon"><i class="bi bi-collection"></i></div>
+            <div class="assignment-card-title-wrap">
+                <h3 class="assignment-card-title" title="@Model.Title">@Model.Title</h3>
+                <div class="assignment-card-badges">
+                    <span class="assignment-badge assignment-badge-subject" title="@Model.Subject">@Model.Subject</span>
+                    <span class="assignment-badge assignment-badge-grade" title="@Model.Grade">@Model.Grade</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="assignment-card-meta">
+            <div class="assignment-card-meta-row">
+                <span class="assignment-meta-label">@Localizer["Type"]:</span>
+                <span class="assignment-meta-value" title="@Model.Type">@Model.Type</span>
+            </div>
+            <div class="assignment-card-meta-row">
+                <span class="assignment-meta-label">@Localizer["Evaluation"]:</span>
+                <span class="assignment-meta-value" title="@Model.GradingType">@Model.GradingType</span>
+            </div>
+            <div class="assignment-card-meta-row">
+                <span class="assignment-meta-label">@Localizer["CreatedDate"]:</span>
+                <span class="assignment-meta-value">@Model.CreatedAt.ToString("dd.MM.yyyy")</span>
+            </div>
+        </div>
+
+        <div class="assignment-card-progress-wrap">
+            <div class="assignment-card-progress-top">
+                <span class="assignment-participants"><i class="bi bi-people"></i> @Model.ParticipantCount @Localizer["ParticipantsShort"]</span>
+                <span class="assignment-progress-text"><i class="bi bi-paperclip"></i> @Model.FilesCount</span>
+            </div>
+        </div>
+
+        <div class="assignment-card-footer">
+            <a href="@Url.Action("CreateAssignment", "Teacher", new { fromTemplate = Model.Id })" class="assignment-view-btn">
+                <i class="bi bi-pencil-square"></i> @Localizer["OpenAndSendBtn"]
+            </a>
+        </div>
+    </div>
+</div>

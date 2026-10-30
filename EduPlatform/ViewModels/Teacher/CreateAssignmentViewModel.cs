@@ -19,6 +19,32 @@
 
         /// <summary>Սերվերի կողմից ստուգման սխալի հաղորդագրություն</summary>
         public string? Error { get; set; }
+
+        /// <summary>Շտեմարանից բացելիս՝ ձևի նախալրացումը</summary>
+        public CreateAssignmentPrefill? Prefill { get; set; }
+    }
+
+    public class CreateAssignmentPrefill
+    {
+        public int SourceTemplateId { get; set; }
+        public string Title { get; set; } = "";
+        public string? Description { get; set; }
+        public List<int> SubjectIds { get; set; } = new();
+        public List<int> GradeLevels { get; set; } = new();
+
+        /// <summary>Առանձին դրոշակներ (1, 2, 4, ...)</summary>
+        public List<int> Types { get; set; } = new();
+        public string? OtherTypeText { get; set; }
+        public int GradingType { get; set; }
+        public bool AllowTextAnswer { get; set; }
+        public bool AllowFileAnswer { get; set; }
+        public List<PrefillFile> ExistingFiles { get; set; } = new();
+    }
+
+    public class PrefillFile
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
     }
 
     public class AssignmentClassGroupViewModel
@@ -53,5 +79,11 @@
 
         /// <summary>Ընտրված աշակերտների Id-ները (PupilUserId)</summary>
         public List<string> PupilIds { get; set; } = new();
+
+        /// <summary>Շտեմարանի ձևանմուշը, որից բացվել է ձևը (եթե կա)</summary>
+        public int? SourceTemplateId { get; set; }
+
+        /// <summary>Ձևանմուշի այն ֆայլերի Id-ները, որոնք թողնվում են</summary>
+        public List<int> KeepFileIds { get; set; } = new();
     }
 }

@@ -80,6 +80,28 @@
         });
     });
 
+    // Archive
+    const archiveBtn = document.getElementById('adArchiveBtn');
+    if (archiveBtn) {
+        archiveBtn.addEventListener('click', async function () {
+            if (!confirm(archiveBtn.getAttribute('data-confirm-text'))) return;
+
+            archiveBtn.disabled = true;
+            try {
+                const res = await fetch('/Teacher/ArchiveAssignment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: parseInt(archiveBtn.getAttribute('data-assignment-id'), 10) })
+                });
+                if (res.ok) {
+                    window.location.href = archiveBtn.getAttribute('data-redirect-url');
+                    return;
+                }
+            } catch (e) { }
+            archiveBtn.disabled = false;
+        });
+    }
+
     // --- Pupil list filters ---
     (function () {
         const rows = document.querySelectorAll('.ad-submission-row');

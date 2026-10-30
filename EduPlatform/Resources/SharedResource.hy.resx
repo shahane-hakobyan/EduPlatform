@@ -419,4 +419,12 @@
 	<data name="InitialScoreLabel" xml:space="preserve"><value>Նախնական միավոր</value></data>
 	<data name="CurrentScoreLabel" xml:space="preserve"><value>Ընթացիկ միավոր</value></data>
 	<data name="GradeFieldsRequired" xml:space="preserve"><value>Լրացրեք միավորը կամ հետադարձ կապը</value></data>
+
+	<data name="AssignmentBankTitle" xml:space="preserve"><value>Առաջադրանքների շտեմարան</value></data>
+	<data name="AssignmentsCountLabel" xml:space="preserve"><value>առաջադրանք</value></data>
+	<data name="CreatedDate" xml:space="preserve"><value>Ստեղծման ամսաթիվ</value></data>
+	<data name="SentTimes" xml:space="preserve"><value>Ուղարկվել է</value></data>
+	<data name="NoBankAssignments" xml:space="preserve"><value>Շտեմարանը դատարկ է</value></data>
+
+	<data name="OpenAndSendBtn" xml:space="preserve"><value>Բացել և ուղարկել</value></data>
 </root>
