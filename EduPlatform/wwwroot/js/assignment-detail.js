@@ -31,28 +31,13 @@
         });
     });
 
-    // Grading mode tabs (Point vs Formative)
-    document.querySelectorAll('[data-grading-tabs]').forEach(function (tabs) {
-        const modal = tabs.closest('.answer-modal');
-        tabs.querySelectorAll('.answer-grading-tab').forEach(function (tab) {
-            tab.addEventListener('click', function () {
-                tabs.querySelectorAll('.answer-grading-tab').forEach(function (t) { t.classList.remove('active'); });
-                tab.classList.add('active');
-
-                const mode = tab.getAttribute('data-mode');
-                modal.querySelectorAll('.answer-grading-panel').forEach(function (panel) {
-                    panel.style.display = panel.getAttribute('data-panel') === mode ? 'block' : 'none';
-                });
-            });
-        });
-    });
-
-    // Point picker
+    // Point picker (կրկին սեղմելով՝ միավորը հանվում է)
     document.querySelectorAll('.answer-points-grid').forEach(function (grid) {
         grid.querySelectorAll('.answer-point-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
+                const wasActive = btn.classList.contains('active');
                 grid.querySelectorAll('.answer-point-btn').forEach(function (b) { b.classList.remove('active'); });
-                btn.classList.add('active');
+                if (!wasActive) btn.classList.add('active');
             });
         });
     });
@@ -61,29 +46,65 @@
     document.querySelectorAll('[data-save-grade]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const modal = btn.closest('.answer-modal');
-            const submissionId = btn.getAttribute('data-submission-id');
-            const activeTab = modal.querySelector('.answer-grading-tab.active');
-            const mode = activeTab ? activeTab.getAttribute('data-mode') : 'Point';
+            const type = modal.getAttribute('data-grading-type');
+            const errBox = modal.querySelector('.answer-error');
+            const feedback = modal.querySelector('.answer-protocol-textarea').value.trim();
+            const payload = { submissionId: parseInt(btn.getAttribute('data-submission-id'), 10), feedback: feedback, score: null };
 
-            const payload = { submissionId: parseInt(submissionId, 10), gradingMode: mode };
+            function fail(msg) { errBox.textContent = msg; errBox.style.display = 'block'; }
+            errBox.style.display = 'none';
 
-            if (mode === 'Point') {
-                const activePoint = modal.querySelector('.answer-point-btn.active');
-                payload.score = activePoint ? parseInt(activePoint.getAttribute('data-score'), 10) : null;
-            } else {
-                const textarea = modal.querySelector('.answer-protocol-textarea');
-                payload.protocolText = textarea ? textarea.value : '';
+            if (type === 'CurrentScore') {
+                const active = modal.querySelector('.answer-point-btn.active');
+                payload.score = active ? parseInt(active.getAttribute('data-score'), 10) : null;
+            } else if (type === 'Diagnostic') {
+                const val = modal.querySelector('.answer-score-input').value;
+                payload.score = val === '' ? null : parseFloat(val);
             }
 
+            // Ընթացիկ/Հայտորոշիչ՝ առնվազն մեկ դաշտ, Ձևավորող՝ հետադարձ կապը պարտադիր է
+            const needsFeedbackOnly = type === 'Formative';
+            if ((needsFeedbackOnly && !feedback) || (!needsFeedbackOnly && payload.score === null && !feedback)) {
+                return fail(errBox.getAttribute('data-msg') || '*');
+            }
+
+            btn.disabled = true;
             fetch('/Teacher/SaveGrade', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
-            }).then(function () {
-                closeModal(modal.id);
-            });
+            }).then(function (r) {
+                if (r.ok) { location.reload(); }
+                else { btn.disabled = false; fail('Error ' + r.status); }
+            }).catch(function () { btn.disabled = false; fail('Error'); });
         });
     });
+
+    // --- Pupil list filters ---
+    (function () {
+        const rows = document.querySelectorAll('.ad-submission-row');
+        const search = document.getElementById('adSearch');
+        const grade = document.getElementById('adGradeFilter');
+        const group = document.getElementById('adGroupFilter');
+        const status = document.getElementById('adStatusFilter');
+        if (!search) return;
+
+        function apply() {
+            const q = search.value.trim().toLowerCase();
+            rows.forEach(function (r) {
+                const ok =
+                    (!q || r.dataset.name.includes(q)) &&
+                    (!grade.value || r.dataset.grade === grade.value) &&
+                    (!group || !group.value || r.dataset.group === group.value) &&
+                    (!status.value || r.dataset.status === status.value);
+                r.style.display = ok ? '' : 'none';
+            });
+        }
+
+        [search, grade, group, status].forEach(function (el) {
+            if (el) el.addEventListener(el === search ? 'input' : 'change', apply);
+        });
+    })();
 
     // --- Add pupils modal ---
     const addPupilsSubmitBtn = document.getElementById('addPupilsSubmitBtn');

@@ -318,37 +318,37 @@
   <data name="NoArchivedAssignments" xml:space="preserve"><value>Արխիվացված առաջադրանքներ չկան։</value></data>
 
   <data name="CreateAssignmentSubtitle" xml:space="preserve"><value>Լրացրեք պահանջվող բոլոր դաշտերը</value></data>
-  <data name="AssignmentDetailsSection" xml:space="preserve"><value>Առաջադրանքի Տվյալներ</value></data>
+  <data name="AssignmentDetailsSection" xml:space="preserve"><value>Առաջադրանքի տվյալներ</value></data>
   <data name="AssignmentNameLabel" xml:space="preserve"><value>Անվանում</value></data>
   <data name="AssignmentNamePlaceholder" xml:space="preserve"><value>Մուտքագրեք առաջադրանքի անվանումը</value></data>
   <data name="DescriptionLabel" xml:space="preserve"><value>Նկարագրություն</value></data>
   <data name="DescriptionPlaceholder" xml:space="preserve"><value>Մուտքագրեք նկարագրությունը</value></data>
   <data name="SubjectSearchPlaceholder" xml:space="preserve"><value>Փնտրել առարկա...</value></data>
   <data name="GradeSearchPlaceholder" xml:space="preserve"><value>Փնտրել դասարան...</value></data>
-  <data name="AssignmentTypeSectionLabel" xml:space="preserve"><value>Առաջադրանքի Տեսակ</value></data>
+  <data name="AssignmentTypeSectionLabel" xml:space="preserve"><value>Առաջադրանքի տեսակ</value></data>
   <data name="AssignmentTypeHint" xml:space="preserve"><value>Կարելի է ընտրել մեկ կամ մի քանի</value></data>
-  <data name="GradingTypeSectionLabel" xml:space="preserve"><value>Գնահատման Տեսակ</value></data>
-  <data name="AssignmentStartLabel" xml:space="preserve"><value>Առաջադրանքի Սկիզբ</value></data>
-  <data name="AssignmentDueLabel" xml:space="preserve"><value>Առաջադրանքի Վերջնաժամկետ</value></data>
-  <data name="SubmissionFormatSection" xml:space="preserve"><value>Պատասխանի Ներկայացման Ձև</value></data>
+  <data name="GradingTypeSectionLabel" xml:space="preserve"><value>Գնահատման տեսակ</value></data>
+  <data name="AssignmentStartLabel" xml:space="preserve"><value>Առաջադրանքի սկիզբ</value></data>
+  <data name="AssignmentDueLabel" xml:space="preserve"><value>Առաջադրանքի վերջնաժամկետ</value></data>
+  <data name="SubmissionFormatSection" xml:space="preserve"><value>Պատասխանի ներկայացման ձև</value></data>
   <data name="SubmissionFormatHint" xml:space="preserve"><value>Կարելի է ընտրել մեկ կամ երկուսը</value></data>
-  <data name="TextAnswerOption" xml:space="preserve"><value>Տեքստային Պատասխան</value></data>
+  <data name="TextAnswerOption" xml:space="preserve"><value>Տեքստային պատասխան</value></data>
   <data name="TextAnswerOptionDesc" xml:space="preserve"><value>Սովորողները կարող են գրել պատասխան</value></data>
-  <data name="FileAnswerOption" xml:space="preserve"><value>Կցված Ֆայլ</value></data>
+  <data name="FileAnswerOption" xml:space="preserve"><value>Կցված ֆայլ</value></data>
   <data name="FileAnswerOptionDesc" xml:space="preserve"><value>Սովորողները կարող են վերբեռնել ֆայլ</value></data>
-  <data name="UploadFileSection" xml:space="preserve"><value>Վերբեռնել Ֆայլ</value></data>
+  <data name="UploadFileSection" xml:space="preserve"><value>Վերբեռնել ֆայլ</value></data>
   <data name="DropzoneCta" xml:space="preserve"><value>Սեղմեք կամ քաշեք ֆայլը</value></data>
   <data name="DropzoneHint" xml:space="preserve"><value>PDF, Word, Excel, JPG, PNG · առավելագույնը 25 ՄԲ</value></data>
-  <data name="SendToStudentsSection" xml:space="preserve"><value>Ուղարկել Առաջադրանքը Սովորողներին</value></data>
-  <data name="MyClassesTab" xml:space="preserve"><value>Իմ Դասարանները</value></data>
-  <data name="MyGroupsTab" xml:space="preserve"><value>Իմ Խմբերը</value></data>
+  <data name="SendToStudentsSection" xml:space="preserve"><value>Ուղարկել առաջադրանքը սովորողներին</value></data>
+  <data name="MyClassesTab" xml:space="preserve"><value>Իմ դասարանները</value></data>
+  <data name="MyGroupsTab" xml:space="preserve"><value>Իմ խմբերը</value></data>
   <data name="SelectedPupilsSuffix" xml:space="preserve"><value>սովորողի</value></data>
   <data name="ClearAllLabel" xml:space="preserve"><value>Մաքրել բոլորը</value></data>
-  <data name="SelectAllLabel" xml:space="preserve"><value>Ընտրել Բոլորը</value></data>
+  <data name="SelectAllLabel" xml:space="preserve"><value>Ընտրել բոլորը</value></data>
   <data name="SearchPupilPlaceholder" xml:space="preserve"><value>Սովորողին որոնել...</value></data>
   <data name="PupilsCountSuffix" xml:space="preserve"><value>սովորողի</value></data>
   <data name="CancelBtn" xml:space="preserve"><value>Չեղարկել</value></data>
-  <data name="SendAssignmentBtn" xml:space="preserve"><value>Ուղարկել Առաջադրանքը</value></data>
+  <data name="SendAssignmentBtn" xml:space="preserve"><value>Ուղարկել առաջադրանքը</value></data>
 
   <data name="AddLabel" xml:space="preserve"><value>Ավելացնել</value></data>
   <data name="SearchPupilByNamePlaceholder" xml:space="preserve"><value>Փնտրել անունով...</value></data>
@@ -357,7 +357,7 @@
   <data name="SubmittedOn" xml:space="preserve"><value>Ներկայացված</value></data>
   <data name="SubmissionStatusGraded" xml:space="preserve"><value>Գնահատված</value></data>
   <data name="SubmissionStatusSubmitted" xml:space="preserve"><value>Կատարված</value></data>
-  <data name="SubmissionStatusPending" xml:space="preserve"><value>Սպասվում է</value></data>
+  <data name="SubmissionStatusPending" xml:space="preserve"><value>Ուղարկված</value></data>
   <data name="GradeLabel" xml:space="preserve"><value>Գնահատել</value></data>
   <data name="DownloadLabel" xml:space="preserve"><value>Բեռնել</value></data>
   <data name="PointGrading" xml:space="preserve"><value>Միավորային գնահատում</value></data>
@@ -406,4 +406,17 @@
   <data name="AssignmentFormIncomplete" xml:space="preserve"><value>Լրացրեք բոլոր պարտադիր դաշտերը և ընտրեք առնվազն մեկ աշակերտ։</value></data>
   <data name="OtherTypePlaceholder" xml:space="preserve"><value>Գրեք առաջադրանքի տեսակը</value></data>
   <data name="Pupil" xml:space="preserve"><value>Աշակերտ</value></data>
+  <data name="ViewAnswer" xml:space="preserve"><value>Դիտել պատասխանը</value></data>
+
+  <data name="AssignmentResponseForm" xml:space="preserve"><value>Պատասխանի ձև</value></data>
+  <data name="ResponseFormText" xml:space="preserve"><value>Տեքստային պատասխան</value></data>
+  <data name="ResponseFormFile" xml:space="preserve"><value>Ֆայլ</value></data>
+  <data name="AttachedFilesLabel" xml:space="preserve"><value>Կցված ֆայլեր</value></data>
+
+	<data name="AnswerTextLabel" xml:space="preserve"><value>Պատասխան</value></data>
+	<data name="NoAnswerYet" xml:space="preserve"><value>Պատասխան դեռ չկա</value></data>
+	<data name="FeedbackLabel" xml:space="preserve"><value>Հետադարձ կապ</value></data>
+	<data name="InitialScoreLabel" xml:space="preserve"><value>Նախնական միավոր</value></data>
+	<data name="CurrentScoreLabel" xml:space="preserve"><value>Ընթացիկ միավոր</value></data>
+	<data name="GradeFieldsRequired" xml:space="preserve"><value>Լրացրեք միավորը կամ հետադարձ կապը</value></data>
 </root>

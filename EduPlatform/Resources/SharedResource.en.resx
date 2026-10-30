@@ -357,7 +357,7 @@
   <data name="SubmittedOn" xml:space="preserve"><value>Submitted</value></data>
   <data name="SubmissionStatusGraded" xml:space="preserve"><value>Graded</value></data>
   <data name="SubmissionStatusSubmitted" xml:space="preserve"><value>Submitted</value></data>
-  <data name="SubmissionStatusPending" xml:space="preserve"><value>Pending</value></data>
+  <data name="SubmissionStatusPending" xml:space="preserve"><value>Sent</value></data>
   <data name="GradeLabel" xml:space="preserve"><value>Grade</value></data>
   <data name="DownloadLabel" xml:space="preserve"><value>Download</value></data>
   <data name="PointGrading" xml:space="preserve"><value>Point-based Grading</value></data>
@@ -407,4 +407,22 @@
   <data name="AssignmentFormIncomplete" xml:space="preserve"><value>Fill in all required fields and select at least one pupil.</value></data>
   <data name="OtherTypePlaceholder" xml:space="preserve"><value>Describe the assignment type</value></data>
   <data name="Pupil" xml:space="preserve"><value>Pupil</value></data>
+  <data name="ViewAnswer" xml:space="preserve"><value>View answer</value></data>
+
+  <data name="AssignmentResponseForm" xml:space="preserve"><value>Answer form</value></data>
+  <data name="ResponseFormText" xml:space="preserve"><value>Text answer</value></data>
+  <data name="ResponseFormFile" xml:space="preserve"><value>File</value></data>
+  <data name="AttachedFilesLabel" xml:space="preserve"><value>Attached files</value></data>
+	
+  <data name="AnswerTextLabel" xml:space="preserve"><value>Answer</value></data>
+  <data name="NoAnswerYet" xml:space="preserve"><value>No answer yet</value></data>
+  <data name="FeedbackLabel" xml:space="preserve"><value>Feedback</value></data>
+  <data name="InitialScoreLabel" xml:space="preserve"><value>Initial score</value></data>
+
+	<data name="AnswerTextLabel" xml:space="preserve"><value>Answer</value></data>
+	<data name="NoAnswerYet" xml:space="preserve"><value>No answer yet</value></data>
+	<data name="FeedbackLabel" xml:space="preserve"><value>Feedback</value></data>
+	<data name="InitialScoreLabel" xml:space="preserve"><value>Initial score</value></data>
+	<data name="CurrentScoreLabel" xml:space="preserve"><value>Current score</value></data>
+	<data name="GradeFieldsRequired" xml:space="preserve"><value>Enter a score or feedback</value></data>
 </root>

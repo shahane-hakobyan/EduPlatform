@@ -1,129 +1,211 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    // ── Ընթացիկ / Արխիվացված ներդիրներ ───────────────────────────────────────
-    document.querySelectorAll('.assignment-tab-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.assignment-tab-btn').forEach(function (b) { b.classList.remove('active'); });
-            document.querySelectorAll('.assignment-tab-pane').forEach(function (p) {
-                p.classList.remove('active');
-                p.style.display = 'none';
-            });
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        const backdrop = document.getElementById(id + '-backdrop');
+        if (modal) modal.classList.add('open');
+        if (backdrop) backdrop.classList.add('open');
+    }
 
-            btn.classList.add('active');
-            const target = document.getElementById(btn.getAttribute('data-tab-target'));
-            if (target) {
-                target.classList.add('active');
-                target.style.display = 'block';
-            }
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        const backdrop = document.getElementById(id + '-backdrop');
+        if (modal) modal.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('open');
+    }
+
+    document.querySelectorAll('[data-open-modal]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            openModal(btn.getAttribute('data-open-modal'));
         });
     });
 
-    // ── Արխիվացնել՝ իրական (բազայում) ─────────────────────────────────────────
-    document.querySelectorAll('.assignment-archive-btn').forEach(function (btn) {
-        btn.addEventListener('click', async function () {
-            const confirmText = btn.getAttribute('data-confirm-text') || 'Archive this assignment?';
-            if (!confirm(confirmText)) return;
+    document.querySelectorAll('[data-close-modal]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            closeModal(btn.getAttribute('data-close-modal'));
+        });
+    });
+
+    document.querySelectorAll('.answer-modal-backdrop').forEach(function (backdrop) {
+        backdrop.addEventListener('click', function () {
+            closeModal(backdrop.id.replace('-backdrop', ''));
+        });
+    });
+
+    // Point picker (կրկին սեղմելով՝ միավորը հանվում է)
+    document.querySelectorAll('.answer-points-grid').forEach(function (grid) {
+        grid.querySelectorAll('.answer-point-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const wasActive = btn.classList.contains('active');
+                grid.querySelectorAll('.answer-point-btn').forEach(function (b) { b.classList.remove('active'); });
+                if (!wasActive) btn.classList.add('active');
+            });
+        });
+    });
+
+    // Save grade
+    document.querySelectorAll('[data-save-grade]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const modal = btn.closest('.answer-modal');
+            const type = modal.getAttribute('data-grading-type');
+            const errBox = modal.querySelector('.answer-error');
+            const feedback = modal.querySelector('.answer-protocol-textarea').value.trim();
+            const payload = { submissionId: parseInt(btn.getAttribute('data-submission-id'), 10), feedback: feedback, score: null };
+
+            function fail(msg) { errBox.textContent = msg; errBox.style.display = 'block'; }
+            errBox.style.display = 'none';
+
+            if (type === 'CurrentScore') {
+                const active = modal.querySelector('.answer-point-btn.active');
+                payload.score = active ? parseInt(active.getAttribute('data-score'), 10) : null;
+            } else if (type === 'Diagnostic') {
+                const val = modal.querySelector('.answer-score-input').value;
+                payload.score = val === '' ? null : parseFloat(val);
+            }
+
+            // Ընթացիկ/Հայտորոշիչ՝ առնվազն մեկ դաշտ, Ձևավորող՝ հետադարձ կապը պարտադիր է
+            const needsFeedbackOnly = type === 'Formative';
+            if ((needsFeedbackOnly && !feedback) || (!needsFeedbackOnly && payload.score === null && !feedback)) {
+                return fail(errBox.getAttribute('data-msg') || '*');
+            }
 
             btn.disabled = true;
+            fetch('/Teacher/SaveGrade', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(function (r) {
+                if (r.ok) { location.reload(); }
+                else { btn.disabled = false; fail('Error ' + r.status); }
+            }).catch(function () { btn.disabled = false; fail('Error'); });
+        });
+    });
+
+    // Archive
+    const archiveBtn = document.getElementById('adArchiveBtn');
+    if (archiveBtn) {
+        archiveBtn.addEventListener('click', async function () {
+            if (!confirm(archiveBtn.getAttribute('data-confirm-text'))) return;
+
+            archiveBtn.disabled = true;
             try {
                 const res = await fetch('/Teacher/ArchiveAssignment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: parseInt(btn.getAttribute('data-assignment-id'), 10) })
+                    body: JSON.stringify({ id: parseInt(archiveBtn.getAttribute('data-assignment-id'), 10) })
                 });
                 if (res.ok) {
-                    window.location.reload();   // առաջադրանքը անցնում է «Արխիվացված» ներդիր
+                    window.location.href = archiveBtn.getAttribute('data-redirect-url');
                     return;
                 }
             } catch (e) { }
-            btn.disabled = false;
+            archiveBtn.disabled = false;
         });
-    });
-
-    // ── Որոնում և ֆիլտրեր (բրաուզերում) ───────────────────────────────────────
-    const search = document.querySelector('.materials-search-input');
-    const dropdowns = document.querySelectorAll('.materials-filter-dropdown');
-    const applyBtn = document.querySelector('.materials-filter-apply-btn');
-    const clearBtn = document.querySelector('.materials-filter-clear-btn');
-
-    function visibleCount(paneId) {
-        const pane = document.getElementById(paneId);
-        if (!pane) return 0;
-        return Array.from(pane.querySelectorAll('.assignment-card'))
-            .filter(function (el) { return el.style.display !== 'none'; }).length;
     }
 
-    function refreshCounts() {
-        const active = visibleCount('assignments-tab-active');
-        const archived = visibleCount('assignments-tab-archived');
+    // --- Pupil list filters ---
+    (function () {
+        const rows = document.querySelectorAll('.ad-submission-row');
+        const search = document.getElementById('adSearch');
+        const grade = document.getElementById('adGradeFilter');
+        const group = document.getElementById('adGroupFilter');
+        const status = document.getElementById('adStatusFilter');
+        if (!search) return;
 
-        const tabCounts = document.querySelectorAll('.assignment-tab-count');
-        if (tabCounts[0]) tabCounts[0].textContent = active;
-        if (tabCounts[1]) tabCounts[1].textContent = archived;
-
-        const activeEl = document.getElementById('assignmentsActiveCount');
-        const archivedEl = document.getElementById('assignmentsArchivedCount');
-        if (activeEl) activeEl.textContent = active;
-        if (archivedEl) archivedEl.textContent = archived;
-    }
-
-    function selectedValues() {
-        const result = {};
-        dropdowns.forEach(function (dropdown) {
-            const key = dropdown.getAttribute('data-filter-key');
-            const values = Array.from(dropdown.querySelectorAll('.materials-filter-pill-input:checked'))
-                .map(function (input) { return input.value; });
-            if (values.length) result[key] = values;
-        });
-        return result;
-    }
-
-    function apply() {
-        const q = (search ? search.value : '').trim().toLowerCase();
-        const selected = selectedValues();
-
-        document.querySelectorAll('.assignment-card').forEach(function (card) {
-            let ok = !q || (card.getAttribute('data-f-search') || '').indexOf(q) !== -1;
-
-            // նույն ֆիլտրի ներսում՝ «կամ», տարբեր ֆիլտրերի միջև՝ «և»
-            Object.keys(selected).forEach(function (key) {
-                if (!ok) return;
-                const values = (card.getAttribute('data-f-' + key) || '').split('|');
-                ok = selected[key].some(function (value) { return values.indexOf(value) !== -1; });
+        function apply() {
+            const q = search.value.trim().toLowerCase();
+            rows.forEach(function (r) {
+                const ok =
+                    (!q || r.dataset.name.includes(q)) &&
+                    (!grade.value || r.dataset.grade === grade.value) &&
+                    (!group || !group.value || r.dataset.group === group.value) &&
+                    (!status.value || r.dataset.status === status.value);
+                r.style.display = ok ? '' : 'none';
             });
-
-            card.style.display = ok ? '' : 'none';
-        });
-
-        dropdowns.forEach(function (dropdown) {
-            const badge = dropdown.querySelector('.materials-filter-badge');
-            const count = dropdown.querySelectorAll('.materials-filter-pill-input:checked').length;
-            if (badge) {
-                badge.textContent = count;
-                badge.style.display = count ? '' : 'none';
-            }
-        });
-
-        if (clearBtn) {
-            clearBtn.style.display = (q || Object.keys(selected).length) ? '' : 'none';
         }
 
-        refreshCounts();
-    }
+        [search, grade, group, status].forEach(function (el) {
+            if (el) el.addEventListener(el === search ? 'input' : 'change', apply);
+        });
+    })();
 
-    if (applyBtn) applyBtn.addEventListener('click', apply);
+    // --- Add pupils modal ---
+    const addPupilsSubmitBtn = document.getElementById('addPupilsSubmitBtn');
+    const addPupilsSelectedCount = document.getElementById('addPupilsSelectedCount');
 
-    if (search) {
-        search.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') { e.preventDefault(); apply(); }
+    function refreshAddPupilsCounts() {
+        const modal = document.getElementById('addPupilsModal');
+        if (!modal) return;
+
+        const checked = modal.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)');
+        addPupilsSelectedCount.textContent = checked.length;
+        addPupilsSubmitBtn.disabled = checked.length === 0;
+
+        modal.querySelectorAll('.ca-class-group').forEach(function (group) {
+            const groupChecked = group.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)').length;
+            const groupTotal = group.querySelectorAll('[data-pupil-checkbox]').length;
+            const badge = group.querySelector('[data-selected-badge]');
+            badge.textContent = groupChecked;
+            badge.classList.toggle('show', groupChecked > 0);
+            group.querySelector('[data-progress-label]').textContent = groupChecked + ' / ' + groupTotal;
         });
     }
 
-    if (clearBtn) {
-        clearBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelectorAll('.materials-filter-pill-input').forEach(function (input) { input.checked = false; });
-            if (search) search.value = '';
-            apply();
+    const addPupilsModal = document.getElementById('addPupilsModal');
+    if (addPupilsModal) {
+        addPupilsModal.querySelectorAll('[data-pupil-checkbox]').forEach(function (cb) {
+            cb.addEventListener('change', refreshAddPupilsCounts);
+        });
+
+        addPupilsModal.querySelectorAll('.ca-class-group-head').forEach(function (head) {
+            head.addEventListener('click', function () {
+                head.closest('.ca-class-group').classList.toggle('open');
+            });
+        });
+
+        addPupilsModal.querySelectorAll('.ca-select-all-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const group = btn.closest('.ca-class-group');
+                const boxes = group.querySelectorAll('[data-pupil-checkbox]:not(:disabled)');
+                const allChecked = Array.from(boxes).every(function (b) { return b.checked; });
+                boxes.forEach(function (b) { b.checked = !allChecked; });
+                refreshAddPupilsCounts();
+            });
+        });
+
+        const clearAllBtn = document.getElementById('addPupilsClearAllBtn');
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', function () {
+                addPupilsModal.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)').forEach(function (cb) { cb.checked = false; });
+                refreshAddPupilsCounts();
+            });
+        }
+
+        const search = document.getElementById('addPupilsSearch');
+        if (search) {
+            search.addEventListener('input', function () {
+                const q = search.value.trim().toLowerCase();
+                addPupilsModal.querySelectorAll('.ca-pupil-item').forEach(function (item) {
+                    const name = item.querySelector('.ca-pupil-name').textContent.toLowerCase();
+                    item.style.display = name.includes(q) ? '' : 'none';
+                });
+            });
+        }
+
+        addPupilsSubmitBtn.addEventListener('click', function () {
+            const scriptTag = document.querySelector('script[src*="assignment-detail.js"]');
+            const assignmentId = scriptTag ? scriptTag.getAttribute('data-assignment-id') : null;
+
+            const pupilNames = Array.from(addPupilsModal.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)'))
+                .map(function (cb) { return cb.value; });
+
+            fetch('/Teacher/AddPupilsToAssignment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ assignmentId: parseInt(assignmentId, 10), pupilNames: pupilNames })
+            }).then(function () {
+                closeModal('addPupilsModal');
+                location.reload();
+            });
         });
     }
 });

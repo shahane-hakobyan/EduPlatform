@@ -862,12 +862,14 @@ namespace EduPlatform.Controllers
                     x.Types,
                     x.OtherTypeText,
                     x.GradingType,
+                    x.ResponseForms,
                     x.StartDate,
                     x.DueDate,
                     x.IsArchived,
                     x.CreatedAt,
                     Subjects = x.Subjects.Select(s => s.Subject.Name).ToList(),
                     Levels = x.GradeLevels.Select(g => g.Level).OrderBy(l => l).ToList(),
+                    Files = x.Files.OrderBy(f => f.Id).Select(f => new { f.Id, f.FileName }).ToList(),
                     Recipients = x.Recipients.OrderBy(r => r.Id).Select(r => new
                     {
                         r.Id,
@@ -877,7 +879,8 @@ namespace EduPlatform.Controllers
                         r.AnswerText,
                         r.Score,
                         r.Feedback,
-                        GradeName = r.Grade != null ? r.Grade.GradeName : ""
+                        GradeName = r.Grade != null ? r.Grade.GradeName : "",
+                        Files = r.Files.OrderBy(f => f.Id).Select(f => new { f.Id, f.FileName }).ToList()
                     }).ToList()
                 })
                 .FirstOrDefaultAsync();
@@ -900,7 +903,15 @@ namespace EduPlatform.Controllers
                 DueDate = a.DueDate ?? a.StartDate ?? a.CreatedAt,
                 Description = a.Description ?? "",
                 IsArchived = a.IsArchived,
+                AllowTextAnswer = a.ResponseForms.HasFlag(AssignmentResponseForms.Text),
+                AllowFileAnswer = a.ResponseForms.HasFlag(AssignmentResponseForms.File),
                 ArchiveUrl = "#",
+                Files = a.Files.Select(f => new AssignmentFileViewModel
+                {
+                    Name = f.FileName,
+                    ViewUrl = Url.Action(nameof(AssignmentFile), new { id = f.Id })!,
+                    DownloadUrl = Url.Action(nameof(AssignmentFile), new { id = f.Id, download = true })!
+                }).ToList(),
                 Submissions = a.Recipients.Select((r, i) => new PupilSubmissionViewModel
                 {
                     Id = r.Id,
@@ -915,14 +926,20 @@ namespace EduPlatform.Controllers
                         AssignmentRecipientStatus.Completed => "Submitted",
                         _ => "Pending"
                     },
-                    Score = r.Score.HasValue ? (int)r.Score.Value : null,
+                    Score = r.Score,
                     ScoreFeedback = r.Feedback ?? "",
-                    ProtocolText = r.Feedback ?? "",
-                    GradingMode = a.GradingType == AssignmentGradingType.CurrentScore ? "Point" : "Formative"
+                    AnswerText = r.AnswerText ?? "",
+                    GradingType = a.GradingType.ToString(),
+                    Files = r.Files.Select(f => new AssignmentFileViewModel
+                    {
+                        Name = f.FileName,
+                        ViewUrl = Url.Action(nameof(SubmissionFile), new { id = f.Id })!,
+                        DownloadUrl = Url.Action(nameof(SubmissionFile), new { id = f.Id, download = true })!
+                    }).ToList()
                 }).ToList()
             };
 
-            // «Ավելացնել» մոդալը դեռ ժամանակավոր է (Քայլ 4d)
+            // «Ավելացնել» մոդալը դեռ ժամանակավոր է
             var grades = await _db.TeacherGrades
                 .Where(tg => tg.TeacherUserId == CurrentTeacherUserId)
                 .Select(tg => new SelectOption { Id = tg.GradeId, Label = tg.Grade.GradeName })
@@ -942,21 +959,105 @@ namespace EduPlatform.Controllers
             return View(vm);
         }
 
-        public class SaveGradeRequest
+        // Ուսուցչի կցած ֆայլի բացում (նոր էջում) կամ ներբեռնում
+        [HttpGet]
+        public async Task<IActionResult> AssignmentFile(int id, bool download = false)
         {
-            public int SubmissionId { get; set; }
-            public string GradingMode { get; set; } = "Point";
-            public int? Score { get; set; }
-            public string? ProtocolText { get; set; }
+            var f = await _db.AssignmentFiles
+                .Where(x => x.Id == id && x.Assignment.TeacherUserId == CurrentTeacherUserId)
+                .Select(x => new { x.FileName, x.StoredFileName, x.ContentType })
+                .FirstOrDefaultAsync();
+
+            if (f == null) return NotFound();
+
+            var path = Path.Combine(AssignmentFilesRoot(), Path.GetFileName(f.StoredFileName));
+            if (!System.IO.File.Exists(path)) return NotFound();
+
+            var contentType = string.IsNullOrWhiteSpace(f.ContentType) ? "application/octet-stream" : f.ContentType;
+            var stream = System.IO.File.OpenRead(path);
+
+            // download=false → inline (PDF/նկար բացվում է բրաուզերում), true → ներբեռնում
+            return download
+                ? File(stream, contentType, f.FileName)
+                : File(stream, contentType);
         }
 
-        [HttpPost]
-        public IActionResult SaveGrade([FromBody] SaveGradeRequest request)
+        // Աշակերտի կցած պատասխանի ֆայլը (միայն տվյալ առաջադրանքի ուսուցչին)
+        [HttpGet]
+        public async Task<IActionResult> SubmissionFile(int id, bool download = false)
         {
-            // No submission/grade persistence yet — wire this to a real
-            // Submission entity once it exists in the DB.
-            return Json(new { success = true });
+            var f = await _db.AssignmentSubmissionFiles
+                .Where(x => x.Id == id && x.Recipient.Assignment.TeacherUserId == CurrentTeacherUserId)
+                .Select(x => new { x.FileName, x.StoredFileName, x.ContentType })
+                .FirstOrDefaultAsync();
+
+            if (f == null) return NotFound();
+
+            var path = Path.Combine(AssignmentFilesRoot(), Path.GetFileName(f.StoredFileName));
+            if (!System.IO.File.Exists(path)) return NotFound();
+
+            var contentType = string.IsNullOrWhiteSpace(f.ContentType) ? "application/octet-stream" : f.ContentType;
+            var stream = System.IO.File.OpenRead(path);
+
+            return download
+                ? File(stream, contentType, f.FileName)
+                : File(stream, contentType);
         }
+
+        public class SaveGradeRequest
+        {
+            public int SubmissionId { get; set; }   // AssignmentRecipient.Id
+            public decimal? Score { get; set; }
+            public string? Feedback { get; set; }
+        }
+
+        // Գնահատում՝ ըստ առաջադրանքի գնահատման տեսակի
+        [HttpPost]
+        public async Task<IActionResult> SaveGrade([FromBody] SaveGradeRequest req)
+        {
+            var r = await _db.AssignmentRecipients
+                .Include(x => x.Assignment)
+                .FirstOrDefaultAsync(x => x.Id == req.SubmissionId
+                                       && x.Assignment.TeacherUserId == CurrentTeacherUserId
+                                       && !x.Assignment.IsTemplate);
+            if (r == null) return NotFound();
+
+            var feedback = string.IsNullOrWhiteSpace(req.Feedback) ? null : req.Feedback.Trim();
+            if (feedback is { Length: > 2000 }) return BadRequest();
+
+            switch (r.Assignment.GradingType)
+            {
+                case AssignmentGradingType.CurrentScore:
+                    // միավորը (1–10) և/կամ հետադարձ կապ՝ առնվազն մեկը
+                    if (req.Score is not null
+                        && (req.Score < 1 || req.Score > 10 || req.Score != decimal.Truncate(req.Score.Value)))
+                        return BadRequest();
+                    if (req.Score is null && feedback is null) return BadRequest();
+                    r.Score = req.Score;
+                    break;
+
+                case AssignmentGradingType.Diagnostic:
+                    // նախնական միավոր (ազատ թիվ) և/կամ հետադարձ կապ՝ առնվազն մեկը
+                    if (req.Score is not null && (req.Score < 0 || req.Score > 9999))
+                        return BadRequest();
+                    if (req.Score is null && feedback is null) return BadRequest();
+                    r.Score = req.Score is null ? null : Math.Round(req.Score.Value, 2);
+                    break;
+
+                default: // Formative՝ միայն հետադարձ կապ
+                    if (feedback is null) return BadRequest();
+                    r.Score = null;
+                    break;
+            }
+
+            r.Feedback = feedback;
+            r.Status = AssignmentRecipientStatus.Graded;
+            r.GradedAt = DateTime.Now;
+            await _db.SaveChangesAsync();
+
+            return Ok();
+        }
+
         public class AddPupilsRequest
         {
             public int AssignmentId { get; set; }

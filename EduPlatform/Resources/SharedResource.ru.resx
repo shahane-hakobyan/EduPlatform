@@ -357,7 +357,7 @@
   <data name="SubmittedOn" xml:space="preserve"><value>Сдано</value></data>
   <data name="SubmissionStatusGraded" xml:space="preserve"><value>Оценено</value></data>
   <data name="SubmissionStatusSubmitted" xml:space="preserve"><value>Сдано</value></data>
-  <data name="SubmissionStatusPending" xml:space="preserve"><value>Ожидается</value></data>
+  <data name="SubmissionStatusPending" xml:space="preserve"><value>Отправлено</value></data>
   <data name="GradeLabel" xml:space="preserve"><value>Оценить</value></data>
   <data name="DownloadLabel" xml:space="preserve"><value>Скачать</value></data>
   <data name="PointGrading" xml:space="preserve"><value>Балльное оценивание</value></data>
@@ -407,4 +407,24 @@
   <data name="AssignmentFormIncomplete" xml:space="preserve"><value>Заполните все обязательные поля и выберите хотя бы одного ученика.</value></data>
   <data name="OtherTypePlaceholder" xml:space="preserve"><value>Опишите тип задания</value></data>
   <data name="Pupil" xml:space="preserve"><value>Ученик</value></data>
+  <data name="ViewAnswer" xml:space="preserve"><value>Смотреть ответ</value></data>
+	
+  <data name="AssignmentResponseForm" xml:space="preserve"><value>Форма ответа</value></data>
+  <data name="ResponseFormText" xml:space="preserve"><value>Текстовый ответ</value></data>
+  <data name="ResponseFormFile" xml:space="preserve"><value>Файл</value></data>
+  <data name="AttachedFilesLabel" xml:space="preserve"><value>Прикреплённые файлы</value></data>
+	
+  <data name="AnswerTextLabel" xml:space="preserve"><value>Ответ</value></data>
+  <data name="NoAnswerYet" xml:space="preserve"><value>Ответа пока нет</value></data>
+  <data name="FeedbackLabel" xml:space="preserve"><value>Обратная связь</value></data>
+  <data name="InitialScoreLabel" xml:space="preserve"><value>Начальный балл</value></data>
+
+	<data name="AnswerTextLabel" xml:space="preserve"><value>Ответ</value></data>
+	<data name="NoAnswerYet" xml:space="preserve"><value>Ответа пока нет</value></data>
+	<data name="FeedbackLabel" xml:space="preserve"><value>Обратная связь</value></data>
+	<data name="InitialScoreLabel" xml:space="preserve"><value>Начальный балл</value></data>
+	<data name="CurrentScoreLabel" xml:space="preserve"><value>Текущий балл</value></data>
+	<data name="GradeFieldsRequired" xml:space="preserve"><value>Укажите балл или обратную связь</value></data>
+	
+  
 </root>

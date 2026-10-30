@@ -526,3 +526,71 @@
     font-weight: 700;
     color: #fff;
 }
+.ad-files-title {
+    margin-top: 12px;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.ad-file-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.ad-file-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ad-file-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary, #6366d1);
+    text-decoration: none;
+}
+.answer-text-box {
+    padding: 12px 16px;
+    background: var(--surface-alt);
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.answer-score-input {
+    box-sizing: border-box;
+    width: 160px;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.answer-error {
+    margin-top: 12px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #fdecea;
+    color: #b42318;
+    font-size: 13px;
+}
+
+span.answer-grading-tab {
+    display: inline-block;
+    flex: 0 0 auto;
+    cursor: default;
+}
