@@ -47,9 +47,9 @@
                         <div class="ca-pupil-grid">
                             @foreach (var pupil in group.Pupils)
                             {
-                                var alreadyAdded = Model.AlreadyAddedPupilIds.Contains(pupil.Name.GetHashCode());
+                                var alreadyAdded = Model.AlreadyAddedPupilUserIds.Contains(pupil.UserId);
                                 <label class="ca-pupil-item @(alreadyAdded ? "ca-pupil-item-disabled" : "")">
-                                    <input type="checkbox" data-pupil-checkbox value="@pupil.Name" @(alreadyAdded ? "checked disabled" : "") />
+                                    <input type="checkbox" data-pupil-checkbox value="@pupil.UserId" @(alreadyAdded ? "checked disabled" : "") />
                                     <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
                                     <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
                                     <span class="ca-pupil-name">@pupil.Name</span>

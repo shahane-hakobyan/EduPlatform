@@ -594,3 +594,9 @@ span.answer-grading-tab {
     flex: 0 0 auto;
     cursor: default;
 }
+.ad-due-saved {
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #067647;
+}

@@ -26,7 +26,7 @@
 
     public class CreateAssignmentPrefill
     {
-        public int SourceTemplateId { get; set; }
+        public int? SourceTemplateId { get; set; }
         public string Title { get; set; } = "";
         public string? Description { get; set; }
         public List<int> SubjectIds { get; set; } = new();
@@ -39,12 +39,18 @@
         public bool AllowTextAnswer { get; set; }
         public bool AllowFileAnswer { get; set; }
         public List<PrefillFile> ExistingFiles { get; set; } = new();
+
+        /// <summary>Սխալից հետո ձևի վերադարձ՝ արդեն լրացված ամսաթվերն ու աշակերտները</summary>
+        public string? StartDate { get; set; }
+        public string? DueDate { get; set; }
+        public List<string> PupilIds { get; set; } = new();
     }
 
     public class PrefillFile
     {
         public int Id { get; set; }
         public string Name { get; set; } = "";
+        public bool Keep { get; set; } = true;
     }
 
     public class AssignmentClassGroupViewModel

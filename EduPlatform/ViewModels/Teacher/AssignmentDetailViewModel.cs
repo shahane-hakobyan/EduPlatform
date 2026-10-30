@@ -10,6 +10,7 @@
         public string GradingType { get; set; } = "";
         public DateTime StartDate { get; set; }
         public DateTime DueDate { get; set; }
+        public DateTime? StartDateRaw { get; set; }
         public string Description { get; set; } = "";
         public bool IsArchived { get; set; }
         public bool AllowTextAnswer { get; set; }
@@ -18,7 +19,7 @@
         public string ArchiveUrl { get; set; } = "#";
         public List<PupilSubmissionViewModel> Submissions { get; set; } = new();
         public List<AssignmentClassGroupViewModel> AvailableGrades { get; set; } = new();
-        public List<int> AlreadyAddedPupilIds { get; set; } = new();
+        public List<string> AlreadyAddedPupilUserIds { get; set; } = new();
     }
 
     public class AssignmentFileViewModel

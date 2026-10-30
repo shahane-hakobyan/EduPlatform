@@ -102,6 +102,39 @@
         });
     }
 
+    // Change deadline
+    const dueInput = document.getElementById('adDueInput');
+    if (dueInput) {
+        const savedBox = document.getElementById('adDueSaved');
+        dueInput.addEventListener('change', async function () {
+            const value = dueInput.value;
+            const start = dueInput.getAttribute('data-start');
+            if (!value || (start && value.slice(0, 10) < start.slice(0, 10))) {
+                alert(dueInput.getAttribute('data-invalid-msg'));
+                dueInput.value = dueInput.getAttribute('data-original');
+                return;
+            }
+
+            try {
+                const res = await fetch('/Teacher/ChangeDueDate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: parseInt(dueInput.getAttribute('data-assignment-id'), 10), dueDate: value })
+                });
+                if (res.ok) {
+                    dueInput.setAttribute('data-original', value);
+                    if (savedBox) {
+                        savedBox.style.display = '';
+                        setTimeout(function () { savedBox.style.display = 'none'; }, 2500);
+                    }
+                    return;
+                }
+            } catch (e) { }
+            alert(dueInput.getAttribute('data-invalid-msg'));
+            dueInput.value = dueInput.getAttribute('data-original');
+        });
+    }
+
     // --- Pupil list filters ---
     (function () {
         const rows = document.querySelectorAll('.ad-submission-row');
@@ -195,17 +228,23 @@
             const scriptTag = document.querySelector('script[src*="assignment-detail.js"]');
             const assignmentId = scriptTag ? scriptTag.getAttribute('data-assignment-id') : null;
 
-            const pupilNames = Array.from(addPupilsModal.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)'))
+            const pupilIds = Array.from(addPupilsModal.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)'))
                 .map(function (cb) { return cb.value; });
 
+            addPupilsSubmitBtn.disabled = true;
             fetch('/Teacher/AddPupilsToAssignment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ assignmentId: parseInt(assignmentId, 10), pupilNames: pupilNames })
-            }).then(function () {
-                closeModal('addPupilsModal');
-                location.reload();
-            });
+                body: JSON.stringify({ assignmentId: parseInt(assignmentId, 10), pupilIds: pupilIds })
+            }).then(function (r) {
+                if (r.ok) {
+                    closeModal('addPupilsModal');
+                    location.reload();
+                } else {
+                    addPupilsSubmitBtn.disabled = false;
+                    alert('Error ' + r.status);
+                }
+            }).catch(function () { addPupilsSubmitBtn.disabled = false; });
         });
     }
 });

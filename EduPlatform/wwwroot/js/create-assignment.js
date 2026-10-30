@@ -199,9 +199,17 @@
                 has('GradingType') && form.querySelector('input[name="GradingType"]').value !== '' &&
                 (form.querySelector('[name="AllowTextAnswer"]').checked || form.querySelector('[name="AllowFileAnswer"]').checked);
 
-            if (!ok) {
+            // Վերջնաժամկետը պետք է լինի սկզբից հետո
+            const startEl = form.querySelector('[name="StartDate"]');
+            const dueEl = form.querySelector('[name="DueDate"]');
+            const datesOk = !(startEl && dueEl && startEl.value && dueEl.value && dueEl.value.slice(0, 10) < startEl.value.slice(0, 10));
+
+            if (!ok || !datesOk) {
                 e.preventDefault();
                 if (clientError) {
+                    clientError.textContent = (ok && !datesOk)
+                        ? clientError.getAttribute('data-date-msg')
+                        : clientError.getAttribute('data-default-msg');
                     clientError.style.display = '';
                     clientError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }

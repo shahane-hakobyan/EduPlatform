@@ -432,6 +432,8 @@
 	<data name="SentTimes" xml:space="preserve"><value>Отправлено</value></data>
 	<data name="NoBankAssignments" xml:space="preserve"><value>Банк пуст</value></data>
 	<data name="OpenAndSendBtn" xml:space="preserve"><value>Открыть и отправить</value></data>
+	<data name="DeadlineSaved" xml:space="preserve"><value>Срок сохранён</value></data>
+	<data name="DeadlineInvalid" xml:space="preserve"><value>Срок должен быть позже начала</value></data>
 	
   
 </root>
