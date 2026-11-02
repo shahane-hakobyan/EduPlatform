@@ -20,6 +20,11 @@
                     <span class="materials-filter-badge" style="display:none">0</span>
                 </button>
                 <div class="dropdown-menu materials-filter-menu">
+                    <div class="materials-filter-menu-head">
+                        <a href="#" class="materials-filter-clear-one" style="display:none">
+                            <i class="bi bi-x-circle"></i> @Localizer["ClearThisFilter"]
+                        </a>
+                    </div>
                     @for (var i = 0; i < filter.Options.Count; i++)
                     {
                         var inputId = $"f-{uid}-{filter.Key}-{i}";

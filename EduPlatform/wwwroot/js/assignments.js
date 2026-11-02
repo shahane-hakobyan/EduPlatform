@@ -101,6 +101,9 @@
                 badge.textContent = count;
                 badge.style.display = count ? '' : 'none';
             }
+
+            const clearOne = dropdown.querySelector('.materials-filter-clear-one');
+            if (clearOne) clearOne.style.display = count ? '' : 'none';
         });
 
         if (clearBtn) {
@@ -111,6 +114,42 @@
     }
 
     if (applyBtn) applyBtn.addEventListener('click', apply);
+
+    // ընտրված ֆիլտրերի թիվը (badge) թարմացվում է անմիջապես, արդյունքները՝ «Կիրառել»-ից հետո
+    dropdowns.forEach(function (dropdown) {
+        const badge = dropdown.querySelector('.materials-filter-badge');
+        const inputs = dropdown.querySelectorAll('.materials-filter-pill-input');
+        inputs.forEach(function (input) {
+            input.addEventListener('change', function () {
+                const count = dropdown.querySelectorAll('.materials-filter-pill-input:checked').length;
+                if (badge) {
+                    badge.textContent = count;
+                    badge.style.display = count ? '' : 'none';
+                }
+            });
+        });
+    });
+
+    // Մաքրել միայն այս ֆիլտրը (մյուսները մնում են)
+    dropdowns.forEach(function (dropdown) {
+        const clearOne = dropdown.querySelector('.materials-filter-clear-one');
+        if (!clearOne) return;
+        const inputs = dropdown.querySelectorAll('.materials-filter-pill-input');
+
+        // հղումը երևում է հենց ընտրելուց, առանց «Կիրառել»-ի սպասելու
+        inputs.forEach(function (input) {
+            input.addEventListener('change', function () {
+                const any = Array.from(inputs).some(function (i) { return i.checked; });
+                clearOne.style.display = any ? '' : 'none';
+            });
+        });
+
+        clearOne.addEventListener('click', function (e) {
+            e.preventDefault();
+            inputs.forEach(function (input) { input.checked = false; });
+            apply();
+        });
+    });
 
     if (search) {
         search.addEventListener('keydown', function (e) {

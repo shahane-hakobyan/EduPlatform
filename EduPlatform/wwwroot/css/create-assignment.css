@@ -648,3 +648,30 @@
     .ca-existing-file input {
         accent-color: var(--accent);
     }
+.ca-dropzone.dragover {
+    border-color: var(--accent);
+    background: rgba(99, 105, 212, 0.08);
+}
+
+.ca-dropzone-filename {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+}
+
+.ca-file-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+.ca-file-chip-remove {
+    cursor: pointer;
+    font-size: 16px;
+}

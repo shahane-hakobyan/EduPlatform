@@ -429,4 +429,5 @@
 	<data name="OpenAndSendBtn" xml:space="preserve"><value>Բացել և ուղարկել</value></data>
 	<data name="DeadlineSaved" xml:space="preserve"><value>Վերջնաժամկետը պահպանվեց</value></data>
 	<data name="DeadlineInvalid" xml:space="preserve"><value>Վերջնաժամկետը պետք է լինի սկզբնաժամկետից ավելի ուշ</value></data>
+	<data name="ClearThisFilter" xml:space="preserve"><value>Մաքրել այս ֆիլտրը</value></data>
 </root>

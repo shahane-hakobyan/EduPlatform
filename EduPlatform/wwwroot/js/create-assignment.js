@@ -103,9 +103,72 @@
     // --- File dropzone (մի քանի ֆայլ) ---
     const fileInput = document.getElementById('caFileInput');
     const fileNameEl = document.getElementById('caFileName');
+    const dropzone = document.querySelector('.ca-dropzone');
     if (fileInput) {
+        const dt = new DataTransfer();   // ընտրված ֆայլերի ընդհանուր ցուցակը (click + drag & drop)
+
+        function renderFiles() {
+            fileNameEl.innerHTML = '';
+            Array.from(dt.files).forEach(function (f, i) {
+                const chip = document.createElement('span');
+                chip.className = 'ca-file-chip';
+                chip.textContent = f.name + ' ';
+                const x = document.createElement('i');
+                x.className = 'bi bi-x ca-file-chip-remove';
+                x.addEventListener('click', function (e) {
+                    e.preventDefault();      // label-ի ներսում՝ ֆայլի ընտրության պատուհանը չբացվի
+                    e.stopPropagation();
+                    const next = new DataTransfer();
+                    Array.from(dt.files).forEach(function (g, j) { if (j !== i) next.items.add(g); });
+                    dt.items.clear();
+                    Array.from(next.files).forEach(function (g) { dt.items.add(g); });
+                    fileInput.files = dt.files;
+                    renderFiles();
+                });
+                chip.appendChild(x);
+                fileNameEl.appendChild(chip);
+            });
+        }
+
+        function addFiles(list) {
+            Array.from(list).forEach(function (f) {
+                const exists = Array.from(dt.files).some(function (g) { return g.name === f.name && g.size === f.size; });
+                if (!exists) dt.items.add(f);
+            });
+            fileInput.files = dt.files;
+            renderFiles();
+        }
+
         fileInput.addEventListener('change', function () {
-            fileNameEl.textContent = Array.from(fileInput.files).map(function (f) { return f.name; }).join(', ');
+            // ընտրվածները ավելացվում են արդեն եղածներին
+            const picked = Array.from(fileInput.files);
+            fileInput.files = dt.files;
+            addFiles(picked);
+        });
+
+        if (dropzone) {
+            ['dragenter', 'dragover'].forEach(function (ev) {
+                dropzone.addEventListener(ev, function (e) {
+                    e.preventDefault();
+                    dropzone.classList.add('dragover');
+                });
+            });
+            ['dragleave', 'dragend'].forEach(function (ev) {
+                dropzone.addEventListener(ev, function () { dropzone.classList.remove('dragover'); });
+            });
+            dropzone.addEventListener('drop', function (e) {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+                if (e.dataTransfer && e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
+            });
+        }
+
+        // ֆայլը ձևից դուրս գցելիս բրաուզերը այն չի բացում
+        ['dragover', 'drop'].forEach(function (ev) {
+            window.addEventListener(ev, function (e) {
+                if (e.target.closest && e.target.closest('.ca-dropzone')) return;
+                e.preventDefault();
+            });
         });
     }
 

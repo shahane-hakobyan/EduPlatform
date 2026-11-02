@@ -434,4 +434,5 @@
 	<data name="OpenAndSendBtn" xml:space="preserve"><value>Open and send</value></data>
 	<data name="DeadlineSaved" xml:space="preserve"><value>Deadline saved</value></data>
 	<data name="DeadlineInvalid" xml:space="preserve"><value>The deadline must be after the start</value></data>
+	<data name="ClearThisFilter" xml:space="preserve"><value>Clear this filter</value></data>
 </root>
