@@ -435,4 +435,11 @@
 	<data name="DeadlineSaved" xml:space="preserve"><value>Deadline saved</value></data>
 	<data name="DeadlineInvalid" xml:space="preserve"><value>The deadline must be after the start</value></data>
 	<data name="ClearThisFilter" xml:space="preserve"><value>Clear this filter</value></data>
+	<data name="TimesSuffix" xml:space="preserve"><value>times</value></data>
+	<data name="ConfirmDeleteBankAssignment" xml:space="preserve"><value>Delete from the bank? Assignments already sent will stay.</value></data>
+	<data name="SendAssignmentTitle" xml:space="preserve"><value>Send assignment</value></data>
+	<data name="SendAssignmentSubtitle" xml:space="preserve"><value>Choose the pupils and the dates. The bank entry will not change</value></data>
+	<data name="EditAssignmentTitle" xml:space="preserve"><value>Edit assignment</value></data>
+	<data name="EditAssignmentSubtitle" xml:space="preserve"><value>Changes are saved in the bank. Assignments already sent will not change</value></data>
+	<data name="SaveChangesBtn" xml:space="preserve"><value>Save changes</value></data>
 </root>

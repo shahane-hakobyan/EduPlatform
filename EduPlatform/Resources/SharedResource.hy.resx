@@ -430,4 +430,11 @@
 	<data name="DeadlineSaved" xml:space="preserve"><value>Վերջնաժամկետը պահպանվեց</value></data>
 	<data name="DeadlineInvalid" xml:space="preserve"><value>Վերջնաժամկետը պետք է լինի սկզբնաժամկետից ավելի ուշ</value></data>
 	<data name="ClearThisFilter" xml:space="preserve"><value>Մաքրել այս ֆիլտրը</value></data>
+	<data name="TimesSuffix" xml:space="preserve"><value>անգամ</value></data>
+	<data name="ConfirmDeleteBankAssignment" xml:space="preserve"><value>Ջնջե՞լ շտեմարանից։ Արդեն ուղարկված առաջադրանքները կմնան։</value></data>
+	<data name="SendAssignmentTitle" xml:space="preserve"><value>Ուղարկել առաջադրանքը</value></data>
+	<data name="SendAssignmentSubtitle" xml:space="preserve"><value>Ընտրեք աշակերտներին և ժամկետները. Շտեմարանի գրառումը չի փոխվի</value></data>
+	<data name="EditAssignmentTitle" xml:space="preserve"><value>Խմբագրել առաջադրանքը</value></data>
+	<data name="EditAssignmentSubtitle" xml:space="preserve"><value>Փոփոխությունները կպահվեն շտեմարանում. Արդեն ուղարկված առաջադրանքները չեն փոխվի</value></data>
+	<data name="SaveChangesBtn" xml:space="preserve"><value>Պահպանել փոփոխությունները</value></data>
 </root>

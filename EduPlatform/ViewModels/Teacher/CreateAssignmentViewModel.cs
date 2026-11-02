@@ -22,6 +22,9 @@
 
         /// <summary>Շտեմարանից բացելիս՝ ձևի նախալրացումը</summary>
         public CreateAssignmentPrefill? Prefill { get; set; }
+
+        /// <summary>Create | Send (շտեմարանից ուղարկել) | Edit (շտեմարանի գրառման խմբագրում)</summary>
+        public string Mode { get; set; } = "Create";
     }
 
     public class CreateAssignmentPrefill

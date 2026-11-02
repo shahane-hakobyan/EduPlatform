@@ -1,4 +1,27 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
+    // ── Ջնջել շտեմարանից (արդեն ուղարկվածները մնում են) ───────────────────────
+    document.querySelectorAll('[data-bank-delete]').forEach(function (btn) {
+        btn.addEventListener('click', async function () {
+            if (!confirm(btn.getAttribute('data-confirm-text'))) return;
+
+            btn.disabled = true;
+            try {
+                const res = await fetch('/Teacher/DeleteBankAssignment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: parseInt(btn.getAttribute('data-assignment-id'), 10) })
+                });
+                if (res.ok) {
+                    const row = btn.closest('.bank-row');
+                    if (row) row.remove();
+                    refreshCounts();
+                    return;
+                }
+            } catch (e) { }
+            btn.disabled = false;
+        });
+    });
+
     // ── Որոնում և ֆիլտրեր (բրաուզերում) ───────────────────────────────────────
     const search = document.querySelector('.materials-search-input');
     const dropdowns = document.querySelectorAll('.materials-filter-dropdown');
@@ -6,7 +29,7 @@
     const clearBtn = document.querySelector('.materials-filter-clear-btn');
 
     function refreshCounts() {
-        const count = Array.from(document.querySelectorAll('.assignment-card'))
+        const count = Array.from(document.querySelectorAll('.bank-row'))
             .filter(function (el) { return el.style.display !== 'none'; }).length;
         const el = document.getElementById('bankCount');
         if (el) el.textContent = count;
@@ -27,7 +50,7 @@
         const q = (search ? search.value : '').trim().toLowerCase();
         const selected = selectedValues();
 
-        document.querySelectorAll('.assignment-card').forEach(function (card) {
+        document.querySelectorAll('.bank-row').forEach(function (card) {
             let ok = !q || (card.getAttribute('data-f-search') || '').indexOf(q) !== -1;
 
             // նույն ֆիլտրի ներսում՝ «կամ», տարբեր ֆիլտրերի միջև՝ «և»

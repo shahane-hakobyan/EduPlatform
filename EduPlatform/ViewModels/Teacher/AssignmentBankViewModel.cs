@@ -23,6 +23,7 @@
 
         public DateTime CreatedAt { get; set; }
         public int FilesCount { get; set; }
-        public int ParticipantCount { get; set; }
+        /// <summary>Քանի անգամ է ուղարկվել</summary>
+        public int SentCount { get; set; }
     }
 }

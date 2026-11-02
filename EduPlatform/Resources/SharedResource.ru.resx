@@ -435,7 +435,13 @@
 	<data name="DeadlineSaved" xml:space="preserve"><value>Срок сохранён</value></data>
 	<data name="DeadlineInvalid" xml:space="preserve"><value>Срок должен быть позже начала</value></data>
 	<data name="ClearThisFilter" xml:space="preserve"><value>Очистить этот фильтр</value></data>
-
+	<data name="TimesSuffix" xml:space="preserve"><value>раз</value></data>
+	<data name="ConfirmDeleteBankAssignment" xml:space="preserve"><value>Удалить из банка? Уже отправленные задания останутся.</value></data>
+	<data name="SendAssignmentTitle" xml:space="preserve"><value>Отправить задание</value></data>
+	<data name="SendAssignmentSubtitle" xml:space="preserve"><value>Выберите учеников и сроки. Запись в банке не изменится</value></data>
+	<data name="EditAssignmentTitle" xml:space="preserve"><value>Редактировать задание</value></data>
+	<data name="EditAssignmentSubtitle" xml:space="preserve"><value>Изменения сохраняются в банке. Уже отправленные задания не изменятся</value></data>
+	<data name="SaveChangesBtn" xml:space="preserve"><value>Сохранить изменения</value></data>
 
 
 </root>

@@ -197,9 +197,13 @@
     function refreshCounts() {
         const checked = document.querySelectorAll('[data-pupil-checkbox]:checked');
         const total = checked.length;
-        selectedCountEl.textContent = total;
-        selectedCountTopEl.textContent = total;
-        submitBtn.disabled = total === 0;
+        if (selectedCountEl) selectedCountEl.textContent = total;
+        if (selectedCountTopEl) selectedCountTopEl.textContent = total;
+
+        // խմբագրման ռեժիմում աշակերտներ չկան՝ կոճակը միշտ ակտիվ է
+        const pageForm = document.getElementById('createAssignmentForm');
+        const isEdit = pageForm && pageForm.getAttribute('data-mode') === 'Edit';
+        if (submitBtn && !isEdit) submitBtn.disabled = total === 0;
 
         document.querySelectorAll('.ca-class-group').forEach(function (group) {
             const groupChecked = group.querySelectorAll('[data-pupil-checkbox]:checked').length;
