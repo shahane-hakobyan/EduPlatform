@@ -1,4 +1,4 @@
-﻿@model EduPlatform.ViewModels.Library.MaterialsPageViewModel
+@model EduPlatform.ViewModels.Library.MaterialsPageViewModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 
 @{
@@ -55,7 +55,7 @@
 <div class="materials-grid">
     @foreach (var material in Model.Materials)
     {
-        <partial name="~/Views/Shared/Materials/_MaterialCard.cshtml" model="material" />
+        <partial name="_MaterialCard" model="material" />
     }
 </div>
 
