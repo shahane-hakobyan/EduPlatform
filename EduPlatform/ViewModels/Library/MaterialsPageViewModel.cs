@@ -1,4 +1,4 @@
-﻿namespace EduPlatform.ViewModels
+﻿namespace EduPlatform.ViewModels.Library
 {
     public class MaterialsPageViewModel
     {

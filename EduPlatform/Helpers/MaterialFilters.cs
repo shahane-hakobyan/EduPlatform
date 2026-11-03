@@ -1,4 +1,4 @@
-﻿using EduPlatform.ViewModels;
+﻿using EduPlatform.ViewModels.Library;
 using Microsoft.Extensions.Localization;
 
 namespace EduPlatform.Helpers

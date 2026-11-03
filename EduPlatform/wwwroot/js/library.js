@@ -91,7 +91,7 @@
 
             btn.disabled = true;
             try {
-                const res = await fetch('/Teacher/RemoveSavedMaterial', {
+                const res = await fetch('/Library/RemoveSavedMaterial', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ materialType: btn.dataset.type, id: parseInt(btn.dataset.id, 10) })

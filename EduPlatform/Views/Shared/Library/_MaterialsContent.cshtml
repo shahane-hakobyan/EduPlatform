@@ -1,4 +1,4 @@
-﻿@model EduPlatform.ViewModels.MaterialsPageViewModel
+﻿@model EduPlatform.ViewModels.Library.MaterialsPageViewModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 
 @{
@@ -93,7 +93,7 @@
                             <div class="materials-table-icon cover-@material.ColorVariant">
                                 @if (!string.IsNullOrEmpty(material.ThumbnailUrl))
                                 {
-                                    <img src="@material.ThumbnailUrl" alt="@material.Title" />
+                                    <img src="@material.ThumbnailUrl" alt="@material.Title" loading="lazy" decoding="async" />
                                 }
                                 else
                                 {

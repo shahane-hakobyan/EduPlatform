@@ -1,4 +1,4 @@
-﻿@model EduPlatform.ViewModels.MaterialCardViewModel
+﻿@model EduPlatform.ViewModels.Library.MaterialCardViewModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 
 <div class="material-card-wide" data-saved-key="@Model.MaterialType-@Model.Id"
@@ -13,7 +13,7 @@
     <div class="material-card-wide-image material-card-cover" data-full-image="@Model.ThumbnailUrl">
         @if (!string.IsNullOrEmpty(Model.ThumbnailUrl))
         {
-            <img src="@Model.ThumbnailUrl" alt="@Model.Title" />
+            <img src="@Model.ThumbnailUrl" alt="@Model.Title" loading="lazy" decoding="async" />
         }
         else
         {

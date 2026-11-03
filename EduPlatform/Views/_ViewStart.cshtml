@@ -1,5 +1,5 @@
 ﻿@{
-    var appAreaControllers = new[] { "Teacher", "Pupil", "School" };
+    var appAreaControllers = new[] { "Teacher", "Pupil", "School", "Library" };
 
     Layout = appAreaControllers.Contains(ViewContext.RouteData.Values["controller"]?.ToString())
         ? "_AppLayout"

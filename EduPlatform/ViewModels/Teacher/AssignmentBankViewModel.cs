@@ -1,4 +1,6 @@
-﻿namespace EduPlatform.ViewModels
+﻿using EduPlatform.ViewModels.Library;
+
+namespace EduPlatform.ViewModels
 {
     public class AssignmentBankViewModel
     {
