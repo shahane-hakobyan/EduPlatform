@@ -49,10 +49,10 @@ namespace EduPlatform.Controllers
                 Email = "harutyun.grigoryan@school.am",
                 PhoneNumber = "+374 77 123456",
                 SchoolName = "Ստեփան Շահումյանի անվան հ. 1 հիմնական դպրոց",
-                Subjects = "Մաթեմատիկա և Փիզիկա",
+                Subjects = "Մաթեմատիկա և Ֆիզիկա",
                 DigitLevel = "4-րդ աստիճան",
                 VoluntaryCertification = "Կամավոր ատեստավորում՝ 90-100%",
-                ProfessionalAchievements = "10+ տարվա մանկավարժական փորձ, մասնակցություն մարզային մաթեմատիկայի օլիմպիադների կազմակերպմանը, \"Լավագույն ուսուցիչ\" կոչում 2023թ.-ին, կանոնավոր վերապատրաստումների մասնակից։"
+                ProfessionalAchievements = "10+ տարվա մանկավարժական փորձ, մասնակցություն մարզային մաթեմատիկայի օլիմպիադաների կազմակերպմանը, \"Լավագույն ուսուցիչ\" կոչում 2023թ.-ին, կանոնավոր վերապատրաստումների մասնակից։"
             };
 
             return View(profile);
@@ -213,7 +213,7 @@ namespace EduPlatform.Controllers
             return today == DayOfWeek.Sunday ? ScheduleDay.Sunday : (ScheduleDay)(int)today;
         }
 
-        // ── «Խմբեր» ───────────────────────────────────────────────────────────────────────
+        // ── «Խմբեր» ───────────────────────────────────────────────────────────
 
         private string GroupTypeLabel(GroupType type) => type switch
         {
@@ -339,7 +339,7 @@ namespace EduPlatform.Controllers
                 : validPupilIds;
         }
 
-        // Անդամի ցույցադրվող անունը (AuthServer-ի անունները առայժմ տեղապահներ են)
+        // Անդամի ցուցադրվող անունը (AuthServer-ի անունները առայժմ տեղապահներ են)
         private async Task<Func<string, int, string>> GroupMemberNamer()
         {
             var pupilNames = (await BuildClassGroups())
@@ -508,7 +508,7 @@ namespace EduPlatform.Controllers
             });
         }
 
-        // ── Խմբի խմբագրում՝ միայն ադմինը ───────────────────────────────────────────────────────────
+        // ── Խմբի խմբագրում՝ միայն ադմինը ───────────────────────────────────────────
 
         private async Task<EditGroupViewModel?> BuildEditGroupViewModel(int id, EditGroupRequest? req = null, string? error = null)
         {
@@ -530,7 +530,7 @@ namespace EduPlatform.Controllers
             var nameFor = await GroupMemberNamer();
             var memberIds = g.Members.Select(m => m.UserId).ToHashSet();
 
-            // նոր անդամներ ավելացնելու ցանկ՝ առանց արդեն խմբում եղածների
+            // նոր անդամներ ավելացնելու ցուցակ՝ առանց արդեն խմբում եղածների
             var classGroups = new List<AssignmentClassGroupViewModel>();
             if (g.Type == GroupType.Pupils || g.Type == GroupType.Parents)
             {
@@ -713,7 +713,7 @@ namespace EduPlatform.Controllers
             return View("~/Views/Teacher/Messages.cshtml");
         }
 
-        // Ուսուցչի դասարանները և նրանց աշակերտները՝ IClassRosterService-ից (նույնը օգտագործում են նաև առաջադրանքները)
+        // Ուսուցչի դասարանները և նրանց աշակերտները՝ IClassRosterService-ից (նույնն օգտագործում են նաև առաջադրանքները)
         private Task<List<AssignmentClassGroupViewModel>> BuildClassGroups()
             => _roster.BuildClassGroupsAsync(CurrentTeacherUserId);
     }
