@@ -443,5 +443,51 @@
 	<data name="EditAssignmentSubtitle" xml:space="preserve"><value>Изменения сохраняются в банке. Уже отправленные задания не изменятся</value></data>
 	<data name="SaveChangesBtn" xml:space="preserve"><value>Сохранить изменения</value></data>
 
+	<data name="CreateGroup" xml:space="preserve"><value>Создать группу</value></data>
+	<data name="GroupsCountLabel" xml:space="preserve"><value>групп</value></data>
+	<data name="SearchGroups" xml:space="preserve"><value>Поиск групп...</value></data>
+	<data name="NoGroups" xml:space="preserve"><value>Групп пока нет</value></data>
+	<data name="GroupTypeLabel" xml:space="preserve"><value>Тип группы</value></data>
+	<data name="MyRoleInGroup" xml:space="preserve"><value>Моя роль в группе</value></data>
+	<data name="GroupTypePupils" xml:space="preserve"><value>Группа учеников</value></data>
+	<data name="GroupTypeParents" xml:space="preserve"><value>Группа родителей</value></data>
+	<data name="GroupTypeOther" xml:space="preserve"><value>Другая группа</value></data>
+	<data name="GroupRoleAdmin" xml:space="preserve"><value>Создатель группы</value></data>
+	<data name="GroupRoleMember" xml:space="preserve"><value>Участник группы</value></data>
+	<data name="MembersCountLabel" xml:space="preserve"><value>участников</value></data>
+	<data name="GroupRoleAdminShort" xml:space="preserve"><value>Создатель</value></data>
+	<data name="GroupRoleMemberShort" xml:space="preserve"><value>Участник</value></data>
+	<data name="GroupPictureLabel" xml:space="preserve"><value>Изображение группы (необязательно)</value></data>
+	<data name="UploadPicture" xml:space="preserve"><value>Добавить изображение</value></data>
+	<data name="PictureHint" xml:space="preserve"><value>JPG, PNG, максимум 5MB</value></data>
+	<data name="GroupNameLabel" xml:space="preserve"><value>Название группы</value></data>
+	<data name="GroupNamePlaceholder" xml:space="preserve"><value>Введите название группы...</value></data>
+	<data name="GroupTypePupilsDesc" xml:space="preserve"><value>Выбираются классы</value></data>
+	<data name="GroupTypeParentsDesc" xml:space="preserve"><value>Добавляются родители</value></data>
+	<data name="GroupTypeOtherDesc" xml:space="preserve"><value>Любое другое объединение</value></data>
+	<data name="ContinueToMembers" xml:space="preserve"><value>Продолжить → Выбрать участников</value></data>
+	<data name="GroupFormIncomplete" xml:space="preserve"><value>Введите название группы и выберите тип</value></data>
+	<data name="GroupImageInvalid" xml:space="preserve"><value>Изображение должно быть JPG или PNG до 5MB</value></data>
+	<data name="MembersNotAvailableYet" xml:space="preserve"><value>Выбор участников для этого типа группы появится после подключения системы. Группа будет создана, вы станете её администратором.</value></data>
+	<data name="SelectMembersTitle" xml:space="preserve"><value>Выбрать участников</value></data>
+	<data name="SelectedShort" xml:space="preserve"><value>выбрано</value></data>
+	<data name="PickPupilsBanner" xml:space="preserve"><value>Поиск по имени и фамилии ученика; в группу добавляются выбранные ученики.</value></data>
+	<data name="PickParentsBanner" xml:space="preserve"><value>Поиск по имени и фамилии ученика; в группу добавляются его родители.</value></data>
+	<data name="PupilWord" xml:space="preserve"><value>Ученик</value></data>
+	<data name="ParentWord" xml:space="preserve"><value>Родитель</value></data>
+	<data name="ParentOfPupil" xml:space="preserve"><value>Родитель: {0}</value></data>
+	<data name="CreateGroupWithCount" xml:space="preserve"><value>Создать группу ({0} уч.)</value></data>
+	<data name="GroupChatPlaceholder" xml:space="preserve"><value>Чат группы скоро появится</value></data>
+	<data name="GroupMembersTitle" xml:space="preserve"><value>Участники группы</value></data>
+	<data name="YouLabel" xml:space="preserve"><value>Вы</value></data>
+	<data name="UserWord" xml:space="preserve"><value>Пользователь</value></data>
+	<data name="DeleteGroupBtn" xml:space="preserve"><value>Удалить</value></data>
+	<data name="ConfirmDeleteGroup" xml:space="preserve"><value>Удалить группу? Она будет удалена для всех участников.</value></data>
+	<data name="EditGroupTitle" xml:space="preserve"><value>Редактировать группу</value></data>
+	<data name="GroupTypeLocked" xml:space="preserve"><value>Тип группы изменить нельзя</value></data>
+	<data name="ChangePicture" xml:space="preserve"><value>Изменить изображение</value></data>
+	<data name="RemovePicture" xml:space="preserve"><value>Удалить изображение</value></data>
+	<data name="RemoveMemberTitle" xml:space="preserve"><value>Удалить из группы</value></data>
+	<data name="AddMembersTitle" xml:space="preserve"><value>Добавить новых участников</value></data>
 
 </root>

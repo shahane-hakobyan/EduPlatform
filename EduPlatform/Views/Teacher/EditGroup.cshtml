@@ -1,0 +1,175 @@
+﻿@model EduPlatform.ViewModels.EditGroupViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["EditGroupTitle"].Value;
+    var isParents = Model.TypeValue == 2;
+    var canPick = Model.TypeValue == 1 || Model.TypeValue == 2;
+}
+
+<form id="editGroupForm" method="post" action="@Model.SubmitUrl" enctype="multipart/form-data" class="create-assignment-page cg-page">
+
+    <div class="ca-topbar d-flex align-items-center gap-3 mb-3">
+        <a href="@Model.CancelUrl" class="ca-back-btn d-flex align-items-center justify-content-center">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <h1 class="ca-title mb-0 flex-grow-1">@Localizer["EditGroupTitle"]</h1>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Error))
+    {
+        <div class="ca-error">@Model.Error</div>
+    }
+    <div class="ca-error" id="egClientError" style="display:none"
+         data-form-msg="@Localizer["GroupFormIncomplete"]"
+         data-image-msg="@Localizer["GroupImageInvalid"]"></div>
+
+    <!-- նկար, անուն, տեսակ (տեսակը չի փոխվում) -->
+    <div class="ca-section-card">
+        <div class="ca-section-body">
+            <div class="ca-label">@Localizer["GroupPictureLabel"]</div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="cg-avatar" id="egAvatar" data-original="@Model.ImageUrl">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" alt="" />
+                    }
+                    else
+                    {
+                        <i class="bi bi-people"></i>
+                    }
+                </div>
+                <div>
+                    <label for="egImageInput" class="cg-upload-btn"><i class="bi bi-image"></i> @Localizer["ChangePicture"]</label>
+                    <input type="file" id="egImageInput" name="Image" accept=".jpg,.jpeg,.png,image/jpeg,image/png" hidden />
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <label class="eg-remove-image">
+                            <input type="checkbox" name="RemoveImage" value="true" id="egRemoveImage" /> @Localizer["RemovePicture"]
+                        </label>
+                    }
+                    <div class="cg-hint">@Localizer["PictureHint"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ca-section-card">
+        <div class="ca-section-body">
+            <label class="ca-label" for="egName">@Localizer["GroupNameLabel"] <span class="ca-required">*</span></label>
+            <input type="text" id="egName" name="Name" class="ca-input" maxlength="200" value="@Model.Name"
+                   placeholder="@Localizer["GroupNamePlaceholder"]" />
+
+            <div class="ca-label mt-3">@Localizer["GroupTypeLabel"]</div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="group-tag group-tag-@Model.TypeKey.ToLowerInvariant()">@Model.TypeLabel</span>
+                <span class="cg-hint mt-0">@Localizer["GroupTypeLocked"]</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ընթացիկ անդամներ՝ հեռացնելու համար -->
+    <div class="ca-section-card">
+        <div class="ca-section-body">
+            <div class="ca-label">@Localizer["GroupMembersTitle"] (<span id="egMembersCount">@Model.Members.Count</span>)</div>
+            <div class="eg-members">
+                @foreach (var m in Model.Members)
+                {
+                    <div class="eg-member" data-user-id="@m.UserId">
+                        <span class="gd-member-avatar"><i class="bi bi-person"></i></span>
+                        <span class="eg-member-name">@m.Name</span>
+                        <span class="group-tag group-tag-role @(m.IsAdmin ? "is-admin" : "is-member")">@m.RoleLabel</span>
+                        @if (!m.IsAdmin)
+                        {
+                            <button type="button" class="eg-remove-btn" title="@Localizer["RemoveMemberTitle"]" data-remove-member>
+                                <i class="bi bi-person-dash"></i>
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+            <div id="egRemoveInputs"></div>
+        </div>
+    </div>
+
+    <!-- նոր անդամներ ավելացնել -->
+    <div class="ca-section-card">
+        <div class="ca-section-body">
+            <div class="ca-label">@Localizer["AddMembersTitle"] (<span id="egAddCount">0</span>)</div>
+
+            @if (canPick)
+            {
+                <div class="cg-banner">
+                    <i class="bi bi-info-circle"></i>
+                    <span>@(isParents ? Localizer["PickParentsBanner"] : Localizer["PickPupilsBanner"])</span>
+                </div>
+
+                <div class="cg-search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="egPupilSearch" placeholder="@Localizer["SearchPupilByNamePlaceholder"]" />
+                </div>
+
+                <div class="cg-pick-tools">
+                    <select id="egClassFilter" class="cg-class-select">
+                        <option value="">@Localizer["Grade"]</option>
+                        @foreach (var group in Model.ClassGroups.Where(g => g.Pupils.Any()))
+                        {
+                            <option value="@group.GradeName">@group.GradeName</option>
+                        }
+                    </select>
+                    <button type="button" id="egSelectVisible" class="cg-tool-btn"><i class="bi bi-check2-all"></i> @Localizer["SelectAllLabel"]</button>
+                    <button type="button" id="egClearAll" class="cg-tool-btn">@Localizer["ClearAllLabel"]</button>
+                </div>
+
+                <div class="cg-pick-list eg-pick-list">
+                    @foreach (var group in Model.ClassGroups)
+                    {
+                        foreach (var pupil in group.Pupils)
+                        {
+                            <label class="cg-pick-item"
+                                   data-class="@group.GradeName"
+                                   data-search="@((pupil.Name + " " + group.GradeName).ToLowerInvariant())">
+                                <input type="checkbox" name="AddMemberIds" value="@(isParents ? "parent:" + pupil.UserId : pupil.UserId)" />
+                                <span class="cg-pick-main">
+                                    <span class="cg-pick-name">@pupil.Name</span>
+                                    <span class="cg-pick-sub">
+                                        @if (isParents)
+                                        {
+                                            <text>@Localizer["ParentWord"] &mdash; @string.Format(Localizer["ParentOfPupil"].Value, pupil.Name) (@group.GradeName)</text>
+                                        }
+                                        else
+                                        {
+                                            <text>@Localizer["PupilWord"] &mdash; @group.GradeName</text>
+                                        }
+                                    </span>
+                                </span>
+                                <i class="bi bi-check-lg cg-pick-check"></i>
+                            </label>
+                        }
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="cg-note"><i class="bi bi-info-circle"></i> @Localizer["MembersNotAvailableYet"]</div>
+            }
+        </div>
+    </div>
+
+    <div class="ca-footer">
+        <a href="@Model.CancelUrl" class="ca-cancel-btn">@Localizer["CancelBtn"]</a>
+        <button type="submit" class="ca-submit-btn">
+            <i class="bi bi-check-lg"></i> @Localizer["SaveChangesBtn"]
+        </button>
+    </div>
+</form>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/create-assignment.css" />
+    <link rel="stylesheet" href="~/css/groups.css" />
+    <link rel="stylesheet" href="~/css/group-detail.css" />
+    <link rel="stylesheet" href="~/css/create-group.css" />
+    <link rel="stylesheet" href="~/css/edit-group.css" />
+}
+@section Scripts {
+    <script src="~/js/edit-group.js"></script>
+}

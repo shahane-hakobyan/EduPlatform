@@ -442,4 +442,52 @@
 	<data name="EditAssignmentTitle" xml:space="preserve"><value>Edit assignment</value></data>
 	<data name="EditAssignmentSubtitle" xml:space="preserve"><value>Changes are saved in the bank. Assignments already sent will not change</value></data>
 	<data name="SaveChangesBtn" xml:space="preserve"><value>Save changes</value></data>
+
+	<data name="CreateGroup" xml:space="preserve"><value>Create group</value></data>
+	<data name="GroupsCountLabel" xml:space="preserve"><value>groups</value></data>
+	<data name="SearchGroups" xml:space="preserve"><value>Search groups...</value></data>
+	<data name="NoGroups" xml:space="preserve"><value>No groups yet</value></data>
+	<data name="GroupTypeLabel" xml:space="preserve"><value>Group type</value></data>
+	<data name="MyRoleInGroup" xml:space="preserve"><value>My role in the group</value></data>
+	<data name="GroupTypePupils" xml:space="preserve"><value>Pupils' group</value></data>
+	<data name="GroupTypeParents" xml:space="preserve"><value>Parents' group</value></data>
+	<data name="GroupTypeOther" xml:space="preserve"><value>Other group</value></data>
+	<data name="GroupRoleAdmin" xml:space="preserve"><value>Group creator</value></data>
+	<data name="GroupRoleMember" xml:space="preserve"><value>Group member</value></data>
+	<data name="MembersCountLabel" xml:space="preserve"><value>members</value></data>
+	<data name="GroupRoleAdminShort" xml:space="preserve"><value>Creator</value></data>
+	<data name="GroupRoleMemberShort" xml:space="preserve"><value>Member</value></data>
+	<data name="GroupPictureLabel" xml:space="preserve"><value>Group picture (optional)</value></data>
+	<data name="UploadPicture" xml:space="preserve"><value>Upload picture</value></data>
+	<data name="PictureHint" xml:space="preserve"><value>JPG, PNG, max 5MB</value></data>
+	<data name="GroupNameLabel" xml:space="preserve"><value>Group name</value></data>
+	<data name="GroupNamePlaceholder" xml:space="preserve"><value>Enter the group name...</value></data>
+	<data name="GroupTypePupilsDesc" xml:space="preserve"><value>Classes are selected</value></data>
+	<data name="GroupTypeParentsDesc" xml:space="preserve"><value>Parents are added</value></data>
+	<data name="GroupTypeOtherDesc" xml:space="preserve"><value>Any other association</value></data>
+	<data name="ContinueToMembers" xml:space="preserve"><value>Continue → Choose members</value></data>
+	<data name="GroupFormIncomplete" xml:space="preserve"><value>Enter the group name and choose its type</value></data>
+	<data name="GroupImageInvalid" xml:space="preserve"><value>The picture must be a JPG or PNG up to 5MB</value></data>
+	<data name="MembersNotAvailableYet" xml:space="preserve"><value>Choosing members for this group type will be added once the system is connected. The group will be created and you will be its admin.</value></data>
+	<data name="SelectMembersTitle" xml:space="preserve"><value>Choose members</value></data>
+	<data name="SelectedShort" xml:space="preserve"><value>selected</value></data>
+	<data name="PickPupilsBanner" xml:space="preserve"><value>Search by the pupil's first and last name; the selected pupils are added to the group.</value></data>
+	<data name="PickParentsBanner" xml:space="preserve"><value>Search by the pupil's first and last name; the pupil's parents are added to the group.</value></data>
+	<data name="PupilWord" xml:space="preserve"><value>Pupil</value></data>
+	<data name="ParentWord" xml:space="preserve"><value>Parent</value></data>
+	<data name="ParentOfPupil" xml:space="preserve"><value>Parent of {0}</value></data>
+	<data name="CreateGroupWithCount" xml:space="preserve"><value>Create group ({0} members)</value></data>
+	<data name="GroupChatPlaceholder" xml:space="preserve"><value>The group chat will be added soon</value></data>
+	<data name="GroupMembersTitle" xml:space="preserve"><value>Group members</value></data>
+	<data name="YouLabel" xml:space="preserve"><value>You</value></data>
+	<data name="UserWord" xml:space="preserve"><value>User</value></data>
+	<data name="DeleteGroupBtn" xml:space="preserve"><value>Delete</value></data>
+	<data name="ConfirmDeleteGroup" xml:space="preserve"><value>Delete the group? It will be deleted for all members.</value></data>
+	<data name="EditGroupTitle" xml:space="preserve"><value>Edit group</value></data>
+	<data name="GroupTypeLocked" xml:space="preserve"><value>The group type cannot be changed</value></data>
+	<data name="ChangePicture" xml:space="preserve"><value>Change picture</value></data>
+	<data name="RemovePicture" xml:space="preserve"><value>Remove picture</value></data>
+	<data name="RemoveMemberTitle" xml:space="preserve"><value>Remove from group</value></data>
+	<data name="AddMembersTitle" xml:space="preserve"><value>Add new members</value></data>
+
 </root>

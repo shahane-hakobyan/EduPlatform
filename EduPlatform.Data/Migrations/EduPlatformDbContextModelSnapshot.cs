@@ -486,6 +486,70 @@ namespace EduPlatform.Migrations
                     b.ToTable("TeacherSubjects");
                 });
 
+            modelBuilder.Entity("EduPlatform.Data.Models.UserGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ImageContentType")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ImageStoredFileName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.ToTable("UserGroups");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.UserGroupMember", b =>
+                {
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserGroupMembers");
+                });
+
             modelBuilder.Entity("EduPlatform.Data.Models.UserLibraryMaterial", b =>
                 {
                     b.Property<int>("Id")
@@ -680,6 +744,17 @@ namespace EduPlatform.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("EduPlatform.Data.Models.UserGroupMember", b =>
+                {
+                    b.HasOne("EduPlatform.Data.Models.UserGroup", "Group")
+                        .WithMany("Members")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("EduPlatform.Data.Models.Assignment", b =>
                 {
                     b.Navigation("Files");
@@ -706,6 +781,11 @@ namespace EduPlatform.Migrations
                     b.Navigation("LessonGrades");
 
                     b.Navigation("LessonSubjects");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.UserGroup", b =>
+                {
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

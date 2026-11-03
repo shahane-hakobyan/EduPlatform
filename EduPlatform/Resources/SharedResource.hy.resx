@@ -437,4 +437,51 @@
 	<data name="EditAssignmentTitle" xml:space="preserve"><value>Խմբագրել առաջադրանքը</value></data>
 	<data name="EditAssignmentSubtitle" xml:space="preserve"><value>Փոփոխությունները կպահվեն շտեմարանում. Արդեն ուղարկված առաջադրանքները չեն փոխվի</value></data>
 	<data name="SaveChangesBtn" xml:space="preserve"><value>Պահպանել փոփոխությունները</value></data>
+
+	<data name="CreateGroup" xml:space="preserve"><value>Ստեղծել խումբ</value></data>
+	<data name="GroupsCountLabel" xml:space="preserve"><value>խումբ</value></data>
+	<data name="SearchGroups" xml:space="preserve"><value>Որոնել խմբեր...</value></data>
+	<data name="NoGroups" xml:space="preserve"><value>Դեռ խմբեր չկան</value></data>
+	<data name="GroupTypeLabel" xml:space="preserve"><value>Խմբի տեսակ</value></data>
+	<data name="MyRoleInGroup" xml:space="preserve"><value>Իմ դերը խմբում</value></data>
+	<data name="GroupTypePupils" xml:space="preserve"><value>Սովորողների խումբ</value></data>
+	<data name="GroupTypeParents" xml:space="preserve"><value>Ծնողների խումբ</value></data>
+	<data name="GroupTypeOther" xml:space="preserve"><value>Այլ խումբ</value></data>
+	<data name="GroupRoleAdmin" xml:space="preserve"><value>Խմբի ստեղծող</value></data>
+	<data name="GroupRoleMember" xml:space="preserve"><value>Խմբի անդամ</value></data>
+	<data name="MembersCountLabel" xml:space="preserve"><value>անդամ</value></data>
+	<data name="GroupRoleAdminShort" xml:space="preserve"><value>Ստեղծող</value></data>
+	<data name="GroupRoleMemberShort" xml:space="preserve"><value>Անդամ</value></data>
+	<data name="GroupPictureLabel" xml:space="preserve"><value>Խմբի նկար (ըստ ցանկության)</value></data>
+	<data name="UploadPicture" xml:space="preserve"><value>Ավելացնել նկար</value></data>
+	<data name="PictureHint" xml:space="preserve"><value>JPG, PNG, առավելագույնը 5MB</value></data>
+	<data name="GroupNameLabel" xml:space="preserve"><value>Խմբի անուն</value></data>
+	<data name="GroupNamePlaceholder" xml:space="preserve"><value>Մուտքագրեք խմբի անունը...</value></data>
+	<data name="GroupTypePupilsDesc" xml:space="preserve"><value>Ընտրվում են դասարանները</value></data>
+	<data name="GroupTypeParentsDesc" xml:space="preserve"><value>Ավելացվում են ծնողներ</value></data>
+	<data name="GroupTypeOtherDesc" xml:space="preserve"><value>Այլ ցանկացած միավորում</value></data>
+	<data name="ContinueToMembers" xml:space="preserve"><value>Շարունակել → Ընտրել անդամներին</value></data>
+	<data name="GroupFormIncomplete" xml:space="preserve"><value>Լրացրեք խմբի անունը և ընտրեք խմբի տեսակը</value></data>
+	<data name="GroupImageInvalid" xml:space="preserve"><value>Նկարը պետք է լինի JPG կամ PNG՝ մինչև 5MB</value></data>
+	<data name="MembersNotAvailableYet" xml:space="preserve"><value>Այս տեսակի խմբում անդամների ընտրությունը կավելանա համակարգի հետ կապվելուց հետո։ Խումբը կստեղծվի, և դուք կլինեք նրա ադմինը։</value></data>
+	<data name="SelectMembersTitle" xml:space="preserve"><value>Ընտրել անդամներին</value></data>
+	<data name="SelectedShort" xml:space="preserve"><value>ընտրված</value></data>
+	<data name="PickPupilsBanner" xml:space="preserve"><value>Որոնումը կատարվում է սովորողի անունով և ազգանունով, իսկ խմբում ավելացվում են ընտրված սովորողները։</value></data>
+	<data name="PickParentsBanner" xml:space="preserve"><value>Որոնումը կատարվում է սովորողի անունով և ազգանունով, իսկ խմբում ավելացվում են նրա ծնողները։</value></data>
+	<data name="PupilWord" xml:space="preserve"><value>Սովորող</value></data>
+	<data name="ParentWord" xml:space="preserve"><value>Ծնող</value></data>
+	<data name="ParentOfPupil" xml:space="preserve"><value>{0}-ի ծնող</value></data>
+	<data name="CreateGroupWithCount" xml:space="preserve"><value>Ստեղծել խումբը ({0} անդամ)</value></data>
+	<data name="GroupChatPlaceholder" xml:space="preserve"><value>Խմբի չաթը շուտով կավելանա</value></data>
+	<data name="GroupMembersTitle" xml:space="preserve"><value>Խմբի անդամներ</value></data>
+	<data name="YouLabel" xml:space="preserve"><value>Դուք</value></data>
+	<data name="UserWord" xml:space="preserve"><value>Օգտատեր</value></data>
+	<data name="DeleteGroupBtn" xml:space="preserve"><value>Ջնջել</value></data>
+	<data name="ConfirmDeleteGroup" xml:space="preserve"><value>Ջնջե՞լ խումբը։ Այն կջնջվի բոլոր անդամների համար։</value></data>
+	<data name="EditGroupTitle" xml:space="preserve"><value>Խմբագրել խումբը</value></data>
+	<data name="GroupTypeLocked" xml:space="preserve"><value>Խմբի տեսակը փոխել չի կարելի</value></data>
+	<data name="ChangePicture" xml:space="preserve"><value>Փոխել նկարը</value></data>
+	<data name="RemovePicture" xml:space="preserve"><value>Հեռացնել նկարը</value></data>
+	<data name="RemoveMemberTitle" xml:space="preserve"><value>Հեռացնել խմբից</value></data>
+	<data name="AddMembersTitle" xml:space="preserve"><value>Ավելացնել նոր անդամներ</value></data>
 </root>

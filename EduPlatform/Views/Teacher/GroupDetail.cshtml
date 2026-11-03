@@ -1,0 +1,74 @@
+﻿@model EduPlatform.ViewModels.GroupDetailViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="gd-topbar d-flex align-items-center gap-3 mb-3">
+    <a href="@Model.BackUrl" class="ca-back-btn d-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <div class="gd-avatar">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="" />
+        }
+        else
+        {
+            <i class="bi bi-people"></i>
+        }
+    </div>
+    <div class="flex-grow-1 min-w-0">
+        <h1 class="gd-title mb-1" title="@Model.Name">@Model.Name</h1>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="group-tag group-tag-@Model.TypeKey.ToLowerInvariant()">@Model.TypeLabel</span>
+            <span class="gd-count"><i class="bi bi-people"></i> @Model.MemberCount @Localizer["MembersCountLabel"]</span>
+        </div>
+    </div>
+
+    @if (Model.IsAdmin)
+    {
+        <div class="gd-actions">
+            <a href="@Model.EditUrl" class="gd-btn"><i class="bi bi-pencil"></i> @Localizer["Edit"]</a>
+            <button type="button" id="gdDelete" class="gd-btn gd-btn-delete"
+                    data-group-id="@Model.Id"
+                    data-confirm-text="@Localizer["ConfirmDeleteGroup"]"
+                    data-redirect-url="@Model.BackUrl">
+                <i class="bi bi-trash"></i> @Localizer["DeleteGroupBtn"]
+            </button>
+        </div>
+    }
+</div>
+
+<div class="gd-layout">
+    <!-- Չաթի տեղը՝ «Հաղորդագրություններ» բաժնի մասն է, այս գործառույթը առանձին է իրականացվելու -->
+    <div class="gd-chat" id="groupChatPlaceholder">
+        <i class="bi bi-chat-dots"></i>
+        <div>@Localizer["GroupChatPlaceholder"]</div>
+    </div>
+
+    <div class="gd-members">
+        <div class="gd-members-head">
+            <i class="bi bi-people"></i> @Localizer["GroupMembersTitle"] <span class="gd-members-count">@Model.Members.Count</span>
+        </div>
+        <div class="gd-members-list">
+            @foreach (var m in Model.Members)
+            {
+                <a href="@m.ProfileUrl" class="gd-member">
+                    <span class="gd-member-avatar"><i class="bi bi-person"></i></span>
+                    <span class="gd-member-name">@m.Name</span>
+                    <span class="group-tag group-tag-role @(m.IsAdmin ? "is-admin" : "is-member")">@m.RoleLabel</span>
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/create-assignment.css" />
+    <link rel="stylesheet" href="~/css/groups.css" />
+    <link rel="stylesheet" href="~/css/group-detail.css" />
+}
+@section Scripts {
+    <script src="~/js/group-detail.js"></script>
+}

@@ -1,0 +1,262 @@
+﻿
+/* ── Խմբի ստեղծում ── */
+.cg-page {
+    max-width: 720px;
+}
+
+.cg-avatar {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6369D4 0%, #6D72EA 100%);
+    color: #fff;
+    font-size: 28px;
+}
+
+    .cg-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.cg-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--surface);
+    border: .8px solid var(--border);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+    .cg-upload-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+.cg-hint {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--text-faint);
+}
+
+/* խմբի տեսակի ընտրություն */
+.cg-type-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    padding: 14px 16px;
+    border: 1.2px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    background: var(--surface);
+}
+
+    .cg-type-card input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+.cg-type-dot {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1.6px solid var(--border);
+    background: var(--surface);
+}
+
+.cg-type-card:has(input:checked) {
+    border-color: var(--accent);
+    background: rgba(99, 105, 212, 0.06);
+}
+
+    .cg-type-card:has(input:checked) .cg-type-dot {
+        border: 5px solid var(--accent);
+    }
+
+.cg-type-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.cg-type-desc {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.cg-wide-btn {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ── Քայլ 2՝ անդամների ընտրություն ── */
+.cg-selected-top {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-strong);
+    white-space: nowrap;
+}
+
+.cg-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    border: .8px solid #bedbff;
+    border-radius: 14px;
+    background: #eff6ff;
+    color: #1447e6;
+    font-size: 13px;
+}
+
+.cg-search {
+    position: relative;
+    margin-bottom: 12px;
+}
+
+    .cg-search i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-faint);
+    }
+
+    .cg-search input {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 12px 16px 12px 44px;
+        border: .8px solid var(--border);
+        border-radius: 14px;
+        background: var(--surface);
+        font-size: 14px;
+    }
+
+.cg-pick-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.cg-class-select {
+    padding: 8px 12px;
+    border: .8px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    font-size: 13px;
+}
+
+.cg-tool-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: .8px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+    .cg-tool-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+.cg-pick-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 96px; /* ներքևի կոճակի տեղը */
+}
+
+.cg-pick-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    border: .8px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    cursor: pointer;
+}
+
+    .cg-pick-item input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+.cg-pick-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cg-pick-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.cg-pick-sub {
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.cg-pick-check {
+    flex-shrink: 0;
+    font-size: 20px;
+    color: var(--accent);
+    visibility: hidden;
+}
+
+.cg-pick-item:has(input:checked) {
+    border: 1.2px solid var(--accent);
+    background: rgba(99, 105, 212, 0.08);
+}
+
+    .cg-pick-item:has(input:checked) .cg-pick-check {
+        visibility: visible;
+    }
+
+.cg-note {
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+/* ներքևի «Ստեղծել խումբը» կոճակը */
+.cg-bottom-bar {
+    position: sticky;
+    bottom: 0;
+    padding: 16px 0;
+    background: linear-gradient(to top, var(--bg, #f2f3f8) 70%, rgba(242, 243, 248, 0));
+}

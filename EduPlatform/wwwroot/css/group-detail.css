@@ -1,0 +1,198 @@
+﻿/* Խմբի էջ */
+.min-w-0 {
+    min-width: 0;
+}
+
+.gd-topbar {
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border: 0.8px solid #F3F4F6;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.gd-avatar {
+    flex: none;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6369D4 0%, #6D72EA 100%);
+    color: #fff;
+    font-size: 28px;
+}
+
+    .gd-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.gd-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #101828;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gd-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #6A7282;
+}
+
+.gd-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.gd-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: .8px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.gd-btn-delete {
+    color: #d92d20;
+    border-color: #fda29b;
+}
+
+.gd-btn-disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.gd-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 16px;
+    align-items: start;
+}
+
+/* չաթի տեղը */
+.gd-chat {
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px;
+    background: #FFFFFF;
+    border: 0.8px dashed #D1D5DC;
+    border-radius: 16px;
+    color: #99A1AF;
+    font-size: 14px;
+    text-align: center;
+}
+
+    .gd-chat i {
+        font-size: 32px;
+    }
+
+/* անդամների ցուցակ */
+.gd-members {
+    background: #FFFFFF;
+    border: 0.8px solid #F3F4F6;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.gd-members-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: .8px solid #F3F4F6;
+    font-size: 14px;
+    font-weight: 700;
+    color: #101828;
+}
+
+.gd-members-count {
+    margin-left: auto;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: #F3F4F6;
+    color: #4A5565;
+    font-size: 12px;
+}
+
+.gd-members-list {
+    max-height: 520px;
+    overflow-y: auto;
+}
+
+.gd-member {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: inherit;
+}
+
+    .gd-member:hover {
+        background: #F9FAFB;
+    }
+
+.gd-member-avatar {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #F3F4F6;
+    color: #6A7282;
+}
+
+.gd-member-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 600;
+    color: #101828;
+}
+
+@media (max-width: 900px) {
+    .gd-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .gd-chat {
+        min-height: 160px;
+    }
+}
+
+/* քարտը հղում է՝ անդերլայն և գույն չեն ժառանգվում */
+a.group-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+    a.group-card:hover {
+        border-color: var(--accent);
+    }

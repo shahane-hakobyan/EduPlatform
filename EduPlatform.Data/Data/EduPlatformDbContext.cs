@@ -29,6 +29,8 @@ namespace EduPlatform.Data
         public DbSet<AssignmentFile> AssignmentFiles => Set<AssignmentFile>();
         public DbSet<AssignmentRecipient> AssignmentRecipients => Set<AssignmentRecipient>();
         public DbSet<AssignmentSubmissionFile> AssignmentSubmissionFiles => Set<AssignmentSubmissionFile>();
+        public DbSet<UserGroup> UserGroups => Set<UserGroup>();
+        public DbSet<UserGroupMember> UserGroupMembers => Set<UserGroupMember>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -267,6 +269,33 @@ namespace EduPlatform.Data
                 e.HasOne(x => x.Recipient)
                  .WithMany(r => r.Files)
                  .HasForeignKey(x => x.RecipientId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ── Խումբ (սովորողների / ծնողների / այլ) ──────────────────────
+            modelBuilder.Entity<UserGroup>(e =>
+            {
+                e.Property(x => x.Name).HasMaxLength(200);
+                e.Property(x => x.CreatedByUserId).HasMaxLength(450);
+                e.Property(x => x.ImageStoredFileName).HasMaxLength(100);
+                e.Property(x => x.ImageContentType).HasMaxLength(150);
+
+                // «Իմ ստեղծած խմբերը»
+                e.HasIndex(x => x.CreatedByUserId);
+            });
+
+            // ── Խմբի անդամ ───────────────────────────────────────────────
+            modelBuilder.Entity<UserGroupMember>(e =>
+            {
+                e.HasKey(x => new { x.GroupId, x.UserId });
+                e.Property(x => x.UserId).HasMaxLength(450);
+
+                // «Այն խմբերը, որոնցում ինձ ավելացրել են»
+                e.HasIndex(x => x.UserId);
+
+                e.HasOne(x => x.Group)
+                 .WithMany(g => g.Members)
+                 .HasForeignKey(x => x.GroupId)
                  .OnDelete(DeleteBehavior.Cascade);
             });
         }
