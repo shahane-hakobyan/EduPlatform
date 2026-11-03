@@ -61,7 +61,7 @@ namespace EduPlatform.Controllers
         [HttpGet]
         public IActionResult ScheduleDayContent(string day)
         {
-            return PartialView("_TeacherSchedule", BuildScheduleViewModel(day));
+            return PartialView("Schedule/_TeacherSchedule", BuildScheduleViewModel(day));
         }
 
         [HttpGet]
@@ -101,7 +101,7 @@ namespace EduPlatform.Controllers
                     .ToList()
             };
 
-            return PartialView("_ScheduleEditModal", vm);
+            return PartialView("Schedule/_ScheduleEditModal", vm);
         }
 
         public class ScheduleSaveRequest
@@ -204,7 +204,7 @@ namespace EduPlatform.Controllers
                 }).ToList()
             };
 
-            return PartialView("_GradeRoster", vm);
+            return PartialView("Schedule/_GradeRoster", vm);
         }
 
         private static ScheduleDay CurrentScheduleDay()

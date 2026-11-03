@@ -37,7 +37,7 @@ namespace EduPlatform.Controllers
         [HttpGet("MyTools")]
         public IActionResult MyTools()
         {
-            return View(new ToolsPageViewModel
+            return View("Tools/MyTools", new ToolsPageViewModel
             {
                 Tools = new(),
                 AddToolUrl = $"{_config["Authentication:Authority"]}/Tools"
