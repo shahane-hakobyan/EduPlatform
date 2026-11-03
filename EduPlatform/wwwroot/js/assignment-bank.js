@@ -1,12 +1,12 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    // ── Ջնջել շտեմարանից (արդեն ուղարկվածները մնում են) ───────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+    // ── ջնջել շտեմարանից (արդեն ուղարկվածները մնում են) ───────────────────────
     document.querySelectorAll('[data-bank-delete]').forEach(function (btn) {
         btn.addEventListener('click', async function () {
             if (!confirm(btn.getAttribute('data-confirm-text'))) return;
 
             btn.disabled = true;
             try {
-                const res = await fetch('/Teacher/DeleteBankAssignment', {
+                const res = await fetch('/Repository/Assignments/Bank/Delete', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: parseInt(btn.getAttribute('data-assignment-id'), 10) })
@@ -84,7 +84,7 @@
 
     if (applyBtn) applyBtn.addEventListener('click', apply);
 
-    // ընտրված ֆիլտրերի թիվը (badge) թարմացվում է անմիջապես, արդյունքները՝ «Կիրառել»-ից հետո
+    // ընտրված ֆիլտրերի թիվը (badge) թարմացվում է անմիջապես, արդյունքները՝ «Կիրանել»-ից հետո
     dropdowns.forEach(function (dropdown) {
         const badge = dropdown.querySelector('.materials-filter-badge');
         const inputs = dropdown.querySelectorAll('.materials-filter-pill-input');
@@ -99,13 +99,13 @@
         });
     });
 
-    // Մաքրել միայն այս ֆիլտրը (մյուսները մնում են)
+    // Մաքրել միայն այս ֆիլտրը (մյոսները մնում են)
     dropdowns.forEach(function (dropdown) {
         const clearOne = dropdown.querySelector('.materials-filter-clear-one');
         if (!clearOne) return;
         const inputs = dropdown.querySelectorAll('.materials-filter-pill-input');
 
-        // հղումը երևում է հենց ընտրելուց, առանց «Կիրառել»-ի սպասելու
+        // հղումը երևում է հենց ընտրելուց, առանց «Կիրանել»-ի սպասելու
         inputs.forEach(function (input) {
             input.addEventListener('change', function () {
                 const any = Array.from(inputs).some(function (i) { return i.checked; });
