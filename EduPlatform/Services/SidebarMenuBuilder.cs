@@ -51,8 +51,8 @@ namespace EduPlatform.Services
                 new() { Label = _l["MyCreatedMaterials"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Repository/MyCreatedMaterials" },
                 new() { Label = _l["MyExpertise"], IconSvg = SidebarIcons.Expertise, Url = "/Teacher/Repository/MyExpertise" },
                 new() { Label = _l["MyAssignments"], IconSvg = SidebarIcons.Assignments, Children = {
-                    new() { Label = _l["GivenAssignments"], IconSvg = SidebarIcons.Assignments, Url = "/Teacher/Repository/Assignments" },
-                    new() { Label = _l["AssignmentBank"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Teacher/Repository/AssignmentBank" },
+                    new() { Label = _l["GivenAssignments"], IconSvg = SidebarIcons.Assignments, Url = "/Repository/Assignments" },
+                    new() { Label = _l["AssignmentBank"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Repository/Assignments/Bank" },
                 }},
             }},
             new() { Label = _l["StudentAssessment"], IconSvg = SidebarIcons.Assessment, Children = {

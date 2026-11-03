@@ -19,6 +19,7 @@ builder.Services.AddControllersWithViews()
     {
         // Views/Shared-ի ենթաթղթապանակները՝ կարճ անուններով գտնելու համար
         options.ViewLocationFormats.Add("/Views/Shared/{1}/{0}.cshtml");   // Views/Shared/<Controller>/
+        options.ViewLocationFormats.Add("/Views/Shared/Repository/{1}/{0}.cshtml");   // Views/Shared/Repository/<Controller>/ («Իմ գրապահոց»-ի ենթաբաժիններ)
         options.ViewLocationFormats.Add("/Views/Shared/Layouts/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Shared/Partials/{0}.cshtml");
     });
@@ -49,6 +50,7 @@ builder.Services.AddSignalR();
 builder.Services.AddLocalization(options => options.ResourcesPath = "");
 
 builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
+builder.Services.AddScoped<IClassRosterService, ClassRosterService>();
 
 // ── Մուտք ───────────────────────────────────────────────────────────────────
 // Production՝ AuthServer-ի JWT (մուտքի տրամաբանությունը կավարտի մեկ այլ ծրագրավորող):
