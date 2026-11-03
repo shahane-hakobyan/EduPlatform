@@ -1,4 +1,4 @@
-﻿@model List<EduPlatform.ViewModels.Library.OtherBooksTabViewModel>
+@model List<EduPlatform.ViewModels.Library.OtherBooksTabViewModel>
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 @{
     ViewData["Title"] = Localizer["OtherBooks"].Value;
@@ -39,7 +39,7 @@
 {
     var tab = Model[i];
     <div class="library-tab-pane @(i == 0 ? "active" : "")" id="library-tab-@tab.Key" style="@(i == 0 ? "" : "display:none;")">
-        <partial name="~/Views/Shared/Materials/_MaterialsContent.cshtml" model="tab.Content" />
+        <partial name="_MaterialsContent" model="tab.Content" />
     </div>
 }
 
