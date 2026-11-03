@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     function openModal(id) {
         const modal = document.getElementById(id);
         const backdrop = document.getElementById(id + '-backdrop');
@@ -69,7 +69,7 @@
             }
 
             btn.disabled = true;
-            fetch('/Teacher/SaveGrade', {
+            fetch('/Repository/Assignments/Grade', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -88,7 +88,7 @@
 
             archiveBtn.disabled = true;
             try {
-                const res = await fetch('/Teacher/ArchiveAssignment', {
+                const res = await fetch('/Repository/Assignments/Archive', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: parseInt(archiveBtn.getAttribute('data-assignment-id'), 10) })
@@ -116,7 +116,7 @@
             }
 
             try {
-                const res = await fetch('/Teacher/ChangeDueDate', {
+                const res = await fetch('/Repository/Assignments/ChangeDueDate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: parseInt(dueInput.getAttribute('data-assignment-id'), 10), dueDate: value })
@@ -232,7 +232,7 @@
                 .map(function (cb) { return cb.value; });
 
             addPupilsSubmitBtn.disabled = true;
-            fetch('/Teacher/AddPupilsToAssignment', {
+            fetch('/Repository/Assignments/AddPupils', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ assignmentId: parseInt(assignmentId, 10), pupilIds: pupilIds })
