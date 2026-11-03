@@ -1,0 +1,73 @@
+@model EduPlatform.ViewModels.AssignmentDetailViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    ViewData["Title"] = Model.Title;
+} 
+
+<div class="ad-topbar d-flex align-items-center gap-3 mb-3">
+    <a href="@ViewBag.BackUrl" class="ad-back-btn d-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <div class="flex-grow-1">
+        <h1 class="ad-title mb-0">@Model.Title</h1>
+        <p class="ad-subtitle mb-0">@Model.Subject &middot; @Model.Grade</p>
+    </div>
+    <a href="@ViewBag.EditUrl" class="ad-archive-btn d-flex align-items-center gap-2">
+        <i class="bi bi-pencil"></i> @Localizer["Edit"]
+    </a>
+    <a href="@ViewBag.SendUrl" class="ad-add-btn d-flex align-items-center gap-2">
+        <i class="bi bi-send"></i> @Localizer["SendAssignmentBtn"]
+    </a>
+</div>
+
+<div class="ad-card mb-3">
+    <div class="ad-card-head">
+        <i class="bi bi-file-earmark-text"></i>
+        <h2 class="ad-card-title">@Model.Title</h2>
+    </div>
+    <div class="ad-card-body">
+        <div class="ad-info-grid">
+            <div>
+                <div class="ad-info-label">@Localizer["AssignmentType"]</div>
+                <div class="ad-info-value">@Model.Type</div>
+            </div>
+            <div>
+                <div class="ad-info-label">@Localizer["Evaluation"]</div>
+                <div class="ad-info-value">@Model.GradingType</div>
+            </div>
+            <div>
+                <div class="ad-info-label">@Localizer["AssignmentResponseForm"]</div>
+                <div class="ad-info-value">
+                    @(string.Join(", ", new[]
+                    {
+                        Model.AllowTextAnswer ? Localizer["ResponseFormText"].Value : null,
+                        Model.AllowFileAnswer ? Localizer["ResponseFormFile"].Value : null
+                    }.Where(x => x != null)))
+                </div>
+            </div>
+        </div>
+        <div class="ad-description-box mt-3">
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <div>@Model.Description</div>
+            }
+            @if (Model.Files.Any())
+            {
+                <div class="ad-files-title">@Localizer["AttachedFilesLabel"]</div>
+                @foreach (var f in Model.Files)
+                {
+                    <div class="ad-file-row">
+                        <i class="bi bi-paperclip"></i>
+                        <span class="ad-file-name">@f.Name</span>
+                        <a href="@f.ViewUrl" target="_blank" class="ad-file-link"><i class="bi bi-eye"></i> @Localizer["View"]</a>
+                        <a href="@f.DownloadUrl" class="ad-file-link"><i class="bi bi-download"></i> @Localizer["Download"]</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/assignment-detail.css" />
+}
