@@ -1,0 +1,116 @@
+@model EduPlatform.ViewModels.PupilSubmissionViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    var gradingLabel = Model.GradingType switch
+    {
+        "Diagnostic" => Localizer["GradingDiagnostic"],
+        "Formative" => Localizer["GradingFormative"],
+        _ => Localizer["GradingCurrentScore"]
+    };
+}
+
+<div id="answerModal-@Model.Id-backdrop" class="answer-modal-backdrop"></div>
+<div id="answerModal-@Model.Id" class="answer-modal" data-submission-id="@Model.Id" data-grading-type="@Model.GradingType">
+    <div class="answer-modal-header">
+        <div class="d-flex align-items-center gap-3">
+            <img src="@Model.PhotoUrl" alt="" class="answer-modal-avatar" />
+            <div>
+                <div class="answer-modal-name">@Model.PupilName</div>
+                <div class="answer-modal-meta">
+                    @Model.GradeName
+                    @if (!string.IsNullOrEmpty(Model.GroupName))
+                    {
+                        <text> &middot; @Model.GroupName</text>
+                    }
+                    @if (Model.SubmittedDate.HasValue)
+                    {
+                        <text> &middot; @Model.SubmittedDate.Value.ToString("dd.MM.yyyy")</text>
+                    }
+                </div>
+            </div>
+        </div>
+        <button type="button" class="answer-modal-close" data-close-modal="answerModal-@Model.Id">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <div class="answer-modal-body">
+        @if (!string.IsNullOrWhiteSpace(Model.AnswerText))
+        {
+            <div class="answer-modal-section">
+                <div class="answer-modal-label">@Localizer["AnswerTextLabel"]</div>
+                <div class="answer-text-box">@Model.AnswerText</div>
+            </div>
+        }
+
+        @if (Model.Files.Any())
+        {
+            <div class="answer-modal-section">
+                <div class="answer-modal-label">@Localizer["FileAnswerOption"]</div>
+                @foreach (var f in Model.Files)
+                {
+                    <div class="answer-attachment-row mb-2">
+                        <div class="answer-attachment-icon"><i class="bi bi-file-earmark-text"></i></div>
+                        <div class="answer-attachment-name">@f.Name</div>
+                        <a href="@f.ViewUrl" target="_blank" class="answer-attachment-btn"><i class="bi bi-eye"></i> @Localizer["View"]</a>
+                        <a href="@f.DownloadUrl" class="answer-attachment-btn answer-attachment-btn-primary"><i class="bi bi-download"></i> @Localizer["DownloadLabel"]</a>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (string.IsNullOrWhiteSpace(Model.AnswerText) && !Model.Files.Any())
+        {
+            <div class="answer-modal-section">
+                <div class="answer-info-note"><i class="bi bi-info-circle"></i> @Localizer["NoAnswerYet"]</div>
+            </div>
+        }
+
+        <div class="answer-modal-section answer-modal-section-bordered">
+            <div class="answer-modal-label-lg">@Localizer["Evaluation"]</div>
+            <div class="answer-grading-tabs">
+                <span class="answer-grading-tab active">@gradingLabel</span>
+            </div>
+
+            @if (Model.GradingType == "CurrentScore")
+            {
+                <div class="answer-modal-label mb-2">@Localizer["CurrentScoreLabel"]</div>
+                <div class="answer-points-grid">
+                    @for (int i = 1; i <= 10; i++)
+                    {
+                        <button type="button" class="answer-point-btn @(Model.Score == i ? "active" : "")" data-score="@i">@i</button>
+                    }
+                </div>
+            }
+            else if (Model.GradingType == "Diagnostic")
+            {
+                <div class="answer-modal-label mb-2">@Localizer["InitialScoreLabel"]</div>
+                <input type="number" step="0.01" min="0" max="9999" class="answer-score-input" value="@(Model.Score?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))" />
+            }
+
+            <div class="answer-modal-label mb-2 mt-3">@Localizer["FeedbackLabel"]</div>
+            <textarea class="answer-protocol-textarea" rows="4" placeholder="@Localizer["ProtocolPlaceholder"]">@Model.ScoreFeedback</textarea>
+
+            @if (Model.GradingType == "CurrentScore")
+            {
+                <div class="answer-warning-note mt-3">
+                    <i class="bi bi-exclamation-triangle"></i> @Localizer["PointGradeVisibilityNote"]
+                </div>
+            }
+            else
+            {
+                <div class="answer-info-note mt-2">
+                    <i class="bi bi-info-circle"></i> @Localizer["FormativeGradeVisibilityNote"]
+                </div>
+            }
+            <div class="answer-error" style="display:none" data-msg="@Localizer["GradeFieldsRequired"]"></div>
+        </div>
+    </div>
+
+    <div class="answer-modal-footer">
+        <button type="button" class="answer-cancel-btn" data-close-modal="answerModal-@Model.Id">@Localizer["CancelBtn"]</button>
+        <button type="button" class="answer-save-btn" data-save-grade data-submission-id="@Model.Id">
+            <i class="bi bi-check-lg"></i> @Localizer["SaveGradeBtn"]
+        </button>
+    </div>
+</div>
