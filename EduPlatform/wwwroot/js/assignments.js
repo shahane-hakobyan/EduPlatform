@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (applyBtn) applyBtn.addEventListener('click', apply);
 
-    // ընտրված ֆիլտրերի թիվը (badge) թարմացվում է անմիջապես, արդյունքները՝ «Կիրանել»-ից հետո
+    // ընտրված ֆիլտրերի թիվը (badge) թարմացվում է անմիջապես, արդյունքները՝ «Կիրառել»-ից հետո
     dropdowns.forEach(function (dropdown) {
         const badge = dropdown.querySelector('.materials-filter-badge');
         const inputs = dropdown.querySelectorAll('.materials-filter-pill-input');
@@ -130,13 +130,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Մաքրել միայն այս ֆիլտրը (մյոսները մնում են)
+    // Մաքրել միայն այս ֆիլտրը (մյուսները մնում են)
     dropdowns.forEach(function (dropdown) {
         const clearOne = dropdown.querySelector('.materials-filter-clear-one');
         if (!clearOne) return;
         const inputs = dropdown.querySelectorAll('.materials-filter-pill-input');
 
-        // հղումը երևում է հենց ընտրելուց, առանց «Կիրանել»-ի սպասելու
+        // հղումը երևում է հենց ընտրելուց, առանց «Կիրառել»-ի սպասելու
         inputs.forEach(function (input) {
             input.addEventListener('change', function () {
                 const any = Array.from(inputs).some(function (i) { return i.checked; });
