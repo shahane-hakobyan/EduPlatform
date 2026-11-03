@@ -59,7 +59,7 @@ namespace EduPlatform.Services
                 new() { Label = _l["MyLogbook"], IconSvg = SidebarIcons.Journal, Url = "/Teacher/Assessment/MyLogbook" },
                 new() { Label = _l["AIAssessment"], IconSvg = SidebarIcons.AIScore, Url = "/Teacher/Assessment/AIAssessment" },
             }},
-            Groups("/Teacher/Groups"),
+            Groups("/Groups"),
             new() { Label = _l["Messages"], IconSvg = SidebarIcons.Messages, Url = "/Teacher/Messages" },
             new() { Label = _l["AIChat"], IconSvg = SidebarIcons.AIChat, Url = "/Teacher/AIChat" },
         };

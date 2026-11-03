@@ -8,7 +8,7 @@
 
         del.disabled = true;
         try {
-            const res = await fetch('/Teacher/DeleteGroup', {
+            const res = await fetch('/Groups/Delete', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: parseInt(del.getAttribute('data-group-id'), 10) })
