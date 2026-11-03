@@ -1,4 +1,4 @@
-﻿using EduPlatform.Helpers;
+using EduPlatform.Helpers;
 using EduPlatform.Resources;
 using EduPlatform.ViewModels;
 using Microsoft.Extensions.Localization;
@@ -47,8 +47,8 @@ namespace EduPlatform.Services
             PersonalPage("/Teacher/Index"),
             MyLibrary("/Library"),
             new() { Label = _l["MyBookshelf"], IconSvg = SidebarIcons.Repository, Children = {
-                new() { Label = _l["MyTools"], IconSvg = SidebarIcons.Tools, Url = "/Teacher/Repository/MyTools" },
-                new() { Label = _l["MyCreatedMaterials"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Teacher/Repository/MyCreatedMaterials" },
+                new() { Label = _l["MyTools"], IconSvg = SidebarIcons.Tools, Url = "/Repository/MyTools" },
+                new() { Label = _l["MyCreatedMaterials"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Repository/MyCreatedMaterials" },
                 new() { Label = _l["MyExpertise"], IconSvg = SidebarIcons.Expertise, Url = "/Teacher/Repository/MyExpertise" },
                 new() { Label = _l["MyAssignments"], IconSvg = SidebarIcons.Assignments, Children = {
                     new() { Label = _l["GivenAssignments"], IconSvg = SidebarIcons.Assignments, Url = "/Teacher/Repository/Assignments" },
