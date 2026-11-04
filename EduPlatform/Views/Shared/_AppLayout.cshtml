@@ -28,13 +28,18 @@
         var sidebarItems = ViewBag.SidebarItems as List<SidebarMenuItem> ?? new();
         var sidebarFooterItems = ViewBag.SidebarFooterItems as List<SidebarMenuItem> ?? new();
 
-        string pageTitle = "";
-        foreach (var item in sidebarItems)
+        // էջի վերնագիրը՝ մենյուի ցանկացած խորության տարրից (մինչև ներդրված ենթաբաժինները)
+        static string? FindTitle(IEnumerable<SidebarMenuItem> items, string? path)
         {
-            if (item.Url == currentPath) { pageTitle = item.Label; break; }
-            var child = item.Children.FirstOrDefault(c => c.Url == currentPath);
-            if (child != null) { pageTitle = child.Label; break; }
+            foreach (var item in items)
+            {
+                if (item.Url == path) return item.Label;
+                var found = FindTitle(item.Children, path);
+                if (found != null) return found;
+            }
+            return null;
         }
+        string pageTitle = FindTitle(sidebarItems, currentPath) ?? "";
     }
 
     <div class="d-flex">
