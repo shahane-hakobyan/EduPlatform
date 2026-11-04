@@ -22,6 +22,241 @@ namespace EduPlatform.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EduPlatform.Data.Models.Assignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GradingType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTemplate")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MaterialUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("OtherTypeText")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("ResponseForms")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TeacherUserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("Types")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TemplateId");
+
+                    b.HasIndex("TeacherUserId", "IsTemplate", "IsArchived");
+
+                    b.ToTable("Assignments");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.Property<long>("SizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.ToTable("AssignmentFiles");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentGradeLevel", b =>
+                {
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.HasKey("AssignmentId", "Level");
+
+                    b.ToTable("AssignmentGradeLevels", t =>
+                        {
+                            t.HasCheckConstraint("CK_AssignmentGradeLevels_Level", "[Level] BETWEEN 1 AND 12");
+                        });
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentRecipient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AnswerText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Feedback")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<int?>("GradeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("GradedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PupilUserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal?>("Score")
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SubmittedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GradeId");
+
+                    b.HasIndex("AssignmentId", "PupilUserId")
+                        .IsUnique();
+
+                    b.HasIndex("PupilUserId", "Status");
+
+                    b.ToTable("AssignmentRecipients");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentSubject", b =>
+                {
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AssignmentId", "SubjectId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("AssignmentSubjects");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentSubmissionFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.Property<int>("RecipientId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("SizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipientId");
+
+                    b.ToTable("AssignmentSubmissionFiles");
+                });
+
             modelBuilder.Entity("EduPlatform.Data.Models.Grade", b =>
                 {
                     b.Property<int>("Id")
@@ -251,6 +486,70 @@ namespace EduPlatform.Migrations
                     b.ToTable("TeacherSubjects");
                 });
 
+            modelBuilder.Entity("EduPlatform.Data.Models.UserGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ImageContentType")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ImageStoredFileName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.ToTable("UserGroups");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.UserGroupMember", b =>
+                {
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserGroupMembers");
+                });
+
             modelBuilder.Entity("EduPlatform.Data.Models.UserLibraryMaterial", b =>
                 {
                     b.Property<int>("Id")
@@ -281,6 +580,86 @@ namespace EduPlatform.Migrations
                         .IsUnique();
 
                     b.ToTable("UserLibraryMaterials");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.Assignment", b =>
+                {
+                    b.HasOne("EduPlatform.Data.Models.Assignment", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Template");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentFile", b =>
+                {
+                    b.HasOne("EduPlatform.Data.Models.Assignment", "Assignment")
+                        .WithMany("Files")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentGradeLevel", b =>
+                {
+                    b.HasOne("EduPlatform.Data.Models.Assignment", "Assignment")
+                        .WithMany("GradeLevels")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentRecipient", b =>
+                {
+                    b.HasOne("EduPlatform.Data.Models.Assignment", "Assignment")
+                        .WithMany("Recipients")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduPlatform.Data.Models.Grade", "Grade")
+                        .WithMany()
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Grade");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentSubject", b =>
+                {
+                    b.HasOne("EduPlatform.Data.Models.Assignment", "Assignment")
+                        .WithMany("Subjects")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduPlatform.Data.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentSubmissionFile", b =>
+                {
+                    b.HasOne("EduPlatform.Data.Models.AssignmentRecipient", "Recipient")
+                        .WithMany("Files")
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipient");
                 });
 
             modelBuilder.Entity("EduPlatform.Data.Models.Grade", b =>
@@ -365,6 +744,33 @@ namespace EduPlatform.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("EduPlatform.Data.Models.UserGroupMember", b =>
+                {
+                    b.HasOne("EduPlatform.Data.Models.UserGroup", "Group")
+                        .WithMany("Members")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.Assignment", b =>
+                {
+                    b.Navigation("Files");
+
+                    b.Navigation("GradeLevels");
+
+                    b.Navigation("Recipients");
+
+                    b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentRecipient", b =>
+                {
+                    b.Navigation("Files");
+                });
+
             modelBuilder.Entity("EduPlatform.Data.Models.Institution", b =>
                 {
                     b.Navigation("Grades");
@@ -375,6 +781,11 @@ namespace EduPlatform.Migrations
                     b.Navigation("LessonGrades");
 
                     b.Navigation("LessonSubjects");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.UserGroup", b =>
+                {
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

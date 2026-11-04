@@ -1,0 +1,156 @@
+﻿/* Խմբեր՝ քարտեր (ըստ դիզայների Figma-ի չափերի) */
+.groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 12px;
+}
+
+.group-card {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    min-height: 99px;
+    background: #FFFFFF;
+    border: 0.8px solid #F3F4F6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+}
+
+/* նկար / պատկերակ */
+.group-card-avatar {
+    flex: none;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6369D4 0%, #656AD8 16.67%, #666CDB 33.33%, #686DDF 50%, #6A6FE3 66.67%, #6B70E6 83.33%, #6D72EA 100%);
+    color: #FFFFFF;
+    font-size: 28px;
+}
+
+    .group-card-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.group-card-body {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* անվանում */
+.group-card-title {
+    max-width: 100%;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: #101828;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* պիտակներ */
+.group-card-tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding-top: 4px;
+}
+
+.group-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 15px;
+    white-space: nowrap;
+}
+
+.group-tag-pupils {
+    background: #DBEAFE;
+    color: #1447E6;
+}
+
+.group-tag-parents {
+    background: #DCFCE7;
+    color: #008236;
+}
+
+.group-tag-other {
+    background: #F3E8FF;
+    color: #8200DB;
+}
+
+.group-tag-role.is-admin {
+    background: #FEF3C6;
+    color: #BB4D00;
+}
+
+.group-tag-role.is-member {
+    background: #F3F4F6;
+    color: #4A5565;
+}
+
+/* ներքևի տող՝ ձախից վերջին հաղորդագրության տեղը, աջից՝ անդամների թիվը */
+.group-card-foot {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 6px;
+}
+
+.group-card-preview {
+    max-width: 180px;
+    min-height: 17px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+    color: #6A7282;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.group-card-members {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding-left: 8px;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 15px;
+    color: #6A7282;
+}
+
+    .group-card-members i {
+        font-size: 12px;
+        line-height: 1;
+    }
+/* Խմբի քարտը հղում է՝ ներսի տեքստերը չեն ընդգծվում և չեն գունավորվում */
+a.group-card,
+a.group-card:hover,
+a.group-card:focus {
+    text-decoration: none;
+    color: inherit;
+}
+
+    a.group-card:hover {
+        border-color: var(--accent);
+    }

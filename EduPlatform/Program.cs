@@ -14,7 +14,15 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .Enrich.FromLogContext()
     .WriteTo.Console());
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddRazorOptions(options =>
+    {
+        // Views/Shared-ի ենթաթղթապանակները՝ կարճ անուններով գտնելու համար
+        options.ViewLocationFormats.Add("/Views/Shared/{1}/{0}.cshtml");   // Views/Shared/<Controller>/
+        options.ViewLocationFormats.Add("/Views/Shared/Repository/{1}/{0}.cshtml");   // Views/Shared/Repository/<Controller>/ («Իմ գրապահոց»-ի ենթաբաժիններ)
+        options.ViewLocationFormats.Add("/Views/Shared/Layouts/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Shared/Partials/{0}.cshtml");
+    });
 
 builder.Services.AddDbContext<EduPlatformDbContext>(options =>
 options.UseSqlServer(
@@ -28,6 +36,11 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ILibraryApiClient, LibraryApiClient>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["LibraryApi:BaseUrl"]!.TrimEnd('/') + "/");
+
+    // Library.Api-ն Production-ում ընդունում է միայն բանալիով հարցումներ
+    var apiKey = builder.Configuration["LibraryApi:ApiKey"];
+    if (!string.IsNullOrEmpty(apiKey))
+        c.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
 });
 
 builder.Services.AddScoped<IIpGeolocationService, IpGeolocationService>();
@@ -37,6 +50,7 @@ builder.Services.AddSignalR();
 builder.Services.AddLocalization(options => options.ResourcesPath = "");
 
 builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
+builder.Services.AddScoped<IClassRosterService, ClassRosterService>();
 
 // ── Մուտք ───────────────────────────────────────────────────────────────────
 // Production՝ AuthServer-ի JWT (մուտքի տրամաբանությունը կավարտի մեկ այլ ծրագրավորող):
@@ -62,8 +76,10 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+// EF-ի գործիքները (Add-Migration) հավելվածը միայն մոդելը կարդալու համար են գործարկում՝ այդ ժամանակ migration չենք կատարում
+if (!EF.IsDesignTime)
 {
+    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<EduPlatformDbContext>();
     db.Database.Migrate();
 }
@@ -95,7 +111,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=MainPage}/{id?}")
+    pattern: "{controller=Teacher}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 // ԺԱՄԱՆԱԿԱՎՈՐ՝ ստուգելու համար, թե սերվերում ինչ build և ինչ կարգավորում է աշխատում: Ստուգելուց հետո ջնջել:

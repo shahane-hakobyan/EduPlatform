@@ -1,0 +1,157 @@
+﻿@model EduPlatform.ViewModels.CreateGroupViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["CreateGroup"].Value;
+}
+
+<form id="createGroupForm" method="post" action="@Model.SubmitUrl" enctype="multipart/form-data" class="create-assignment-page cg-page">
+
+    <div class="ca-topbar d-flex align-items-center gap-3 mb-3">
+        <a href="@Model.CancelUrl" id="cgBack" class="ca-back-btn d-flex align-items-center justify-content-center">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <h1 class="ca-title mb-0 flex-grow-1" id="cgTitle" data-step2="@Localizer["SelectMembersTitle"]">@Localizer["CreateGroup"]</h1>
+        <span class="cg-selected-top" id="cgSelectedTop" style="display:none"><span id="cgSelectedTopCount">0</span> @Localizer["SelectedShort"]</span>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Error))
+    {
+        <div class="ca-error">@Model.Error</div>
+    }
+    <div class="ca-error" id="cgClientError" style="display:none"
+         data-form-msg="@Localizer["GroupFormIncomplete"]"
+         data-image-msg="@Localizer["GroupImageInvalid"]"></div>
+
+    <!-- ── Քայլ 1՝ նկար, անուն, տեսակ ── -->
+    <div id="cgStep1" class="cg-step">
+
+        <div class="ca-section-card">
+            <div class="ca-section-body">
+                <div class="ca-label">@Localizer["GroupPictureLabel"]</div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="cg-avatar" id="cgAvatar"><i class="bi bi-people"></i></div>
+                    <div>
+                        <label for="cgImageInput" class="cg-upload-btn"><i class="bi bi-image"></i> @Localizer["UploadPicture"]</label>
+                        <input type="file" id="cgImageInput" name="Image" accept=".jpg,.jpeg,.png,image/jpeg,image/png" hidden />
+                        <div class="cg-hint" id="cgImageHint">@Localizer["PictureHint"]</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ca-section-card">
+            <div class="ca-section-body">
+                <label class="ca-label" for="cgName">@Localizer["GroupNameLabel"] <span class="ca-required">*</span></label>
+                <input type="text" id="cgName" name="Name" class="ca-input" maxlength="200" value="@Model.Name"
+                       placeholder="@Localizer["GroupNamePlaceholder"]" />
+            </div>
+        </div>
+
+        <div class="ca-section-card">
+            <div class="ca-section-body">
+                <div class="ca-label">@Localizer["GroupTypeLabel"] <span class="ca-required">*</span></div>
+
+                <label class="cg-type-card">
+                    <input type="radio" name="Type" value="1" @(Model.Type == 1 ? "checked" : "") />
+                    <span class="cg-type-dot"></span>
+                    <span>
+                        <span class="cg-type-title">@Localizer["GroupTypePupils"]</span>
+                        <span class="cg-type-desc">@Localizer["GroupTypePupilsDesc"]</span>
+                    </span>
+                </label>
+                <label class="cg-type-card">
+                    <input type="radio" name="Type" value="2" @(Model.Type == 2 ? "checked" : "") />
+                    <span class="cg-type-dot"></span>
+                    <span>
+                        <span class="cg-type-title">@Localizer["GroupTypeParents"]</span>
+                        <span class="cg-type-desc">@Localizer["GroupTypeParentsDesc"]</span>
+                    </span>
+                </label>
+                <label class="cg-type-card">
+                    <input type="radio" name="Type" value="3" @(Model.Type == 3 ? "checked" : "") />
+                    <span class="cg-type-dot"></span>
+                    <span>
+                        <span class="cg-type-title">@Localizer["GroupTypeOther"]</span>
+                        <span class="cg-type-desc">@Localizer["GroupTypeOtherDesc"]</span>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <button type="button" id="cgContinue" class="ca-submit-btn cg-wide-btn">
+            @Localizer["ContinueToMembers"]
+        </button>
+    </div>
+
+    <!-- ── Քայլ 2՝ անդամների ընտրություն ── -->
+    <div id="cgStep2" class="cg-step" style="display:none">
+
+        <!-- սովորողների և ծնողների խմբեր՝ որոնում և ընտրություն -->
+        <div id="cgPickPane">
+            <div class="cg-banner">
+                <i class="bi bi-info-circle"></i>
+                <span id="cgBannerPupils">@Localizer["PickPupilsBanner"]</span>
+                <span id="cgBannerParents" style="display:none">@Localizer["PickParentsBanner"]</span>
+            </div>
+
+            <div class="cg-search">
+                <i class="bi bi-search"></i>
+                <input type="text" id="cgPupilSearch" placeholder="@Localizer["SearchPupilByNamePlaceholder"]" />
+            </div>
+
+            <div class="cg-pick-tools">
+                <select id="cgClassFilter" class="cg-class-select">
+                    <option value="">@Localizer["Grade"]</option>
+                    @foreach (var group in Model.ClassGroups)
+                    {
+                        <option value="@group.GradeName">@group.GradeName</option>
+                    }
+                </select>
+                <button type="button" id="cgSelectVisible" class="cg-tool-btn"><i class="bi bi-check2-all"></i> @Localizer["SelectAllLabel"]</button>
+                <button type="button" id="cgClearAll" class="cg-tool-btn">@Localizer["ClearAllLabel"]</button>
+            </div>
+
+            <div class="cg-pick-list">
+                @foreach (var group in Model.ClassGroups)
+                {
+                    foreach (var pupil in group.Pupils)
+                    {
+                        <label class="cg-pick-item"
+                               data-class="@group.GradeName"
+                               data-search="@((pupil.Name + " " + group.GradeName).ToLowerInvariant())">
+                            <input type="checkbox" name="MemberIds" value="@pupil.UserId"
+                                   data-pupil-id="@pupil.UserId" data-parent-id="parent:@pupil.UserId" />
+                            <span class="cg-pick-main">
+                                <span class="cg-pick-name">@pupil.Name</span>
+                                <span class="cg-pick-sub cg-sub-pupil">@Localizer["PupilWord"] &mdash; @group.GradeName</span>
+                                <span class="cg-pick-sub cg-sub-parent" style="display:none">@Localizer["ParentWord"] &mdash; @string.Format(Localizer["ParentOfPupil"].Value, pupil.Name) (@group.GradeName)</span>
+                            </span>
+                            <i class="bi bi-check-lg cg-pick-check"></i>
+                        </label>
+                    }
+                }
+            </div>
+        </div>
+
+        <!-- «Այլ» խումբ՝ դեռ առանց անդամների ընտրության -->
+        <div id="cgOtherPane" style="display:none">
+            <div class="cg-note"><i class="bi bi-info-circle"></i> @Localizer["MembersNotAvailableYet"]</div>
+        </div>
+
+        <div class="cg-bottom-bar">
+            <button type="submit" class="ca-submit-btn cg-wide-btn" id="cgSubmit"
+                    data-template="@Localizer["CreateGroupWithCount"]">
+                @string.Format(Localizer["CreateGroupWithCount"].Value, 1)
+            </button>
+        </div>
+    </div>
+</form>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/create-assignment.css" />
+    <link rel="stylesheet" href="~/css/groups.css" />
+    <link rel="stylesheet" href="~/css/create-group.css" />
+}
+@section Scripts {
+    <script src="~/js/create-group.js"></script>
+}

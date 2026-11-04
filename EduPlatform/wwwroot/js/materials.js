@@ -40,26 +40,40 @@
         });
     }
 
-    const gridBtn = document.querySelector('.materials-view-btn[data-view="grid"]');
-    const listBtn = document.querySelector('.materials-view-btn[data-view="list"]');
-    const gridView = document.querySelector('.materials-grid');
-    const listView = document.querySelector('.materials-list-view');
+    // ── ցանց / ցուցակ (յուրաքանչյուր ներդիրում առանձին, ընտրությունը պահվում է) ──
+    const VIEW_KEY = 'eduMaterialsView';
+    let savedView = null;
+    try { savedView = localStorage.getItem(VIEW_KEY); } catch (e) { }
 
-    if (gridBtn && listBtn && gridView && listView) {
-        gridBtn.addEventListener('click', function () {
-            gridBtn.classList.add('active');
-            listBtn.classList.remove('active');
-            gridView.style.display = 'grid';
-            listView.style.display = 'none';
-        });
+    function initViewToggle(scope) {
+        const gridBtn = scope.querySelector('.materials-view-btn[data-view="grid"]');
+        const listBtn = scope.querySelector('.materials-view-btn[data-view="list"]');
+        const gridView = scope.querySelector('.materials-grid');
+        const listView = scope.querySelector('.materials-list-view');
+        if (!(gridBtn && listBtn && gridView && listView)) return;
 
-        listBtn.addEventListener('click', function () {
-            listBtn.classList.add('active');
-            gridBtn.classList.remove('active');
-            gridView.style.display = 'none';
-            listView.style.display = 'block';
-        });
+        function setView(view) {
+            const isList = view === 'list';
+            listBtn.classList.toggle('active', isList);
+            gridBtn.classList.toggle('active', !isList);
+            gridView.style.display = isList ? 'none' : 'grid';
+            listView.style.display = isList ? 'block' : 'none';
+        }
+
+        function choose(view) {
+            setView(view);
+            try { localStorage.setItem(VIEW_KEY, view); } catch (e) { }
+        }
+
+        gridBtn.addEventListener('click', function () { choose('grid'); });
+        listBtn.addEventListener('click', function () { choose('list'); });
+
+        if (savedView === 'list') setView('list');
     }
+
+    const viewPanes = document.querySelectorAll('.library-tab-pane');
+    if (viewPanes.length) viewPanes.forEach(initViewToggle);
+    else initViewToggle(document);
 
     document.querySelectorAll('.material-card-delete-btn').forEach(function (btn) {
         btn.addEventListener('click', async function () {
@@ -68,7 +82,7 @@
 
             btn.disabled = true;
             try {
-                const res = await fetch('/Teacher/RemoveSavedMaterial', {
+                const res = await fetch('/Library/RemoveSavedMaterial', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ materialType: btn.dataset.type, id: parseInt(btn.dataset.id, 10) })
@@ -152,6 +166,9 @@
                     badge.textContent = count;
                     badge.style.display = count ? '' : 'none';
                 }
+
+                const clearOne = dropdown.querySelector('.materials-filter-clear-one');
+                if (clearOne) clearOne.style.display = count ? '' : 'none';
             });
 
             if (clearBtn) {
@@ -162,6 +179,41 @@
         }
 
         if (applyBtn) applyBtn.addEventListener('click', apply);
+
+        // ընտրված ֆիլտրերի թիվը (badge) թարմացվում է անմիջապես, արդյունքները՝ «Կիրառել»-ից հետո
+        dropdowns.forEach(function (dropdown) {
+            const badge = dropdown.querySelector('.materials-filter-badge');
+            dropdown.querySelectorAll('.materials-filter-pill-input').forEach(function (input) {
+                input.addEventListener('change', function () {
+                    const count = dropdown.querySelectorAll('.materials-filter-pill-input:checked').length;
+                    if (badge) {
+                        badge.textContent = count;
+                        badge.style.display = count ? '' : 'none';
+                    }
+                });
+            });
+        });
+
+        // Մաքրել միայն այս ֆիլտրը (մյուսները և որոնումը մնում են)
+        dropdowns.forEach(function (dropdown) {
+            const clearOne = dropdown.querySelector('.materials-filter-clear-one');
+            if (!clearOne) return;
+            const inputs = dropdown.querySelectorAll('.materials-filter-pill-input');
+
+            // հղումը երևում է հենց ընտրելուց, առանց «Կիրառել»-ի սպասելու
+            inputs.forEach(function (input) {
+                input.addEventListener('change', function () {
+                    const any = Array.from(inputs).some(function (i) { return i.checked; });
+                    clearOne.style.display = any ? '' : 'none';
+                });
+            });
+
+            clearOne.addEventListener('click', function (e) {
+                e.preventDefault();
+                inputs.forEach(function (input) { input.checked = false; });
+                apply();
+            });
+        });
 
         if (search) {
             search.addEventListener('keydown', function (e) {

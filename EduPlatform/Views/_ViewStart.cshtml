@@ -1,7 +1,6 @@
-﻿@{
-    var appAreaControllers = new[] { "Teacher", "Pupil", "School" };
-
-    Layout = appAreaControllers.Contains(ViewContext.RouteData.Values["controller"]?.ToString())
-        ? "_AppLayout"
-        : "_Layout";
+@{
+    // Բոլոր էջերը՝ _AppLayout-ով, բացի Home-ից (նոր կոնտրոլերները ավելացնել պետք չէ)
+    Layout = ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
+        ? "_Layout"
+        : "_AppLayout";
 }

@@ -68,12 +68,107 @@
         });
     });
 
-    // --- File dropzone ---
+    // --- Multi-select pills (assignment type) ---
+    document.querySelectorAll('[data-multi-select]').forEach(function (row) {
+        const fieldName = row.getAttribute('data-field-name');
+        const container = row.parentElement;
+        const otherValue = '32';   // AssignmentTypes.Other
+        const otherWrap = document.getElementById('caOtherTypeWrap');
+
+        row.querySelectorAll('button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const value = btn.getAttribute('data-value');
+                const nowActive = !btn.classList.contains('active');
+                btn.classList.toggle('active', nowActive);
+
+                const existing = container.querySelector('input[type="hidden"][name="' + fieldName + '"][value="' + value + '"]');
+                if (nowActive && !existing) {
+                    const hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = fieldName;
+                    hidden.value = value;
+                    container.appendChild(hidden);
+                } else if (!nowActive && existing) {
+                    existing.remove();
+                }
+
+                // «Այլ» ընտրելիս բացվում է տեքստի դաշտը
+                if (value === otherValue && otherWrap) {
+                    otherWrap.style.display = nowActive ? '' : 'none';
+                }
+            });
+        });
+    });
+
+    // --- File dropzone (մի քանի ֆայլ) ---
     const fileInput = document.getElementById('caFileInput');
     const fileNameEl = document.getElementById('caFileName');
+    const dropzone = document.querySelector('.ca-dropzone');
     if (fileInput) {
+        const dt = new DataTransfer();   // ընտրված ֆայլերի ընդհանուր ցուցակը (click + drag & drop)
+
+        function renderFiles() {
+            fileNameEl.innerHTML = '';
+            Array.from(dt.files).forEach(function (f, i) {
+                const chip = document.createElement('span');
+                chip.className = 'ca-file-chip';
+                chip.textContent = f.name + ' ';
+                const x = document.createElement('i');
+                x.className = 'bi bi-x ca-file-chip-remove';
+                x.addEventListener('click', function (e) {
+                    e.preventDefault();      // label-ի ներսում՝ ֆայլի ընտրության պատուհանը չբացվի
+                    e.stopPropagation();
+                    const next = new DataTransfer();
+                    Array.from(dt.files).forEach(function (g, j) { if (j !== i) next.items.add(g); });
+                    dt.items.clear();
+                    Array.from(next.files).forEach(function (g) { dt.items.add(g); });
+                    fileInput.files = dt.files;
+                    renderFiles();
+                });
+                chip.appendChild(x);
+                fileNameEl.appendChild(chip);
+            });
+        }
+
+        function addFiles(list) {
+            Array.from(list).forEach(function (f) {
+                const exists = Array.from(dt.files).some(function (g) { return g.name === f.name && g.size === f.size; });
+                if (!exists) dt.items.add(f);
+            });
+            fileInput.files = dt.files;
+            renderFiles();
+        }
+
         fileInput.addEventListener('change', function () {
-            fileNameEl.textContent = fileInput.files.length ? fileInput.files[0].name : '';
+            // ընտրվածները ավելացվում են արդեն եղածներին
+            const picked = Array.from(fileInput.files);
+            fileInput.files = dt.files;
+            addFiles(picked);
+        });
+
+        if (dropzone) {
+            ['dragenter', 'dragover'].forEach(function (ev) {
+                dropzone.addEventListener(ev, function (e) {
+                    e.preventDefault();
+                    dropzone.classList.add('dragover');
+                });
+            });
+            ['dragleave', 'dragend'].forEach(function (ev) {
+                dropzone.addEventListener(ev, function () { dropzone.classList.remove('dragover'); });
+            });
+            dropzone.addEventListener('drop', function (e) {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+                if (e.dataTransfer && e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
+            });
+        }
+
+        // ֆայլը ձևից դուրս գցելիս բրաուզերը այն չի բացում
+        ['dragover', 'drop'].forEach(function (ev) {
+            window.addEventListener(ev, function (e) {
+                if (e.target.closest && e.target.closest('.ca-dropzone')) return;
+                e.preventDefault();
+            });
         });
     }
 
@@ -102,9 +197,13 @@
     function refreshCounts() {
         const checked = document.querySelectorAll('[data-pupil-checkbox]:checked');
         const total = checked.length;
-        selectedCountEl.textContent = total;
-        selectedCountTopEl.textContent = total;
-        submitBtn.disabled = total === 0;
+        if (selectedCountEl) selectedCountEl.textContent = total;
+        if (selectedCountTopEl) selectedCountTopEl.textContent = total;
+
+        // խմբագրման ռեժիմում աշակերտներ չկան՝ կոճակը միշտ ակտիվ է
+        const pageForm = document.getElementById('createAssignmentForm');
+        const isEdit = pageForm && pageForm.getAttribute('data-mode') === 'Edit';
+        if (submitBtn && !isEdit) submitBtn.disabled = total === 0;
 
         document.querySelectorAll('.ca-class-group').forEach(function (group) {
             const groupChecked = group.querySelectorAll('[data-pupil-checkbox]:checked').length;
@@ -149,6 +248,67 @@
             });
         });
     }
+
+    // --- Ուղարկելուց առաջ՝ պարտադիր դաշտերի ստուգում ---
+    const form = document.getElementById('createAssignmentForm');
+    const clientError = document.getElementById('caClientError');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            const has = function (name) { return form.querySelectorAll('input[type="hidden"][name="' + name + '"]').length > 0; };
+            const typesHasOther = !!form.querySelector('input[type="hidden"][name="Types"][value="32"]');
+            const otherText = form.querySelector('input[name="OtherTypeText"]');
+
+            const ok =
+                has('SubjectIds') &&
+                has('GradeLevels') &&
+                has('Types') &&
+                (!typesHasOther || (otherText && otherText.value.trim() !== '')) &&
+                has('GradingType') && form.querySelector('input[name="GradingType"]').value !== '' &&
+                (form.querySelector('[name="AllowTextAnswer"]').checked || form.querySelector('[name="AllowFileAnswer"]').checked);
+
+            // Վերջնաժամկետը պետք է լինի սկզբից հետո
+            const startEl = form.querySelector('[name="StartDate"]');
+            const dueEl = form.querySelector('[name="DueDate"]');
+            const datesOk = !(startEl && dueEl && startEl.value && dueEl.value && dueEl.value.slice(0, 10) < startEl.value.slice(0, 10));
+
+            if (!ok || !datesOk) {
+                e.preventDefault();
+                if (clientError) {
+                    clientError.textContent = (ok && !datesOk)
+                        ? clientError.getAttribute('data-date-msg')
+                        : clientError.getAttribute('data-default-msg');
+                    clientError.style.display = '';
+                    clientError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    }
+
+    // --- Շտեմարանից բացելիս՝ նախալրացում (նույն կլիկներով, ինչ ձեռքով ընտրելիս) ---
+    (function () {
+        const el = document.getElementById('caPrefill');
+        if (!el) return;
+        let d;
+        try { d = JSON.parse(el.textContent); } catch (e) { return; }
+
+        function click(selector) {
+            const node = document.querySelector(selector);
+            if (node) node.click();
+        }
+
+        (d.subjectIds || []).forEach(function (v) {
+            click('[data-field-name="SubjectIds"] .ca-chip-option[data-value="' + v + '"]');
+        });
+        (d.gradeLevels || []).forEach(function (v) {
+            click('[data-field-name="GradeLevels"] .ca-chip-option[data-value="' + v + '"]');
+        });
+        (d.types || []).forEach(function (v) {
+            click('[data-multi-select] button[data-value="' + v + '"]');
+        });
+        if (d.gradingType) {
+            click('[data-single-select] button[data-value="' + d.gradingType + '"]');
+        }
+    })();
 
     refreshCounts();
 });

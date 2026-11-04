@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Security.Claims;
+using EduPlatform.ViewModels.Library;
 
 namespace EduPlatform.Controllers
 {
@@ -20,16 +21,18 @@ namespace EduPlatform.Controllers
         private readonly EduPlatformDbContext _db;
         private readonly IConfiguration _config;
         private readonly ILibraryApiClient _library;
+        private readonly IClassRosterService _roster;
 
         private string CurrentTeacherUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-        public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer, EduPlatformDbContext db, IConfiguration config, ILibraryApiClient library)
+        public TeacherController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer, EduPlatformDbContext db, IConfiguration config, ILibraryApiClient library, IClassRosterService roster)
         {
             _menuBuilder = menuBuilder;
             _l = localizer;
             _db = db;
             _config = config;
             _library = library;
+            _roster = roster;
         }
 
         public IActionResult Index()
@@ -58,7 +61,7 @@ namespace EduPlatform.Controllers
         [HttpGet]
         public IActionResult ScheduleDayContent(string day)
         {
-            return PartialView("_TeacherSchedule", BuildScheduleViewModel(day));
+            return PartialView("Schedule/_TeacherSchedule", BuildScheduleViewModel(day));
         }
 
         [HttpGet]
@@ -98,7 +101,7 @@ namespace EduPlatform.Controllers
                     .ToList()
             };
 
-            return PartialView("_ScheduleEditModal", vm);
+            return PartialView("Schedule/_ScheduleEditModal", vm);
         }
 
         public class ScheduleSaveRequest
@@ -201,7 +204,7 @@ namespace EduPlatform.Controllers
                 }).ToList()
             };
 
-            return PartialView("_GradeRoster", vm);
+            return PartialView("Schedule/_GradeRoster", vm);
         }
 
         private static ScheduleDay CurrentScheduleDay()
@@ -210,196 +213,6 @@ namespace EduPlatform.Controllers
             return today == DayOfWeek.Sunday ? ScheduleDay.Sunday : (ScheduleDay)(int)today;
         }
 
-        // «Իմ գրադարան» ենթամենյուի route → Library-ի MaterialKind
-        private static readonly Dictionary<string, string> LibraryTypeByRoute = new()
-        {
-            ["Textbooks"] = "Textbook",
-            ["MethodologicalGuidelines"] = "MethodicalGuide",
-            ["OtherEducationalMaterials"] = "OtherMaterial",
-        };
-
-        private static readonly string[] CardColors =
-            { "blue", "purple", "green", "orange", "pink", "red", "teal", "emerald", "indigo", "amber" };
-
-        /// <summary>
-        /// Ուսուցչի պահած նյութերը՝ EduPlatform-ի UserLibraryMaterials աղյուսակից,
-        /// իսկ նյութերի տվյալները՝ Library.Api-ից:
-        /// </summary>
-        /// <summary>Library-ի OtherMaterial-ի տեսակի (Kind) անունը ընթացիկ լեզվով:</summary>
-        private string? KindLabel(string? kind) => kind switch
-        {
-            "Text" => _l["TextMaterial"].Value,
-            "Video" => _l["VideoMaterial"].Value,
-            "Audio" => _l["AudioMaterial"].Value,
-            "Image" => _l["ImageMaterial"].Value,
-            "ThreeD" => _l["ThreeDMaterial"].Value,
-            "Folder" => _l["Folder"].Value,
-            "Digitized" => _l["DigitizedMaterial"].Value,
-            "Crossword" => _l["Crossword"].Value,
-            "PairMatch" => _l["MatchingPairsGame"].Value,
-            "Learn" => _l["Quiz"].Value,
-            _ => null
-        };
-
-        /// <summary>Ֆիլտրերի ընտրելի արժեքները կազմվում են էջի նյութերից:</summary>
-        private List<MaterialFilterOption> BuildFilters(IReadOnlyCollection<MaterialCardViewModel> cards, params string[] keys)
-        {
-            var result = new List<MaterialFilterOption>();
-
-            foreach (var key in keys)
-            {
-                string label;
-                IEnumerable<string> values;
-
-                switch (key)
-                {
-                    case "subject":
-                        label = _l["Subject"]; values = cards.SelectMany(c => c.Subjects); break;
-                    case "grade":
-                        label = _l["Grade"]; values = cards.SelectMany(c => c.Grades); break;
-                    case "author":
-                        label = _l["Author"];
-                        values = cards.SelectMany(c => c.Authors.Split(", ", StringSplitOptions.RemoveEmptyEntries));
-                        break;
-                    case "year":
-                        label = _l["PublicationYear"]; values = cards.Select(c => c.Year.ToString()); break;
-                    case "publisher":
-                        label = _l["Publisher"]; values = cards.Select(c => c.Publisher); break;
-                    case "language":
-                        label = _l["Language"]; values = cards.Select(c => c.Language ?? ""); break;
-                    case "type":
-                        label = _l["MaterialType"]; values = cards.Select(c => c.TypeLabel ?? ""); break;
-                    default:
-                        continue;
-                }
-
-                var options = values
-                    .Where(v => !string.IsNullOrWhiteSpace(v))
-                    .Distinct()
-                    .OrderBy(v => int.TryParse(v, out var n) ? n : int.MaxValue)
-                    .ThenBy(v => v)
-                    .ToList();
-
-                if (options.Count > 0)
-                    result.Add(new MaterialFilterOption { Key = key, Label = label, Options = options });
-            }
-
-            return result;
-        }
-
-        private async Task<MaterialsPageViewModel> BuildSavedMaterialsPage(string route)
-        {
-            var type = LibraryTypeByRoute[route];
-
-            var saved = await _db.UserLibraryMaterials
-                .Where(x => x.UserId == CurrentTeacherUserId && x.MaterialType == type)
-                .OrderByDescending(x => x.SavedAt)
-                .ToListAsync();
-
-            var books = await _library.GetByIdsAsync(saved.Select(s => s.LibraryMaterialId));
-
-            if (books is not null)
-            {
-                // Library-ն պատասխանել է → այնտեղ ջնջված նյութերը հեռացնում ենք մեր աղյուսակից:
-                var existing = books.Select(b => b.Id).ToHashSet();
-                var orphans = saved.Where(s => !existing.Contains(s.LibraryMaterialId)).ToList();
-                if (orphans.Count > 0)
-                {
-                    _db.UserLibraryMaterials.RemoveRange(orphans);
-                    await _db.SaveChangesAsync();
-                }
-            }
-
-            // Library-ն անհասանելի է → ոչինչ չենք հեռացնում, ցուցակը դատարկ է ցույց տրվում:
-            var byId = (books ?? new()).ToDictionary(b => b.Id);
-
-            var cards = saved
-                .Where(s => byId.ContainsKey(s.LibraryMaterialId))
-                .Select(s => byId[s.LibraryMaterialId])
-                .Select(b => new MaterialCardViewModel
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    MaterialType = b.MaterialType,
-                    TypeLabel = KindLabel(b.Kind),
-                    Grades = b.Grades.OrderBy(g => g).Select(g => g.ToString()).ToList(),
-                    Subjects = b.Subjects,
-                    ColorVariant = CardColors[Math.Abs(b.Id) % CardColors.Length],
-                    ThumbnailUrl = b.CoverUrl,
-                    Authors = string.Join(", ", b.Authors),
-                    Publisher = b.PublisherName,
-                    Language = b.Language,
-                    Pages = b.Pages ?? 0,
-                    Year = b.PublishedYear,
-                    ViewUrl = b.ViewUrl ?? "",
-                    DownloadUrl = b.DownloadUrl ?? ""
-                })
-                .ToList();
-
-            var filterKeys = route == "OtherEducationalMaterials"
-                ? new[] { "subject", "grade", "author", "year", "publisher", "type" }
-                : new[] { "subject", "grade", "author", "year", "publisher" };
-
-            return new MaterialsPageViewModel
-            {
-                Title = _l[route],
-                TotalCount = cards.Count,
-                Filters = BuildFilters(cards, filterKeys),
-                Materials = cards
-            };
-        }
-
-        public async Task<IActionResult> Materials(string id)
-        {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
-
-            if (LibraryTypeByRoute.ContainsKey(id))
-            {
-                var page = await BuildSavedMaterialsPage(id);
-                return View("~/Views/Shared/Materials/MaterialsList.cshtml", page);
-            }
-
-            return NotFound();
-        }
-
-        public record RemoveSavedRequest(string MaterialType, int Id);
-
-        // «Իմ գրադարան»-ից նյութի հեռացում (Library-ի նյութը չի ջնջվում, միայն այս օգտատիրոջ պահվածը)
-        [HttpPost]
-        public async Task<IActionResult> RemoveSavedMaterial([FromBody] RemoveSavedRequest req)
-        {
-            await _db.UserLibraryMaterials
-                .Where(x => x.UserId == CurrentTeacherUserId
-                         && x.MaterialType == req.MaterialType
-                         && x.LibraryMaterialId == req.Id)
-                .ExecuteDeleteAsync();
-
-            return Ok();
-        }
-
-        [HttpGet]
-        public IActionResult Repository(string id)
-        {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
-
-            return id switch
-            {
-                "MyTools" => View("~/Views/Teacher/Repository/MyTools.cshtml", new ToolsPageViewModel
-                {
-                    Tools = new(),
-                    AddToolUrl = $"{_config["Authentication:Authority"]}/Tools"
-                }),
-                "Assignments" => View("~/Views/Teacher/Repository/Assignments.cshtml", new AssignmentsPageViewModel
-                {
-                    Assignments = new(),
-                    CreateUrl = Url.Action(nameof(CreateAssignment))!
-                }),
-                "AssignmentBank" => View("~/Views/Teacher/Repository/AssignmentBank.cshtml"),
-                _ => NotFound()
-            };
-        }
 
         [HttpGet]
         public IActionResult Messages()
@@ -407,205 +220,6 @@ namespace EduPlatform.Controllers
             ViewBag.SidebarItems = _menuBuilder.ForTeacher();
             ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
             return View("~/Views/Teacher/Messages.cshtml");
-        }
-
-        public async Task<IActionResult> OtherBooks()
-        {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
-
-            var saved = await _db.UserLibraryMaterials
-                .Where(x => x.UserId == CurrentTeacherUserId && x.MaterialType == "OtherBook")
-                .OrderByDescending(x => x.SavedAt)
-                .ToListAsync();
-
-            var books = await _library.GetByIdsAsync(saved.Select(s => s.LibraryMaterialId));
-
-            if (books is not null)
-            {
-                // Library-ում ջնջված նյութերը հեռացնում ենք մեր աղյուսակից
-                var existing = books.Select(b => b.Id).ToHashSet();
-                var orphans = saved.Where(s => !existing.Contains(s.LibraryMaterialId)).ToList();
-                if (orphans.Count > 0)
-                {
-                    _db.UserLibraryMaterials.RemoveRange(orphans);
-                    await _db.SaveChangesAsync();
-                }
-            }
-
-            // Library-ն անհասանելի է → ոչինչ չենք հեռացնում, ցուցակը դատարկ է
-            var byId = (books ?? new()).ToDictionary(b => b.Id);
-            var ordered = saved
-                .Where(s => byId.ContainsKey(s.LibraryMaterialId))
-                .Select(s => byId[s.LibraryMaterialId])
-                .ToList();
-
-            MaterialsPageViewModel TabContent(string category, string title, params string[] filterKeys)
-            {
-                var cards = ordered
-                    .Where(b => b.Category == category)
-                    .Select(b => new MaterialCardViewModel
-                    {
-                        Id = b.Id,
-                        Title = b.Title,
-                        MaterialType = b.MaterialType,
-                        Grades = b.Grades.OrderBy(g => g).Select(g => g.ToString()).ToList(),
-                        Subjects = b.Subjects,
-                        ColorVariant = CardColors[Math.Abs(b.Id) % CardColors.Length],
-                        ThumbnailUrl = b.CoverUrl,
-                        Authors = string.Join(", ", b.Authors),
-                        Publisher = b.PublisherName,
-                        Language = b.Language,
-                        Pages = b.Pages ?? 0,
-                        Year = b.PublishedYear,
-                        ViewUrl = b.ViewUrl ?? "",
-                        DownloadUrl = b.DownloadUrl ?? ""
-                    })
-                    .ToList();
-
-                return new MaterialsPageViewModel { Title = title, TotalCount = cards.Count, Filters = BuildFilters(cards, filterKeys), Materials = cards };
-            }
-
-            var tabs = new List<OtherBooksTabViewModel>
-            {
-                new() { Key = "other-textbooks", Content = TabContent("Textbook", _l["OtherTextbooks"], "subject", "grade", "author", "year", "publisher", "language") },
-                new() { Key = "fiction", Content = TabContent("Fiction", _l["FictionBooks"], "author", "year", "publisher", "language") },
-                new() { Key = "popular-science", Content = TabContent("PopularScience", _l["PopularScienceBooks"], "author", "year", "publisher", "language") },
-            };
-
-            return View("~/Views/Shared/Materials/OtherBooks.cshtml", tabs);
-        }
-
-        [HttpGet]
-        public IActionResult CreateAssignment()
-        {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
-
-            var grades = _db.TeacherGrades
-                .Where(tg => tg.TeacherUserId == CurrentTeacherUserId)
-                .Select(tg => new SelectOption { Id = tg.GradeId, Label = tg.Grade.GradeName })
-                .ToList();
-
-            var vm = new CreateAssignmentViewModel
-            {
-                Subjects = _db.TeacherSubjects
-                    .Where(ts => ts.TeacherUserId == CurrentTeacherUserId)
-                    .Select(ts => new SelectOption { Id = ts.SubjectId, Label = ts.Subject.Name })
-                    .ToList(),
-                Grades = grades,
-                AssignmentTypes = new() { "Թեստային", "Գործնական", "Լաբորատոր", "Նախագծային", "Տնային Աշխատանք", "Այլ" },
-                GradingTypes = new() { "Հայտորոշիչ", "Ձևավորող", "Ամփոփիչ" },
-                ClassGroups = grades.Select(g => new AssignmentClassGroupViewModel
-                {
-                    GradeId = g.Id,
-                    GradeName = g.Label,
-                    Pupils = Enumerable.Range(1, 8).Select(i => new RosterPupilViewModel
-                    {
-                        Name = $"{_l["Pupil"]} {i}",
-                        PhotoUrl = "/images/avatar-placeholder.jpg"
-                    }).ToList()
-                }).ToList(),
-                SubmitUrl = Url.Action(nameof(CreateAssignment))!,
-                CancelUrl = Url.Action(nameof(Repository), new { id = "Assignments" })!
-            };
-
-            return View("~/Views/Teacher/Repository/CreateAssignment.cshtml", vm);
-        }
-
-        [HttpPost]
-        public IActionResult CreateAssignment(CreateAssignmentViewModel _)
-        {
-            // No Assignment entity/table exists yet — this just returns to the list.
-            // Wire this up to a real save once the Assignment model + migration are added.
-            return RedirectToAction(nameof(Repository), new { id = "Assignments" });
-        }
-
-        [HttpGet]
-        public IActionResult AssignmentDetail(int id)
-        {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
-
-            var vm = new AssignmentDetailViewModel
-            {
-                Id = id,
-                Title = "Ծաղիկի կառուցվածք",
-                Subject = "Կենսաբանություն",
-                Grade = "9-րդ դասարան",
-                Type = "Գործնական",
-                GradingType = "Ձևավորող",
-                StartDate = new DateTime(2028, 3, 8),
-                DueDate = new DateTime(2028, 3, 15),
-                Description = "պատասխան ",
-                ArchiveUrl = "#",
-                Submissions = new()
-        {
-            new() {
-                Id = 1, PupilName = "Լուսինե Գրիգորյան", PhotoUrl = "/images/avatar-placeholder.jpg",
-                GradeName = "9-րդ դասարան", GroupName = "Խումբ Ա",
-                SubmittedDate = new DateTime(2028, 3, 10), Status = "Graded",
-                Score = 7, MaxScore = 10, ScoreFeedback = "Կարելի է ավելի լավ",
-                AttachmentFileName = "Լուսինե Գրիգորյան.pdf", AttachmentUrl = "#",
-                GradingMode = "Point"
-            },
-            new() {
-                Id = 2, PupilName = "Լիլիթ Բադոյան", PhotoUrl = "/images/avatar-placeholder.jpg",
-                GradeName = "9-րդ դասարան", GroupName = "Խումբ Ա",
-                SubmittedDate = new DateTime(2028, 3, 11), Status = "Submitted",
-                AttachmentFileName = "Լիլիթ Բադոյան.pdf", AttachmentUrl = "#",
-                GradingMode = "Formative"
-            },
-        }
-            };
-
-            var grades = _db.TeacherGrades
-                .Where(tg => tg.TeacherUserId == CurrentTeacherUserId)
-                .Select(tg => new SelectOption { Id = tg.GradeId, Label = tg.Grade.GradeName })
-                .ToList();
-
-            vm.AvailableGrades = grades.Select(g => new AssignmentClassGroupViewModel
-            {
-                GradeId = g.Id,
-                GradeName = g.Label,
-                Pupils = Enumerable.Range(1, 8).Select(i => new RosterPupilViewModel
-                {
-                    Name = $"{_l["Pupil"]} {i}",
-                    PhotoUrl = "/images/avatar-placeholder.jpg"
-                }).ToList()
-            }).ToList();
-
-            vm.AlreadyAddedPupilIds = vm.Submissions.Select(s => s.PupilName.GetHashCode()).ToList();
-
-            return View(vm);
-        }
-
-        public class SaveGradeRequest
-        {
-            public int SubmissionId { get; set; }
-            public string GradingMode { get; set; } = "Point";
-            public int? Score { get; set; }
-            public string? ProtocolText { get; set; }
-        }
-
-        [HttpPost]
-        public IActionResult SaveGrade([FromBody] SaveGradeRequest request)
-        {
-            // No submission/grade persistence yet — wire this to a real
-            // Submission entity once it exists in the DB.
-            return Json(new { success = true });
-        }
-        public class AddPupilsRequest
-        {
-            public int AssignmentId { get; set; }
-            public List<string> PupilNames { get; set; } = new();
-        }
-
-        [HttpPost]
-        public IActionResult AddPupilsToAssignment([FromBody] AddPupilsRequest request)
-        {
-            // No Submission entity yet — wire this to a real insert once it exists.
-            return Json(new { success = true, added = request.PupilNames.Count });
         }
 
     }

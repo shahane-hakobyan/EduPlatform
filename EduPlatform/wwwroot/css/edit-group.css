@@ -1,0 +1,70 @@
+﻿/* Խմբի խմբագրում */
+.eg-remove-image {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.eg-members {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.eg-member {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: .8px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.eg-member-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 600;
+    color: #101828;
+}
+
+.eg-member.is-removed {
+    opacity: .5;
+    background: #fef3f2;
+}
+
+    .eg-member.is-removed .eg-member-name {
+        text-decoration: line-through;
+    }
+
+.eg-remove-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: .8px solid #fda29b;
+    border-radius: 10px;
+    background: var(--surface);
+    color: #d92d20;
+    cursor: pointer;
+}
+
+.eg-pick-list {
+    max-height: 420px;
+    overflow-y: auto;
+    padding-bottom: 0;
+}
+
+.cg-page .cg-hint.mt-0 {
+    margin-top: 0;
+}

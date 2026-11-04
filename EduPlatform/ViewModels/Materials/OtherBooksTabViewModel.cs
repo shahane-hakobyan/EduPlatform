@@ -1,8 +1,0 @@
-﻿namespace EduPlatform.ViewModels
-{
-    public class OtherBooksTabViewModel
-    {
-        public string Key { get; set; } = "";
-        public MaterialsPageViewModel Content { get; set; } = new();
-    }
-}

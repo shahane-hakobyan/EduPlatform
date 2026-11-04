@@ -752,3 +752,23 @@
         padding: 10px 18px;
     }
 }
+/* Մաքրել միայն այս ֆիլտրը */
+.materials-filter-menu-head {
+    flex-basis: 100%;
+    width: 100%;
+}
+
+.materials-filter-clear-one {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+    .materials-filter-clear-one:hover {
+        color: var(--accent);
+    }

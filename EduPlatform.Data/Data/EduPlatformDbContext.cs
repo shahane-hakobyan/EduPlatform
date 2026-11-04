@@ -23,6 +23,14 @@ namespace EduPlatform.Data
         public DbSet<TeacherGrade> TeacherGrades => Set<TeacherGrade>();
         public DbSet<PupilGrade> PupilGrades => Set<PupilGrade>();
         public DbSet<UserLibraryMaterial> UserLibraryMaterials => Set<UserLibraryMaterial>();
+        public DbSet<Assignment> Assignments => Set<Assignment>();
+        public DbSet<AssignmentSubject> AssignmentSubjects => Set<AssignmentSubject>();
+        public DbSet<AssignmentGradeLevel> AssignmentGradeLevels => Set<AssignmentGradeLevel>();
+        public DbSet<AssignmentFile> AssignmentFiles => Set<AssignmentFile>();
+        public DbSet<AssignmentRecipient> AssignmentRecipients => Set<AssignmentRecipient>();
+        public DbSet<AssignmentSubmissionFile> AssignmentSubmissionFiles => Set<AssignmentSubmissionFile>();
+        public DbSet<UserGroup> UserGroups => Set<UserGroup>();
+        public DbSet<UserGroupMember> UserGroupMembers => Set<UserGroupMember>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -163,6 +171,132 @@ namespace EduPlatform.Data
                 // Նույն նյութը օգտատերը կարող է պահել միայն մեկ անգամ:
                 e.HasIndex(x => new { x.UserId, x.MaterialType, x.LibraryMaterialId })
                  .IsUnique();
+            });
+
+            // ── Առաջադրանք (ձևանմուշ կամ ուղարկված) ──────────────────────
+            modelBuilder.Entity<Assignment>(e =>
+            {
+                e.Property(x => x.TeacherUserId).HasMaxLength(450);
+                e.Property(x => x.Title).HasMaxLength(300);
+                e.Property(x => x.Description).HasMaxLength(4000);
+                e.Property(x => x.OtherTypeText).HasMaxLength(500);
+                e.Property(x => x.MaterialUrl).HasMaxLength(1000);
+
+                // Ուղարկված առաջադրանքը կապված է իր ձևանմուշի հետ, բայց ձևանմուշը
+                // ջնջելիս ուղարկվածը չպետք է ջնջվի (աշակերտների աշխատանքը մնում է)
+                e.HasOne(x => x.Template)
+                 .WithMany()
+                 .HasForeignKey(x => x.TemplateId)
+                 .OnDelete(DeleteBehavior.NoAction);
+
+                // Ուսուցչի ցուցակները՝ շտեմարան / ընթացիկ / արխիվացված
+                e.HasIndex(x => new { x.TeacherUserId, x.IsTemplate, x.IsArchived });
+            });
+
+            // ── Առաջադրանք ↔ Առարկա ──────────────────────────────────────
+            modelBuilder.Entity<AssignmentSubject>(e =>
+            {
+                e.HasKey(x => new { x.AssignmentId, x.SubjectId });
+
+                e.HasOne(x => x.Assignment)
+                 .WithMany(a => a.Subjects)
+                 .HasForeignKey(x => x.AssignmentId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasOne(x => x.Subject)
+                 .WithMany()
+                 .HasForeignKey(x => x.SubjectId)
+                 .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // ── Առաջադրանք ↔ Դասարանի մակարդակ (1–12) ────────────────────
+            modelBuilder.Entity<AssignmentGradeLevel>(e =>
+            {
+                e.HasKey(x => new { x.AssignmentId, x.Level });
+
+                e.ToTable(t => t.HasCheckConstraint("CK_AssignmentGradeLevels_Level", "[Level] BETWEEN 1 AND 12"));
+
+                e.HasOne(x => x.Assignment)
+                 .WithMany(a => a.GradeLevels)
+                 .HasForeignKey(x => x.AssignmentId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ── Առաջադրանքին կցված ֆայլեր ────────────────────────────────
+            modelBuilder.Entity<AssignmentFile>(e =>
+            {
+                e.Property(x => x.FileName).HasMaxLength(260);
+                e.Property(x => x.StoredFileName).HasMaxLength(100);
+                e.Property(x => x.ContentType).HasMaxLength(150);
+
+                e.HasOne(x => x.Assignment)
+                 .WithMany(a => a.Files)
+                 .HasForeignKey(x => x.AssignmentId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ── Ստացող աշակերտ (կարգավիճակ, պատասխան, գնահատական) ─────────
+            modelBuilder.Entity<AssignmentRecipient>(e =>
+            {
+                e.Property(x => x.PupilUserId).HasMaxLength(450);
+                e.Property(x => x.Score).HasPrecision(6, 2);
+                e.Property(x => x.Feedback).HasMaxLength(4000);
+
+                // Աշակերտը մեկ առաջադրանքին ունի միայն մեկ տող
+                e.HasIndex(x => new { x.AssignmentId, x.PupilUserId }).IsUnique();
+
+                // Աշակերտի «իմ առաջադրանքները» ցուցակի համար
+                e.HasIndex(x => new { x.PupilUserId, x.Status });
+
+                e.HasOne(x => x.Assignment)
+                 .WithMany(a => a.Recipients)
+                 .HasForeignKey(x => x.AssignmentId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasOne(x => x.Grade)
+                 .WithMany()
+                 .HasForeignKey(x => x.GradeId)
+                 .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // ── Աշակերտի կցած ֆայլեր ─────────────────────────────────────
+            modelBuilder.Entity<AssignmentSubmissionFile>(e =>
+            {
+                e.Property(x => x.FileName).HasMaxLength(260);
+                e.Property(x => x.StoredFileName).HasMaxLength(100);
+                e.Property(x => x.ContentType).HasMaxLength(150);
+
+                e.HasOne(x => x.Recipient)
+                 .WithMany(r => r.Files)
+                 .HasForeignKey(x => x.RecipientId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ── Խումբ (սովորողների / ծնողների / այլ) ──────────────────────
+            modelBuilder.Entity<UserGroup>(e =>
+            {
+                e.Property(x => x.Name).HasMaxLength(200);
+                e.Property(x => x.CreatedByUserId).HasMaxLength(450);
+                e.Property(x => x.ImageStoredFileName).HasMaxLength(100);
+                e.Property(x => x.ImageContentType).HasMaxLength(150);
+
+                // «Իմ ստեղծած խմբերը»
+                e.HasIndex(x => x.CreatedByUserId);
+            });
+
+            // ── Խմբի անդամ ───────────────────────────────────────────────
+            modelBuilder.Entity<UserGroupMember>(e =>
+            {
+                e.HasKey(x => new { x.GroupId, x.UserId });
+                e.Property(x => x.UserId).HasMaxLength(450);
+
+                // «Այն խմբերը, որոնցում ինձ ավելացրել են»
+                e.HasIndex(x => x.UserId);
+
+                e.HasOne(x => x.Group)
+                 .WithMany(g => g.Members)
+                 .HasForeignKey(x => x.GroupId)
+                 .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
