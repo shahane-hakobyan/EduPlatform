@@ -489,5 +489,5 @@
 	<data name="RemovePicture" xml:space="preserve"><value>Remove picture</value></data>
 	<data name="RemoveMemberTitle" xml:space="preserve"><value>Remove from group</value></data>
 	<data name="AddMembersTitle" xml:space="preserve"><value>Add new members</value></data>
-
+  <data name="AssignmentType" xml:space="preserve"><value>Assignment type</value></data>
 </root>

@@ -489,5 +489,6 @@
 	<data name="RemovePicture" xml:space="preserve"><value>Удалить изображение</value></data>
 	<data name="RemoveMemberTitle" xml:space="preserve"><value>Удалить из группы</value></data>
 	<data name="AddMembersTitle" xml:space="preserve"><value>Добавить новых участников</value></data>
+  <data name="AssignmentType" xml:space="preserve"><value>Тип задания</value></data>
 
 </root>

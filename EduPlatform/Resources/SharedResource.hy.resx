@@ -484,4 +484,5 @@
 	<data name="RemovePicture" xml:space="preserve"><value>Հեռացնել նկարը</value></data>
 	<data name="RemoveMemberTitle" xml:space="preserve"><value>Հեռացնել խմբից</value></data>
 	<data name="AddMembersTitle" xml:space="preserve"><value>Ավելացնել նոր անդամներ</value></data>
+  <data name="AssignmentType" xml:space="preserve"><value>Առաջադրանքի տեսակ</value></data>
 </root>
