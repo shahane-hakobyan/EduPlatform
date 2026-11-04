@@ -326,7 +326,7 @@ namespace EduPlatform.Controllers
 
             var validSubjectIds = subjectIds.Count == 0
                 ? new List<int>()
-                : await _db.Subjects.Where(s => subjectIds.Contains(s.Id)).Select(s => s.Id).ToListAsync();
+                : await ValidTeacherSubjectIds(subjectIds);
 
             var attachments = req.Attachments.Where(f => f.Length > 0).ToList();
             var keepIds = req.KeepFileIds.ToHashSet();
@@ -470,6 +470,16 @@ namespace EduPlatform.Controllers
             ".png", ".jpg", ".jpeg", ".zip"
         };
 
+        // Միայն այն առարկաները, որոնք ուսուցիչը դասավանդում է
+        private Task<List<int>> ValidTeacherSubjectIds(IEnumerable<int> requested)
+        {
+            var wanted = requested.Distinct().ToList();
+            return _db.TeacherSubjects
+                .Where(ts => ts.TeacherUserId == CurrentUserId && wanted.Contains(ts.SubjectId))
+                .Select(ts => ts.SubjectId)
+                .ToListAsync();
+        }
+
         private string AssignmentFilesRoot()
         {
             var configured = _config["AssignmentFiles:RootPath"];
@@ -521,6 +531,45 @@ namespace EduPlatform.Controllers
             return vm;
         }
 
+        // Ուսուցչի «Սովորողների» խմբերը («Իմ խմբերը» ներդիրի համար)։
+        // alreadyAddedPupilIds՝ արդեն առաջադրանք ստացած սովորողները ցուցադրվում են, բայց չեն ընտրվում (Ավելացնել սովորողներ)
+        private async Task<List<AssignmentGroupOptionViewModel>> BuildGroupOptions(
+            List<AssignmentClassGroupViewModel> classGroups, ICollection<string>? alreadyAddedPupilIds = null)
+        {
+            var me = CurrentUserId;
+            var groupRows = await _db.UserGroupMembers
+                .Where(m => m.UserId == me && m.Group.Type == GroupType.Pupils)
+                .OrderByDescending(m => m.Group.CreatedAt)
+                .Select(m => new
+                {
+                    m.Group.Id,
+                    m.Group.Name,
+                    m.Group.ImageStoredFileName,
+                    PupilIds = m.Group.Members.Where(x => x.UserId != me).Select(x => x.UserId).ToList()
+                })
+                .ToListAsync();
+
+            // միայն ուսուցչի դասարանների սովորողները կարելի է ընտրել (նրանց անուններն էլ այստեղից են)
+            var pupilById = classGroups
+                .SelectMany(cg => cg.Pupils)
+                .GroupBy(p => p.UserId)
+                .ToDictionary(p => p.Key, p => p.First());
+
+            return groupRows.Select(g => new AssignmentGroupOptionViewModel
+            {
+                Id = g.Id,
+                Name = g.Name,
+                ImageUrl = g.ImageStoredFileName == null ? null : Url.Action("Image", "Groups", new { id = g.Id }),
+                Pupils = g.PupilIds
+                    .Where(pupilById.ContainsKey)
+                    .Select(id => pupilById[id])
+                    .ToList(),
+                DisabledPupilIds = g.PupilIds
+                    .Where(id => alreadyAddedPupilIds != null && alreadyAddedPupilIds.Contains(id))
+                    .ToList()
+            }).ToList();
+        }
+
         private async Task<CreateAssignmentViewModel> BuildCreateAssignmentViewModel(string? error = null)
         {
             var subjects = await _db.TeacherSubjects
@@ -529,16 +578,9 @@ namespace EduPlatform.Controllers
                 .OrderBy(s => s.Label)
                 .ToListAsync();
 
-            // Մինչև AuthServer-ի հետ ինտեգրումը ուսուցչի առարկաների ցանկը կարող է դատարկ լինել՝ ցույց ենք տալիս բոլորը
-            if (subjects.Count == 0)
-            {
-                subjects = await _db.Subjects
-                    .Select(s => new SelectOption { Id = s.Id, Label = s.Name })
-                    .OrderBy(s => s.Label)
-                    .ToListAsync();
-            }
-
             var classGroups = await _roster.BuildClassGroupsAsync(CurrentUserId);
+
+            var groups = await BuildGroupOptions(classGroups);
 
             return new CreateAssignmentViewModel
             {
@@ -562,6 +604,7 @@ namespace EduPlatform.Controllers
                     new() { Id = (int)AssignmentGradingType.CurrentScore, Label = _l["GradingCurrentScore"] }
                 },
                 ClassGroups = classGroups,
+                Groups = groups,
                 SubmitUrl = Url.Action(nameof(Create))!,
                 CancelUrl = Url.Action(nameof(Index))!,
                 Error = error
@@ -673,10 +716,7 @@ namespace EduPlatform.Controllers
                     .Select(g => (PupilUserId: g.Key, GradeId: g.First().GradeId))
                     .ToList();
 
-                validSubjectIds = await _db.Subjects
-                    .Where(s => subjectIds.Contains(s.Id))
-                    .Select(s => s.Id)
-                    .ToListAsync();
+                validSubjectIds = await ValidTeacherSubjectIds(subjectIds);
             }
 
             if (incomplete || pupilGrades.Count == 0 || validSubjectIds.Count == 0)
@@ -905,6 +945,7 @@ namespace EduPlatform.Controllers
 
             vm.AvailableGrades = classGroups;
             vm.AlreadyAddedPupilUserIds = a.Recipients.Select(r => r.PupilUserId).ToList();
+            vm.Groups = await BuildGroupOptions(classGroups, vm.AlreadyAddedPupilUserIds);
 
             return View("Given/Detail", vm);
         }

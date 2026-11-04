@@ -69,8 +69,21 @@ window.EduFilterBar = (function () {
             const inputs = dropdown.querySelectorAll('.materials-filter-pill-input');
             const clearOne = dropdown.querySelector('.materials-filter-clear-one');
 
+            // ցանկի scroll-ը չի թռնում վերև, երբ տարբերակ ես ընտրում
+            const menu = dropdown.querySelector('.materials-filter-menu');
+            let savedTop = 0;
+            dropdown.querySelectorAll('.materials-filter-pill').forEach(function (pill) {
+                pill.addEventListener('mousedown', function (e) {
+                    savedTop = menu ? menu.scrollTop : 0;
+                    e.preventDefault();               // թաքնված checkbox-ին ֆոկուս չի գնում
+                });
+            });
+
             inputs.forEach(function (input) {
-                input.addEventListener('change', function () { updateBadge(dropdown); });
+                input.addEventListener('change', function () {
+                    updateBadge(dropdown);
+                    if (menu) menu.scrollTop = savedTop;   // եթե բրաուզերը թռցրեց՝ վերադարձնում ենք
+                });
             });
 
             // Մաքրել միայն այս ֆիլտրը (մյուսները և որոնումը մնում են)

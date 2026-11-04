@@ -14,6 +14,10 @@ namespace EduPlatform.ViewModels
         public List<SelectOption> GradingTypes { get; set; } = new();
 
         public List<AssignmentClassGroupViewModel> ClassGroups { get; set; } = new();
+
+        /// <summary>Ուսուցչի «Սովորողների» խմբերը՝ մեկ սեղմումով անդամներին ընտրելու համար</summary>
+        public List<AssignmentGroupOptionViewModel> Groups { get; set; } = new();
+
         public string SubmitUrl { get; set; } = "#";
         public string CancelUrl { get; set; } = "#";
 
@@ -54,6 +58,20 @@ namespace EduPlatform.ViewModels
         public int Id { get; set; }
         public string Name { get; set; } = "";
         public bool Keep { get; set; } = true;
+    }
+
+    /// <summary>Ուսուցչի խումբ՝ ուղարկելու ձևում ընտրության համար</summary>
+    public class AssignmentGroupOptionViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public string? ImageUrl { get; set; }
+
+        /// <summary>Խմբի այն սովորողները, որոնք ուսուցչի դասարաններից են (կարելի է ընտրել)</summary>
+        public List<RosterPupilViewModel> Pupils { get; set; } = new();
+
+        /// <summary>Այս խմբի այն սովորողները, որոնք արդեն ստացել են առաջադրանքը (ցուցադրվում են, բայց չեն ընտրվում)</summary>
+        public List<string> DisabledPupilIds { get; set; } = new();
     }
 
     public class AssignmentClassGroupViewModel

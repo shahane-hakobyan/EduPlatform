@@ -34,12 +34,12 @@
     white-space: nowrap;
     font-size: 13px;
     font-weight: 600;
-    color: #101828;
+    color: var(--text-primary);
 }
 
 .eg-member.is-removed {
     opacity: .5;
-    background: #fef3f2;
+    background: var(--danger-soft-bg);
 }
 
     .eg-member.is-removed .eg-member-name {
@@ -52,10 +52,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: .8px solid #fda29b;
+    border: .8px solid var(--danger);
     border-radius: 10px;
     background: var(--surface);
-    color: #d92d20;
+    color: var(--danger);
     cursor: pointer;
 }
 

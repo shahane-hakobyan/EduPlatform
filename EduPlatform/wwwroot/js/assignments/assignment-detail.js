@@ -165,6 +165,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const addPupilsSubmitBtn = document.getElementById('addPupilsSubmitBtn');
     const addPupilsSelectedCount = document.getElementById('addPupilsSelectedCount');
 
+    let addGroupPicker = null;
+
     function refreshAddPupilsCounts() {
         const modal = document.getElementById('addPupilsModal');
         if (!modal) return;
@@ -175,18 +177,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
         modal.querySelectorAll('.ca-class-group').forEach(function (group) {
             const groupChecked = group.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)').length;
-            const groupTotal = group.querySelectorAll('[data-pupil-checkbox]').length;
+            const groupTotal = group.querySelectorAll('[data-pupil-checkbox]:not(:disabled)').length;
             const badge = group.querySelector('[data-selected-badge]');
             badge.textContent = groupChecked;
             badge.classList.toggle('show', groupChecked > 0);
             group.querySelector('[data-progress-label]').textContent = groupChecked + ' / ' + groupTotal;
         });
+
+        if (addGroupPicker) addGroupPicker.refresh();
     }
 
     const addPupilsModal = document.getElementById('addPupilsModal');
     if (addPupilsModal) {
         addPupilsModal.querySelectorAll('[data-pupil-checkbox]').forEach(function (cb) {
             cb.addEventListener('change', refreshAddPupilsCounts);
+        });
+
+        // «Իմ դասարանները» / «Իմ խմբերը» ներդիրներ
+        const pupilBoxByValue = {};
+        addPupilsModal.querySelectorAll('[data-pupil-checkbox]').forEach(function (cb) { pupilBoxByValue[cb.value] = cb; });
+
+        addGroupPicker = EduGroupPicker.init({
+            root: addPupilsModal,
+            getBox: function (value) { return pupilBoxByValue[value]; },
+            onChange: refreshAddPupilsCounts
+        });
+
+        refreshAddPupilsCounts();   // սկզբնական թվերը (արդեն ավելացվածները չեն հաշվվում)
+
+        addPupilsModal.querySelectorAll('[data-add-tab]').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                addPupilsModal.querySelectorAll('[data-add-tab]').forEach(function (t) { t.classList.remove('active'); });
+                tab.classList.add('active');
+                const showGroups = tab.getAttribute('data-add-tab') === 'groups';
+                const classesPane = document.getElementById('addPupilsClassesPane');
+                const groupsPane = document.getElementById('addPupilsGroupsPane');
+                if (classesPane) classesPane.style.display = showGroups ? 'none' : '';
+                if (groupsPane) groupsPane.style.display = showGroups ? '' : 'none';
+            });
         });
 
         addPupilsModal.querySelectorAll('.ca-class-group-head').forEach(function (head) {
@@ -221,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const name = item.querySelector('.ca-pupil-name').textContent.toLowerCase();
                     item.style.display = name.includes(q) ? '' : 'none';
                 });
+                if (addGroupPicker) addGroupPicker.filter(q);
             });
         }
 

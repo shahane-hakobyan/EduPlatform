@@ -624,9 +624,9 @@
     white-space: nowrap;
 }
 .ca-error {
-    background: #FEE2E2;
-    color: #B91C1C;
-    border: 1px solid #FCA5A5;
+    background: var(--danger-soft-bg);
+    color: var(--danger);
+    border: 1px solid var(--danger);
     border-radius: 12px;
     padding: 12px 16px;
     margin-bottom: 16px;
@@ -675,3 +675,178 @@
     cursor: pointer;
     font-size: 16px;
 }
+
+/* ── «Իմ խմբերը»՝ խմբեր՝ ընտրելու համար (Ուղարկել առաջադրանքը սովորողներին) ── */
+.ca-groups-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ca-groups-empty {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.ca-group-card {
+    border: .8px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    overflow: hidden;
+}
+
+    .ca-group-card:hover {
+        border-color: var(--accent);
+    }
+
+    .ca-group-card.selected {
+        border: 1.2px solid var(--accent);
+        background: var(--accent-soft-bg);
+    }
+
+    .ca-group-card.partial {
+        border-color: var(--accent);
+    }
+
+    .ca-group-card.empty {
+        opacity: .5;
+    }
+
+.ca-group-head {
+    display: flex;
+    align-items: stretch;
+}
+
+.ca-group-select {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    text-align: left;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.ca-group-card.empty .ca-group-select {
+    cursor: not-allowed;
+}
+
+.ca-group-toggle {
+    flex: none;
+    width: 48px;
+    border: none;
+    border-left: .8px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+    .ca-group-toggle i {
+        display: inline-block;
+        transition: transform .15s ease;
+    }
+
+.ca-group-card.open .ca-group-toggle i {
+    transform: rotate(180deg);
+}
+
+.ca-group-avatar {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6369D4 0%, #6D72EA 100%);
+    color: #fff;
+    font-size: 20px;
+}
+
+    .ca-group-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.ca-group-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.ca-group-name {
+    font-size: 14px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ca-group-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.ca-group-check {
+    flex: none;
+    font-size: 20px;
+    color: var(--accent);
+    visibility: hidden;
+}
+
+.ca-group-card.selected .ca-group-check {
+    visibility: visible;
+}
+
+/* խմբի անդամները (բացվում են սլաքով) */
+.ca-group-members {
+    display: none;
+    border-top: .8px solid var(--border);
+    padding: 8px 12px;
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.ca-group-card.open .ca-group-members {
+    display: block;
+}
+
+.ca-group-member {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 4px;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 13px;
+}
+
+    .ca-group-member input {
+        accent-color: var(--accent);
+    }
+
+    .ca-group-member .ca-pupil-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    /* արդեն ավելացված սովորողը խմբի ցանկում */
+    .ca-group-member.is-disabled {
+        opacity: .6;
+        cursor: not-allowed;
+    }
+
+        .ca-group-member.is-disabled .ca-pupil-already-badge {
+            margin-left: auto;
+        }

@@ -177,8 +177,12 @@
         tab.addEventListener('click', function () {
             document.querySelectorAll('[data-group-tab]').forEach(function (t) { t.classList.remove('active'); });
             tab.classList.add('active');
-            // Only "classes" has data behind it right now — extend here once
-            // "My Groups" has its own data source from the backend.
+
+            const showGroups = tab.getAttribute('data-group-tab') === 'groups';
+            const classesPane = document.getElementById('caClassGroupsPane');
+            const groupsPane = document.getElementById('caGroupsPane');
+            if (classesPane) classesPane.style.display = showGroups ? 'none' : '';
+            if (groupsPane) groupsPane.style.display = showGroups ? '' : 'none';
         });
     });
 
@@ -193,6 +197,8 @@
     const submitBtn = document.getElementById('caSubmitBtn');
     const selectedCountEl = document.getElementById('caSelectedCount');
     const selectedCountTopEl = document.getElementById('caSelectedCountTop');
+
+    let groupPicker = null;
 
     function refreshCounts() {
         const checked = document.querySelectorAll('[data-pupil-checkbox]:checked');
@@ -213,8 +219,20 @@
             badge.classList.toggle('show', groupChecked > 0);
             group.querySelector('[data-progress-label]').textContent = groupChecked + ' / ' + groupTotal;
         });
+
+        if (groupPicker) groupPicker.refresh();
     }
 
+    // --- «Իմ խմբերը» (ընդհանուր կոդը՝ group-picker.js) ---
+    const pupilBoxByValue = {};
+    document.querySelectorAll('[data-pupil-checkbox]').forEach(function (cb) { pupilBoxByValue[cb.value] = cb; });
+
+    groupPicker = EduGroupPicker.init({
+        getBox: function (value) { return pupilBoxByValue[value]; },
+        onChange: refreshCounts
+    });
+
+    // աշակերտի checkbox-ը փոխվելիս թվերը և «Ուղարկել» կոճակը թարմացվում են
     document.querySelectorAll('[data-pupil-checkbox]').forEach(function (cb) {
         cb.addEventListener('change', refreshCounts);
     });
@@ -246,6 +264,7 @@
                 const name = item.querySelector('.ca-pupil-name').textContent.toLowerCase();
                 item.style.display = name.includes(q) ? '' : 'none';
             });
+            if (groupPicker) groupPicker.filter(q);
         });
     }
 

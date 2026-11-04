@@ -13,8 +13,8 @@
     gap: 16px;
     padding: 16px;
     min-height: 99px;
-    background: #FFFFFF;
-    border: 0.8px solid #F3F4F6;
+    background: var(--surface);
+    border: 0.8px solid var(--border);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
     border-radius: 16px;
 }
@@ -54,7 +54,7 @@
     font-weight: 700;
     font-size: 14px;
     line-height: 20px;
-    color: #101828;
+    color: var(--text-primary);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -101,8 +101,29 @@
 }
 
 .group-tag-role.is-member {
-    background: #F3F4F6;
-    color: #4A5565;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+}
+
+/* ── Մութ ռեժիմ՝ պիտակների գույները ── */
+[data-theme="dark"] .group-tag-pupils {
+    background: rgba(59, 130, 246, 0.22);
+    color: #93C5FD;
+}
+
+[data-theme="dark"] .group-tag-parents {
+    background: rgba(34, 197, 94, 0.20);
+    color: #86EFAC;
+}
+
+[data-theme="dark"] .group-tag-other {
+    background: rgba(168, 85, 247, 0.22);
+    color: #D8B4FE;
+}
+
+[data-theme="dark"] .group-tag-role.is-admin {
+    background: rgba(245, 158, 11, 0.22);
+    color: #FCD34D;
 }
 
 /* ներքևի տող՝ ձախից վերջին հաղորդագրության տեղը, աջից՝ անդամների թիվը */
@@ -121,7 +142,7 @@
     font-weight: 400;
     font-size: 12px;
     line-height: 17px;
-    color: #6A7282;
+    color: var(--text-muted);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -136,7 +157,7 @@
     font-weight: 400;
     font-size: 11px;
     line-height: 15px;
-    color: #6A7282;
+    color: var(--text-muted);
 }
 
     .group-card-members i {

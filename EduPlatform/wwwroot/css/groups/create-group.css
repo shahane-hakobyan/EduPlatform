@@ -79,7 +79,7 @@
 
 .cg-type-card:has(input:checked) {
     border-color: var(--accent);
-    background: rgba(99, 105, 212, 0.06);
+    background: var(--accent-soft-bg);
 }
 
     .cg-type-card:has(input:checked) .cg-type-dot {
@@ -119,10 +119,10 @@
     gap: 10px;
     padding: 12px 16px;
     margin-bottom: 12px;
-    border: .8px solid #bedbff;
+    border: .8px solid var(--info);
     border-radius: 14px;
-    background: #eff6ff;
-    color: #1447e6;
+    background: var(--info-soft-bg);
+    color: var(--info);
     font-size: 13px;
 }
 
@@ -236,7 +236,7 @@
 
 .cg-pick-item:has(input:checked) {
     border: 1.2px solid var(--accent);
-    background: rgba(99, 105, 212, 0.08);
+    background: var(--accent-soft-bg);
 }
 
     .cg-pick-item:has(input:checked) .cg-pick-check {
@@ -258,5 +258,5 @@
     position: sticky;
     bottom: 0;
     padding: 16px 0;
-    background: linear-gradient(to top, var(--bg, #f2f3f8) 70%, rgba(242, 243, 248, 0));
+    background: linear-gradient(to top, var(--surface) 70%, transparent);
 }

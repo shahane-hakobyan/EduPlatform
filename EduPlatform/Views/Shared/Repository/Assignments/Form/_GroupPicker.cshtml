@@ -1,0 +1,50 @@
+﻿@model List<EduPlatform.ViewModels.AssignmentGroupOptionViewModel>
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+
+@if (!Model.Any())
+{
+    <div class="ca-groups-empty">@Localizer["NoGroups"]</div>
+}
+@foreach (var g in Model)
+{
+    <div class="ca-group-card" data-group-card
+         data-group-name="@g.Name.ToLowerInvariant()">
+        <div class="ca-group-head">
+            <button type="button" class="ca-group-select" data-group-select title="@Localizer["SelectAllLabel"]">
+                <span class="ca-group-avatar">
+                    @if (!string.IsNullOrEmpty(g.ImageUrl))
+                    {
+                        <img src="@g.ImageUrl" alt="" />
+                    }
+                    else
+                    {
+                        <i class="bi bi-people"></i>
+                    }
+                </span>
+                <span class="ca-group-main">
+                    <span class="ca-group-name">@g.Name</span>
+                    <span class="ca-group-sub"><span data-group-progress>0 / @(g.Pupils.Count - g.DisabledPupilIds.Count)</span> @Localizer["PupilsCountSuffix"]</span>
+                </span>
+                <i class="bi bi-check-lg ca-group-check"></i>
+            </button>
+            <button type="button" class="ca-group-toggle" data-group-toggle>
+                <i class="bi bi-chevron-down"></i>
+            </button>
+        </div>
+        <div class="ca-group-members">
+            @foreach (var p in g.Pupils)
+            {
+                var alreadyAdded = g.DisabledPupilIds.Contains(p.UserId);
+                <label class="ca-group-member @(alreadyAdded ? "is-disabled" : "")" data-member-name="@p.Name.ToLowerInvariant()">
+                    <input type="checkbox" data-group-member value="@p.UserId" @(alreadyAdded ? "checked disabled" : "") />
+                    <img src="@p.PhotoUrl" alt="" class="ca-pupil-avatar" />
+                    <span class="ca-group-member-name">@p.Name</span>
+                    @if (alreadyAdded)
+                    {
+                        <span class="ca-pupil-already-badge">@Localizer["AlreadyAddedLabel"]</span>
+                    }
+                </label>
+            }
+        </div>
+    </div>
+}

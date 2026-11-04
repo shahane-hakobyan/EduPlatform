@@ -11,6 +11,11 @@
     </div>
 
     <div class="answer-modal-body">
+        <div class="ca-group-tabs mb-2">
+            <button type="button" class="ca-group-tab active" data-add-tab="classes">@Localizer["MyClassesTab"]</button>
+            <button type="button" class="ca-group-tab" data-add-tab="groups">@Localizer["MyGroupsTab"]</button>
+        </div>
+
         <div class="ca-selected-summary d-flex align-items-center justify-content-between">
             <span class="d-flex align-items-center gap-2">
                 <i class="bi bi-check-circle"></i>
@@ -24,9 +29,15 @@
             <input type="text" id="addPupilsSearch" placeholder="@Localizer["SearchPupilPlaceholder"]" />
         </div>
 
-        <div class="ca-class-groups mt-2">
+        <div class="ca-groups-pane mt-2" id="addPupilsGroupsPane" style="display:none">
+            <partial name="Form/_GroupPicker" model="Model.Groups" />
+        </div>
+
+        <div class="ca-class-groups mt-2" id="addPupilsClassesPane">
             @foreach (var group in Model.AvailableGrades)
             {
+                // միայն դեռ չավելացված սովորողները (արդեն ավելացվածները չեն հաշվվում)
+                var addableCount = group.Pupils.Count(p => !Model.AlreadyAddedPupilUserIds.Contains(p.UserId));
                 <div class="ca-class-group" data-grade-id="@group.GradeId">
                     <button type="button" class="ca-class-group-head">
                         <span class="d-flex align-items-center gap-2">
@@ -41,8 +52,8 @@
                     </button>
                     <div class="ca-class-group-body">
                         <div class="ca-class-group-toolbar">
-                            <button type="button" class="ca-select-all-btn"><i class="bi bi-check2-all"></i> @Localizer["SelectAllLabel"]</button>
-                            <span class="ca-class-progress" data-progress-label>0 / @group.Pupils.Count</span>
+                            <button type="button" class="ca-select-all-btn" @(addableCount == 0 ? "disabled" : "")><i class="bi bi-check2-all"></i> @Localizer["SelectAllLabel"]</button>
+                            <span class="ca-class-progress" data-progress-label>0 / @addableCount</span>
                         </div>
                         <div class="ca-pupil-grid">
                             @foreach (var pupil in group.Pupils)

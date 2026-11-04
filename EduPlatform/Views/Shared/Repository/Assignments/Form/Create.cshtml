@@ -26,12 +26,12 @@
     @if (Model.Prefill != null)
     {
         <script type="application/json" id="caPrefill">
-                @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new
-                        {
-                                subjectIds = Model.Prefill.SubjectIds,
-                                gradeLevels = Model.Prefill.GradeLevels,
-                                types = Model.Prefill.Types,
-                                gradingType = Model.Prefill.GradingType
+                    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new
+                            {
+                                        subjectIds = Model.Prefill.SubjectIds,
+                                        gradeLevels = Model.Prefill.GradeLevels,
+                                        types = Model.Prefill.Types,
+                                        gradingType = Model.Prefill.GradingType
             }))</script>
         }
         <div class="ca-topbar d-flex align-items-center gap-3 mb-3">
@@ -235,6 +235,11 @@
                         <input type="text" id="caPupilSearch" placeholder="@Localizer["SearchPupilPlaceholder"]" />
                     </div>
 
+                    <!-- «Իմ խմբերը»՝ սեղմելով ընտրվում են խմբի բոլոր սովորողները -->
+                    <div class="ca-groups-pane mt-2" id="caGroupsPane" style="display:none">
+                        <partial name="Form/_GroupPicker" model="Model.Groups" />
+                    </div>
+
                     <div class="ca-class-groups mt-2" id="caClassGroupsPane">
                         @foreach (var group in Model.ClassGroups)
                         {
@@ -296,5 +301,6 @@
         <link rel="stylesheet" href="~/css/assignments/create-assignment.css" />
     }
     @section Scripts {
+        <script src="~/js/assignments/group-picker.js"></script>
         <script src="~/js/assignments/create-assignment.js"></script>
     }

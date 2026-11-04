@@ -20,6 +20,9 @@ namespace EduPlatform.ViewModels
         public List<PupilSubmissionViewModel> Submissions { get; set; } = new();
         public List<AssignmentClassGroupViewModel> AvailableGrades { get; set; } = new();
         public List<string> AlreadyAddedPupilUserIds { get; set; } = new();
+
+        /// <summary>Ուսուցչի խմբերը՝ «Ավելացնել սովորողներ» պատուհանի «Իմ խմբերը» ներդիրի համար</summary>
+        public List<AssignmentGroupOptionViewModel> Groups { get; set; } = new();
     }
 
     public class AssignmentFileViewModel
