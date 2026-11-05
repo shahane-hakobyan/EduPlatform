@@ -490,4 +490,7 @@
   <data name="StatusFilter" xml:space="preserve"><value>Կարգավիճակ</value></data>
   <data name="StatusActive" xml:space="preserve"><value>Գործող</value></data>
   <data name="StatusArchived" xml:space="preserve"><value>Արխիվացված</value></data>
+  <data name="ConfirmSendTitle" xml:space="preserve"><value>Ուղարկե՞լ առաջադրանքը</value></data>
+  <data name="ConfirmSendText" xml:space="preserve"><value>Հաստատելուց հետո առաջադրանքի տվյալները փոխել հնարավոր չի լինի։ Առաջադրանքը կստեղծվի և կուղարկվի ընտրված սովորողներին։</value></data>
+  <data name="ConfirmSendBtn" xml:space="preserve"><value>Հաստատել և ուղարկել</value></data>
 </root>

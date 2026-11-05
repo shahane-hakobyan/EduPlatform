@@ -495,4 +495,7 @@
   <data name="StatusFilter" xml:space="preserve"><value>Статус</value></data>
   <data name="StatusActive" xml:space="preserve"><value>Действующие</value></data>
   <data name="StatusArchived" xml:space="preserve"><value>Архивные</value></data>
+  <data name="ConfirmSendTitle" xml:space="preserve"><value>Отправить задание?</value></data>
+  <data name="ConfirmSendText" xml:space="preserve"><value>После подтверждения данные задания изменить будет нельзя. Задание будет создано и отправлено выбранным ученикам.</value></data>
+  <data name="ConfirmSendBtn" xml:space="preserve"><value>Подтвердить и отправить</value></data>
 </root>

@@ -299,8 +299,50 @@
                     clientError.style.display = '';
                     clientError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
+                return;
+            }
+
+            // Ամեն ինչ լրացված է՝ ուղարկելուց առաջ հաստատման պատուհան (միայն ուղարկելիս, ոչ շտեմարանի խմբագրման ժամանակ)
+            const isEdit = form.getAttribute('data-mode') === 'Edit';
+            const confirmModal = document.getElementById('caConfirmModal');
+            if (!isEdit && confirmModal && !form.dataset.confirmed) {
+                e.preventDefault();
+                openConfirm();
             }
         });
+    }
+
+    // --- Հաստատման պատուհան՝ հաստատելուց հետո առաջադրանքի տվյալները փոխել հնարավոր չէ ---
+    const confirmModal = document.getElementById('caConfirmModal');
+    const confirmBackdrop = document.getElementById('caConfirmBackdrop');
+    const confirmOk = document.getElementById('caConfirmOk');
+    const confirmCancel = document.getElementById('caConfirmCancel');
+
+    function openConfirm() {
+        if (confirmModal) confirmModal.classList.add('open');
+        if (confirmBackdrop) confirmBackdrop.classList.add('open');
+        if (confirmCancel) confirmCancel.focus();
+    }
+
+    function closeConfirm() {
+        if (confirmModal) confirmModal.classList.remove('open');
+        if (confirmBackdrop) confirmBackdrop.classList.remove('open');
+    }
+
+    if (confirmModal && form) {
+        if (confirmCancel) confirmCancel.addEventListener('click', closeConfirm);
+        if (confirmBackdrop) confirmBackdrop.addEventListener('click', closeConfirm);
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeConfirm();
+        });
+
+        if (confirmOk) {
+            confirmOk.addEventListener('click', function () {
+                confirmOk.disabled = true;            // կրկնակի ուղարկում չլինի
+                form.dataset.confirmed = '1';
+                form.submit();
+            });
+        }
     }
 
     // --- Շտեմարանից բացելիս՝ նախալրացում (նույն կլիկներով, ինչ ձեռքով ընտրելիս) ---

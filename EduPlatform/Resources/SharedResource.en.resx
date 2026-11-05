@@ -495,4 +495,7 @@
   <data name="StatusFilter" xml:space="preserve"><value>Status</value></data>
   <data name="StatusActive" xml:space="preserve"><value>Active</value></data>
   <data name="StatusArchived" xml:space="preserve"><value>Archived</value></data>
+  <data name="ConfirmSendTitle" xml:space="preserve"><value>Send the assignment?</value></data>
+  <data name="ConfirmSendText" xml:space="preserve"><value>After you confirm, the assignment details can no longer be changed. The assignment will be created and sent to the selected pupils.</value></data>
+  <data name="ConfirmSendBtn" xml:space="preserve"><value>Confirm and send</value></data>
 </root>
