@@ -104,7 +104,7 @@
   <data name="MethodologicalGuidelines" xml:space="preserve"><value>Մեթոդական ուղեցույցներ</value></data>
   <data name="OtherEducationalMaterials" xml:space="preserve"><value>Այլ ուսումնական նյութեր</value></data>
   <data name="OtherBooks" xml:space="preserve"><value>Այլ գրքեր</value></data>
-  <data name="MyBookshelf" xml:space="preserve"><value>Իմ գրապահոցը</value></data>
+  <data name="MyBookshelf" xml:space="preserve"><value>Իմ աշխատարանը</value></data>
   <data name="MyTools" xml:space="preserve"><value>Իմ գործիքները</value></data>
   <data name="MyCreatedMaterials" xml:space="preserve"><value>Իմ ստեղծած նյութերը</value></data>
   <data name="MyExpertise" xml:space="preserve"><value>Իմ փորձաքննությունը</value></data>
@@ -485,4 +485,9 @@
 	<data name="RemoveMemberTitle" xml:space="preserve"><value>Հեռացնել խմբից</value></data>
 	<data name="AddMembersTitle" xml:space="preserve"><value>Ավելացնել նոր անդամներ</value></data>
   <data name="AssignmentType" xml:space="preserve"><value>Առաջադրանքի տեսակ</value></data>
+  <data name="EnterAssignmentText" xml:space="preserve"><value>Մուտքագրեք առաջադրանքը</value></data>
+  <data name="ViewAnswersAndGrade" xml:space="preserve"><value>Դիտել պատասխաններն ու գնահատել</value></data>
+  <data name="StatusFilter" xml:space="preserve"><value>Կարգավիճակ</value></data>
+  <data name="StatusActive" xml:space="preserve"><value>Գործող</value></data>
+  <data name="StatusArchived" xml:space="preserve"><value>Արխիվացված</value></data>
 </root>

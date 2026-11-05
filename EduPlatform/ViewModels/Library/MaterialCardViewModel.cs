@@ -19,5 +19,8 @@
         public int Year { get; set; }
         public string ViewUrl { get; set; } = "";
         public string DownloadUrl { get; set; } = "";
+
+        /// <summary>Կարգավիճակի անունը ընթացիկ լեզվով («Գործող» / «Արխիվացված»)՝ ֆիլտրի համար, դատարկ է մնացած դեպքերում</summary>
+        public string StatusLabel { get; set; } = "";
     }
 }

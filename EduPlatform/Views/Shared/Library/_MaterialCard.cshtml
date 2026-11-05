@@ -9,6 +9,7 @@
      data-f-publisher="@Model.Publisher"
      data-f-language="@Model.Language"
      data-f-type="@Model.TypeLabel"
+     data-f-status="@Model.StatusLabel"
      data-f-search="@((Model.Title + " " + Model.Authors + " " + Model.Publisher).ToLowerInvariant())">
     <div class="material-card-wide-image material-card-cover" data-full-image="@Model.ThumbnailUrl">
         @if (!string.IsNullOrEmpty(Model.ThumbnailUrl))

@@ -36,6 +36,9 @@ namespace EduPlatform.ViewModels
         public int? SourceTemplateId { get; set; }
         public string Title { get; set; } = "";
         public string? Description { get; set; }
+
+        /// <summary>Առաջադրանքի տեքստը (ոչ պարտադիր)</summary>
+        public string? TaskText { get; set; }
         public List<int> SubjectIds { get; set; } = new();
         public List<int> GradeLevels { get; set; } = new();
 
@@ -86,6 +89,9 @@ namespace EduPlatform.ViewModels
     {
         public string Title { get; set; } = "";
         public string? Description { get; set; }
+
+        /// <summary>Առաջադրանքի տեքստը (ոչ պարտադիր)</summary>
+        public string? TaskText { get; set; }
         public List<int> SubjectIds { get; set; } = new();
         public List<int> GradeLevels { get; set; } = new();
 

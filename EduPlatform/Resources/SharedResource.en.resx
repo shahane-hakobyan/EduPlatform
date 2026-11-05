@@ -104,7 +104,7 @@
   <data name="MethodologicalGuidelines" xml:space="preserve"><value>Methodological Guides</value></data>
   <data name="OtherEducationalMaterials" xml:space="preserve"><value>Other Materials</value></data>
   <data name="OtherBooks" xml:space="preserve"><value>Other books</value></data>
-  <data name="MyBookshelf" xml:space="preserve"><value>My Bookshelf</value></data>
+  <data name="MyBookshelf" xml:space="preserve"><value>My Workspace</value></data>
   <data name="MyTools" xml:space="preserve"><value>My Tools</value></data>
   <data name="MyCreatedMaterials" xml:space="preserve"><value>My Created Materials</value></data>
   <data name="MyExpertise" xml:space="preserve"><value>My Expertise</value></data>
@@ -490,4 +490,9 @@
 	<data name="RemoveMemberTitle" xml:space="preserve"><value>Remove from group</value></data>
 	<data name="AddMembersTitle" xml:space="preserve"><value>Add new members</value></data>
   <data name="AssignmentType" xml:space="preserve"><value>Assignment type</value></data>
+  <data name="EnterAssignmentText" xml:space="preserve"><value>Enter the assignment</value></data>
+  <data name="ViewAnswersAndGrade" xml:space="preserve"><value>View answers and grade</value></data>
+  <data name="StatusFilter" xml:space="preserve"><value>Status</value></data>
+  <data name="StatusActive" xml:space="preserve"><value>Active</value></data>
+  <data name="StatusArchived" xml:space="preserve"><value>Archived</value></data>
 </root>

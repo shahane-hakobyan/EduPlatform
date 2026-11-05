@@ -250,6 +250,7 @@ namespace EduPlatform.Controllers
                     x.Id,
                     x.Title,
                     x.Description,
+                    x.TaskText,
                     x.Types,
                     x.OtherTypeText,
                     x.GradingType,
@@ -272,6 +273,7 @@ namespace EduPlatform.Controllers
                     .Select(f => AssignmentTypeLabel(f, t.OtherTypeText))),
                 GradingType = GradingTypeLabel(t.GradingType),
                 Description = t.Description ?? "",
+                TaskText = t.TaskText ?? "",
                 AllowTextAnswer = t.ResponseForms.HasFlag(AssignmentResponseForms.Text),
                 AllowFileAnswer = t.ResponseForms.HasFlag(AssignmentResponseForms.File),
                 Files = t.Files.Select(f => new AssignmentFileViewModel
@@ -382,6 +384,7 @@ namespace EduPlatform.Controllers
 
                 a.Title = req.Title.Trim();
                 a.Description = string.IsNullOrWhiteSpace(req.Description) ? null : req.Description.Trim();
+                a.TaskText = string.IsNullOrWhiteSpace(req.TaskText) ? null : req.TaskText.Trim();
                 a.Types = types;
                 a.OtherTypeText = types.HasFlag(AssignmentTypes.Other) ? req.OtherTypeText!.Trim() : null;
                 a.GradingType = (AssignmentGradingType)req.GradingType;
@@ -501,6 +504,7 @@ namespace EduPlatform.Controllers
                 SourceTemplateId = req.SourceTemplateId,
                 Title = req.Title ?? "",
                 Description = req.Description,
+                TaskText = req.TaskText,
                 SubjectIds = req.SubjectIds.ToList(),
                 GradeLevels = req.GradeLevels.ToList(),
                 Types = req.Types.Where(t => t != 0 && Enum.IsDefined(typeof(AssignmentTypes), t)).ToList(),
@@ -654,6 +658,7 @@ namespace EduPlatform.Controllers
                     x.Id,
                     x.Title,
                     x.Description,
+                    x.TaskText,
                     x.Types,
                     x.OtherTypeText,
                     x.GradingType,
@@ -671,6 +676,7 @@ namespace EduPlatform.Controllers
                 SourceTemplateId = t.Id,
                 Title = t.Title,
                 Description = t.Description,
+                TaskText = t.TaskText,
                 SubjectIds = t.SubjectIds,
                 GradeLevels = t.Levels,
                 Types = Enum.GetValues<AssignmentTypes>()
@@ -791,6 +797,7 @@ namespace EduPlatform.Controllers
                     IsTemplate = isTemplate,
                     Title = req.Title.Trim(),
                     Description = string.IsNullOrWhiteSpace(req.Description) ? null : req.Description.Trim(),
+                    TaskText = string.IsNullOrWhiteSpace(req.TaskText) ? null : req.TaskText.Trim(),
                     Types = types,
                     OtherTypeText = types.HasFlag(AssignmentTypes.Other) ? req.OtherTypeText!.Trim() : null,
                     GradingType = (AssignmentGradingType)req.GradingType,
@@ -872,6 +879,7 @@ namespace EduPlatform.Controllers
                     x.Id,
                     x.Title,
                     x.Description,
+                    x.TaskText,
                     x.Types,
                     x.OtherTypeText,
                     x.GradingType,
@@ -922,6 +930,7 @@ namespace EduPlatform.Controllers
                 DueDate = a.DueDate ?? a.StartDate ?? a.CreatedAt,
                 StartDateRaw = a.StartDate,
                 Description = a.Description ?? "",
+                TaskText = a.TaskText ?? "",
                 IsArchived = a.IsArchived,
                 AllowTextAnswer = a.ResponseForms.HasFlag(AssignmentResponseForms.Text),
                 AllowFileAnswer = a.ResponseForms.HasFlag(AssignmentResponseForms.File),

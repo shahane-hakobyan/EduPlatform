@@ -179,6 +179,7 @@ namespace EduPlatform.Data
                 e.Property(x => x.TeacherUserId).HasMaxLength(450);
                 e.Property(x => x.Title).HasMaxLength(300);
                 e.Property(x => x.Description).HasMaxLength(4000);
+                e.Property(x => x.TaskText).HasMaxLength(4000);
                 e.Property(x => x.OtherTypeText).HasMaxLength(500);
                 e.Property(x => x.MaterialUrl).HasMaxLength(1000);
 

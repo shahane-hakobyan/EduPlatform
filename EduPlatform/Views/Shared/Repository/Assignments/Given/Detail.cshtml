@@ -68,6 +68,11 @@
             {
                 <div>@Model.Description</div>
             }
+            @if (!string.IsNullOrWhiteSpace(Model.TaskText))
+            {
+                <div class="ad-files-title">@Localizer["Assignment"]</div>
+                <div class="ad-task-text">@Model.TaskText</div>
+            }
             @if (Model.Files.Any())
             {
                 <div class="ad-files-title">@Localizer["AttachedFilesLabel"]</div>
@@ -164,11 +169,8 @@
                     }
                 </div>
                 <div class="ad-submission-actions">
-                    <button type="button" class="ad-view-btn" data-open-modal="answerModal-@s.Id">
-                        <i class="bi bi-eye"></i> @Localizer["ViewAnswer"]
-                    </button>
                     <button type="button" class="ad-grade-btn" data-open-modal="answerModal-@s.Id">
-                        <i class="bi bi-star"></i> @Localizer["GradeLabel"]
+                        <i class="bi bi-eye"></i> @Localizer["ViewAnswersAndGrade"]
                     </button>
                 </div>
             </div>

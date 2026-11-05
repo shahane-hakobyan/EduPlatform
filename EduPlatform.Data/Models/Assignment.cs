@@ -39,6 +39,9 @@
         /// <summary>Նկարագրություն (ոչ պարտադիր)</summary>
         public string? Description { get; set; }
 
+        /// <summary>Առաջադրանքի տեքստը՝ ուսուցչի գրած առաջադրանքը (ոչ պարտադիր, կարելի է ուղարկել միայն կցված ֆայլով)</summary>
+        public string? TaskText { get; set; }
+
         /// <summary>Առաջադրանքի տեսակները (դրոշակներ)</summary>
         public AssignmentTypes Types { get; set; }
 

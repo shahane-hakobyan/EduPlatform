@@ -25,6 +25,9 @@ namespace EduPlatform.Services
         public string? DownloadUrl { get; set; }
         public int? Pages { get; set; }
         public string? Language { get; set; }
+
+        /// <summary>Guaranteed, NotGuaranteed կամ Archived (Library.Api-ի EduMaterialDto.Status)</summary>
+        public string? Status { get; set; }
     }
 
     public interface ILibraryApiClient

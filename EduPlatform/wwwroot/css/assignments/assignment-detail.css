@@ -600,3 +600,10 @@ span.answer-grading-tab {
     font-weight: 700;
     color: #067647;
 }
+
+/* Առաջադրանքի տեքստը (պահպանում է տողադարձերը) */
+.ad-task-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin-bottom: 8px;
+}

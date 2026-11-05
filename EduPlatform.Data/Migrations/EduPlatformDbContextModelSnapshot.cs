@@ -66,6 +66,10 @@ namespace EduPlatform.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("TaskText")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
                     b.Property<string>("TeacherUserId")
                         .IsRequired()
                         .HasMaxLength(450)

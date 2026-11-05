@@ -12,6 +12,9 @@ namespace EduPlatform.ViewModels
         public DateTime DueDate { get; set; }
         public DateTime? StartDateRaw { get; set; }
         public string Description { get; set; } = "";
+
+        /// <summary>Առաջադրանքի տեքստը (ոչ պարտադիր)</summary>
+        public string TaskText { get; set; } = "";
         public bool IsArchived { get; set; }
         public bool AllowTextAnswer { get; set; }
         public bool AllowFileAnswer { get; set; }

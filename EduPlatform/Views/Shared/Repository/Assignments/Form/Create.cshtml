@@ -179,6 +179,14 @@
             </div>
         </div>
 
+        <!-- Առաջադրանքի տեքստը՝ առանձին բլոկ «Վերբեռնել ֆայլ»-ից վերև։ Պարտադիր չէ (կարելի է ուղարկել միայն կցված ֆայլով) -->
+        <div class="ca-section-card">
+            <div class="ca-section-body">
+                <textarea name="TaskText" class="ca-textarea" rows="4" maxlength="4000"
+                          placeholder="@Localizer["EnterAssignmentText"]">@Model.Prefill?.TaskText</textarea>
+            </div>
+        </div>
+
         <!-- Section 3 -->
         <div class="ca-section-card">
             <div class="ca-section-head">

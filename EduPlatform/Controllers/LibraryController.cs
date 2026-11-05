@@ -76,6 +76,14 @@ namespace EduPlatform.Controllers
             _ => null
         };
 
+        /// <summary>Library-ի կարգավիճակը → «Գործող» (Երաշխավորված) / «Արխիվացված»։ Չերաշխավորվածը ֆիլտրում չի երևում։</summary>
+        private string StatusLabel(string? status) => status switch
+        {
+            "Guaranteed" => _l["StatusActive"].Value,
+            "Archived" => _l["StatusArchived"].Value,
+            _ => ""
+        };
+
         /// <summary>Ֆիլտրերի ընտրելի արժեքները կազմվում են էջի նյութերից:</summary>
         private List<MaterialFilterOption> BuildFilters(IReadOnlyCollection<MaterialCardViewModel> cards, params string[] keys)
         {
@@ -104,6 +112,8 @@ namespace EduPlatform.Controllers
                         label = _l["Language"]; values = cards.Select(c => c.Language ?? ""); break;
                     case "type":
                         label = _l["MaterialType"]; values = cards.Select(c => c.TypeLabel ?? ""); break;
+                    case "status":
+                        label = _l["StatusFilter"]; values = cards.Select(c => c.StatusLabel); break;
                     default:
                         continue;
                 }
@@ -112,6 +122,7 @@ namespace EduPlatform.Controllers
                     .Where(v => !string.IsNullOrWhiteSpace(v))
                     .Distinct()
                     .OrderBy(v => int.TryParse(v, out var n) ? n : int.MaxValue)
+                    .ThenBy(v => key == "status" && v == _l["StatusActive"].Value ? 0 : 1)   // «Գործող»-ը առաջինը
                     .ThenBy(v => v)
                     .ToList();
 
@@ -167,13 +178,18 @@ namespace EduPlatform.Controllers
                     Pages = b.Pages ?? 0,
                     Year = b.PublishedYear,
                     ViewUrl = b.ViewUrl ?? "",
-                    DownloadUrl = b.DownloadUrl ?? ""
+                    DownloadUrl = b.DownloadUrl ?? "",
+                    StatusLabel = StatusLabel(b.Status)
                 })
                 .ToList();
 
-            var filterKeys = route == "OtherEducationalMaterials"
-                ? new[] { "subject", "grade", "author", "year", "publisher", "type" }
-                : new[] { "subject", "grade", "author", "year", "publisher" };
+            // Կարգավիճակի ֆիլտրը՝ միայն դասագրքերի և մեթոդական ուղեցույցների համար
+            var filterKeys = route switch
+            {
+                "OtherEducationalMaterials" => new[] { "subject", "grade", "author", "year", "publisher", "type" },
+                "Textbooks" or "MethodologicalGuidelines" => new[] { "subject", "grade", "author", "year", "publisher", "status" },
+                _ => new[] { "subject", "grade", "author", "year", "publisher" }
+            };
 
             return new MaterialsPageViewModel
             {

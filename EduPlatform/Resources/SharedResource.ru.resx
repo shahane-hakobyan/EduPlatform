@@ -104,7 +104,7 @@
   <data name="MethodologicalGuidelines" xml:space="preserve"><value>Методические пособия</value></data>
   <data name="OtherEducationalMaterials" xml:space="preserve"><value>Другие материалы</value></data>
   <data name="OtherBooks" xml:space="preserve"><value>Другие книги</value></data>
-  <data name="MyBookshelf" xml:space="preserve"><value>Мой репозиторий</value></data>
+  <data name="MyBookshelf" xml:space="preserve"><value>Моя мастерская</value></data>
   <data name="MyTools" xml:space="preserve"><value>Мои инструменты</value></data>
   <data name="MyCreatedMaterials" xml:space="preserve"><value>Мои созданные материалы</value></data>
   <data name="MyExpertise" xml:space="preserve"><value>Моя экспертиза</value></data>
@@ -490,5 +490,9 @@
 	<data name="RemoveMemberTitle" xml:space="preserve"><value>Удалить из группы</value></data>
 	<data name="AddMembersTitle" xml:space="preserve"><value>Добавить новых участников</value></data>
   <data name="AssignmentType" xml:space="preserve"><value>Тип задания</value></data>
-
+  <data name="EnterAssignmentText" xml:space="preserve"><value>Введите задание</value></data>
+  <data name="ViewAnswersAndGrade" xml:space="preserve"><value>Посмотреть ответы и оценить</value></data>
+  <data name="StatusFilter" xml:space="preserve"><value>Статус</value></data>
+  <data name="StatusActive" xml:space="preserve"><value>Действующие</value></data>
+  <data name="StatusArchived" xml:space="preserve"><value>Архивные</value></data>
 </root>
