@@ -538,14 +538,15 @@ namespace EduPlatform.Controllers
         {
             var me = CurrentUserId;
             var groupRows = await _db.UserGroupMembers
-                .Where(m => m.UserId == me && m.Group.Type == GroupType.Pupils)
-                .OrderByDescending(m => m.Group.CreatedAt)
+                .Where(m => m.UserId == me)
+                .OrderBy(m => m.Group.Name)
                 .Select(m => new
                 {
                     m.Group.Id,
                     m.Group.Name,
+                    m.Group.Type,
                     m.Group.ImageStoredFileName,
-                    PupilIds = m.Group.Members.Where(x => x.UserId != me).Select(x => x.UserId).ToList()
+                    MemberIds = m.Group.Members.Where(x => x.UserId != me).Select(x => x.UserId).ToList()
                 })
                 .ToListAsync();
 
@@ -555,18 +556,33 @@ namespace EduPlatform.Controllers
                 .GroupBy(p => p.UserId)
                 .ToDictionary(p => p.Key, p => p.First());
 
-            return groupRows.Select(g => new AssignmentGroupOptionViewModel
+            return groupRows.Select(g =>
             {
-                Id = g.Id,
-                Name = g.Name,
-                ImageUrl = g.ImageStoredFileName == null ? null : Url.Action("Image", "Groups", new { id = g.Id }),
-                Pupils = g.PupilIds
-                    .Where(pupilById.ContainsKey)
-                    .Select(id => pupilById[id])
-                    .ToList(),
-                DisabledPupilIds = g.PupilIds
-                    .Where(id => alreadyAddedPupilIds != null && alreadyAddedPupilIds.Contains(id))
-                    .ToList()
+                // Սովորողների խումբ՝ անդամները սովորողներն են։ Ծնողների խումբ՝ առաջադրանքը ստանում են ծնողների երեխաները
+                // (ժամանակավոր ծնողի Id-ն՝ «parent:{սովորողի UserId}»)։ «Այլ» խումբը սովորողներ չունի։
+                var pupilIds = g.Type switch
+                {
+                    GroupType.Pupils => g.MemberIds,
+                    GroupType.Parents => g.MemberIds
+                        .Where(id => id.StartsWith("parent:"))
+                        .Select(id => id["parent:".Length..])
+                        .ToList(),
+                    _ => new List<string>()
+                };
+
+                return new AssignmentGroupOptionViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    ImageUrl = g.ImageStoredFileName == null ? null : Url.Action("Image", "Groups", new { id = g.Id }),
+                    Pupils = pupilIds
+                        .Where(pupilById.ContainsKey)
+                        .Select(id => pupilById[id])
+                        .ToList(),
+                    DisabledPupilIds = pupilIds
+                        .Where(id => alreadyAddedPupilIds != null && alreadyAddedPupilIds.Contains(id))
+                        .ToList()
+                };
             }).ToList();
         }
 

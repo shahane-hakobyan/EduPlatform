@@ -63,7 +63,16 @@
                                     <input type="checkbox" data-pupil-checkbox value="@pupil.UserId" @(alreadyAdded ? "checked disabled" : "") />
                                     <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
                                     <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
-                                    <span class="ca-pupil-name">@pupil.Name</span>
+                                    <span class="ca-pupil-name">
+                                        @if (!string.IsNullOrEmpty(pupil.ProfileUrl))
+                                        {
+                                            <a href="@pupil.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@pupil.Name</a>
+                                        }
+                                        else
+                                        {
+                                            @pupil.Name
+                                        }
+                                    </span>
                                     @if (alreadyAdded)
                                     {
                                         <span class="ca-pupil-already-badge">@Localizer["AlreadyAddedLabel"]</span>

@@ -38,7 +38,16 @@
                 <label class="ca-group-member @(alreadyAdded ? "is-disabled" : "")" data-member-name="@p.Name.ToLowerInvariant()">
                     <input type="checkbox" data-group-member value="@p.UserId" @(alreadyAdded ? "checked disabled" : "") />
                     <img src="@p.PhotoUrl" alt="" class="ca-pupil-avatar" />
-                    <span class="ca-group-member-name">@p.Name</span>
+                    <span class="ca-group-member-name">
+                        @if (!string.IsNullOrEmpty(p.ProfileUrl))
+                        {
+                            <a href="@p.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@p.Name</a>
+                        }
+                        else
+                        {
+                            @p.Name
+                        }
+                    </span>
                     @if (alreadyAdded)
                     {
                         <span class="ca-pupil-already-badge">@Localizer["AlreadyAddedLabel"]</span>

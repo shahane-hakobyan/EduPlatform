@@ -267,7 +267,16 @@
                                                 <input type="checkbox" name="PupilIds" value="@pupil.UserId" data-pupil-checkbox @(Model.Prefill?.PupilIds.Contains(pupil.UserId) == true ? "checked" : "") />
                                                 <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
                                                 <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
-                                                <span class="ca-pupil-name">@pupil.Name</span>
+                                                <span class="ca-pupil-name">
+                                                    @if (!string.IsNullOrEmpty(pupil.ProfileUrl))
+                                                    {
+                                                        <a href="@pupil.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@pupil.Name</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        @pupil.Name
+                                                    }
+                                                </span>
                                             </label>
                                         }
                                     </div>
