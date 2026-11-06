@@ -1,7 +1,8 @@
 ﻿namespace EduPlatform.Data.Models
 {
     /// <summary>
-    /// Առաջադրանքի համար ուսուցչի կցած ֆայլ (մեկ առաջադրանքին՝ մի քանի ֆայլ)
+    /// Ուսուցչի կցած ֆայլ։ Մեկ ֆայլ՝ մեկ գրառում, որը կապվում է մի քանի առաջադրանքի հետ
+    /// (շտեմարանի օրինակ + ուղարկված առաջադրանք)՝ <c>AssignmentFileLinks</c> աղյուսակի միջոցով
     /// </summary>
     /// <remarks>
     /// Ֆայլի բովանդակությունը պահվում է սերվերի ֆայլային պահոցում, իսկ բազայում՝
@@ -12,8 +13,10 @@
     {
         public int Id { get; set; }
 
-        public int AssignmentId { get; set; }
-        public Assignment Assignment { get; set; } = null!;
+
+        /// <summary>Այն առաջադրանքները, որոնց կցված է այս ֆայլը</summary>
+        public List<Assignment> Assignments { get; set; } = new();
+
 
         /// <summary>Ֆայլի սկզբնական անունը (ցուցադրելու համար)</summary>
         public string FileName { get; set; } = "";

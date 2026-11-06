@@ -666,3 +666,31 @@ span.answer-grading-tab {
     background: rgba(245, 158, 11, 0.2);
     color: #FCD34D;
 }
+/* Շտեմարանի դիտման էջ՝ «Խմբագրել» / «Ուղարկել» կոճակներ (assignment-detail.css-ի վերջում) */
+.ad-bank-btn {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--card-bg, #fff);
+    color: var(--text-color, #1e293b);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+    .ad-bank-btn:hover {
+        background: var(--hover-bg, #f1f5f9);
+        color: inherit;
+    }
+
+.ad-bank-btn-primary {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+}
+
+    .ad-bank-btn-primary:hover {
+        background: #1d4ed8;
+        color: #fff;
+    }

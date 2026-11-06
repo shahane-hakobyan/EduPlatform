@@ -22,6 +22,21 @@ namespace EduPlatform.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AssignmentFileLinks", b =>
+                {
+                    b.Property<int>("FileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FileId", "AssignmentId");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.ToTable("AssignmentFileLinks", (string)null);
+                });
+
             modelBuilder.Entity("EduPlatform.Data.Models.Assignment", b =>
                 {
                     b.Property<int>("Id")
@@ -30,9 +45,6 @@ namespace EduPlatform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ArchivedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -40,16 +52,10 @@ namespace EduPlatform.Migrations
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
 
-                    b.Property<DateTime?>("DueDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("GradingType")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsTemplate")
+                    b.Property<bool>("IsInBank")
                         .HasColumnType("bit");
 
                     b.Property<string>("MaterialUrl")
@@ -63,9 +69,6 @@ namespace EduPlatform.Migrations
                     b.Property<int>("ResponseForms")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("TaskText")
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
@@ -74,9 +77,6 @@ namespace EduPlatform.Migrations
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("TemplateId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -91,9 +91,7 @@ namespace EduPlatform.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TemplateId");
-
-                    b.HasIndex("TeacherUserId", "IsTemplate", "IsArchived");
+                    b.HasIndex("TeacherUserId", "IsInBank");
 
                     b.ToTable("Assignments");
                 });
@@ -105,9 +103,6 @@ namespace EduPlatform.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AssignmentId")
-                        .HasColumnType("int");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
@@ -131,8 +126,6 @@ namespace EduPlatform.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AssignmentId");
 
                     b.ToTable("AssignmentFiles");
                 });
@@ -164,12 +157,12 @@ namespace EduPlatform.Migrations
                     b.Property<string>("AnswerText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AssignmentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Feedback")
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
+
+                    b.Property<int>("GivenAssignmentId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("GradeId")
                         .HasColumnType("int");
@@ -199,7 +192,7 @@ namespace EduPlatform.Migrations
 
                     b.HasIndex("GradeId");
 
-                    b.HasIndex("AssignmentId", "PupilUserId")
+                    b.HasIndex("GivenAssignmentId", "PupilUserId")
                         .IsUnique();
 
                     b.HasIndex("PupilUserId", "Status");
@@ -259,6 +252,46 @@ namespace EduPlatform.Migrations
                     b.HasIndex("RecipientId");
 
                     b.ToTable("AssignmentSubmissionFiles");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.GivenAssignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ArchivedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TeacherUserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.HasIndex("TeacherUserId", "IsArchived");
+
+                    b.ToTable("GivenAssignments");
                 });
 
             modelBuilder.Entity("EduPlatform.Data.Models.Grade", b =>
@@ -586,25 +619,19 @@ namespace EduPlatform.Migrations
                     b.ToTable("UserLibraryMaterials");
                 });
 
-            modelBuilder.Entity("EduPlatform.Data.Models.Assignment", b =>
+            modelBuilder.Entity("AssignmentFileLinks", b =>
                 {
-                    b.HasOne("EduPlatform.Data.Models.Assignment", "Template")
+                    b.HasOne("EduPlatform.Data.Models.Assignment", null)
                         .WithMany()
-                        .HasForeignKey("TemplateId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Template");
-                });
-
-            modelBuilder.Entity("EduPlatform.Data.Models.AssignmentFile", b =>
-                {
-                    b.HasOne("EduPlatform.Data.Models.Assignment", "Assignment")
-                        .WithMany("Files")
                         .HasForeignKey("AssignmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Assignment");
+                    b.HasOne("EduPlatform.Data.Models.AssignmentFile", null)
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EduPlatform.Data.Models.AssignmentGradeLevel", b =>
@@ -620,9 +647,9 @@ namespace EduPlatform.Migrations
 
             modelBuilder.Entity("EduPlatform.Data.Models.AssignmentRecipient", b =>
                 {
-                    b.HasOne("EduPlatform.Data.Models.Assignment", "Assignment")
+                    b.HasOne("EduPlatform.Data.Models.GivenAssignment", "GivenAssignment")
                         .WithMany("Recipients")
-                        .HasForeignKey("AssignmentId")
+                        .HasForeignKey("GivenAssignmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -631,7 +658,7 @@ namespace EduPlatform.Migrations
                         .HasForeignKey("GradeId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.Navigation("Assignment");
+                    b.Navigation("GivenAssignment");
 
                     b.Navigation("Grade");
                 });
@@ -664,6 +691,17 @@ namespace EduPlatform.Migrations
                         .IsRequired();
 
                     b.Navigation("Recipient");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.GivenAssignment", b =>
+                {
+                    b.HasOne("EduPlatform.Data.Models.Assignment", "Assignment")
+                        .WithMany("GivenAssignments")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
                 });
 
             modelBuilder.Entity("EduPlatform.Data.Models.Grade", b =>
@@ -761,11 +799,9 @@ namespace EduPlatform.Migrations
 
             modelBuilder.Entity("EduPlatform.Data.Models.Assignment", b =>
                 {
-                    b.Navigation("Files");
+                    b.Navigation("GivenAssignments");
 
                     b.Navigation("GradeLevels");
-
-                    b.Navigation("Recipients");
 
                     b.Navigation("Subjects");
                 });
@@ -773,6 +809,11 @@ namespace EduPlatform.Migrations
             modelBuilder.Entity("EduPlatform.Data.Models.AssignmentRecipient", b =>
                 {
                     b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("EduPlatform.Data.Models.GivenAssignment", b =>
+                {
+                    b.Navigation("Recipients");
                 });
 
             modelBuilder.Entity("EduPlatform.Data.Models.Institution", b =>

@@ -277,13 +277,16 @@
             const typesHasOther = !!form.querySelector('input[type="hidden"][name="Types"][value="32"]');
             const otherText = form.querySelector('input[name="OtherTypeText"]');
 
-            const ok =
+            // «Ուղարկել» էջ (շտեմարանից)՝ ձևի դաշտեր չկան, ստուգվում են միայն ժամկետները
+            const sendOnly = form.getAttribute('data-mode') === 'SendOnly';
+
+            const ok = sendOnly || (
                 has('SubjectIds') &&
                 has('GradeLevels') &&
                 has('Types') &&
                 (!typesHasOther || (otherText && otherText.value.trim() !== '')) &&
                 has('GradingType') && form.querySelector('input[name="GradingType"]').value !== '' &&
-                (form.querySelector('[name="AllowTextAnswer"]').checked || form.querySelector('[name="AllowFileAnswer"]').checked);
+                (form.querySelector('[name="AllowTextAnswer"]').checked || form.querySelector('[name="AllowFileAnswer"]').checked));
 
             // Վերջնաժամկետը պետք է լինի սկզբից հետո
             const startEl = form.querySelector('[name="StartDate"]');

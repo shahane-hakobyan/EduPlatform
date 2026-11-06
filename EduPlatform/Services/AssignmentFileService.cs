@@ -5,15 +5,17 @@ namespace EduPlatform.Services
 {
     /// <summary>
     /// Առաջադրանքների ֆայլերի պահոց՝ սերվերի սկավառակի վրա, wwwroot-ից դուրս։
-    /// Կառուցվածքը՝ {RootPath}/{օգտատիրոջ թղթապանակ}/{տարի}/{ամիս}/{օր}/{պատահական անուն}.{ընդլայնում}
-    /// Օրինակ՝ E:\EduPlatformAssignments\teacher-9f3a1c27\2026\11\06\a1b2c3....pdf
+    /// Կառուցվածքը՝ {RootPath}/assignments/{մարզի Id}/{դպրոցի Id}/{ուսուցչի թղթապանակ}/{պատահական անուն}.{ընդլայնում}
+    /// Օրինակ՝ E:\EduPlatformAssignments\assignments\0\12\teacher-9f3a1c27\a1b2c3....pdf
     /// </summary>
     public interface IAssignmentFileService
     {
         /// <summary>Պահպանում է ֆայլը և վերադարձնում հարաբերական բանալին («/»-ներով), որը գրվում է բազայում (StoredFileName)։</summary>
-        /// <param name="ownerUserId">Ֆայլի սեփականատիրոջ UserId-ն</param>
         /// <param name="ownerPrefix">«teacher» կամ «pupil»՝ թղթապանակի անվան սկիզբը</param>
-        Task<string> SaveAsync(string ownerUserId, string ownerPrefix, IFormFile file, DateTime now);
+        /// <param name="ownerUserId">Ֆայլի սեփականատիրոջ UserId-ն</param>
+        /// <param name="regionId">Մարզի Id-ն (0՝ եթե դեռ հայտնի չէ)</param>
+        /// <param name="schoolId">Դպրոցի Id-ն (0՝ եթե հայտնի չէ)</param>
+        Task<string> SaveAsync(string ownerPrefix, string ownerUserId, int regionId, int schoolId, IFormFile file);
 
         /// <summary>Բացում է ֆայլը կարդալու համար։ null՝ եթե ֆայլը չկա կամ բանալին անվտանգ չէ։</summary>
         FileStream? OpenRead(string key);
@@ -26,6 +28,9 @@ namespace EduPlatform.Services
     {
         // StoredFileName սյունը բազայում 100 նիշ է
         private const int MaxKeyLength = 100;
+
+        // արմատի ներսում առաջադրանքների թղթապանակը (հետագայում՝ նաև այլ բաժիններ)
+        private const string Section = "assignments";
 
         private readonly string _root;
         private readonly string _legacyRoot;
@@ -59,14 +64,14 @@ namespace EduPlatform.Services
             return $"{ownerPrefix}-{Convert.ToHexString(hash, 0, 4).ToLowerInvariant()}";
         }
 
-        public async Task<string> SaveAsync(string ownerUserId, string ownerPrefix, IFormFile file, DateTime now)
+        public async Task<string> SaveAsync(string ownerPrefix, string ownerUserId, int regionId, int schoolId, IFormFile file)
         {
             // ընդլայնումը՝ միայն փոքր տառեր և թվեր (օրինակ՝ .pdf)
             var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (ext.Length > 6 || !ext.Skip(1).All(c => char.IsAsciiLetterOrDigit(c))) ext = "";
 
             var folder = OwnerFolder(ownerPrefix, ownerUserId);
-            var key = $"{folder}/{now:yyyy}/{now:MM}/{now:dd}/{Guid.NewGuid():N}{ext}";
+            var key = $"{Section}/{regionId}/{schoolId}/{folder}/{Guid.NewGuid():N}{ext}";
             if (key.Length > MaxKeyLength)
                 throw new InvalidOperationException("Stored file key is longer than the database column allows.");
 

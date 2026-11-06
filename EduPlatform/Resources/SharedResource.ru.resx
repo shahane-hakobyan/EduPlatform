@@ -499,4 +499,6 @@
   <data name="ConfirmSendText" xml:space="preserve"><value>После подтверждения данные задания изменить будет нельзя. Задание будет создано и отправлено выбранным ученикам.</value></data>
   <data name="ConfirmSendBtn" xml:space="preserve"><value>Подтвердить и отправить</value></data>
   <data name="ArchivedReadOnlyNote" xml:space="preserve"><value>Это задание в архиве, доступен только просмотр.</value></data>
+  <data name="AssignmentTaskLabel" xml:space="preserve"><value>Текст задания</value></data>
+  <data name="ComingSoonLabel" xml:space="preserve"><value>Скоро</value></data>
 </root>

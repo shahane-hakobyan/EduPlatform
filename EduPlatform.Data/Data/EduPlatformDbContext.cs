@@ -26,6 +26,7 @@ namespace EduPlatform.Data
         public DbSet<Assignment> Assignments => Set<Assignment>();
         public DbSet<AssignmentSubject> AssignmentSubjects => Set<AssignmentSubject>();
         public DbSet<AssignmentGradeLevel> AssignmentGradeLevels => Set<AssignmentGradeLevel>();
+        public DbSet<GivenAssignment> GivenAssignments => Set<GivenAssignment>();
         public DbSet<AssignmentFile> AssignmentFiles => Set<AssignmentFile>();
         public DbSet<AssignmentRecipient> AssignmentRecipients => Set<AssignmentRecipient>();
         public DbSet<AssignmentSubmissionFile> AssignmentSubmissionFiles => Set<AssignmentSubmissionFile>();
@@ -183,15 +184,23 @@ namespace EduPlatform.Data
                 e.Property(x => x.OtherTypeText).HasMaxLength(500);
                 e.Property(x => x.MaterialUrl).HasMaxLength(1000);
 
-                // Ուղարկված առաջադրանքը կապված է իր ձևանմուշի հետ, բայց ձևանմուշը
-                // ջնջելիս ուղարկվածը չպետք է ջնջվի (աշակերտների աշխատանքը մնում է)
-                e.HasOne(x => x.Template)
-                 .WithMany()
-                 .HasForeignKey(x => x.TemplateId)
-                 .OnDelete(DeleteBehavior.NoAction);
+                // Ուսուցչի շտեմարանի ցուցակը
+                e.HasIndex(x => new { x.TeacherUserId, x.IsInBank });
+            });
 
-                // Ուսուցչի ցուցակները՝ շտեմարան / ընթացիկ / արխիվացված
-                e.HasIndex(x => new { x.TeacherUserId, x.IsTemplate, x.IsArchived });
+            // ── Տրված (ուղարկված) առաջադրանք՝ կապված շտեմարանի առաջադրանքին ──
+            modelBuilder.Entity<GivenAssignment>(e =>
+            {
+                e.Property(x => x.TeacherUserId).HasMaxLength(450);
+
+                // Շտեմարանի առաջադրանքը չի ջնջվում, քանի դեռ տրված առաջադրանքներ կան (դրա փոխարեն թաքցվում է)
+                e.HasOne(x => x.Assignment)
+                 .WithMany(a => a.GivenAssignments)
+                 .HasForeignKey(x => x.AssignmentId)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+                // Ուսուցչի ցուցակները՝ ընթացիկ / արխիվացված
+                e.HasIndex(x => new { x.TeacherUserId, x.IsArchived });
             });
 
             // ── Առաջադրանք ↔ Առարկա ──────────────────────────────────────
@@ -230,10 +239,19 @@ namespace EduPlatform.Data
                 e.Property(x => x.StoredFileName).HasMaxLength(100);
                 e.Property(x => x.ContentType).HasMaxLength(150);
 
-                e.HasOne(x => x.Assignment)
+                // Մեկ ֆայլ՝ մեկ գրառում, կապվում է մի քանի առաջադրանքի հետ (շտեմարանի օրինակ + ուղարկված)
+                e.HasMany(x => x.Assignments)
                  .WithMany(a => a.Files)
-                 .HasForeignKey(x => x.AssignmentId)
-                 .OnDelete(DeleteBehavior.Cascade);
+                 .UsingEntity<Dictionary<string, object>>(
+                     "AssignmentFileLinks",
+                     j => j.HasOne<Assignment>().WithMany().HasForeignKey("AssignmentId").OnDelete(DeleteBehavior.Cascade),
+                     j => j.HasOne<AssignmentFile>().WithMany().HasForeignKey("FileId").OnDelete(DeleteBehavior.Cascade),
+                     j =>
+                     {
+                         j.HasKey("FileId", "AssignmentId");
+                         j.HasIndex("AssignmentId");
+                         j.ToTable("AssignmentFileLinks");
+                     });
             });
 
             // ── Ստացող աշակերտ (կարգավիճակ, պատասխան, գնահատական) ─────────
@@ -244,14 +262,14 @@ namespace EduPlatform.Data
                 e.Property(x => x.Feedback).HasMaxLength(4000);
 
                 // Աշակերտը մեկ առաջադրանքին ունի միայն մեկ տող
-                e.HasIndex(x => new { x.AssignmentId, x.PupilUserId }).IsUnique();
+                e.HasIndex(x => new { x.GivenAssignmentId, x.PupilUserId }).IsUnique();
 
                 // Աշակերտի «իմ առաջադրանքները» ցուցակի համար
                 e.HasIndex(x => new { x.PupilUserId, x.Status });
 
-                e.HasOne(x => x.Assignment)
+                e.HasOne(x => x.GivenAssignment)
                  .WithMany(a => a.Recipients)
-                 .HasForeignKey(x => x.AssignmentId)
+                 .HasForeignKey(x => x.GivenAssignmentId)
                  .OnDelete(DeleteBehavior.Cascade);
 
                 e.HasOne(x => x.Grade)

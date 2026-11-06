@@ -38,7 +38,7 @@
     </div>
 
     <div class="bank-row-actions">
-        <a href="@Url.Action("Create", "Assignments", new { fromTemplate = Model.Id })" class="bank-btn bank-btn-send" title="@Localizer["SendAssignmentBtn"]">
+        <a href="@Url.Action("BankSend", "Assignments", new { id = Model.Id })" class="bank-btn bank-btn-send" title="@Localizer["SendAssignmentBtn"]">
             <i class="bi bi-send"></i>
         </a>
         <a href="@Url.Action("BankEdit", "Assignments", new { id = Model.Id })" class="bank-btn" title="@Localizer["Edit"]"><i class="bi bi-pencil"></i></a>

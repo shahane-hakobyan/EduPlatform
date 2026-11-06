@@ -91,21 +91,22 @@ namespace EduPlatform.Controllers
 
         private async Task<AssignmentsPageViewModel> BuildAssignmentsPage()
         {
-            var rows = await _db.Assignments
-                .Where(a => a.TeacherUserId == CurrentUserId && !a.IsTemplate)
+            // տրված առաջադրանքներ՝ բովանդակությունը վերցվում է կապված շտեմարանի առաջադրանքից
+            var rows = await _db.GivenAssignments
+                .Where(a => a.TeacherUserId == CurrentUserId)
                 .OrderBy(a => a.DueDate)
                 .Select(a => new
                 {
                     a.Id,
-                    a.Title,
-                    a.Types,
-                    a.OtherTypeText,
-                    a.GradingType,
+                    a.Assignment.Title,
+                    a.Assignment.Types,
+                    a.Assignment.OtherTypeText,
+                    a.Assignment.GradingType,
                     a.StartDate,
                     a.DueDate,
                     a.IsArchived,
-                    Subjects = a.Subjects.Select(s => s.Subject.Name).ToList(),
-                    Levels = a.GradeLevels.Select(g => g.Level).OrderBy(l => l).ToList(),
+                    Subjects = a.Assignment.Subjects.Select(s => s.Subject.Name).ToList(),
+                    Levels = a.Assignment.GradeLevels.Select(g => g.Level).OrderBy(l => l).ToList(),
                     Participants = a.Recipients.Count(),
                     Completed = a.Recipients.Count(r => r.Status != AssignmentRecipientStatus.Sent),
                     Graded = a.Recipients.Count(r => r.Status == AssignmentRecipientStatus.Graded)
@@ -132,7 +133,7 @@ namespace EduPlatform.Controllers
                     SubjectList = r.Subjects,
                     GradeList = gradeList,
                     TypeList = typeList,
-                    DueDate = r.DueDate ?? r.StartDate ?? DateTime.Today,
+                    DueDate = r.DueDate,
                     ParticipantCount = r.Participants,
                     CompletedCount = r.Completed,
                     GradedCount = r.Graded,
@@ -171,7 +172,7 @@ namespace EduPlatform.Controllers
         private async Task<AssignmentBankViewModel> BuildAssignmentBank()
         {
             var rows = await _db.Assignments
-                .Where(a => a.TeacherUserId == CurrentUserId && a.IsTemplate)
+                .Where(a => a.TeacherUserId == CurrentUserId && a.IsInBank)
                 .OrderByDescending(a => a.CreatedAt)
                 .Select(a => new
                 {
@@ -184,7 +185,7 @@ namespace EduPlatform.Controllers
                     Subjects = a.Subjects.Select(s => s.Subject.Name).ToList(),
                     Levels = a.GradeLevels.Select(g => g.Level).OrderBy(l => l).ToList(),
                     FilesCount = a.Files.Count(),
-                    SentCount = _db.Assignments.Count(x => x.TemplateId == a.Id)
+                    SentCount = a.GivenAssignments.Count()
                 })
                 .ToListAsync();
 
@@ -241,12 +242,11 @@ namespace EduPlatform.Controllers
 
         // ── Շտեմարանի գրառման դիտում / խմբագրում ──────────────────────────────
 
-        [HttpGet("Bank/{id:int}")]
-        public async Task<IActionResult> BankView(int id)
+        // Շտեմարանի գրառման ամփոփումը (օգտագործվում է «Դիտել» և «Ուղարկել» էջերում)
+        private async Task<AssignmentDetailViewModel?> LoadBankDetail(int id)
         {
-
             var t = await _db.Assignments
-                .Where(x => x.Id == id && x.TeacherUserId == CurrentUserId && x.IsTemplate)
+                .Where(x => x.Id == id && x.TeacherUserId == CurrentUserId && x.IsInBank)
                 .Select(x => new
                 {
                     x.Id,
@@ -262,9 +262,9 @@ namespace EduPlatform.Controllers
                     Files = x.Files.OrderBy(f => f.Id).Select(f => new { f.Id, f.FileName }).ToList()
                 })
                 .FirstOrDefaultAsync();
-            if (t == null) return NotFound();
+            if (t == null) return null;
 
-            var vm = new AssignmentDetailViewModel
+            return new AssignmentDetailViewModel
             {
                 Id = t.Id,
                 Title = t.Title,
@@ -285,12 +285,115 @@ namespace EduPlatform.Controllers
                     DownloadUrl = Url.Action(nameof(AssignmentFile), new { id = f.Id, download = true })!
                 }).ToList()
             };
+        }
 
-            ViewBag.SendUrl = Url.Action(nameof(Create), new { fromTemplate = id });
+        [HttpGet("Bank/{id:int}")]
+        public async Task<IActionResult> BankView(int id)
+        {
+            var vm = await LoadBankDetail(id);
+            if (vm == null) return NotFound();
+
+            ViewBag.SendUrl = Url.Action(nameof(BankSend), new { id });
             ViewBag.EditUrl = Url.Action(nameof(BankEdit), new { id });
             ViewBag.BackUrl = Url.Action(nameof(Bank));
 
             return View("Bank/View", vm);
+        }
+
+        // ── Շտեմարանից ուղարկում՝ միայն սովորողների ընտրություն + ժամկետներ ──────
+
+        private async Task<SendAssignmentViewModel?> BuildSendViewModel(int id, string? error = null)
+        {
+            var detail = await LoadBankDetail(id);
+            if (detail == null) return null;
+
+            var classGroups = await _roster.BuildClassGroupsAsync(CurrentUserId);
+            var now = DateTime.Now;
+
+            return new SendAssignmentViewModel
+            {
+                Assignment = detail,
+                ClassGroups = classGroups,
+                Groups = await BuildGroupOptions(classGroups),
+                SubmitUrl = Url.Action(nameof(BankSend), new { id })!,
+                CancelUrl = Url.Action(nameof(Bank))!,
+                StartDate = now.ToString("yyyy-MM-ddTHH:mm"),
+                DueDate = "",
+                Error = error
+            };
+        }
+
+        [HttpGet("Bank/{id:int}/Send")]
+        public async Task<IActionResult> BankSend(int id)
+        {
+            var vm = await BuildSendViewModel(id);
+            if (vm == null) return NotFound();
+            return View("Form/Send", vm);
+        }
+
+        [HttpPost("Bank/{id:int}/Send")]
+        public async Task<IActionResult> BankSend(int id, SendAssignmentRequest req)
+        {
+            var exists = await _db.Assignments
+                .AnyAsync(x => x.Id == id && x.TeacherUserId == CurrentUserId && x.IsInBank);
+            if (!exists) return NotFound();
+
+            var pupilIds = req.PupilIds.Where(p => !string.IsNullOrWhiteSpace(p)).Distinct().ToList();
+
+            var datesOk = req.StartDate != default && req.DueDate != default && req.DueDate.Date >= req.StartDate.Date;
+
+            // ընտրված աշակերտները պետք է լինեն ՄԻԱՅՆ այս ուսուցչի դասարաններից
+            var pupilGrades = new List<(string PupilUserId, int GradeId)>();
+            if (datesOk && pupilIds.Count > 0)
+            {
+                var teacherGradeIds = await _db.TeacherGrades
+                    .Where(tg => tg.TeacherUserId == CurrentUserId)
+                    .Select(tg => tg.GradeId)
+                    .ToListAsync();
+
+                pupilGrades = (await _db.PupilGrades
+                        .Where(pg => pupilIds.Contains(pg.PupilUserId) && teacherGradeIds.Contains(pg.GradeId))
+                        .Select(pg => new { pg.PupilUserId, pg.GradeId })
+                        .ToListAsync())
+                    .GroupBy(p => p.PupilUserId)
+                    .Select(g => (PupilUserId: g.Key, GradeId: g.First().GradeId))
+                    .ToList();
+            }
+
+            if (!datesOk || pupilGrades.Count == 0)
+            {
+                var error = req.StartDate != default && req.DueDate != default && req.DueDate.Date < req.StartDate.Date
+                    ? _l["DeadlineInvalid"].Value
+                    : _l["AssignmentFormIncomplete"].Value;
+
+                var vm = await BuildSendViewModel(id, error);
+                if (vm == null) return NotFound();
+                if (req.StartDate != default) vm.StartDate = req.StartDate.ToString("yyyy-MM-ddTHH:mm");
+                if (req.DueDate != default) vm.DueDate = req.DueDate.ToString("yyyy-MM-ddTHH:mm");
+                vm.PupilIds = pupilIds;
+                return View("Form/Send", vm);
+            }
+
+            // Նոր շտեմարանի գրառում չի ստեղծվում՝ տրված առաջադրանքը կապվում է նույն բովանդակությանը
+            var now = DateTime.Now;
+            _db.GivenAssignments.Add(new GivenAssignment
+            {
+                AssignmentId = id,
+                TeacherUserId = CurrentUserId,
+                StartDate = req.StartDate,
+                DueDate = req.DueDate,
+                CreatedAt = now,
+                Recipients = pupilGrades.Select(p => new AssignmentRecipient
+                {
+                    PupilUserId = p.PupilUserId,
+                    GradeId = p.GradeId,
+                    Status = AssignmentRecipientStatus.Sent,
+                    SentAt = now
+                }).ToList()
+            });
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet("Bank/{id:int}/Edit")]
@@ -317,7 +420,7 @@ namespace EduPlatform.Controllers
                 .Include(x => x.Subjects)
                 .Include(x => x.GradeLevels)
                 .Include(x => x.Files)
-                .FirstOrDefaultAsync(x => x.Id == id && x.TeacherUserId == CurrentUserId && x.IsTemplate);
+                .FirstOrDefaultAsync(x => x.Id == id && x.TeacherUserId == CurrentUserId && x.IsInBank);
             if (a == null) return NotFound();
 
             var types = req.Types
@@ -361,14 +464,24 @@ namespace EduPlatform.Controllers
 
             var now = DateTime.Now;
             var storedNames = new List<string>();
+            var removedFileIds = new List<int>();
+            var (regionId, schoolId) = await TeacherLocationAsync();
+
+            // Եթե այս շտեմարանի առաջադրանքը արդեն ուղարկվել է՝ ուղարկվածները ՉԵՆ փոխվում (ոչ մի կերպ)։
+            // Փոփոխությունը պահվում է ՆՈՐ շտեմարանի առաջադրանքով, իսկ հինը թաքցվում է շտեմարանից,
+            // բայց մնում է՝ արդեն տրված առաջադրանքների բովանդակությունը պահելու համար։
+            var hasGiven = await _db.GivenAssignments.AnyAsync(g => g.AssignmentId == a.Id);
+            var target = hasGiven
+                ? new Assignment { TeacherUserId = CurrentUserId, IsInBank = true, CreatedAt = now }
+                : a;
 
             try
             {
                 var newFiles = new List<AssignmentFile>();
                 foreach (var file in attachments)
                 {
-                    // {օգտատիրոջ թղթապանակ}/{տարի}/{ամիս}/{օր}/{անուն}
-                    var stored = await _files.SaveAsync(CurrentUserId, "teacher", file, now);
+                    // assignments/{մարզ}/{դպրոց}/{ուսուցիչ}/{անուն}
+                    var stored = await _files.SaveAsync("teacher", CurrentUserId, regionId, schoolId, file);
                     storedNames.Add(stored);
 
                     newFiles.Add(new AssignmentFile
@@ -381,28 +494,45 @@ namespace EduPlatform.Controllers
                     });
                 }
 
-                a.Title = req.Title.Trim();
-                a.Description = string.IsNullOrWhiteSpace(req.Description) ? null : req.Description.Trim();
-                a.TaskText = string.IsNullOrWhiteSpace(req.TaskText) ? null : req.TaskText.Trim();
-                a.Types = types;
-                a.OtherTypeText = types.HasFlag(AssignmentTypes.Other) ? req.OtherTypeText!.Trim() : null;
-                a.GradingType = (AssignmentGradingType)req.GradingType;
-                a.ResponseForms = forms;
-                a.UpdatedAt = now;
+                target.Title = req.Title.Trim();
+                target.Description = string.IsNullOrWhiteSpace(req.Description) ? null : req.Description.Trim();
+                target.TaskText = string.IsNullOrWhiteSpace(req.TaskText) ? null : req.TaskText.Trim();
+                target.Types = types;
+                target.OtherTypeText = types.HasFlag(AssignmentTypes.Other) ? req.OtherTypeText!.Trim() : null;
+                target.GradingType = (AssignmentGradingType)req.GradingType;
+                target.ResponseForms = forms;
+                target.UpdatedAt = now;
 
-                // առարկաներ՝ ջնջում ենք հանվածները, ավելացնում նորերը
-                _db.AssignmentSubjects.RemoveRange(a.Subjects.Where(s => !validSubjectIds.Contains(s.SubjectId)));
-                foreach (var sid in validSubjectIds.Where(sid => a.Subjects.All(s => s.SubjectId != sid)))
-                    a.Subjects.Add(new AssignmentSubject { SubjectId = sid });
+                // առարկաներ՝ ջնջում ենք հանվածները, ավելացնում նորերը (նոր տարբերակի դեպքում՝ ավելացվում են բոլորը)
+                _db.AssignmentSubjects.RemoveRange(target.Subjects.Where(s => !validSubjectIds.Contains(s.SubjectId)));
+                foreach (var sid in validSubjectIds.Where(sid => target.Subjects.All(s => s.SubjectId != sid)))
+                    target.Subjects.Add(new AssignmentSubject { SubjectId = sid });
 
                 // դասարանների մակարդակներ
-                _db.AssignmentGradeLevels.RemoveRange(a.GradeLevels.Where(g => !levels.Contains(g.Level)));
-                foreach (var l in levels.Where(l => a.GradeLevels.All(g => g.Level != l)))
-                    a.GradeLevels.Add(new AssignmentGradeLevel { Level = l });
+                _db.AssignmentGradeLevels.RemoveRange(target.GradeLevels.Where(g => !levels.Contains(g.Level)));
+                foreach (var l in levels.Where(l => target.GradeLevels.All(g => g.Level != l)))
+                    target.GradeLevels.Add(new AssignmentGradeLevel { Level = l });
 
-                // ֆայլեր՝ հանվածների գրառումները ջնջվում են (սկավառակի ֆայլը մնում է, քանի որ ուղարկվածները կարող են օգտագործել)
-                _db.AssignmentFiles.RemoveRange(a.Files.Where(f => !keepIds.Contains(f.Id)));
-                foreach (var f in newFiles) a.Files.Add(f);
+                // ֆայլեր
+                if (hasGiven)
+                {
+                    // նոր տարբերակը կապվում է թողնված (արդեն գոյություն ունեցող) ֆայլերին՝ առանց կրկնօրինակման
+                    foreach (var f in a.Files.Where(f => keepIds.Contains(f.Id))) target.Files.Add(f);
+                }
+                else
+                {
+                    // հանվածների կապն է հանվում (ֆայլը կարող է օգտագործվել այլ առաջադրանքում)
+                    var removedFiles = a.Files.Where(f => !keepIds.Contains(f.Id)).ToList();
+                    foreach (var f in removedFiles) a.Files.Remove(f);
+                    removedFileIds = removedFiles.Select(f => f.Id).ToList();
+                }
+                foreach (var f in newFiles) target.Files.Add(f);
+
+                if (hasGiven)
+                {
+                    _db.Assignments.Add(target);
+                    a.IsInBank = false;     // հին տարբերակը թաքցվում է շտեմարանից
+                }
 
                 await _db.SaveChangesAsync();
             }
@@ -413,30 +543,44 @@ namespace EduPlatform.Controllers
                 throw;
             }
 
+            // եթե հանված ֆայլը այլևս ոչ մի առաջադրանքի չի կցված՝ ջնջում ենք գրառումը և սկավառակի ֆայլը
+            await DeleteOrphanFilesAsync(removedFileIds);
+
             return RedirectToAction(nameof(Bank));
         }
 
+
         public record DeleteBankAssignmentRequest(int Id);
 
-        // Շտեմարանից ջնջում՝ միայն շտեմարանի գրառումը, արդեն ուղարկվածները (աշակերտների աշխատանքով) մնում են
+        // Շտեմարանից ջնջում։ Եթե առաջադրանքը երբեք չի ուղարկվել՝ ջնջվում է։
+        // Եթե տրված առաջադրանքներ կան՝ դրանք դեռ օգտագործում են այս բովանդակությունը, ուստի միայն թաքցվում է շտեմարանից։
         [HttpPost("Bank/Delete")]
         public async Task<IActionResult> BankDelete([FromBody] DeleteBankAssignmentRequest req)
         {
             var exists = await _db.Assignments
-                .AnyAsync(a => a.Id == req.Id && a.TeacherUserId == CurrentUserId && a.IsTemplate);
+                .AnyAsync(a => a.Id == req.Id && a.TeacherUserId == CurrentUserId && a.IsInBank);
             if (!exists) return NotFound();
 
-            await using var tx = await _db.Database.BeginTransactionAsync();
+            if (await _db.GivenAssignments.AnyAsync(g => g.AssignmentId == req.Id))
+            {
+                await _db.Assignments
+                    .Where(a => a.Id == req.Id && a.TeacherUserId == CurrentUserId)
+                    .ExecuteUpdateAsync(s => s.SetProperty(a => a.IsInBank, false));
+                return Ok();
+            }
+
+            // ձևանմուշի ֆայլերը՝ ջնջելուց հետո կստուգենք, թե որոնք մնացին առանց առաջադրանքի
+            var fileIds = await _db.Assignments
+                .Where(a => a.Id == req.Id)
+                .SelectMany(a => a.Files)
+                .Select(f => f.Id)
+                .ToListAsync();
 
             await _db.Assignments
-                .Where(a => a.TemplateId == req.Id)
-                .ExecuteUpdateAsync(s => s.SetProperty(a => a.TemplateId, (int?)null));
-
-            await _db.Assignments
-                .Where(a => a.Id == req.Id && a.TeacherUserId == CurrentUserId && a.IsTemplate)
+                .Where(a => a.Id == req.Id && a.TeacherUserId == CurrentUserId)
                 .ExecuteDeleteAsync();
 
-            await tx.CommitAsync();
+            await DeleteOrphanFilesAsync(fileIds);
             return Ok();
         }
 
@@ -446,10 +590,9 @@ namespace EduPlatform.Controllers
         [HttpPost("Archive")]
         public async Task<IActionResult> Archive([FromBody] ArchiveAssignmentRequest req)
         {
-            var affected = await _db.Assignments
+            var affected = await _db.GivenAssignments
                 .Where(a => a.Id == req.Id
                          && a.TeacherUserId == CurrentUserId
-                         && !a.IsTemplate
                          && !a.IsArchived)
                 .ExecuteUpdateAsync(s => s
                     .SetProperty(a => a.IsArchived, true)
@@ -469,6 +612,36 @@ namespace EduPlatform.Controllers
             ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt",
             ".png", ".jpg", ".jpeg", ".zip"
         };
+
+        // Ջնջում է այն ֆայլերի գրառումները և սկավառակի ֆայլերը, որոնք այլևս ոչ մի առաջադրանքի չեն կցված
+        private async Task DeleteOrphanFilesAsync(List<int> fileIds)
+        {
+            if (fileIds.Count == 0) return;
+
+            var orphans = await _db.AssignmentFiles
+                .Where(f => fileIds.Contains(f.Id) && !f.Assignments.Any())
+                .ToListAsync();
+            if (orphans.Count == 0) return;
+
+            _db.AssignmentFiles.RemoveRange(orphans);
+            await _db.SaveChangesAsync();
+
+            // սկավառակից՝ միայն բազայի փոփոխությունը հաջողվելուց հետո
+            foreach (var o in orphans) _files.Delete(o.StoredFileName);
+        }
+
+        // Ուսուցչի դպրոցը՝ նրա վերջին ուսումնական տարվա դասարաններից։
+        // Մարզի Id-ն դեռ չկա (կգա AuthServer-ից) → 0։ Երբ հայտնվի՝ միայն այստեղ կփոխվի։
+        private async Task<(int RegionId, int SchoolId)> TeacherLocationAsync()
+        {
+            var schoolId = await _db.TeacherGrades
+                .Where(tg => tg.TeacherUserId == CurrentUserId)
+                .OrderByDescending(tg => tg.AcademicYear)
+                .Select(tg => tg.Grade.InstitutionId)
+                .FirstOrDefaultAsync();
+
+            return (0, schoolId);
+        }
 
         // Միայն այն առարկաները, որոնք ուսուցիչը դասավանդում է
         private Task<List<int>> ValidTeacherSubjectIds(IEnumerable<int> requested)
@@ -508,9 +681,9 @@ namespace EduPlatform.Controllers
             if (req.SourceTemplateId.HasValue)
             {
                 prefill.ExistingFiles = await _db.AssignmentFiles
-                    .Where(f => f.AssignmentId == req.SourceTemplateId.Value
-                             && f.Assignment.TeacherUserId == CurrentUserId
-                             && f.Assignment.IsTemplate)
+                    .Where(f => f.Assignments.Any(a => a.Id == req.SourceTemplateId.Value
+                                                    && a.TeacherUserId == CurrentUserId
+                                                    && a.IsInBank))
                     .OrderBy(f => f.Id)
                     .Select(f => new PrefillFile { Id = f.Id, Name = f.FileName, Keep = req.KeepFileIds.Contains(f.Id) })
                     .ToListAsync();
@@ -640,7 +813,7 @@ namespace EduPlatform.Controllers
         private async Task<CreateAssignmentPrefill?> LoadAssignmentPrefill(int templateId)
         {
             var t = await _db.Assignments
-                .Where(x => x.Id == templateId && x.TeacherUserId == CurrentUserId && x.IsTemplate)
+                .Where(x => x.Id == templateId && x.TeacherUserId == CurrentUserId && x.IsInBank)
                 .Select(x => new
                 {
                     x.Id,
@@ -748,26 +921,26 @@ namespace EduPlatform.Controllers
                                     await BuildCreateAssignmentViewModelFromRequest(req, _l["AssignmentFormIncomplete"].Value));
             }
 
-            // շտեմարանի ձևանմուշից թողնված ֆայլերը (նույն ֆայլը՝ նոր գրառումով)
+            // շտեմարանի ձևանմուշից թողնված ֆայլերը՝ նույն ֆայլը կապվում է նոր առաջադրանքին (նոր գրառում չի ստեղծվում)
             var keptFiles = new List<AssignmentFile>();
             if (req.SourceTemplateId.HasValue && req.KeepFileIds.Count > 0)
             {
                 keptFiles = await _db.AssignmentFiles
-                    .AsNoTracking()
                     .Where(f => req.KeepFileIds.Contains(f.Id)
-                             && f.AssignmentId == req.SourceTemplateId.Value
-                             && f.Assignment.TeacherUserId == CurrentUserId
-                             && f.Assignment.IsTemplate)
+                             && f.Assignments.Any(a => a.Id == req.SourceTemplateId.Value
+                                                    && a.TeacherUserId == CurrentUserId
+                                                    && a.IsInBank))
                     .ToListAsync();
             }
 
             var storedFiles = new List<(string FileName, string StoredName, string ContentType, long Size)>();
+            var (regionId, schoolId) = await TeacherLocationAsync();
             try
             {
                 foreach (var file in attachments)
                 {
-                    // {օգտատիրոջ թղթապանակ}/{տարի}/{ամիս}/{օր}/{անուն}
-                    var stored = await _files.SaveAsync(CurrentUserId, "teacher", file, DateTime.Now);
+                    // assignments/{մարզ}/{դպրոց}/{ուսուցիչ}/{անուն}
+                    var stored = await _files.SaveAsync("teacher", CurrentUserId, regionId, schoolId, file);
 
                     storedFiles.Add((Path.GetFileName(file.FileName), stored, file.ContentType, file.Length));
                 }
@@ -775,67 +948,85 @@ namespace EduPlatform.Controllers
                 // ── պահպանում՝ մեկ ուղարկված առաջադրանք (շտեմարանը նույն գրառումներն են) ──
                 var now = DateTime.Now;
 
-                Assignment Make(bool isTemplate) => new()
+                // նոր ֆայլերը ստեղծվում են ՄԵԿ անգամ՝ շտեմարանի օրինակը և ուղարկվածը կապվում են նույն գրառման հետ
+                var attachedFiles = storedFiles.Select(f => new AssignmentFile
                 {
+                    FileName = f.FileName,
+                    StoredFileName = f.StoredName,
+                    ContentType = f.ContentType,
+                    SizeBytes = f.Size,
+                    UploadedAt = now
+                }).Concat(keptFiles).ToList();
+
+                static string? Norm(string? text) => string.IsNullOrWhiteSpace(text) ? null : text.Trim();
+                var description = Norm(req.Description);
+                var taskText = Norm(req.TaskText);
+                var otherTypeText = types.HasFlag(AssignmentTypes.Other) ? req.OtherTypeText!.Trim() : null;
+
+                // Շտեմարանից ուղարկելիս՝ եթե բովանդակությունը չի փոխվել, տրված առաջադրանքը կապվում է
+                // ՆՈՒՅՆ շտեմարանի առաջադրանքին (ոչինչ չի կրկնօրինակվում)։ Եթե ձևում ինչ-որ բան փոխվել է՝
+                // փոփոխվածը դառնում է նոր շտեմարանի առաջադրանք, հինը մնում է անփոփոխ։
+                Assignment? source = null;
+                if (req.SourceTemplateId.HasValue)
+                {
+                    source = await _db.Assignments
+                        .Include(x => x.Subjects)
+                        .Include(x => x.GradeLevels)
+                        .Include(x => x.Files)
+                        .FirstOrDefaultAsync(x => x.Id == req.SourceTemplateId.Value
+                                               && x.TeacherUserId == CurrentUserId
+                                               && x.IsInBank);
+                }
+
+                var sameAsSource = source != null
+                    && source.Title == req.Title.Trim()
+                    && source.Description == description
+                    && source.TaskText == taskText
+                    && source.Types == types
+                    && source.OtherTypeText == otherTypeText
+                    && source.GradingType == (AssignmentGradingType)req.GradingType
+                    && source.ResponseForms == forms
+                    && source.Subjects.Select(x => x.SubjectId).OrderBy(x => x).SequenceEqual(validSubjectIds.OrderBy(x => x))
+                    && source.GradeLevels.Select(x => x.Level).OrderBy(x => x).SequenceEqual(levels.OrderBy(x => x))
+                    && storedFiles.Count == 0
+                    && source.Files.Select(x => x.Id).OrderBy(x => x).SequenceEqual(keptFiles.Select(x => x.Id).OrderBy(x => x));
+
+                var content = sameAsSource
+                    ? source!
+                    : new Assignment
+                    {
+                        TeacherUserId = CurrentUserId,
+                        IsInBank = true,
+                        Title = req.Title.Trim(),
+                        Description = description,
+                        TaskText = taskText,
+                        Types = types,
+                        OtherTypeText = otherTypeText,
+                        GradingType = (AssignmentGradingType)req.GradingType,
+                        ResponseForms = forms,
+                        CreatedAt = now,
+                        UpdatedAt = now,
+                        Subjects = validSubjectIds.Select(id => new AssignmentSubject { SubjectId = id }).ToList(),
+                        GradeLevels = levels.Select(l => new AssignmentGradeLevel { Level = l }).ToList(),
+                        Files = attachedFiles.ToList()
+                    };
+
+                var given = new GivenAssignment
+                {
+                    Assignment = content,
                     TeacherUserId = CurrentUserId,
-                    IsTemplate = isTemplate,
-                    Title = req.Title.Trim(),
-                    Description = string.IsNullOrWhiteSpace(req.Description) ? null : req.Description.Trim(),
-                    TaskText = string.IsNullOrWhiteSpace(req.TaskText) ? null : req.TaskText.Trim(),
-                    Types = types,
-                    OtherTypeText = types.HasFlag(AssignmentTypes.Other) ? req.OtherTypeText!.Trim() : null,
-                    GradingType = (AssignmentGradingType)req.GradingType,
-                    ResponseForms = forms,
-                    StartDate = isTemplate ? null : req.StartDate,
-                    DueDate = isTemplate ? null : req.DueDate,
+                    StartDate = req.StartDate,
+                    DueDate = req.DueDate,
                     CreatedAt = now,
-                    UpdatedAt = now,
-                    Subjects = validSubjectIds.Select(id => new AssignmentSubject { SubjectId = id }).ToList(),
-                    GradeLevels = levels.Select(l => new AssignmentGradeLevel { Level = l }).ToList(),
-                    Files = storedFiles.Select(f => new AssignmentFile
+                    Recipients = pupilGrades.Select(p => new AssignmentRecipient
                     {
-                        FileName = f.FileName,
-                        StoredFileName = f.StoredName,
-                        ContentType = f.ContentType,
-                        SizeBytes = f.Size,
-                        UploadedAt = now
-                    }).Concat(keptFiles.Select(k => new AssignmentFile
-                    {
-                        FileName = k.FileName,
-                        StoredFileName = k.StoredFileName,
-                        ContentType = k.ContentType,
-                        SizeBytes = k.SizeBytes,
-                        UploadedAt = now
-                    })).ToList()
+                        PupilUserId = p.PupilUserId,
+                        GradeId = p.GradeId,
+                        Status = AssignmentRecipientStatus.Sent,
+                        SentAt = now
+                    }).ToList()
                 };
-
-                var sent = Make(false);
-                sent.Recipients = pupilGrades.Select(p => new AssignmentRecipient
-                {
-                    PupilUserId = p.PupilUserId,
-                    GradeId = p.GradeId,
-                    Status = AssignmentRecipientStatus.Sent,
-                    SentAt = now
-                }).ToList();
-
-                // Շտեմարանից ուղարկելիս՝ միայն նոր ուղարկված օրինակ (շտեմարանի գրառումը նույնն է մնում)
-                var source = req.SourceTemplateId.HasValue
-                    ? await _db.Assignments.FirstOrDefaultAsync(x => x.Id == req.SourceTemplateId.Value
-                                                                  && x.TeacherUserId == CurrentUserId
-                                                                  && x.IsTemplate)
-                    : null;
-
-                if (source != null)
-                {
-                    sent.TemplateId = source.Id;
-                    _db.Assignments.Add(sent);
-                }
-                else
-                {
-                    var template = Make(true);
-                    sent.Template = template;
-                    _db.Assignments.AddRange(template, sent);
-                }
+                _db.GivenAssignments.Add(given);
 
                 await _db.SaveChangesAsync();
             }
@@ -854,25 +1045,26 @@ namespace EduPlatform.Controllers
         public async Task<IActionResult> Detail(int id)
         {
 
-            var a = await _db.Assignments
-                .Where(x => x.Id == id && x.TeacherUserId == CurrentUserId && !x.IsTemplate)
+            // տրված առաջադրանք՝ բովանդակությունը վերցվում է կապված շտեմարանի առաջադրանքից
+            var a = await _db.GivenAssignments
+                .Where(x => x.Id == id && x.TeacherUserId == CurrentUserId)
                 .Select(x => new
                 {
                     x.Id,
-                    x.Title,
-                    x.Description,
-                    x.TaskText,
-                    x.Types,
-                    x.OtherTypeText,
-                    x.GradingType,
-                    x.ResponseForms,
+                    x.Assignment.Title,
+                    x.Assignment.Description,
+                    x.Assignment.TaskText,
+                    x.Assignment.Types,
+                    x.Assignment.OtherTypeText,
+                    x.Assignment.GradingType,
+                    x.Assignment.ResponseForms,
                     x.StartDate,
                     x.DueDate,
                     x.IsArchived,
                     x.CreatedAt,
-                    Subjects = x.Subjects.Select(s => s.Subject.Name).ToList(),
-                    Levels = x.GradeLevels.Select(g => g.Level).OrderBy(l => l).ToList(),
-                    Files = x.Files.OrderBy(f => f.Id).Select(f => new { f.Id, f.FileName }).ToList(),
+                    Subjects = x.Assignment.Subjects.Select(s => s.Subject.Name).ToList(),
+                    Levels = x.Assignment.GradeLevels.Select(g => g.Level).OrderBy(l => l).ToList(),
+                    Files = x.Assignment.Files.OrderBy(f => f.Id).Select(f => new { f.Id, f.FileName }).ToList(),
                     Recipients = x.Recipients.OrderBy(r => r.Id).Select(r => new
                     {
                         r.Id,
@@ -908,8 +1100,8 @@ namespace EduPlatform.Controllers
                 Grade = string.Join(", ", a.Levels.Select(l => _l["GradeLevelFormat", l].Value)),
                 Type = string.Join(", ", typeLabels),
                 GradingType = GradingTypeLabel(a.GradingType),
-                StartDate = a.StartDate ?? a.CreatedAt,
-                DueDate = a.DueDate ?? a.StartDate ?? a.CreatedAt,
+                StartDate = a.StartDate,
+                DueDate = a.DueDate,
                 StartDateRaw = a.StartDate,
                 Description = a.Description ?? "",
                 TaskText = a.TaskText ?? "",
@@ -963,7 +1155,7 @@ namespace EduPlatform.Controllers
         public async Task<IActionResult> AssignmentFile(int id, bool download = false)
         {
             var f = await _db.AssignmentFiles
-                .Where(x => x.Id == id && x.Assignment.TeacherUserId == CurrentUserId)
+                .Where(x => x.Id == id && x.Assignments.Any(a => a.TeacherUserId == CurrentUserId))
                 .Select(x => new { x.FileName, x.StoredFileName, x.ContentType })
                 .FirstOrDefaultAsync();
 
@@ -985,7 +1177,7 @@ namespace EduPlatform.Controllers
         public async Task<IActionResult> SubmissionFile(int id, bool download = false)
         {
             var f = await _db.AssignmentSubmissionFiles
-                .Where(x => x.Id == id && x.Recipient.Assignment.TeacherUserId == CurrentUserId)
+                .Where(x => x.Id == id && x.Recipient.GivenAssignment.TeacherUserId == CurrentUserId)
                 .Select(x => new { x.FileName, x.StoredFileName, x.ContentType })
                 .FirstOrDefaultAsync();
 
@@ -1013,17 +1205,16 @@ namespace EduPlatform.Controllers
         public async Task<IActionResult> SaveGrade([FromBody] SaveGradeRequest req)
         {
             var r = await _db.AssignmentRecipients
-                .Include(x => x.Assignment)
+                .Include(x => x.GivenAssignment).ThenInclude(g => g.Assignment)
                 .FirstOrDefaultAsync(x => x.Id == req.SubmissionId
-                                       && x.Assignment.TeacherUserId == CurrentUserId
-                                       && !x.Assignment.IsTemplate
-                                       && !x.Assignment.IsArchived);
+                                       && x.GivenAssignment.TeacherUserId == CurrentUserId
+                                       && !x.GivenAssignment.IsArchived);
             if (r == null) return NotFound();
 
             var feedback = string.IsNullOrWhiteSpace(req.Feedback) ? null : req.Feedback.Trim();
             if (feedback is { Length: > 2000 }) return BadRequest();
 
-            switch (r.Assignment.GradingType)
+            switch (r.GivenAssignment.Assignment.GradingType)
             {
                 case AssignmentGradingType.CurrentScore:
                     // միավորը (1–10) և/կամ հետադարձ կապ՝ առնվազն մեկը
@@ -1066,10 +1257,9 @@ namespace EduPlatform.Controllers
         [HttpPost("AddPupils")]
         public async Task<IActionResult> AddPupils([FromBody] AddPupilsRequest req)
         {
-            var assignment = await _db.Assignments
+            var assignment = await _db.GivenAssignments
                 .Where(x => x.Id == req.AssignmentId
                          && x.TeacherUserId == CurrentUserId
-                         && !x.IsTemplate
                          && !x.IsArchived)
                 .Select(x => new { x.Id })
                 .FirstOrDefaultAsync();
@@ -1079,7 +1269,7 @@ namespace EduPlatform.Controllers
             if (wanted.Count == 0) return BadRequest();
 
             var existing = await _db.AssignmentRecipients
-                .Where(r => r.AssignmentId == assignment.Id && wanted.Contains(r.PupilUserId))
+                .Where(r => r.GivenAssignmentId == assignment.Id && wanted.Contains(r.PupilUserId))
                 .Select(r => r.PupilUserId)
                 .ToListAsync();
 
@@ -1096,7 +1286,7 @@ namespace EduPlatform.Controllers
                 .Where(g => !existing.Contains(g.Key))
                 .Select(g => new AssignmentRecipient
                 {
-                    AssignmentId = assignment.Id,
+                    GivenAssignmentId = assignment.Id,
                     PupilUserId = g.Key,
                     GradeId = g.First().GradeId,
                     Status = AssignmentRecipientStatus.Sent,
@@ -1122,19 +1312,17 @@ namespace EduPlatform.Controllers
         [HttpPost("ChangeDueDate")]
         public async Task<IActionResult> ChangeDueDate([FromBody] ChangeDueDateRequest req)
         {
-            var a = await _db.Assignments
-                .Where(x => x.Id == req.Id && x.TeacherUserId == CurrentUserId && !x.IsTemplate && !x.IsArchived)
+            var a = await _db.GivenAssignments
+                .Where(x => x.Id == req.Id && x.TeacherUserId == CurrentUserId && !x.IsArchived)
                 .Select(x => new { x.StartDate })
                 .FirstOrDefaultAsync();
             if (a == null) return NotFound();
 
-            if (a.StartDate.HasValue && req.DueDate.Date < a.StartDate.Value.Date) return BadRequest();
+            if (req.DueDate.Date < a.StartDate.Date) return BadRequest();
 
-            await _db.Assignments
-                .Where(x => x.Id == req.Id && x.TeacherUserId == CurrentUserId && !x.IsTemplate && !x.IsArchived)
-                .ExecuteUpdateAsync(s => s
-                    .SetProperty(x => x.DueDate, req.DueDate)
-                    .SetProperty(x => x.UpdatedAt, DateTime.Now));
+            await _db.GivenAssignments
+                .Where(x => x.Id == req.Id && x.TeacherUserId == CurrentUserId && !x.IsArchived)
+                .ExecuteUpdateAsync(s => s.SetProperty(x => x.DueDate, req.DueDate));
 
             return Ok();
         }

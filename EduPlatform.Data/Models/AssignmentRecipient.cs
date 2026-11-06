@@ -12,8 +12,8 @@
     {
         public int Id { get; set; }
 
-        public int AssignmentId { get; set; }
-        public Assignment Assignment { get; set; } = null!;
+        public int GivenAssignmentId { get; set; }
+        public GivenAssignment GivenAssignment { get; set; } = null!;
 
         /// <summary>Աշակերտի Id-ն AuthServer-ում («sub»)</summary>
         public string PupilUserId { get; set; } = "";

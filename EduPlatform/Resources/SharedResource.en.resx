@@ -499,4 +499,6 @@
   <data name="ConfirmSendText" xml:space="preserve"><value>After you confirm, the assignment details can no longer be changed. The assignment will be created and sent to the selected pupils.</value></data>
   <data name="ConfirmSendBtn" xml:space="preserve"><value>Confirm and send</value></data>
   <data name="ArchivedReadOnlyNote" xml:space="preserve"><value>This assignment is archived and can only be viewed.</value></data>
+  <data name="AssignmentTaskLabel" xml:space="preserve"><value>Assignment text</value></data>
+  <data name="ComingSoonLabel" xml:space="preserve"><value>Coming soon</value></data>
 </root>
