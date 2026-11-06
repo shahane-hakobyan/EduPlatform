@@ -539,7 +539,7 @@
     gap: 10px;
     margin-top: 8px;
     padding: 8px 12px;
-    background: #fff;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
 }
@@ -558,7 +558,7 @@
     gap: 4px;
     font-size: 13px;
     font-weight: 600;
-    color: var(--primary, #6366d1);
+    color: var(--accent);
     text-decoration: none;
 }
 .answer-text-box {
@@ -606,4 +606,63 @@ span.answer-grading-tab {
     white-space: pre-wrap;
     word-break: break-word;
     margin-bottom: 8px;
+}
+
+/* Արխիվացված առաջադրանք՝ միայն դիտման ռեժիմ */
+.ad-readonly-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 1200px;
+    margin: 0 auto 16px;
+    padding: 12px 16px;
+    border: .8px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.ad-due-input:disabled,
+.answer-score-input[readonly],
+.answer-protocol-textarea[readonly] {
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+.answer-point-btn:disabled {
+    cursor: not-allowed;
+    opacity: .7;
+}
+/* Մութ ռեժիմ՝ գրավոր նշումներ, սխալի տող և կարգավիճակի պիտակներ */
+[data-theme="dark"] .answer-warning-note {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: #FCD34D;
+}
+
+[data-theme="dark"] .answer-info-note {
+    background: var(--info-soft-bg);
+    border-color: var(--info);
+    color: var(--info);
+}
+
+[data-theme="dark"] .answer-error {
+    background: var(--danger-soft-bg);
+    color: var(--danger);
+}
+
+[data-theme="dark"] .ad-due-saved {
+    color: #4ade80;
+}
+
+[data-theme="dark"] .ad-badge-graded {
+    background: rgba(34, 197, 94, 0.2);
+    color: #86EFAC;
+}
+
+[data-theme="dark"] .ad-badge-submitted {
+    background: rgba(245, 158, 11, 0.2);
+    color: #FCD34D;
 }

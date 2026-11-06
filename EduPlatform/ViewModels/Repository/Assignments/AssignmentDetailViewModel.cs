@@ -50,5 +50,8 @@ namespace EduPlatform.ViewModels
         public string AnswerText { get; set; } = "";
         public string GradingType { get; set; } = "CurrentScore"; // CurrentScore | Formative | Diagnostic
         public List<AssignmentFileViewModel> Files { get; set; } = new();
+
+        /// <summary>Արխիվացված առաջադրանք՝ միայն դիտում, գնահատել հնարավոր չէ</summary>
+        public bool IsReadOnly { get; set; }
     }
 }

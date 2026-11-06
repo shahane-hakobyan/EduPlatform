@@ -28,17 +28,19 @@ namespace EduPlatform.Controllers
         private readonly EduPlatformDbContext _db;
         private readonly IConfiguration _config;
         private readonly IClassRosterService _roster;
+        private readonly IAssignmentFileService _files;
 
         private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
         public AssignmentsController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer,
-            EduPlatformDbContext db, IConfiguration config, IClassRosterService roster)
+            EduPlatformDbContext db, IConfiguration config, IClassRosterService roster, IAssignmentFileService files)
         {
             _menuBuilder = menuBuilder;
             _l = localizer;
             _db = db;
             _config = config;
             _roster = roster;
+            _files = files;
         }
 
         // Կողային մենյուն ամեն էջի համար
@@ -357,8 +359,6 @@ namespace EduPlatform.Controllers
                 return View("Form/Create", vm);
             }
 
-            var root = AssignmentFilesRoot();
-            Directory.CreateDirectory(root);
             var now = DateTime.Now;
             var storedNames = new List<string>();
 
@@ -367,9 +367,8 @@ namespace EduPlatform.Controllers
                 var newFiles = new List<AssignmentFile>();
                 foreach (var file in attachments)
                 {
-                    var stored = $"{Guid.NewGuid():N}{Path.GetExtension(file.FileName).ToLowerInvariant()}";
-                    await using (var stream = System.IO.File.Create(Path.Combine(root, stored)))
-                        await file.CopyToAsync(stream);
+                    // {օգտատիրոջ թղթապանակ}/{տարի}/{ամիս}/{օր}/{անուն}
+                    var stored = await _files.SaveAsync(CurrentUserId, "teacher", file, now);
                     storedNames.Add(stored);
 
                     newFiles.Add(new AssignmentFile
@@ -410,9 +409,7 @@ namespace EduPlatform.Controllers
             catch
             {
                 foreach (var n in storedNames)
-                {
-                    try { System.IO.File.Delete(Path.Combine(root, n)); } catch { }
-                }
+                    _files.Delete(n);
                 throw;
             }
 
@@ -483,15 +480,6 @@ namespace EduPlatform.Controllers
                 .ToListAsync();
         }
 
-        private string AssignmentFilesRoot()
-        {
-            var configured = _config["AssignmentFiles:RootPath"];
-            if (!string.IsNullOrWhiteSpace(configured)) return configured;
-
-            var env = HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
-            return Path.Combine(env.ContentRootPath, "App_Data", "assignment-files");
-        }
-
         // Ուսուցչի դասարանները (վերջին ուսումնական տարով) և նրանց աշակերտները
 
         // Սխալի դեպքում ձևը վերադարձվում է արդեն լրացված տվյալներով (ոչինչ չի կորչում)
@@ -542,7 +530,7 @@ namespace EduPlatform.Controllers
         {
             var me = CurrentUserId;
             var groupRows = await _db.UserGroupMembers
-                .Where(m => m.UserId == me)
+                .Where(m => m.UserId == me && m.Group.Type != GroupType.Parents)   // ծնողների խմբերը առայժմ պասիվ են
                 .OrderBy(m => m.Group.Name)
                 .Select(m => new
                 {
@@ -773,17 +761,13 @@ namespace EduPlatform.Controllers
                     .ToListAsync();
             }
 
-            var root = AssignmentFilesRoot();
-            Directory.CreateDirectory(root);
-
             var storedFiles = new List<(string FileName, string StoredName, string ContentType, long Size)>();
             try
             {
                 foreach (var file in attachments)
                 {
-                    var stored = $"{Guid.NewGuid():N}{Path.GetExtension(file.FileName).ToLowerInvariant()}";
-                    await using (var stream = System.IO.File.Create(Path.Combine(root, stored)))
-                        await file.CopyToAsync(stream);
+                    // {օգտատիրոջ թղթապանակ}/{տարի}/{ամիս}/{օր}/{անուն}
+                    var stored = await _files.SaveAsync(CurrentUserId, "teacher", file, DateTime.Now);
 
                     storedFiles.Add((Path.GetFileName(file.FileName), stored, file.ContentType, file.Length));
                 }
@@ -859,9 +843,7 @@ namespace EduPlatform.Controllers
             {
                 // բազայի սխալի դեպքում ջնջում ենք արդեն գրված ֆայլերը
                 foreach (var f in storedFiles)
-                {
-                    try { System.IO.File.Delete(Path.Combine(root, f.StoredName)); } catch { }
-                }
+                    _files.Delete(f.StoredName);
                 throw;
             }
 
@@ -959,6 +941,7 @@ namespace EduPlatform.Controllers
                     ScoreFeedback = r.Feedback ?? "",
                     AnswerText = r.AnswerText ?? "",
                     GradingType = a.GradingType.ToString(),
+                    IsReadOnly = a.IsArchived,
                     Files = r.Files.Select(f => new AssignmentFileViewModel
                     {
                         Name = f.FileName,
@@ -986,11 +969,10 @@ namespace EduPlatform.Controllers
 
             if (f == null) return NotFound();
 
-            var path = Path.Combine(AssignmentFilesRoot(), Path.GetFileName(f.StoredFileName));
-            if (!System.IO.File.Exists(path)) return NotFound();
+            var stream = _files.OpenRead(f.StoredFileName);
+            if (stream == null) return NotFound();
 
             var contentType = string.IsNullOrWhiteSpace(f.ContentType) ? "application/octet-stream" : f.ContentType;
-            var stream = System.IO.File.OpenRead(path);
 
             // download=false → inline (PDF/նկար բացվում է բրաուզերում), true → ներբեռնում
             return download
@@ -1009,11 +991,10 @@ namespace EduPlatform.Controllers
 
             if (f == null) return NotFound();
 
-            var path = Path.Combine(AssignmentFilesRoot(), Path.GetFileName(f.StoredFileName));
-            if (!System.IO.File.Exists(path)) return NotFound();
+            var stream = _files.OpenRead(f.StoredFileName);
+            if (stream == null) return NotFound();
 
             var contentType = string.IsNullOrWhiteSpace(f.ContentType) ? "application/octet-stream" : f.ContentType;
-            var stream = System.IO.File.OpenRead(path);
 
             return download
                 ? File(stream, contentType, f.FileName)
@@ -1035,7 +1016,8 @@ namespace EduPlatform.Controllers
                 .Include(x => x.Assignment)
                 .FirstOrDefaultAsync(x => x.Id == req.SubmissionId
                                        && x.Assignment.TeacherUserId == CurrentUserId
-                                       && !x.Assignment.IsTemplate);
+                                       && !x.Assignment.IsTemplate
+                                       && !x.Assignment.IsArchived);
             if (r == null) return NotFound();
 
             var feedback = string.IsNullOrWhiteSpace(req.Feedback) ? null : req.Feedback.Trim();
@@ -1141,7 +1123,7 @@ namespace EduPlatform.Controllers
         public async Task<IActionResult> ChangeDueDate([FromBody] ChangeDueDateRequest req)
         {
             var a = await _db.Assignments
-                .Where(x => x.Id == req.Id && x.TeacherUserId == CurrentUserId && !x.IsTemplate)
+                .Where(x => x.Id == req.Id && x.TeacherUserId == CurrentUserId && !x.IsTemplate && !x.IsArchived)
                 .Select(x => new { x.StartDate })
                 .FirstOrDefaultAsync();
             if (a == null) return NotFound();
@@ -1149,7 +1131,7 @@ namespace EduPlatform.Controllers
             if (a.StartDate.HasValue && req.DueDate.Date < a.StartDate.Value.Date) return BadRequest();
 
             await _db.Assignments
-                .Where(x => x.Id == req.Id && x.TeacherUserId == CurrentUserId && !x.IsTemplate)
+                .Where(x => x.Id == req.Id && x.TeacherUserId == CurrentUserId && !x.IsTemplate && !x.IsArchived)
                 .ExecuteUpdateAsync(s => s
                     .SetProperty(x => x.DueDate, req.DueDate)
                     .SetProperty(x => x.UpdatedAt, DateTime.Now));

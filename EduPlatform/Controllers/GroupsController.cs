@@ -105,7 +105,7 @@ namespace EduPlatform.Controllers
                 new()
                 {
                     Key = "type", Label = _l["GroupTypeLabel"],
-                    Options = new() { GroupTypeLabel(GroupType.Pupils), GroupTypeLabel(GroupType.Parents), GroupTypeLabel(GroupType.Other) }
+                    Options = new() { GroupTypeLabel(GroupType.Pupils), GroupTypeLabel(GroupType.Other) }
                 },
                 new()
                 {
@@ -219,7 +219,8 @@ namespace EduPlatform.Controllers
         public async Task<IActionResult> Create(CreateGroupRequest req)
         {
             var name = (req.Name ?? "").Trim();
-            var typeValid = Enum.IsDefined(typeof(GroupType), req.Type);
+            // Ծնողների խումբ՝ առայժմ չի թույլատրվում (այս փուլում ծնողներ չկան)
+            var typeValid = Enum.IsDefined(typeof(GroupType), req.Type) && req.Type != (int)GroupType.Parents;
             var image = req.Image is { Length: > 0 } ? req.Image : null;
 
             string? error = null;

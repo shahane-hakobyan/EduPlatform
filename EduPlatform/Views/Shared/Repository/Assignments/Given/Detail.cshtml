@@ -23,6 +23,11 @@
     }
 </div>
 
+@if (Model.IsArchived)
+{
+    <div class="ad-readonly-note"><i class="bi bi-archive"></i> @Localizer["ArchivedReadOnlyNote"]</div>
+}
+
 <div class="ad-card mb-3">
     <div class="ad-card-head">
         <i class="bi bi-file-earmark-text"></i>
@@ -59,7 +64,7 @@
                        data-original="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")"
                        data-start="@(Model.StartDateRaw?.ToString("yyyy-MM-ddTHH:mm"))"
                        data-invalid-msg="@Localizer["DeadlineInvalid"]"
-                       value="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")" />
+                       value="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")" @(Model.IsArchived ? "disabled" : "") />
                 <div id="adDueSaved" class="ad-due-saved" style="display:none"><i class="bi bi-check-circle"></i> @Localizer["DeadlineSaved"]</div>
             </div>
         </div>
@@ -70,7 +75,7 @@
             }
             @if (!string.IsNullOrWhiteSpace(Model.TaskText))
             {
-                <div class="ad-files-title">@Localizer["Assignment"]</div>
+                <div class="ad-files-title">@Localizer["AssignmentTaskLabel"]</div>
                 <div class="ad-task-text">@Model.TaskText</div>
             }
             @if (Model.Files.Any())
@@ -96,7 +101,10 @@
             <i class="bi bi-people"></i>
             <h2 class="ad-card-title">@Localizer["SendToStudentsSection"]</h2>
         </div>
-        <button type="button" class="ad-add-btn" data-open-modal="addPupilsModal"><i class="bi bi-person-plus"></i> @Localizer["AddLabel"]</button>
+        @if (!Model.IsArchived)
+        {
+            <button type="button" class="ad-add-btn" data-open-modal="addPupilsModal"><i class="bi bi-person-plus"></i> @Localizer["AddLabel"]</button>
+        }
     </div>
 
     <div class="ad-filter-bar">
@@ -170,7 +178,7 @@
                 </div>
                 <div class="ad-submission-actions">
                     <button type="button" class="ad-grade-btn" data-open-modal="answerModal-@s.Id">
-                        <i class="bi bi-eye"></i> @Localizer["ViewAnswersAndGrade"]
+                        <i class="bi bi-eye"></i> @(Model.IsArchived ? Localizer["ViewAnswer"] : Localizer["ViewAnswersAndGrade"])
                     </button>
                 </div>
             </div>
@@ -182,7 +190,10 @@
 {
     <partial name="Given/_AnswerModal" model="s" />
 }
-<partial name="Given/_AddPupilsModal" model="Model" />
+@if (!Model.IsArchived)
+{
+    <partial name="Given/_AddPupilsModal" model="Model" />
+}
 @section Styles {
     <link rel="stylesheet" href="~/css/assignments/assignment-detail.css" />
     <link rel="stylesheet" href="~/css/assignments/create-assignment.css" />

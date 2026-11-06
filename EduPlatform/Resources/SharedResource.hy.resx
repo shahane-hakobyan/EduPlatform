@@ -493,4 +493,5 @@
   <data name="ConfirmSendTitle" xml:space="preserve"><value>Ուղարկե՞լ առաջադրանքը</value></data>
   <data name="ConfirmSendText" xml:space="preserve"><value>Հաստատելուց հետո առաջադրանքի տվյալները փոխել հնարավոր չի լինի։ Առաջադրանքը կստեղծվի և կուղարկվի ընտրված սովորողներին։</value></data>
   <data name="ConfirmSendBtn" xml:space="preserve"><value>Հաստատել և ուղարկել</value></data>
+  <data name="ArchivedReadOnlyNote" xml:space="preserve"><value>Այս առաջադրանքը արխիվացված է՝ հասանելի է միայն դիտումը։</value></data>
 </root>

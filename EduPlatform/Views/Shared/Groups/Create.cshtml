@@ -59,13 +59,15 @@
                         <span class="cg-type-desc">@Localizer["GroupTypePupilsDesc"]</span>
                     </span>
                 </label>
-                <label class="cg-type-card">
-                    <input type="radio" name="Type" value="2" @(Model.Type == 2 ? "checked" : "") />
+                <!-- Ծնողների խումբ՝ առայժմ պասիվ (այս փուլում ծնողներ չկան) -->
+                <label class="cg-type-card is-disabled" title="@Localizer["ComingSoonLabel"]">
+                    <input type="radio" name="Type" value="2" disabled />
                     <span class="cg-type-dot"></span>
-                    <span>
+                    <span class="flex-grow-1">
                         <span class="cg-type-title">@Localizer["GroupTypeParents"]</span>
                         <span class="cg-type-desc">@Localizer["GroupTypeParentsDesc"]</span>
                     </span>
+                    <span class="cg-soon-badge">@Localizer["ComingSoonLabel"]</span>
                 </label>
                 <label class="cg-type-card">
                     <input type="radio" name="Type" value="3" @(Model.Type == 3 ? "checked" : "") />
