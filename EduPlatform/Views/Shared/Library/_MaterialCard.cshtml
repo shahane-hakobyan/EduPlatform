@@ -25,6 +25,12 @@
                 <span class="material-card-cover-title">@string.Join(", ", Model.Subjects)</span>
             </div>
         }
+        @if (Model.IsArchived)
+        {
+            <span class="material-card-archived-badge" data-bs-toggle="tooltip" data-bs-placement="top" title="@Localizer["StatusArchived"]">
+                <i class="bi bi-archive-fill"></i>
+            </span>
+        }
     </div>
 
     <div class="material-card-wide-content">

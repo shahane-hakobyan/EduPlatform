@@ -557,3 +557,76 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+/* Արխիվացված նյութի փոքր պատկերակ՝ կազմի վերին աջ անկյունում */
+.material-card-archived-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(17, 24, 39, .72);
+    color: #fff;
+    font-size: 14px;
+    z-index: 2;
+}
+
+/* Ցուցակի տեսք */
+.materials-table-archived {
+    margin-left: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.materials-table-actions {
+    flex-wrap: nowrap;
+}
+
+.materials-table .material-card-view-btn {
+    flex: 0 0 auto;
+    padding: 8px 18px;
+}
+
+/* Փոքր և միջին էկրան (մինչև 991px)՝ ցուցակը դառնում է քարտեր */
+@media (max-width: 991px) {
+    .materials-table thead {
+        display: none;
+    }
+
+    .materials-table, .materials-table tbody, .materials-table tr, .materials-table td {
+        display: block;
+        width: 100%;
+    }
+
+        .materials-table tr {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .materials-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .materials-table td {
+            padding: 6px 0;
+        }
+
+            .materials-table td[data-label]::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 11px;
+                font-weight: 700;
+                color: var(--text-faint);
+                text-transform: uppercase;
+                letter-spacing: .02em;
+                margin-bottom: 2px;
+            }
+
+        .materials-table .material-card-view-btn {
+            flex: 1 1 auto;
+        }
+}

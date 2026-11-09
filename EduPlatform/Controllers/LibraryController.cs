@@ -179,9 +179,23 @@ namespace EduPlatform.Controllers
                     Year = b.PublishedYear,
                     ViewUrl = b.ViewUrl ?? "",
                     DownloadUrl = b.DownloadUrl ?? "",
-                    StatusLabel = StatusLabel(b.Status)
+                    StatusLabel = StatusLabel(b.Status),
+                    IsArchived = b.Status == "Archived"
                 })
                 .ToList();
+
+            // Դասագրքեր և մեթոդական ուղեցույցներ՝ սկզբում գործողները, ապա արխիվացվածները, ներսում՝ ըստ դասարանի
+            if (route is "Textbooks" or "MethodologicalGuidelines")
+            {
+                static int FirstGrade(MaterialCardViewModel m)
+                    => m.Grades.Count > 0 && int.TryParse(m.Grades[0], out var g) ? g : int.MaxValue;
+
+                cards = cards
+                    .OrderBy(m => m.IsArchived ? 1 : 0)
+                    .ThenBy(FirstGrade)
+                    .ThenBy(m => m.Title)
+                    .ToList();
+            }
 
             // Կարգավիճակի ֆիլտրը՝ միայն դասագրքերի և մեթոդական ուղեցույցների համար
             var filterKeys = route switch

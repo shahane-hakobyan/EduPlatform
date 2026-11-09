@@ -22,5 +22,8 @@
 
         /// <summary>Կարգավիճակի անունը ընթացիկ լեզվով («Գործող» / «Արխիվացված»)՝ ֆիլտրի համար, դատարկ է մնացած դեպքերում</summary>
         public string StatusLabel { get; set; } = "";
+
+        /// <summary>Արխիվացված նյութ՝ ցուցադրվում է փոքր պատկերակով</summary>
+        public bool IsArchived { get; set; }
     }
 }
