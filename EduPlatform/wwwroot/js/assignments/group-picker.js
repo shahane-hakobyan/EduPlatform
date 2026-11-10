@@ -55,23 +55,56 @@ window.EduGroupPicker = (function () {
         cards.forEach(function (card) {
             // խմբի վերնագրի սեղմում՝ ընտրել բոլորին / հանել բոլորին
             const selectBtn = card.querySelector('[data-group-select]');
+
             if (selectBtn) {
-                selectBtn.addEventListener('click', function () {
+                selectBtn.addEventListener('click', function (e) {
+
+                    e.stopPropagation();
+
                     const list = members(card);
-                    if (!list.length) return;
-                    const allChecked = list.every(function (m) { return m.checked; });
-                    list.forEach(function (m) {
-                        const real = getBox(m.value);
-                        if (real) real.checked = !allChecked;
+
+                    if (!list.length) {
+                        return;
+                    }
+
+                    const boxes = list
+                        .map(function (m) {
+                            return getBox(m.value);
+                        })
+                        .filter(Boolean);
+
+                    const allChecked = boxes.every(function (b) {
+                        return b.checked;
                     });
+
+                    list.forEach(function (m) {
+
+                        const real = getBox(m.value);
+
+                        if (real) {
+                            real.checked = !allChecked;
+                        }
+
+                        m.checked = !allChecked;
+                    });
+
+                    refresh();
                     onChange();
                 });
             }
 
             // սլաք՝ բացել / փակել անդամների ցանկը
-            const toggleBtn = card.querySelector('[data-group-toggle]');
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', function () { card.classList.toggle('open'); });
+            const head = card.querySelector('.ca-group-head');
+
+            if (head) {
+                head.addEventListener('click', function (e) {
+
+                    if (e.target.closest('[data-group-select]')) {
+                        return;
+                    }
+
+                    card.classList.toggle('open');
+                });
             }
 
             // առանձին անդամի ընտրություն

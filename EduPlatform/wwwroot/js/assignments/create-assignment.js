@@ -237,12 +237,25 @@
         cb.addEventListener('change', refreshCounts);
     });
 
-    document.querySelectorAll('.ca-select-all-btn').forEach(function (btn) {
+    document.querySelectorAll('.ca-class-group .ca-select-all-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
+
             const group = btn.closest('.ca-class-group');
+
+            if (!group) {
+                return;
+            }
+
             const boxes = group.querySelectorAll('[data-pupil-checkbox]');
-            const allChecked = Array.from(boxes).every(function (b) { return b.checked; });
-            boxes.forEach(function (b) { b.checked = !allChecked; });
+
+            const allChecked = Array.from(boxes).every(function (b) {
+                return b.checked;
+            });
+
+            boxes.forEach(function (b) {
+                b.checked = !allChecked;
+            });
+
             refreshCounts();
         });
     });
@@ -373,6 +386,17 @@
             click('[data-single-select] button[data-value="' + d.gradingType + '"]');
         }
     })();
+
+    // --- Task text: looks like a one-line input, grows with the text ---
+    const taskText = document.getElementById('caTaskText');
+    if (taskText) {
+        const grow = function () {
+            taskText.style.height = 'auto';
+            taskText.style.height = Math.min(taskText.scrollHeight + 2, 200) + 'px';
+        };
+        taskText.addEventListener('input', grow);
+        grow();
+    }
 
     refreshCounts();
 });

@@ -10,6 +10,7 @@
         "Send" => Localizer["SendAssignmentTitle"].Value,
         _ => Localizer["CreateAssignment"].Value
     };
+    ViewData["HeaderTitle"] = Localizer["Assignments"].Value;   // title in the top app header
     var pageSubtitle = Model.Mode switch
     {
         "Edit" => Localizer["EditAssignmentSubtitle"].Value,
@@ -18,7 +19,7 @@
     };
 }
 
-<form id="createAssignmentForm" method="post" action="@Model.SubmitUrl" enctype="multipart/form-data" class="create-assignment-page" data-mode="@Model.Mode">
+<form id="createAssignmentForm" method="post" action="@Model.SubmitUrl" enctype="multipart/form-data" class="create-assignment-page ca-redesign" data-mode="@Model.Mode">
     @if (Model.Prefill?.SourceTemplateId != null)
     {
         <input type="hidden" name="SourceTemplateId" value="@Model.Prefill.SourceTemplateId" />
@@ -26,15 +27,15 @@
     @if (Model.Prefill != null)
     {
         <script type="application/json" id="caPrefill">
-                    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new
-                            {
-                                        subjectIds = Model.Prefill.SubjectIds,
-                                        gradeLevels = Model.Prefill.GradeLevels,
-                                        types = Model.Prefill.Types,
-                                        gradingType = Model.Prefill.GradingType
+                        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new
+                                {
+                                                subjectIds = Model.Prefill.SubjectIds,
+                                                gradeLevels = Model.Prefill.GradeLevels,
+                                                types = Model.Prefill.Types,
+                                                gradingType = Model.Prefill.GradingType
             }))</script>
         }
-        <div class="ca-topbar d-flex align-items-center gap-3 mb-3">
+        <div class="ca-topbar">
             <a href="@Model.CancelUrl" class="ca-back-btn d-flex align-items-center justify-content-center">
                 <i class="bi bi-arrow-left"></i>
             </a>
@@ -50,252 +51,254 @@
             }
         </div>
 
-        @if (!string.IsNullOrEmpty(Model.Error))
-        {
-            <div class="ca-error">@Model.Error</div>
-        }
-        <div class="ca-error" id="caClientError" style="display:none"
-             data-default-msg="@Localizer["AssignmentFormIncomplete"]"
-             data-date-msg="@Localizer["DeadlineInvalid"]">
-            @Localizer["AssignmentFormIncomplete"]
-        </div>
+        <div class="ca-container">
 
-        <div class="ca-section-card">
-            <div class="ca-section-head">
-                <span class="ca-section-num">1</span>
-                <h2 class="ca-section-title">@Localizer["AssignmentDetailsSection"]</h2>
+            @if (!string.IsNullOrEmpty(Model.Error))
+            {
+                <div class="ca-error">@Model.Error</div>
+            }
+            <div class="ca-error" id="caClientError" style="display:none"
+                 data-default-msg="@Localizer["AssignmentFormIncomplete"]"
+                 data-date-msg="@Localizer["DeadlineInvalid"]">
+                @Localizer["AssignmentFormIncomplete"]
             </div>
-            <div class="ca-section-body">
 
-                <div class="ca-field">
-                    <label class="ca-label">@Localizer["AssignmentNameLabel"] <span class="ca-required">*</span></label>
-                    <input type="text" name="Title" class="ca-input" placeholder="@Localizer["AssignmentNamePlaceholder"]" value="@Model.Prefill?.Title" required />
-                </div>
-
-                <div class="ca-field">
-                    <label class="ca-label">@Localizer["DescriptionLabel"]</label>
-                    <textarea name="Description" class="ca-textarea" rows="3" placeholder="@Localizer["DescriptionPlaceholder"]">@Model.Prefill?.Description</textarea>
-                </div>
-
-                <div class="ca-field">
-                    <label class="ca-label">@Localizer["Subject"] <span class="ca-required">*</span></label>
-                    <div class="ca-chip-input" data-chip-input data-field-name="SubjectIds">
-                        <div class="ca-chip-list"></div>
-                        <input type="text" class="ca-chip-search" placeholder="@Localizer["SubjectSearchPlaceholder"]" />
-                        <i class="bi bi-chevron-down ca-chip-caret"></i>
-                        <div class="ca-chip-dropdown">
-                            @foreach (var s in Model.Subjects)
-                            {
-                                <div class="ca-chip-option" data-value="@s.Id" data-label="@s.Label">@s.Label</div>
-                            }
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ca-field">
-                    <label class="ca-label">@Localizer["Grade"] <span class="ca-required">*</span></label>
-                    <div class="ca-chip-input" data-chip-input data-field-name="GradeLevels">
-                        <div class="ca-chip-list"></div>
-                        <input type="text" class="ca-chip-search" placeholder="@Localizer["GradeSearchPlaceholder"]" />
-                        <i class="bi bi-chevron-down ca-chip-caret"></i>
-                        <div class="ca-chip-dropdown">
-                            @foreach (var g in Model.GradeLevels)
-                            {
-                                <div class="ca-chip-option" data-value="@g.Id" data-label="@g.Label">@g.Label</div>
-                            }
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ca-field">
-                    <label class="ca-label">@Localizer["AssignmentTypeSectionLabel"] <span class="ca-required">*</span></label>
-                    <p class="ca-hint">@Localizer["AssignmentTypeHint"]</p>
-                    <div class="ca-pill-row" data-multi-select data-field-name="Types">
-                        @foreach (var t in Model.AssignmentTypes)
-                        {
-                            <button type="button" class="ca-pill-btn" data-value="@t.Id">@t.Label</button>
-                        }
-                    </div>
-                    <div id="caOtherTypeWrap" class="mt-2" style="display:none">
-                        <input type="text" name="OtherTypeText" class="ca-input" maxlength="500" placeholder="@Localizer["OtherTypePlaceholder"]" value="@Model.Prefill?.OtherTypeText" />
-                    </div>
-                </div>
-
-                <div class="ca-field">
-                    <label class="ca-label">@Localizer["GradingTypeSectionLabel"] <span class="ca-required">*</span></label>
-                    <div class="ca-radio-row" data-single-select data-field-name="GradingType">
-                        @foreach (var g in Model.GradingTypes)
-                        {
-                            <button type="button" class="ca-radio-btn" data-value="@g.Id">
-                                <span class="ca-radio-dot"></span> @g.Label
-                            </button>
-                        }
-                    </div>
-                </div>
-
-                @if (!isEdit)
-                {
-                    <div class="ca-field-row">
-                        <div class="ca-field">
-                            <label class="ca-label">@Localizer["AssignmentStartLabel"] <span class="ca-required">*</span></label>
-                            <input type="datetime-local" name="StartDate" class="ca-input" value="@Model.Prefill?.StartDate" required />
-                        </div>
-                        <div class="ca-field">
-                            <label class="ca-label">@Localizer["AssignmentDueLabel"] <span class="ca-required">*</span></label>
-                            <input type="datetime-local" name="DueDate" class="ca-input" value="@Model.Prefill?.DueDate" required />
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-
-        <!-- Section 2 -->
-        <div class="ca-section-card">
-            <div class="ca-section-head">
-                <span class="ca-section-num">2</span>
-                <h2 class="ca-section-title">@Localizer["SubmissionFormatSection"]</h2>
-            </div>
-            <div class="ca-section-body">
-                <label class="ca-label">@Localizer["SubmissionFormatSection"] <span class="ca-required">*</span></label>
-                <p class="ca-hint">@Localizer["SubmissionFormatHint"]</p>
-
-                <label class="ca-check-card">
-                    <input type="checkbox" name="AllowTextAnswer" value="true" @(Model.Prefill?.AllowTextAnswer == true ? "checked" : "") />
-                    <span class="ca-check-box"></span>
-                    <span>
-                        <span class="ca-check-title">@Localizer["TextAnswerOption"]</span>
-                        <span class="ca-check-desc">@Localizer["TextAnswerOptionDesc"]</span>
-                    </span>
-                </label>
-
-                <label class="ca-check-card">
-                    <input type="checkbox" name="AllowFileAnswer" value="true" @(Model.Prefill?.AllowFileAnswer == true ? "checked" : "") />
-                    <span class="ca-check-box"></span>
-                    <span>
-                        <span class="ca-check-title">@Localizer["FileAnswerOption"]</span>
-                        <span class="ca-check-desc">@Localizer["FileAnswerOptionDesc"]</span>
-                    </span>
-                </label>
-            </div>
-        </div>
-
-        <!-- Առաջադրանքի տեքստը՝ առանձին բլոկ «Վերբեռնել ֆայլ»-ից վերև։ Պարտադիր չէ (կարելի է ուղարկել միայն կցված ֆայլով) -->
-        <div class="ca-section-card">
-            <div class="ca-section-body">
-                <textarea name="TaskText" class="ca-textarea" rows="4" maxlength="4000"
-                          placeholder="@Localizer["EnterAssignmentText"]">@Model.Prefill?.TaskText</textarea>
-            </div>
-        </div>
-
-        <!-- Section 3 -->
-        <div class="ca-section-card">
-            <div class="ca-section-head">
-                <span class="ca-section-num">3</span>
-                <h2 class="ca-section-title">@Localizer["UploadFileSection"]</h2>
-            </div>
-            <div class="ca-section-body">
-                @if (Model.Prefill != null && Model.Prefill.ExistingFiles.Any())
-                {
-                    <div class="ca-label">@Localizer["AttachedFilesLabel"]</div>
-                    @foreach (var f in Model.Prefill.ExistingFiles)
-                    {
-                        <label class="ca-existing-file">
-                            <input type="checkbox" name="KeepFileIds" value="@f.Id" @(f.Keep ? "checked" : "") />
-                            <i class="bi bi-paperclip"></i>
-                            <span>@f.Name</span>
-                        </label>
-                    }
-                }
-                <label class="ca-dropzone" for="caFileInput">
-                    <input type="file" id="caFileInput" name="Attachments" multiple hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.png,.jpg,.jpeg,.zip" />
-                    <div class="ca-dropzone-icon"><i class="bi bi-cloud-arrow-up"></i></div>
-                    <div class="ca-dropzone-cta">@Localizer["DropzoneCta"]</div>
-                    <div class="ca-dropzone-hint">@Localizer["DropzoneHint"]</div>
-                    <div class="ca-dropzone-filename" id="caFileName"></div>
-                </label>
-            </div>
-        </div>
-
-        @if (!isEdit)
-        {
-            <!-- Section 4 -->
             <div class="ca-section-card">
                 <div class="ca-section-head">
-                    <span class="ca-section-num">4</span>
-                    <h2 class="ca-section-title">@Localizer["SendToStudentsSection"]</h2>
+                    <span class="ca-section-num">1</span>
+                    <h2 class="ca-section-title">@Localizer["AssignmentDetailsSection"]</h2>
                 </div>
                 <div class="ca-section-body">
-                    <div class="ca-group-tabs">
-                        <button type="button" class="ca-group-tab active" data-group-tab="classes">@Localizer["MyClassesTab"]</button>
-                        <button type="button" class="ca-group-tab" data-group-tab="groups">@Localizer["MyGroupsTab"]</button>
+
+                    <div class="ca-field">
+                        <label class="ca-label">@Localizer["AssignmentNameLabel"] <span class="ca-required">*</span></label>
+                        <input type="text" name="Title" class="ca-input" placeholder="@Localizer["AssignmentNamePlaceholder"]" value="@Model.Prefill?.Title" required />
                     </div>
 
-                    <div class="ca-selected-summary d-flex align-items-center justify-content-between mt-3">
-                        <span class="d-flex align-items-center gap-2">
-                            <i class="bi bi-check-circle"></i>
-                            <span id="caSelectedCount">0</span> @Localizer["SelectedPupilsSuffix"]
-                        </span>
-                        <button type="button" class="ca-clear-btn" id="caClearAllBtn">@Localizer["ClearAllLabel"]</button>
+                    <div class="ca-field">
+                        <label class="ca-label">@Localizer["DescriptionLabel"]</label>
+                        <textarea name="Description" class="ca-textarea" rows="3" placeholder="@Localizer["DescriptionPlaceholder"]">@Model.Prefill?.Description</textarea>
                     </div>
 
-                    <div class="ca-pupil-search position-relative mt-2">
-                        <i class="bi bi-search"></i>
-                        <input type="text" id="caPupilSearch" placeholder="@Localizer["SearchPupilPlaceholder"]" />
-                    </div>
-
-                    <!-- «Իմ խմբերը»՝ սեղմելով ընտրվում են խմբի բոլոր սովորողները -->
-                    <div class="ca-groups-pane mt-2" id="caGroupsPane" style="display:none">
-                        <partial name="Form/_GroupPicker" model="Model.Groups" />
-                    </div>
-
-                    <div class="ca-class-groups mt-2" id="caClassGroupsPane">
-                        @foreach (var group in Model.ClassGroups)
-                        {
-                            <div class="ca-class-group" data-grade-id="@group.GradeId">
-                                <button type="button" class="ca-class-group-head">
-                                    <span class="d-flex align-items-center gap-2">
-                                        <span class="ca-class-icon"><i class="bi bi-people"></i></span>
-                                        <span class="ca-class-name">@group.GradeName</span>
-                                        <span class="ca-class-selected-badge" data-selected-badge>0</span>
-                                    </span>
-                                    <span class="d-flex align-items-center gap-2">
-                                        <span class="ca-class-count">@group.Pupils.Count @Localizer["PupilsCountSuffix"]</span>
-                                        <i class="bi bi-chevron-down ca-class-caret"></i>
-                                    </span>
-                                </button>
-                                <div class="ca-class-group-body">
-                                    <div class="ca-class-group-toolbar">
-                                        <button type="button" class="ca-select-all-btn"><i class="bi bi-check2-all"></i> @Localizer["SelectAllLabel"]</button>
-                                        <span class="ca-class-progress" data-progress-label>0 / @group.Pupils.Count</span>
-                                    </div>
-                                    <div class="ca-pupil-grid">
-                                        @foreach (var pupil in group.Pupils)
-                                        {
-                                            <label class="ca-pupil-item">
-                                                <input type="checkbox" name="PupilIds" value="@pupil.UserId" data-pupil-checkbox @(Model.Prefill?.PupilIds.Contains(pupil.UserId) == true ? "checked" : "") />
-                                                <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
-                                                <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
-                                                <span class="ca-pupil-name">
-                                                    @if (!string.IsNullOrEmpty(pupil.ProfileUrl))
-                                                    {
-                                                        <a href="@pupil.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@pupil.Name</a>
-                                                    }
-                                                    else
-                                                    {
-                                                        @pupil.Name
-                                                    }
-                                                </span>
-                                            </label>
-                                        }
-                                    </div>
-                                </div>
+                    <div class="ca-field">
+                        <label class="ca-label">@Localizer["Subject"] <span class="ca-required">*</span></label>
+                        <div class="ca-chip-input" data-chip-input data-field-name="SubjectIds">
+                            <div class="ca-chip-list"></div>
+                            <input type="text" class="ca-chip-search" placeholder="@Localizer["SubjectSearchPlaceholder"]" />
+                            <i class="bi bi-chevron-down ca-chip-caret"></i>
+                            <div class="ca-chip-dropdown">
+                                @foreach (var s in Model.Subjects)
+                                {
+                                    <div class="ca-chip-option" data-value="@s.Id" data-label="@s.Label">@s.Label</div>
+                                }
                             </div>
-                        }
+                        </div>
                     </div>
+
+                    <div class="ca-field">
+                        <label class="ca-label">@Localizer["Grade"] <span class="ca-required">*</span></label>
+                        <div class="ca-chip-input" data-chip-input data-field-name="GradeLevels">
+                            <div class="ca-chip-list"></div>
+                            <input type="text" class="ca-chip-search" placeholder="@Localizer["GradeSearchPlaceholder"]" />
+                            <i class="bi bi-chevron-down ca-chip-caret"></i>
+                            <div class="ca-chip-dropdown">
+                                @foreach (var g in Model.GradeLevels)
+                                {
+                                    <div class="ca-chip-option" data-value="@g.Id" data-label="@g.Label">@g.Label</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ca-field">
+                        <label class="ca-label">@Localizer["AssignmentTypeSectionLabel"] <span class="ca-required">*</span></label>
+                        <p class="ca-hint">@Localizer["AssignmentTypeHint"]</p>
+                        <div class="ca-pill-row" data-multi-select data-field-name="Types">
+                            @foreach (var t in Model.AssignmentTypes)
+                            {
+                                <button type="button" class="ca-pill-btn" data-value="@t.Id">@t.Label</button>
+                            }
+                        </div>
+                        <div id="caOtherTypeWrap" class="mt-2" style="display:none">
+                            <input type="text" name="OtherTypeText" class="ca-input" maxlength="500" placeholder="@Localizer["OtherTypePlaceholder"]" value="@Model.Prefill?.OtherTypeText" />
+                        </div>
+                    </div>
+
+                    <div class="ca-field">
+                        <label class="ca-label">@Localizer["GradingTypeSectionLabel"] <span class="ca-required">*</span></label>
+                        <div class="ca-radio-row" data-single-select data-field-name="GradingType">
+                            @foreach (var g in Model.GradingTypes)
+                            {
+                                <button type="button" class="ca-radio-btn" data-value="@g.Id">
+                                    <span class="ca-radio-dot"></span> @g.Label
+                                </button>
+                            }
+                        </div>
+                    </div>
+
+                    @if (!isEdit)
+                    {
+                        <div class="ca-field-row">
+                            <div class="ca-field">
+                                <label class="ca-label">@Localizer["AssignmentStartLabel"] <span class="ca-required">*</span></label>
+                                <input type="datetime-local" name="StartDate" class="ca-input" value="@Model.Prefill?.StartDate" required />
+                            </div>
+                            <div class="ca-field">
+                                <label class="ca-label">@Localizer["AssignmentDueLabel"] <span class="ca-required">*</span></label>
+                                <input type="datetime-local" name="DueDate" class="ca-input" value="@Model.Prefill?.DueDate" required />
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
 
-        }
+            <!-- Section 2 -->
+            <div class="ca-section-card">
+                <div class="ca-section-head">
+                    <span class="ca-section-num">2</span>
+                    <h2 class="ca-section-title">@Localizer["SubmissionFormatSection"]</h2>
+                </div>
+                <div class="ca-section-body">
+                    <label class="ca-label">@Localizer["SubmissionFormatSection"] <span class="ca-required">*</span></label>
+                    <p class="ca-hint">@Localizer["SubmissionFormatHint"]</p>
+
+                    <label class="ca-check-card">
+                        <input type="checkbox" name="AllowTextAnswer" value="true" @(Model.Prefill?.AllowTextAnswer == true ? "checked" : "") />
+                        <span class="ca-check-box"></span>
+                        <span>
+                            <span class="ca-check-title">@Localizer["TextAnswerOption"]</span>
+                            <span class="ca-check-desc">@Localizer["TextAnswerOptionDesc"]</span>
+                        </span>
+                    </label>
+
+                    <label class="ca-check-card">
+                        <input type="checkbox" name="AllowFileAnswer" value="true" @(Model.Prefill?.AllowFileAnswer == true ? "checked" : "") />
+                        <span class="ca-check-box"></span>
+                        <span>
+                            <span class="ca-check-title">@Localizer["FileAnswerOption"]</span>
+                            <span class="ca-check-desc">@Localizer["FileAnswerOptionDesc"]</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="ca-section-card">
+                <div class="ca-section-head">
+                    <span class="ca-section-num">3</span>
+                    <h2 class="ca-section-title">@Localizer["UploadFileSection"]</h2>
+                </div>
+                <div class="ca-section-body">
+                    <div class="ca-field">
+                        <label class="ca-label" for="caTaskText">@Localizer["AssignmentTaskLabel"]</label>
+                        <textarea id="caTaskText" name="TaskText" class="ca-textarea ca-task-text" rows="1" maxlength="4000"
+                                  placeholder="@Localizer["EnterAssignmentText"]">@Model.Prefill?.TaskText</textarea>
+                    </div>
+
+                    @if (Model.Prefill != null && Model.Prefill.ExistingFiles.Any())
+                    {
+                        <div class="ca-label">@Localizer["AttachedFilesLabel"]</div>
+                        @foreach (var f in Model.Prefill.ExistingFiles)
+                        {
+                            <label class="ca-existing-file">
+                                <input type="checkbox" name="KeepFileIds" value="@f.Id" @(f.Keep ? "checked" : "") />
+                                <i class="bi bi-paperclip"></i>
+                                <span>@f.Name</span>
+                            </label>
+                        }
+                    }
+                    <label class="ca-dropzone" for="caFileInput">
+                        <input type="file" id="caFileInput" name="Attachments" multiple hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.png,.jpg,.jpeg,.zip" />
+                        <div class="ca-dropzone-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+                        <div class="ca-dropzone-cta">@Localizer["DropzoneCta"]</div>
+                        <div class="ca-dropzone-hint">@Localizer["DropzoneHint"]</div>
+                        <div class="ca-dropzone-filename" id="caFileName"></div>
+                    </label>
+                </div>
+            </div>
+
+            @if (!isEdit)
+            {
+                <!-- Section 4 -->
+                <div class="ca-section-card">
+                    <div class="ca-section-head">
+                        <span class="ca-section-num">4</span>
+                        <h2 class="ca-section-title">@Localizer["SendToStudentsSection"]</h2>
+                    </div>
+                    <div class="ca-section-body">
+                        <div class="ca-group-tabs">
+                            <button type="button" class="ca-group-tab active" data-group-tab="classes">@Localizer["MyClassesTab"]</button>
+                            <button type="button" class="ca-group-tab" data-group-tab="groups">@Localizer["MyGroupsTab"]</button>
+                        </div>
+
+                        <div class="ca-selected-summary d-flex align-items-center justify-content-between mt-3">
+                            <span class="d-flex align-items-center gap-2">
+                                <i class="bi bi-check-lg"></i>
+                                <span id="caSelectedCount">0</span> @Localizer["SelectedPupilsSuffix"]
+                            </span>
+                            <button type="button" class="ca-clear-btn" id="caClearAllBtn">@Localizer["ClearAllLabel"]</button>
+                        </div>
+
+                        <div class="ca-pupil-search position-relative mt-2">
+                            <i class="bi bi-search"></i>
+                            <input type="text" id="caPupilSearch" placeholder="@Localizer["SearchPupilPlaceholder"]" />
+                        </div>
+
+                        <!-- «Իմ խմբերը»՝ սեղմելով ընտրվում են խմբի բոլոր սովորողները -->
+                        <div class="ca-groups-pane mt-2" id="caGroupsPane" style="display:none">
+                            <partial name="Form/_GroupPicker" model="Model.Groups" />
+                        </div>
+
+                        <div class="ca-class-groups mt-2" id="caClassGroupsPane">
+                            @foreach (var group in Model.ClassGroups)
+                            {
+                                <div class="ca-class-group" data-grade-id="@group.GradeId">
+                                    <button type="button" class="ca-class-group-head">
+                                        <span class="d-flex align-items-center gap-2">
+                                            <span class="ca-class-icon"><i class="bi bi-people"></i></span>
+                                            <span class="ca-class-name">@group.GradeName</span>
+                                            <span class="ca-class-selected-badge" data-selected-badge>0</span>
+                                        </span>
+                                        <span class="d-flex align-items-center gap-2">
+                                            <span class="ca-class-count">@group.Pupils.Count @Localizer["PupilsCountSuffix"]</span>
+                                            <i class="bi bi-chevron-right ca-class-caret"></i>
+                                        </span>
+                                    </button>
+                                    <div class="ca-class-group-body">
+                                        <div class="ca-class-group-toolbar">
+                                            <button type="button" class="ca-select-all-btn"><i class="bi bi-square"></i> @Localizer["SelectAllLabel"]</button>
+                                            <span class="ca-class-progress" data-progress-label>0 / @group.Pupils.Count</span>
+                                        </div>
+                                        <div class="ca-pupil-grid">
+                                            @foreach (var pupil in group.Pupils)
+                                            {
+                                                <label class="ca-pupil-item">
+                                                    <input type="checkbox" name="PupilIds" value="@pupil.UserId" data-pupil-checkbox @(Model.Prefill?.PupilIds.Contains(pupil.UserId) == true ? "checked" : "") />
+                                                    <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
+                                                    <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
+                                                    <span class="ca-pupil-name">
+                                                        @if (!string.IsNullOrEmpty(pupil.ProfileUrl))
+                                                        {
+                                                            <a href="@pupil.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@pupil.Name</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            @pupil.Name
+                                                        }
+                                                    </span>
+                                                </label>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+        </div>@* /ca-container *@
 
         <div class="ca-footer">
             <a href="@Model.CancelUrl" class="ca-cancel-btn">@Localizer["CancelBtn"]</a>
@@ -308,7 +311,7 @@
             else
             {
                 <button type="submit" class="ca-submit-btn" id="caSubmitBtn" disabled>
-                    <i class="bi bi-send"></i> @Localizer["SendAssignmentBtn"]
+                    <i class="bi bi-plus-lg"></i> @Localizer["SendAssignmentBtn"]
                 </button>
             }
         </div>
@@ -330,9 +333,9 @@
     }
 
     @section Styles {
-        <link rel="stylesheet" href="~/css/assignments/create-assignment.css" />
+        <link rel="stylesheet" href="~/css/assignments/create-assignment.css" asp-append-version="true" />
     }
     @section Scripts {
-        <script src="~/js/assignments/group-picker.js"></script>
-        <script src="~/js/assignments/create-assignment.js"></script>
+        <script src="~/js/assignments/group-picker.js" asp-append-version="true"></script>
+        <script src="~/js/assignments/create-assignment.js" asp-append-version="true"></script>
     }

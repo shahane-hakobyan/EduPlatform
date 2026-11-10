@@ -41,7 +41,10 @@ namespace EduPlatform.ViewModels
         public string PupilName { get; set; } = "";
         public string PhotoUrl { get; set; } = "";
         public string GradeName { get; set; } = "";
+        /// <summary>Խմբերի անունները՝ ստորակետով (ցուցադրման համար)</summary>
         public string GroupName { get; set; } = "";
+        /// <summary>Ուսուցչի այն խմբերը, որոնց անդամ է սովորողը (ֆիլտրի համար)</summary>
+        public List<string> GroupNames { get; set; } = new();
         public DateTime? SubmittedDate { get; set; }
         public string Status { get; set; } = "Pending"; // Pending | Submitted | Graded
         public decimal? Score { get; set; }

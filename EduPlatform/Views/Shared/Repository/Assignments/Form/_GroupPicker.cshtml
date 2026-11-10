@@ -5,12 +5,16 @@
 {
     <div class="ca-groups-empty">@Localizer["NoGroups"]</div>
 }
+
 @foreach (var g in Model)
 {
-    <div class="ca-group-card" data-group-card
+    <div class="ca-group-card"
+         data-group-card
          data-group-name="@g.Name.ToLowerInvariant()">
+
         <div class="ca-group-head">
-            <button type="button" class="ca-group-select" data-group-select title="@Localizer["SelectAllLabel"]">
+
+            <div class="ca-group-select">
                 <span class="ca-group-avatar">
                     @if (!string.IsNullOrEmpty(g.ImageUrl))
                     {
@@ -21,39 +25,85 @@
                         <i class="bi bi-people"></i>
                     }
                 </span>
+
                 <span class="ca-group-main">
                     <span class="ca-group-name">@g.Name</span>
-                    <span class="ca-group-sub"><span data-group-progress>0 / @(g.Pupils.Count - g.DisabledPupilIds.Count)</span> @Localizer["PupilsCountSuffix"]</span>
                 </span>
-                <i class="bi bi-check-lg ca-group-check"></i>
-            </button>
-            <button type="button" class="ca-group-toggle" data-group-toggle>
+            </div>
+
+            <button type="button"
+                    class="ca-group-toggle"
+                    data-group-toggle>
                 <i class="bi bi-chevron-down"></i>
             </button>
+
         </div>
-        <div class="ca-group-members">
-            @foreach (var p in g.Pupils)
-            {
-                var alreadyAdded = g.DisabledPupilIds.Contains(p.UserId);
-                <label class="ca-group-member @(alreadyAdded ? "is-disabled" : "")" data-member-name="@p.Name.ToLowerInvariant()">
-                    <input type="checkbox" data-group-member value="@p.UserId" @(alreadyAdded ? "checked disabled" : "") />
-                    <img src="@p.PhotoUrl" alt="" class="ca-pupil-avatar" />
-                    <span class="ca-group-member-name">
-                        @if (!string.IsNullOrEmpty(p.ProfileUrl))
+
+        <div class="ca-group-body">
+
+            <div class="ca-class-group-toolbar">
+
+                <button type="button"
+                        class="ca-select-all-btn"
+                        data-group-select>
+                    <i class="bi bi-square"></i>
+                    @Localizer["SelectAllLabel"]
+                </button>
+
+                <span class="ca-class-progress"
+                      data-group-progress>
+                    0 / @(g.Pupils.Count - g.DisabledPupilIds.Count)
+                </span>
+
+            </div>
+
+            <div class="ca-group-members">
+
+                @foreach (var p in g.Pupils)
+                {
+                    var alreadyAdded = g.DisabledPupilIds.Contains(p.UserId);
+
+                    <label class="ca-group-member @(alreadyAdded ? "is-disabled" : "")"
+                           data-member-name="@p.Name.ToLowerInvariant()">
+
+                        <input type="checkbox"
+                               data-group-member
+                               value="@p.UserId"
+                        @(alreadyAdded ? "checked disabled" : "") />
+
+                        <img src="@p.PhotoUrl"
+                             alt=""
+                             class="ca-pupil-avatar" />
+
+                        <span class="ca-group-member-name">
+                            @if (!string.IsNullOrEmpty(p.ProfileUrl))
+                            {
+                                <a href="@p.ProfileUrl"
+                                   target="_blank"
+                                   rel="noopener"
+                                   onclick="event.stopPropagation()">
+                                    @p.Name
+                                </a>
+                            }
+                            else
+                            {
+                                @p.Name
+                            }
+                        </span>
+
+                        @if (alreadyAdded)
                         {
-                            <a href="@p.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@p.Name</a>
+                            <span class="ca-pupil-already-badge">
+                                @Localizer["AlreadyAddedLabel"]
+                            </span>
                         }
-                        else
-                        {
-                            @p.Name
-                        }
-                    </span>
-                    @if (alreadyAdded)
-                    {
-                        <span class="ca-pupil-already-badge">@Localizer["AlreadyAddedLabel"]</span>
-                    }
-                </label>
-            }
+
+                    </label>
+                }
+
+            </div>
+
         </div>
+
     </div>
 }

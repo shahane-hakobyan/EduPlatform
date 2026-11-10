@@ -119,11 +119,11 @@
                 <option value="@g">@g</option>
             }
         </select>
-        @if (Model.Submissions.Any(x => !string.IsNullOrEmpty(x.GroupName)))
+        @if (Model.Submissions.Any(x => x.GroupNames.Count > 0))
         {
             <select class="ad-filter-select" id="adGroupFilter">
                 <option value="">@Localizer["GroupLabel"]</option>
-                @foreach (var g in Model.Submissions.Select(x => x.GroupName).Where(x => !string.IsNullOrEmpty(x)).Distinct().OrderBy(x => x))
+                @foreach (var g in Model.Submissions.SelectMany(x => x.GroupNames).Distinct().OrderBy(x => x))
                 {
                     <option value="@g">@g</option>
                 }
@@ -143,7 +143,7 @@
             var badgeClass = s.Status switch { "Graded" => "ad-badge-graded", "Submitted" => "ad-badge-submitted", _ => "ad-badge-pending" };
             var badgeLabel = s.Status switch { "Graded" => Localizer["SubmissionStatusGraded"], "Submitted" => Localizer["SubmissionStatusSubmitted"], _ => Localizer["SubmissionStatusPending"] };
 
-            <div class="ad-submission-row" data-name="@s.PupilName.ToLower()" data-grade="@s.GradeName" data-group="@s.GroupName" data-status="@s.Status">
+            <div class="ad-submission-row" data-name="@s.PupilName.ToLower()" data-grade="@s.GradeName" data-group="@string.Join("|", s.GroupNames)" data-status="@s.Status">
                 <img src="@s.PhotoUrl" alt="" class="ad-submission-avatar" />
                 <div class="ad-submission-info">
                     <div class="d-flex align-items-center gap-2">

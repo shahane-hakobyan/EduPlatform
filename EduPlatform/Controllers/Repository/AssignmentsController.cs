@@ -1092,6 +1092,19 @@ namespace EduPlatform.Controllers
                 .GroupBy(p => p.UserId)
                 .ToDictionary(g => g.Key, g => g.First().Name);
 
+            // ուսուցչի խմբերը՝ «Խումբ» ֆիլտրի և «Ավելացնել սովորողներ» պատուհանի համար
+            var addedPupilIds = a.Recipients.Select(r => r.PupilUserId).ToList();
+            var groupOptions = await BuildGroupOptions(classGroups, addedPupilIds);
+
+            // սովորող → նրա խմբերի անունները (սովորողը կարող է լինել մի քանի խմբում)
+            var groupNamesByPupil = groupOptions
+                .SelectMany(g => g.Pupils.Select(p => new { p.UserId, GroupName = g.Name }))
+                .GroupBy(x => x.UserId)
+                .ToDictionary(x => x.Key, x => x.Select(y => y.GroupName).Distinct().OrderBy(n => n).ToList());
+
+            List<string> GroupsOf(string pupilUserId) =>
+                groupNamesByPupil.TryGetValue(pupilUserId, out var names) ? names : new List<string>();
+
             var vm = new AssignmentDetailViewModel
             {
                 Id = a.Id,
@@ -1121,7 +1134,8 @@ namespace EduPlatform.Controllers
                     PupilName = nameByUser.TryGetValue(r.PupilUserId, out var pupilName) ? pupilName : $"{_l["Pupil"]} {i + 1}",
                     PhotoUrl = "/images/avatar-placeholder.jpg",
                     GradeName = r.GradeName,
-                    GroupName = "",
+                    GroupName = string.Join(", ", GroupsOf(r.PupilUserId)),
+                    GroupNames = GroupsOf(r.PupilUserId),
                     SubmittedDate = r.SubmittedAt,
                     Status = r.Status switch
                     {
@@ -1144,8 +1158,8 @@ namespace EduPlatform.Controllers
             };
 
             vm.AvailableGrades = classGroups;
-            vm.AlreadyAddedPupilUserIds = a.Recipients.Select(r => r.PupilUserId).ToList();
-            vm.Groups = await BuildGroupOptions(classGroups, vm.AlreadyAddedPupilUserIds);
+            vm.AlreadyAddedPupilUserIds = addedPupilIds;
+            vm.Groups = groupOptions;
 
             return View("Given/Detail", vm);
         }

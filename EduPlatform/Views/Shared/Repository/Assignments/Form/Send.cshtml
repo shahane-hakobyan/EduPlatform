@@ -3,10 +3,11 @@
 @{
     var a = Model.Assignment;
     ViewData["Title"] = Localizer["SendAssignmentTitle"].Value;
+    ViewData["HeaderTitle"] = Localizer["AssignmentBank"].Value;   // title in the top app header
 }
 
-<form id="createAssignmentForm" method="post" action="@Model.SubmitUrl" class="create-assignment-page" data-mode="SendOnly">
-    <div class="ca-topbar d-flex align-items-center gap-3 mb-3">
+<form id="createAssignmentForm" method="post" action="@Model.SubmitUrl" class="create-assignment-page ca-redesign" data-mode="SendOnly">
+    <div class="ca-topbar">
         <a href="@Model.CancelUrl" class="ca-back-btn d-flex align-items-center justify-content-center">
             <i class="bi bi-arrow-left"></i>
         </a>
@@ -19,172 +20,175 @@
         </span>
     </div>
 
-    @if (!string.IsNullOrEmpty(Model.Error))
-    {
-        <div class="ca-error">@Model.Error</div>
-    }
-    <div class="ca-error" id="caClientError" style="display:none"
-         data-default-msg="@Localizer["AssignmentFormIncomplete"]"
-         data-date-msg="@Localizer["DeadlineInvalid"]">
-        @Localizer["AssignmentFormIncomplete"]
-    </div>
+    <div class="ca-container">
 
-    <!-- Ընտրված առաջադրանքը՝ միայն դիտում -->
-    <div class="ad-card mb-3">
-        <div class="ad-card-head">
-            <i class="bi bi-file-earmark-text"></i>
-            <h2 class="ad-card-title">@a.Title</h2>
+        @if (!string.IsNullOrEmpty(Model.Error))
+        {
+            <div class="ca-error">@Model.Error</div>
+        }
+        <div class="ca-error" id="caClientError" style="display:none"
+             data-default-msg="@Localizer["AssignmentFormIncomplete"]"
+             data-date-msg="@Localizer["DeadlineInvalid"]">
+            @Localizer["AssignmentFormIncomplete"]
         </div>
-        <div class="ad-card-body">
-            <div class="ad-info-grid">
-                <div>
-                    <div class="ad-info-label">@Localizer["Subject"]</div>
-                    <div class="ad-info-value">@a.Subject</div>
-                </div>
-                <div>
-                    <div class="ad-info-label">@Localizer["Grade"]</div>
-                    <div class="ad-info-value">@a.Grade</div>
-                </div>
-                <div>
-                    <div class="ad-info-label">@Localizer["AssignmentType"]</div>
-                    <div class="ad-info-value">@a.Type</div>
-                </div>
-                <div>
-                    <div class="ad-info-label">@Localizer["Evaluation"]</div>
-                    <div class="ad-info-value">@a.GradingType</div>
-                </div>
-            </div>
-            @if (!string.IsNullOrWhiteSpace(a.Description) || !string.IsNullOrWhiteSpace(a.TaskText) || a.Files.Any())
-            {
-                <div class="ad-description-box mt-3">
-                    @if (!string.IsNullOrWhiteSpace(a.Description))
-                    {
-                        <div>@a.Description</div>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(a.TaskText))
-                    {
-                        <div class="ad-files-title">@Localizer["AssignmentTaskLabel"]</div>
-                        <div class="ad-task-text">@a.TaskText</div>
-                    }
-                    @if (a.Files.Any())
-                    {
-                        <div class="ad-files-title">@Localizer["AttachedFilesLabel"]</div>
-                        @foreach (var f in a.Files)
-                        {
-                            <div class="ad-file-row">
-                                <i class="bi bi-paperclip"></i>
-                                <span class="ad-file-name">@f.Name</span>
-                                <a href="@f.ViewUrl" target="_blank" class="ad-file-link"><i class="bi bi-eye"></i> @Localizer["View"]</a>
-                            </div>
-                        }
-                    }
-                </div>
-            }
-        </div>
-    </div>
 
-    <!-- Ժամկետներ -->
-    <div class="ca-section-card">
-        <div class="ca-section-head">
-            <span class="ca-section-num">1</span>
-            <h2 class="ca-section-title">@Localizer["AssignmentStartLabel"] / @Localizer["AssignmentDueLabel"]</h2>
-        </div>
-        <div class="ca-section-body">
-            <div class="ca-field-row">
-                <div class="ca-field">
-                    <label class="ca-label">@Localizer["AssignmentStartLabel"] <span class="ca-required">*</span></label>
-                    <input type="datetime-local" name="StartDate" class="ca-input" value="@Model.StartDate" required />
+        <!-- Ընտրված առաջադրանքը՝ միայն դիտում -->
+        <div class="ad-card mb-3">
+            <div class="ad-card-head">
+                <i class="bi bi-file-earmark-text"></i>
+                <h2 class="ad-card-title">@a.Title</h2>
+            </div>
+            <div class="ad-card-body">
+                <div class="ad-info-grid">
+                    <div>
+                        <div class="ad-info-label">@Localizer["Subject"]</div>
+                        <div class="ad-info-value">@a.Subject</div>
+                    </div>
+                    <div>
+                        <div class="ad-info-label">@Localizer["Grade"]</div>
+                        <div class="ad-info-value">@a.Grade</div>
+                    </div>
+                    <div>
+                        <div class="ad-info-label">@Localizer["AssignmentType"]</div>
+                        <div class="ad-info-value">@a.Type</div>
+                    </div>
+                    <div>
+                        <div class="ad-info-label">@Localizer["Evaluation"]</div>
+                        <div class="ad-info-value">@a.GradingType</div>
+                    </div>
                 </div>
-                <div class="ca-field">
-                    <label class="ca-label">@Localizer["AssignmentDueLabel"] <span class="ca-required">*</span></label>
-                    <input type="datetime-local" name="DueDate" class="ca-input" value="@Model.DueDate" required />
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Սովորողների ընտրություն -->
-    <div class="ca-section-card">
-        <div class="ca-section-head">
-            <span class="ca-section-num">2</span>
-            <h2 class="ca-section-title">@Localizer["SendToStudentsSection"]</h2>
-        </div>
-        <div class="ca-section-body">
-            <div class="ca-group-tabs">
-                <button type="button" class="ca-group-tab active" data-group-tab="classes">@Localizer["MyClassesTab"]</button>
-                <button type="button" class="ca-group-tab" data-group-tab="groups">@Localizer["MyGroupsTab"]</button>
-            </div>
-
-            <div class="ca-selected-summary d-flex align-items-center justify-content-between mt-3">
-                <span class="d-flex align-items-center gap-2">
-                    <i class="bi bi-check-circle"></i>
-                    <span id="caSelectedCount">0</span> @Localizer["SelectedPupilsSuffix"]
-                </span>
-                <button type="button" class="ca-clear-btn" id="caClearAllBtn">@Localizer["ClearAllLabel"]</button>
-            </div>
-
-            <div class="ca-pupil-search position-relative mt-2">
-                <i class="bi bi-search"></i>
-                <input type="text" id="caPupilSearch" placeholder="@Localizer["SearchPupilPlaceholder"]" />
-            </div>
-
-            <!-- «Իմ խմբերը»՝ սեղմելով ընտրվում են խմբի բոլոր սովորողները -->
-            <div class="ca-groups-pane mt-2" id="caGroupsPane" style="display:none">
-                <partial name="Form/_GroupPicker" model="Model.Groups" />
-            </div>
-
-            <div class="ca-class-groups mt-2" id="caClassGroupsPane">
-                @foreach (var group in Model.ClassGroups)
+                @if (!string.IsNullOrWhiteSpace(a.Description) || !string.IsNullOrWhiteSpace(a.TaskText) || a.Files.Any())
                 {
-                    <div class="ca-class-group" data-grade-id="@group.GradeId">
-                        <button type="button" class="ca-class-group-head">
-                            <span class="d-flex align-items-center gap-2">
-                                <span class="ca-class-icon"><i class="bi bi-people"></i></span>
-                                <span class="ca-class-name">@group.GradeName</span>
-                                <span class="ca-class-selected-badge" data-selected-badge>0</span>
-                            </span>
-                            <span class="d-flex align-items-center gap-2">
-                                <span class="ca-class-count">@group.Pupils.Count @Localizer["PupilsCountSuffix"]</span>
-                                <i class="bi bi-chevron-down ca-class-caret"></i>
-                            </span>
-                        </button>
-                        <div class="ca-class-group-body">
-                            <div class="ca-class-group-toolbar">
-                                <button type="button" class="ca-select-all-btn"><i class="bi bi-check2-all"></i> @Localizer["SelectAllLabel"]</button>
-                                <span class="ca-class-progress" data-progress-label>0 / @group.Pupils.Count</span>
-                            </div>
-                            <div class="ca-pupil-grid">
-                                @foreach (var pupil in group.Pupils)
-                                {
-                                    <label class="ca-pupil-item">
-                                        <input type="checkbox" name="PupilIds" value="@pupil.UserId" data-pupil-checkbox @(Model.PupilIds.Contains(pupil.UserId) ? "checked" : "") />
-                                        <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
-                                        <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
-                                        <span class="ca-pupil-name">
-                                            @if (!string.IsNullOrEmpty(pupil.ProfileUrl))
-                                            {
-                                                <a href="@pupil.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@pupil.Name</a>
-                                            }
-                                            else
-                                            {
-                                                @pupil.Name
-                                            }
-                                        </span>
-                                    </label>
-                                }
-                            </div>
-                        </div>
+                    <div class="ad-description-box mt-3">
+                        @if (!string.IsNullOrWhiteSpace(a.Description))
+                        {
+                            <div>@a.Description</div>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(a.TaskText))
+                        {
+                            <div class="ad-files-title">@Localizer["AssignmentTaskLabel"]</div>
+                            <div class="ad-task-text">@a.TaskText</div>
+                        }
+                        @if (a.Files.Any())
+                        {
+                            <div class="ad-files-title">@Localizer["AttachedFilesLabel"]</div>
+                            @foreach (var f in a.Files)
+                            {
+                                <div class="ad-file-row">
+                                    <i class="bi bi-paperclip"></i>
+                                    <span class="ad-file-name">@f.Name</span>
+                                    <a href="@f.ViewUrl" target="_blank" class="ad-file-link"><i class="bi bi-eye"></i> @Localizer["View"]</a>
+                                </div>
+                            }
+                        }
                     </div>
                 }
             </div>
         </div>
-    </div>
 
+        <!-- Ժամկետներ -->
+        <div class="ca-section-card">
+            <div class="ca-section-head">
+                <span class="ca-section-num">1</span>
+                <h2 class="ca-section-title">@Localizer["AssignmentStartLabel"] / @Localizer["AssignmentDueLabel"]</h2>
+            </div>
+            <div class="ca-section-body">
+                <div class="ca-field-row">
+                    <div class="ca-field">
+                        <label class="ca-label">@Localizer["AssignmentStartLabel"] <span class="ca-required">*</span></label>
+                        <input type="datetime-local" name="StartDate" class="ca-input" value="@Model.StartDate" required />
+                    </div>
+                    <div class="ca-field">
+                        <label class="ca-label">@Localizer["AssignmentDueLabel"] <span class="ca-required">*</span></label>
+                        <input type="datetime-local" name="DueDate" class="ca-input" value="@Model.DueDate" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Սովորողների ընտրություն -->
+        <div class="ca-section-card">
+            <div class="ca-section-head">
+                <span class="ca-section-num">2</span>
+                <h2 class="ca-section-title">@Localizer["SendToStudentsSection"]</h2>
+            </div>
+            <div class="ca-section-body">
+                <div class="ca-group-tabs">
+                    <button type="button" class="ca-group-tab active" data-group-tab="classes">@Localizer["MyClassesTab"]</button>
+                    <button type="button" class="ca-group-tab" data-group-tab="groups">@Localizer["MyGroupsTab"]</button>
+                </div>
+
+                <div class="ca-selected-summary d-flex align-items-center justify-content-between mt-3">
+                    <span class="d-flex align-items-center gap-2">
+                        <i class="bi bi-check-lg"></i>
+                        <span id="caSelectedCount">0</span> @Localizer["SelectedPupilsSuffix"]
+                    </span>
+                    <button type="button" class="ca-clear-btn" id="caClearAllBtn">@Localizer["ClearAllLabel"]</button>
+                </div>
+
+                <div class="ca-pupil-search position-relative mt-2">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="caPupilSearch" placeholder="@Localizer["SearchPupilPlaceholder"]" />
+                </div>
+
+                <!-- «Իմ խմբերը»՝ սեղմելով ընտրվում են խմբի բոլոր սովորողները -->
+                <div class="ca-groups-pane mt-2" id="caGroupsPane" style="display:none">
+                    <partial name="Form/_GroupPicker" model="Model.Groups" />
+                </div>
+
+                <div class="ca-class-groups mt-2" id="caClassGroupsPane">
+                    @foreach (var group in Model.ClassGroups)
+                    {
+                        <div class="ca-class-group" data-grade-id="@group.GradeId">
+                            <button type="button" class="ca-class-group-head">
+                                <span class="d-flex align-items-center gap-2">
+                                    <span class="ca-class-icon"><i class="bi bi-people"></i></span>
+                                    <span class="ca-class-name">@group.GradeName</span>
+                                    <span class="ca-class-selected-badge" data-selected-badge>0</span>
+                                </span>
+                                <span class="d-flex align-items-center gap-2">
+                                    <span class="ca-class-count">@group.Pupils.Count @Localizer["PupilsCountSuffix"]</span>
+                                    <i class="bi bi-chevron-right ca-class-caret"></i>
+                                </span>
+                            </button>
+                            <div class="ca-class-group-body">
+                                <div class="ca-class-group-toolbar">
+                                    <button type="button" class="ca-select-all-btn"><i class="bi bi-square"></i> @Localizer["SelectAllLabel"]</button>
+                                    <span class="ca-class-progress" data-progress-label>0 / @group.Pupils.Count</span>
+                                </div>
+                                <div class="ca-pupil-grid">
+                                    @foreach (var pupil in group.Pupils)
+                                    {
+                                        <label class="ca-pupil-item">
+                                            <input type="checkbox" name="PupilIds" value="@pupil.UserId" data-pupil-checkbox @(Model.PupilIds.Contains(pupil.UserId) ? "checked" : "") />
+                                            <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
+                                            <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
+                                            <span class="ca-pupil-name">
+                                                @if (!string.IsNullOrEmpty(pupil.ProfileUrl))
+                                                {
+                                                    <a href="@pupil.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@pupil.Name</a>
+                                                }
+                                                else
+                                                {
+                                                    @pupil.Name
+                                                }
+                                            </span>
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>@* /ca-container *@
 
     <div class="ca-footer">
         <a href="@Model.CancelUrl" class="ca-cancel-btn">@Localizer["CancelBtn"]</a>
         <button type="submit" class="ca-submit-btn" id="caSubmitBtn" disabled>
-            <i class="bi bi-send"></i> @Localizer["SendAssignmentBtn"]
+            <i class="bi bi-plus-lg"></i> @Localizer["SendAssignmentBtn"]
         </button>
     </div>
 </form>
@@ -202,10 +206,10 @@
 </div>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/assignments/assignment-detail.css" />
-    <link rel="stylesheet" href="~/css/assignments/create-assignment.css" />
+    <link rel="stylesheet" href="~/css/assignments/assignment-detail.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/assignments/create-assignment.css" asp-append-version="true" />
 }
 @section Scripts {
-    <script src="~/js/assignments/group-picker.js"></script>
-    <script src="~/js/assignments/create-assignment.js"></script>
+    <script src="~/js/assignments/group-picker.js" asp-append-version="true"></script>
+    <script src="~/js/assignments/create-assignment.js" asp-append-version="true"></script>
 }

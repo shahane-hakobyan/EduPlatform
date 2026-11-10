@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const ok =
                     (!q || r.dataset.name.includes(q)) &&
                     (!grade.value || r.dataset.grade === grade.value) &&
-                    (!group || !group.value || r.dataset.group === group.value) &&
+                    (!group || !group.value || (r.dataset.group || '').split('|').indexOf(group.value) !== -1) &&
                     (!status.value || r.dataset.status === status.value);
                 r.style.display = ok ? '' : 'none';
             });
