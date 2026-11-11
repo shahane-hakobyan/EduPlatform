@@ -51,8 +51,15 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "");
 
 builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
 builder.Services.AddScoped<IClassRosterService, ClassRosterService>();
-builder.Services.AddSingleton<IAssignmentFileService, AssignmentFileService>();
-builder.Services.AddSingleton<IClaudeChatService, ClaudeChatService>();   // ԱԲ զրուցարան (Claude API)
+builder.Services.AddSingleton<IFileStorageService, FileStorageService>();
+// ԱԲ զրուցարան. Claude API՝ երբ Anthropic:ApiKey-ը կարգավորված է։
+// Բանալի չկա + Development (կամ DemoAutoLogin)՝ ԴԵՄՈ ռեժիմ (պատրաստի պատասխաններ), որ կարողանաք տեսնել և փորձարկել էջը։
+var hasClaudeKey = !string.IsNullOrWhiteSpace(builder.Configuration["Anthropic:ApiKey"]);
+var allowDemoChat = builder.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("DemoAutoLogin");
+if (!hasClaudeKey && allowDemoChat)
+    builder.Services.AddSingleton<IClaudeChatService, DemoChatService>();
+else
+    builder.Services.AddSingleton<IClaudeChatService, ClaudeChatService>();
 
 // ── Մուտք ───────────────────────────────────────────────────────────────────
 // Production՝ AuthServer-ի JWT (մուտքի տրամաբանությունը կավարտի մեկ այլ ծրագրավորող):

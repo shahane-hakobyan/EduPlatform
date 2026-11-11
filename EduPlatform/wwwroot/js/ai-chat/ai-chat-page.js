@@ -60,9 +60,10 @@ document.addEventListener('DOMContentLoaded', function () {
         item.className = 'aic-conv';
         item.dataset.id = c.id;
 
-        const main = document.createElement('button');
-        main.type = 'button';
+        const main = document.createElement('div');
         main.className = 'aic-conv-main';
+        main.tabIndex = 0;
+        main.setAttribute('role', 'button');
 
         const title = document.createElement('div');
         title.className = 'aic-conv-title';
@@ -84,7 +85,10 @@ document.addEventListener('DOMContentLoaded', function () {
         main.appendChild(title);
         main.appendChild(preview);
         main.appendChild(time);
-        main.addEventListener('click', function () { openConv(c.id); });
+        main.addEventListener('click', function () { if (!item.classList.contains('is-renaming')) openConv(c.id); });
+        main.addEventListener('keydown', function (e) {
+            if ((e.key === 'Enter' || e.key === ' ') && e.target === main) { e.preventDefault(); openConv(c.id); }
+        });
 
         const menuBtn = document.createElement('button');
         menuBtn.type = 'button';
@@ -119,14 +123,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 await post('/Conversations/' + c.id + '/Pin', { pinned: !c.isPinned });
                 refreshList();
             } else if (btn.dataset.act === 'rename') {
-                const name = window.prompt(t('renamePrompt'), c.title);
-                if (name && name.trim()) {
-                    await post('/Conversations/' + c.id + '/Rename', { title: name.trim() });
-                    if (activeId === c.id) titleEl.textContent = name.trim();
-                    refreshList();
-                }
+                startRename(item, c, title);
             } else if (btn.dataset.act === 'delete') {
-                if (!window.confirm(t('confirmDelete'))) return;
+                const ok = await confirmDialog(t('confirmDelete'), t('delete'), t('cancel'));
+                if (!ok) return;
                 await post('/Conversations/' + c.id + '/Delete');
                 if (activeId === c.id) chat.reset(null);
                 refreshList();
@@ -137,6 +137,86 @@ document.addEventListener('DOMContentLoaded', function () {
         item.appendChild(menuBtn);
         item.appendChild(menu);
         return item;
+    }
+
+    // ── Վերանվանում՝ անմիջապես ցուցակում (առանց բրաուզերի պատուհանի) ───────
+
+    function startRename(item, c, titleDiv) {
+        if (item.classList.contains('is-renaming')) return;
+        item.classList.add('is-renaming');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'aic-conv-rename';
+        input.value = c.title;
+        input.maxLength = 200;
+        input.setAttribute('aria-label', t('rename'));
+
+        titleDiv.hidden = true;
+        titleDiv.after(input);
+
+        let finished = false;
+        async function finish(save) {
+            if (finished) return;
+            finished = true;
+
+            const name = input.value.trim();
+            input.remove();
+            titleDiv.hidden = false;
+            item.classList.remove('is-renaming');
+
+            if (save && name && name !== c.title) {
+                c.title = name;
+                await post('/Conversations/' + c.id + '/Rename', { title: name });
+                if (activeId === c.id) titleEl.textContent = name;
+                refreshList();
+            }
+        }
+
+        input.addEventListener('click', function (e) { e.stopPropagation(); });
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+            else if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+        });
+        input.addEventListener('blur', function () { finish(true); });
+
+        input.focus();
+        input.select();
+    }
+
+    // ── Հաստատման պատուհան (փոխարինում է confirm()-ին) ───────────────────
+
+    function confirmDialog(message, okLabel, cancelLabel) {
+        return new Promise(function (resolve) {
+            const backdrop = document.createElement('div');
+            backdrop.className = 'aic-dialog-backdrop';
+            backdrop.innerHTML =
+                '<div class="aic-dialog" role="alertdialog" aria-modal="true">' +
+                '<div class="aic-dialog-icon"><i class="bi bi-trash"></i></div>' +
+                '<p class="aic-dialog-text"></p>' +
+                '<div class="aic-dialog-actions">' +
+                '<button type="button" class="aic-dialog-cancel"></button>' +
+                '<button type="button" class="aic-dialog-ok"></button>' +
+                '</div></div>';
+
+            backdrop.querySelector('.aic-dialog-text').textContent = message;
+            backdrop.querySelector('.aic-dialog-cancel').textContent = cancelLabel;
+            backdrop.querySelector('.aic-dialog-ok').textContent = okLabel;
+            document.body.appendChild(backdrop);
+
+            function close(result) {
+                document.removeEventListener('keydown', onKey);
+                backdrop.remove();
+                resolve(result);
+            }
+            function onKey(e) { if (e.key === 'Escape') close(false); }
+
+            document.addEventListener('keydown', onKey);
+            backdrop.addEventListener('click', function (e) { if (e.target === backdrop) close(false); });
+            backdrop.querySelector('.aic-dialog-cancel').addEventListener('click', function () { close(false); });
+            backdrop.querySelector('.aic-dialog-ok').addEventListener('click', function () { close(true); });
+            backdrop.querySelector('.aic-dialog-cancel').focus();
+        });
     }
 
     function post(path, body) {

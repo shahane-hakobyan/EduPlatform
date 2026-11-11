@@ -28,12 +28,12 @@ namespace EduPlatform.Controllers
         private readonly EduPlatformDbContext _db;
         private readonly IConfiguration _config;
         private readonly IClassRosterService _roster;
-        private readonly IAssignmentFileService _files;
+        private readonly IFileStorageService _files;
 
         private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
         public AssignmentsController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer,
-            EduPlatformDbContext db, IConfiguration config, IClassRosterService roster, IAssignmentFileService files)
+            EduPlatformDbContext db, IConfiguration config, IClassRosterService roster, IFileStorageService files)
         {
             _menuBuilder = menuBuilder;
             _l = localizer;
@@ -481,7 +481,7 @@ namespace EduPlatform.Controllers
                 foreach (var file in attachments)
                 {
                     // assignments/{մարզ}/{դպրոց}/{ուսուցիչ}/{անուն}
-                    var stored = await _files.SaveAsync("teacher", CurrentUserId, regionId, schoolId, file);
+                    var stored = await _files.SaveAsync(FileSections.Assignments, "teacher", CurrentUserId, regionId, schoolId, file);
                     storedNames.Add(stored);
 
                     newFiles.Add(new AssignmentFile
@@ -940,7 +940,7 @@ namespace EduPlatform.Controllers
                 foreach (var file in attachments)
                 {
                     // assignments/{մարզ}/{դպրոց}/{ուսուցիչ}/{անուն}
-                    var stored = await _files.SaveAsync("teacher", CurrentUserId, regionId, schoolId, file);
+                    var stored = await _files.SaveAsync(FileSections.Assignments, "teacher", CurrentUserId, regionId, schoolId, file);
 
                     storedFiles.Add((Path.GetFileName(file.FileName), stored, file.ContentType, file.Length));
                 }

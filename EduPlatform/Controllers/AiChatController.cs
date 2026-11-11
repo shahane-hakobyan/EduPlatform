@@ -65,7 +65,7 @@ namespace EduPlatform.Controllers
         private readonly IStringLocalizer<SharedResource> _l;
         private readonly EduPlatformDbContext _db;
         private readonly IClaudeChatService _claude;
-        private readonly IAssignmentFileService _files;
+        private readonly IFileStorageService _files;
         private readonly ILogger<AiChatController> _log;
         private readonly int _dailyLimit;
         private readonly int _maxHistory;
@@ -73,7 +73,7 @@ namespace EduPlatform.Controllers
         private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
         public AiChatController(ISidebarMenuBuilder menuBuilder, IStringLocalizer<SharedResource> localizer,
-            EduPlatformDbContext db, IClaudeChatService claude, IAssignmentFileService files, ILogger<AiChatController> log,
+            EduPlatformDbContext db, IClaudeChatService claude, IFileStorageService files, ILogger<AiChatController> log,
             IConfiguration config)
         {
             _menuBuilder = menuBuilder;
@@ -333,6 +333,8 @@ namespace EduPlatform.Controllers
                 _db.AiConversations.Add(conv);
             }
 
+            var (regionId, schoolId) = await TeacherLocationAsync();
+
             var stored = new List<string>();
             AiMessage userMsg;
             try
@@ -341,7 +343,7 @@ namespace EduPlatform.Controllers
                 for (var i = 0; i < plan.Count; i++)
                 {
                     var (file, kind, contentType) = plan[i];
-                    var key = await _files.SaveAsync("aichat", CurrentUserId, 0, 0, file);
+                    var key = await _files.SaveAsync(FileSections.AiChat, "teacher", CurrentUserId, regionId, schoolId, file);
                     stored.Add(key);
 
                     var transcript = kind == AiAttachmentKind.Audio && i < meta.Count ? meta[i].Transcript?.Trim() : null;
@@ -554,6 +556,19 @@ namespace EduPlatform.Controllers
         }
 
         // ── Օգնականներ ───────────────────────────────────────────────────────
+
+        // Ուսուցչի դպրոցը՝ նրա վերջին ուսումնական տարվա դասարաններից (նույնը, ինչ առաջադրանքներում)։
+        // Մարզի Id-ն դեռ չկա (կգա AuthServer-ից) → 0։
+        private async Task<(int RegionId, int SchoolId)> TeacherLocationAsync()
+        {
+            var schoolId = await _db.TeacherGrades
+                .Where(tg => tg.TeacherUserId == CurrentUserId)
+                .OrderByDescending(tg => tg.AcademicYear)
+                .Select(tg => tg.Grade.InstitutionId)
+                .FirstOrDefaultAsync();
+
+            return (0, schoolId);
+        }
 
         private string MakeTitle(string text, List<IFormFile> files)
         {
