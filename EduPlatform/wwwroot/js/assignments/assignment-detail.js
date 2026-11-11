@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const type = modal.getAttribute('data-grading-type');
             const errBox = modal.querySelector('.answer-error');
             const feedback = modal.querySelector('.answer-protocol-textarea').value.trim();
-            const payload = { submissionId: parseInt(btn.getAttribute('data-submission-id'), 10), feedback: feedback, score: null };
+            const payload = { submissionId: parseInt(btn.getAttribute('data-submission-id'), 10), feedback: feedback, score: null, maxScore: null };
 
             function fail(msg) { errBox.textContent = msg; errBox.style.display = 'block'; }
             errBox.style.display = 'none';
@@ -58,13 +58,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 const active = modal.querySelector('.answer-point-btn.active');
                 payload.score = active ? parseInt(active.getAttribute('data-score'), 10) : null;
             } else if (type === 'Diagnostic') {
-                const val = modal.querySelector('.answer-score-input').value;
-                payload.score = val === '' ? null : parseFloat(val);
+                // «Առավելագույն միավոր» և «Նախնական միավոր»՝ ազատ թվեր (ընտրության դաշտ չկա)
+                const maxVal = modal.querySelector('[data-max-score]').value;
+                const initVal = modal.querySelector('[data-initial-score]').value;
+                payload.maxScore = maxVal === '' ? null : parseFloat(maxVal);
+                payload.score = initVal === '' ? null : parseFloat(initVal);
+
+                if (payload.maxScore !== null && !(payload.maxScore > 0)) return fail(errBox.getAttribute('data-msg') || '*');
+                if (payload.score !== null && payload.score < 0) return fail(errBox.getAttribute('data-msg') || '*');
+                if (payload.score !== null && payload.maxScore !== null && payload.score > payload.maxScore) {
+                    return fail(errBox.getAttribute('data-msg-exceeds') || '*');
+                }
             }
 
-            // Ընթացիկ/Հայտորոշիչ՝ առնվազն մեկ դաշտ, Ձևավորող՝ հետադարձ կապը պարտադիր է
+            // Ընթացիկ՝ միավոր և/կամ հետադարձ կապ (առնվազն մեկը), Հայտորոշիչ՝ երեք դաշտերից առնվազն մեկը, Ձևավորող՝ հետադարձ կապը պարտադիր է
             const needsFeedbackOnly = type === 'Formative';
-            if ((needsFeedbackOnly && !feedback) || (!needsFeedbackOnly && payload.score === null && !feedback)) {
+            const nothingFilled = payload.score === null && payload.maxScore === null && !feedback;
+            if ((needsFeedbackOnly && !feedback) || (!needsFeedbackOnly && nothingFilled)) {
                 return fail(errBox.getAttribute('data-msg') || '*');
             }
 
@@ -161,104 +171,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
-    // --- Add pupils modal ---
+    // --- Add pupils modal (ընտրության տրամաբանությունը՝ pupil-picker.js) ---
     const addPupilsSubmitBtn = document.getElementById('addPupilsSubmitBtn');
-    const addPupilsSelectedCount = document.getElementById('addPupilsSelectedCount');
-
-    let addGroupPicker = null;
-
-    function refreshAddPupilsCounts() {
-        const modal = document.getElementById('addPupilsModal');
-        if (!modal) return;
-
-        const checked = modal.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)');
-        addPupilsSelectedCount.textContent = checked.length;
-        addPupilsSubmitBtn.disabled = checked.length === 0;
-
-        modal.querySelectorAll('.ca-class-group').forEach(function (group) {
-            const groupChecked = group.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)').length;
-            const groupTotal = group.querySelectorAll('[data-pupil-checkbox]:not(:disabled)').length;
-            const badge = group.querySelector('[data-selected-badge]');
-            badge.textContent = groupChecked;
-            badge.classList.toggle('show', groupChecked > 0);
-            group.querySelector('[data-progress-label]').textContent = groupChecked + ' / ' + groupTotal;
-        });
-
-        if (addGroupPicker) addGroupPicker.refresh();
-    }
-
     const addPupilsModal = document.getElementById('addPupilsModal');
+
     if (addPupilsModal) {
-        addPupilsModal.querySelectorAll('[data-pupil-checkbox]').forEach(function (cb) {
-            cb.addEventListener('change', refreshAddPupilsCounts);
+        const picker = EduPupilPicker.init(addPupilsModal.querySelector('[data-pupil-picker]'), {
+            onChange: function (total) { addPupilsSubmitBtn.disabled = total === 0; }
         });
-
-        // «Իմ դասարանները» / «Իմ խմբերը» ներդիրներ
-        const pupilBoxByValue = {};
-        addPupilsModal.querySelectorAll('[data-pupil-checkbox]').forEach(function (cb) { pupilBoxByValue[cb.value] = cb; });
-
-        addGroupPicker = EduGroupPicker.init({
-            root: addPupilsModal,
-            getBox: function (value) { return pupilBoxByValue[value]; },
-            onChange: refreshAddPupilsCounts
-        });
-
-        refreshAddPupilsCounts();   // սկզբնական թվերը (արդեն ավելացվածները չեն հաշվվում)
-
-        addPupilsModal.querySelectorAll('[data-add-tab]').forEach(function (tab) {
-            tab.addEventListener('click', function () {
-                addPupilsModal.querySelectorAll('[data-add-tab]').forEach(function (t) { t.classList.remove('active'); });
-                tab.classList.add('active');
-                const showGroups = tab.getAttribute('data-add-tab') === 'groups';
-                const classesPane = document.getElementById('addPupilsClassesPane');
-                const groupsPane = document.getElementById('addPupilsGroupsPane');
-                if (classesPane) classesPane.style.display = showGroups ? 'none' : '';
-                if (groupsPane) groupsPane.style.display = showGroups ? '' : 'none';
-            });
-        });
-
-        addPupilsModal.querySelectorAll('.ca-class-group-head').forEach(function (head) {
-            head.addEventListener('click', function () {
-                head.closest('.ca-class-group').classList.toggle('open');
-            });
-        });
-
-        addPupilsModal.querySelectorAll('.ca-select-all-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                const group = btn.closest('.ca-class-group');
-                const boxes = group.querySelectorAll('[data-pupil-checkbox]:not(:disabled)');
-                const allChecked = Array.from(boxes).every(function (b) { return b.checked; });
-                boxes.forEach(function (b) { b.checked = !allChecked; });
-                refreshAddPupilsCounts();
-            });
-        });
-
-        const clearAllBtn = document.getElementById('addPupilsClearAllBtn');
-        if (clearAllBtn) {
-            clearAllBtn.addEventListener('click', function () {
-                addPupilsModal.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)').forEach(function (cb) { cb.checked = false; });
-                refreshAddPupilsCounts();
-            });
-        }
-
-        const search = document.getElementById('addPupilsSearch');
-        if (search) {
-            search.addEventListener('input', function () {
-                const q = search.value.trim().toLowerCase();
-                addPupilsModal.querySelectorAll('.ca-pupil-item').forEach(function (item) {
-                    const name = item.querySelector('.ca-pupil-name').textContent.toLowerCase();
-                    item.style.display = name.includes(q) ? '' : 'none';
-                });
-                if (addGroupPicker) addGroupPicker.filter(q);
-            });
-        }
 
         addPupilsSubmitBtn.addEventListener('click', function () {
             const scriptTag = document.querySelector('script[src*="assignment-detail.js"]');
             const assignmentId = scriptTag ? scriptTag.getAttribute('data-assignment-id') : null;
 
-            const pupilIds = Array.from(addPupilsModal.querySelectorAll('[data-pupil-checkbox]:checked:not(:disabled)'))
-                .map(function (cb) { return cb.value; });
+            const pupilIds = picker.selectedIds();
 
             addPupilsSubmitBtn.disabled = true;
             fetch('/Repository/Assignments/AddPupils', {

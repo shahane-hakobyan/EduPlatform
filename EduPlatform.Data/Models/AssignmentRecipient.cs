@@ -39,6 +39,9 @@
         /// </summary>
         public decimal? Score { get; set; }
 
+        /// <summary>Հայտորոշիչ գնահատման «Առավելագույն միավոր» (ազատ թիվ)։ Մնացած տեսակների համար՝ դատարկ</summary>
+        public decimal? MaxScore { get; set; }
+
         /// <summary>Հետադարձ կապի տեքստ</summary>
         public string? Feedback { get; set; }
 

@@ -417,29 +417,6 @@
     color: #fff;
 }
 
-.answer-grading-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-}
-
-.answer-grading-tab {
-    flex: 1;
-    padding: 8px 16px;
-    background: var(--surface);
-    border: .8px solid var(--border);
-    border-radius: 14px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--icon-color);
-}
-
-    .answer-grading-tab.active {
-        background: var(--accent-strong);
-        border-color: var(--accent-strong);
-        color: #fff;
-    }
-
 .answer-points-grid {
     display: flex;
     flex-wrap: wrap;
@@ -526,6 +503,7 @@
     font-weight: 700;
     color: #fff;
 }
+
 .ad-files-title {
     margin-top: 12px;
     font-weight: 700;
@@ -561,6 +539,7 @@
     color: var(--accent);
     text-decoration: none;
 }
+
 .answer-text-box {
     padding: 12px 16px;
     background: var(--surface-alt);
@@ -575,9 +554,11 @@
     box-sizing: border-box;
     width: 160px;
     padding: 10px 16px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    font-size: 14px;
+    border: .8px solid var(--border);
+    border-radius: 14px;
+    font-size: 13px;
+    color: var(--input-text);
+    background: var(--input-bg);
 }
 
 .answer-error {
@@ -589,11 +570,6 @@
     font-size: 13px;
 }
 
-span.answer-grading-tab {
-    display: inline-block;
-    flex: 0 0 auto;
-    cursor: default;
-}
 .ad-due-saved {
     margin-top: 6px;
     font-size: 12px;
@@ -694,3 +670,50 @@ span.answer-grading-tab {
         background: #1d4ed8;
         color: #fff;
     }
+
+/* ── Գնահատման պատուհան՝ «Գնահատում» + կանաչ պիտակ մեկ տողում, դաշտերի վերնագրերը՝ սովորական (ոչ մեծատառ) ── */
+.answer-grading-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+    .answer-grading-head .answer-modal-label-lg {
+        margin-bottom: 0;
+    }
+
+.answer-grading-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #DCFCE7;
+    color: #00A63E;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+[data-theme="dark"] .answer-grading-badge {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ADE80;
+}
+
+.answer-field-label {
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.answer-points-grid + .answer-field-label,
+.answer-score-row + .answer-field-label {
+    margin-top: 16px;
+}
+
+/* Հայտորոշիչ՝ «Առավելագույն միավոր» և «Նախնական միավոր» կողք կողքի */
+.answer-score-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}

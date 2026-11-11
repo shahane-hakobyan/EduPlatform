@@ -1,0 +1,26 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    var agents = EduPlatform.Services.AiAgents.All
+        .Select(a => new EduPlatform.ViewModels.AiAgentOption(a.Key, Localizer[a.NameKey].Value))
+        .ToList();
+}
+
+@* Լողացող կոճակ՝ բոլոր էջերում ներքևի աջ անկյունում։ Սեղմելիս բացվում է ԱԲ զրուցարանի փոքր պատուհանը։ *@
+<div class="aic-widget" id="aicWidget">
+    <div class="aic-widget-panel" id="aicWidgetPanel" hidden>
+        <div class="aic-widget-head">
+            <span class="aic-top-icon"><i class="bi bi-robot"></i></span>
+            <span class="aic-widget-title">@Localizer["AiChatTitle"]</span>
+            <button type="button" class="aic-widget-btn" id="aicWidgetNew" title="@Localizer["AiChatNew"]"><i class="bi bi-plus-lg"></i></button>
+            <a class="aic-widget-btn" id="aicWidgetFull" href="@Url.Content("~/Teacher/AIChat")" title="@Localizer["AiChatOpenFull"]"><i class="bi bi-box-arrow-up-right"></i></a>
+            <button type="button" class="aic-widget-btn" id="aicWidgetClose" title="@Localizer["CancelBtn"]"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <partial name="~/Views/Shared/AiChat/_AiChatBody.cshtml" model="agents" />
+    </div>
+
+    <button type="button" class="aic-fab" id="aicFab" aria-label="@Localizer["AiChatTitle"]" title="@Localizer["AiChatTitle"]">
+        <i class="bi bi-chat-dots"></i>
+    </button>
+</div>
+
+<partial name="~/Views/Shared/AiChat/_AiChatStrings.cshtml" />

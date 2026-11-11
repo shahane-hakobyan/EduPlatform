@@ -67,14 +67,14 @@
         }
 
         <div class="answer-modal-section answer-modal-section-bordered">
-            <div class="answer-modal-label-lg">@Localizer["Evaluation"]</div>
-            <div class="answer-grading-tabs">
-                <span class="answer-grading-tab active">@gradingLabel</span>
+            <div class="answer-grading-head">
+                <div class="answer-modal-label-lg">@Localizer["Evaluation"]</div>
+                <span class="answer-grading-badge">@gradingLabel</span>
             </div>
 
             @if (Model.GradingType == "CurrentScore")
             {
-                <div class="answer-modal-label mb-2">@Localizer["CurrentScoreLabel"]</div>
+                <div class="answer-field-label">@Localizer["CurrentScoreLabel"]</div>
                 <div class="answer-points-grid">
                     @for (int i = 1; i <= 10; i++)
                     {
@@ -84,29 +84,22 @@
             }
             else if (Model.GradingType == "Diagnostic")
             {
-                <div class="answer-modal-label mb-2">@Localizer["InitialScoreLabel"]</div>
-                <input type="number" step="0.01" min="0" max="9999" class="answer-score-input" value="@(Model.Score?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))" @(Model.IsReadOnly ? "readonly" : "") />
+                <div class="answer-score-row">
+                    <div>
+                        <div class="answer-field-label">@Localizer["MaxScoreLabel"]</div>
+                        <input type="number" step="0.01" min="0" max="9999" class="answer-score-input" data-max-score value="@(Model.MaxScore?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))" @(Model.IsReadOnly ? "readonly" : "") />
+                    </div>
+                    <div>
+                        <div class="answer-field-label">@Localizer["InitialScoreLabel"]</div>
+                        <input type="number" step="0.01" min="0" max="9999" class="answer-score-input" data-initial-score value="@(Model.Score?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))" @(Model.IsReadOnly ? "readonly" : "") />
+                    </div>
+                </div>
             }
 
-            <div class="answer-modal-label mb-2 mt-3">@Localizer["FeedbackLabel"]</div>
+            <div class="answer-field-label">@Localizer["FeedbackLabel"]</div>
             <textarea class="answer-protocol-textarea" rows="4" placeholder="@Localizer["ProtocolPlaceholder"]" @(Model.IsReadOnly ? "readonly" : "")>@Model.ScoreFeedback</textarea>
 
-            @if (!Model.IsReadOnly)
-            {
-                if (Model.GradingType == "CurrentScore")
-                {
-                    <div class="answer-warning-note mt-3">
-                        <i class="bi bi-exclamation-triangle"></i> @Localizer["PointGradeVisibilityNote"]
-                    </div>
-                }
-                else
-                {
-                    <div class="answer-info-note mt-2">
-                        <i class="bi bi-info-circle"></i> @Localizer["FormativeGradeVisibilityNote"]
-                    </div>
-                }
-            }
-            <div class="answer-error" style="display:none" data-msg="@Localizer["GradeFieldsRequired"]"></div>
+            <div class="answer-error" style="display:none" data-msg="@Localizer["GradeFieldsRequired"]" data-msg-exceeds="@Localizer["ScoreExceedsMax"]"></div>
         </div>
     </div>
 

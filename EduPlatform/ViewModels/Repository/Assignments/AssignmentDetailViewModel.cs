@@ -48,7 +48,8 @@ namespace EduPlatform.ViewModels
         public DateTime? SubmittedDate { get; set; }
         public string Status { get; set; } = "Pending"; // Pending | Submitted | Graded
         public decimal? Score { get; set; }
-        public int MaxScore { get; set; } = 10;
+        /// <summary>Առավելագույն միավոր՝ ընթացիկ միավորայինի համար 10, հայտորոշիչի համար՝ ուսուցչի գրածը (կարող է դատարկ լինել)</summary>
+        public decimal? MaxScore { get; set; }
         public string ScoreFeedback { get; set; } = "";
         public string AnswerText { get; set; } = "";
         public string GradingType { get; set; } = "CurrentScore"; // CurrentScore | Formative | Diagnostic

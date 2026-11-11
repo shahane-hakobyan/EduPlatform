@@ -501,4 +501,47 @@
   <data name="ArchivedReadOnlyNote" xml:space="preserve"><value>Это задание в архиве, доступен только просмотр.</value></data>
   <data name="AssignmentTaskLabel" xml:space="preserve"><value>Текст задания</value></data>
   <data name="ComingSoonLabel" xml:space="preserve"><value>Скоро</value></data>
+  <data name="MaxScoreLabel" xml:space="preserve"><value>Максимальный балл</value></data>
+  <data name="ScoreExceedsMax" xml:space="preserve"><value>Начальный балл не может быть больше максимального</value></data>
+
+  <data name="AiChatTitle" xml:space="preserve"><value>ИИ-чат</value></data>
+  <data name="AiChatNew" xml:space="preserve"><value>Новый чат</value></data>
+  <data name="AiChatAgents" xml:space="preserve"><value>Агенты</value></data>
+  <data name="AiChatPinned" xml:space="preserve"><value>Закреплённые</value></data>
+  <data name="AiChatHistory" xml:space="preserve"><value>История чатов</value></data>
+  <data name="AiChatNoChats" xml:space="preserve"><value>Чатов пока нет</value></data>
+  <data name="AiChatEmptyTitle" xml:space="preserve"><value>Чем могу помочь</value></data>
+  <data name="AiChatEmptySubtitle" xml:space="preserve"><value>Здесь вы можете задать свои вопросы</value></data>
+  <data name="AiChatPlaceholder" xml:space="preserve"><value>Напишите здесь</value></data>
+  <data name="AiChatSend" xml:space="preserve"><value>Отправить</value></data>
+  <data name="AiChatStop" xml:space="preserve"><value>Остановить</value></data>
+  <data name="AiChatAttach" xml:space="preserve"><value>Прикрепить файл</value></data>
+  <data name="AiChatRecord" xml:space="preserve"><value>Записать голос</value></data>
+  <data name="AiChatStopRecord" xml:space="preserve"><value>Остановить запись</value></data>
+  <data name="AiChatCopy" xml:space="preserve"><value>Копировать</value></data>
+  <data name="AiChatCopied" xml:space="preserve"><value>Скопировано</value></data>
+  <data name="AiChatEdit" xml:space="preserve"><value>Редактировать</value></data>
+  <data name="AiChatSave" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="AiChatEdited" xml:space="preserve"><value>изменено</value></data>
+  <data name="AiChatPin" xml:space="preserve"><value>Закрепить</value></data>
+  <data name="AiChatUnpin" xml:space="preserve"><value>Открепить</value></data>
+  <data name="AiChatRename" xml:space="preserve"><value>Переименовать</value></data>
+  <data name="AiChatDelete" xml:space="preserve"><value>Удалить</value></data>
+  <data name="AiChatConfirmDelete" xml:space="preserve"><value>Удалить этот чат?</value></data>
+  <data name="AiChatRenamePrompt" xml:space="preserve"><value>Новое название чата</value></data>
+  <data name="AiChatNewTitle" xml:space="preserve"><value>Новый чат</value></data>
+  <data name="AiChatNow" xml:space="preserve"><value>Сейчас</value></data>
+  <data name="AiChatYesterday" xml:space="preserve"><value>Вчера</value></data>
+  <data name="AiChatError" xml:space="preserve"><value>Не удалось получить ответ. Попробуйте ещё раз.</value></data>
+  <data name="AiChatMicDenied" xml:space="preserve"><value>Микрофон недоступен. Разрешите доступ в настройках браузера.</value></data>
+  <data name="AiChatFileTooBig" xml:space="preserve"><value>Файл слишком большой (максимум 10 МБ).</value></data>
+  <data name="AiChatTooManyFiles" xml:space="preserve"><value>Можно прикрепить не более 5 файлов.</value></data>
+  <data name="AiChatBadType" xml:space="preserve"><value>Этот тип файла не поддерживается</value></data>
+  <data name="AiChatOpenFull" xml:space="preserve"><value>Открыть на всю страницу</value></data>
+  <data name="AiAgentMath" xml:space="preserve"><value>Математика</value></data>
+  <data name="AiAgentHistory" xml:space="preserve"><value>История Армении</value></data>
+  <data name="AiAgentMaterials" xml:space="preserve"><value>Составить материалы</value></data>
+  <data name="AiAgentPhysics" xml:space="preserve"><value>Физика</value></data>
+  <data name="AiChatLimitReached" xml:space="preserve"><value>Вы достигли дневного лимита ({0} запросов). Попробуйте завтра.</value></data>
+
 </root>

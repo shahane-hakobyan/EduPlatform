@@ -32,6 +32,9 @@ namespace EduPlatform.Data
         public DbSet<AssignmentSubmissionFile> AssignmentSubmissionFiles => Set<AssignmentSubmissionFile>();
         public DbSet<UserGroup> UserGroups => Set<UserGroup>();
         public DbSet<UserGroupMember> UserGroupMembers => Set<UserGroupMember>();
+        public DbSet<AiConversation> AiConversations => Set<AiConversation>();
+        public DbSet<AiMessage> AiMessages => Set<AiMessage>();
+        public DbSet<AiMessageAttachment> AiMessageAttachments => Set<AiMessageAttachment>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -259,6 +262,7 @@ namespace EduPlatform.Data
             {
                 e.Property(x => x.PupilUserId).HasMaxLength(450);
                 e.Property(x => x.Score).HasPrecision(6, 2);
+                e.Property(x => x.MaxScore).HasPrecision(6, 2);
                 e.Property(x => x.Feedback).HasMaxLength(4000);
 
                 // Աշակերտը մեկ առաջադրանքին ունի միայն մեկ տող
@@ -316,6 +320,41 @@ namespace EduPlatform.Data
                  .WithMany(g => g.Members)
                  .HasForeignKey(x => x.GroupId)
                  .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ── ԱԲ զրուցարան ─────────────────────────────────────────────
+            modelBuilder.Entity<AiConversation>(e =>
+            {
+                e.Property(x => x.UserId).HasMaxLength(450);
+                e.Property(x => x.Title).HasMaxLength(200);
+                e.Property(x => x.AgentKey).HasMaxLength(50);
+
+                // «Իմ զրույցները»՝ ամրացվածները առաջինը, ապա վերջին փոփոխվածները
+                e.HasIndex(x => new { x.UserId, x.IsPinned, x.UpdatedAt });
+            });
+
+            modelBuilder.Entity<AiMessage>(e =>
+            {
+                e.HasOne(x => x.Conversation)
+                 .WithMany(c => c.Messages)
+                 .HasForeignKey(x => x.ConversationId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasIndex(x => x.ConversationId);
+            });
+
+            modelBuilder.Entity<AiMessageAttachment>(e =>
+            {
+                e.Property(x => x.FileName).HasMaxLength(260);
+                e.Property(x => x.StoredFileName).HasMaxLength(100);   // IAssignmentFileService-ի բանալիների սահմանը
+                e.Property(x => x.ContentType).HasMaxLength(150);
+
+                e.HasOne(x => x.Message)
+                 .WithMany(m => m.Attachments)
+                 .HasForeignKey(x => x.MessageId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasIndex(x => x.MessageId);
             });
         }
     }

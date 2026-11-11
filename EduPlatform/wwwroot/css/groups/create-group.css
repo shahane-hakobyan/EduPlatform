@@ -192,6 +192,7 @@
 }
 
 .cg-pick-item {
+    position: relative; /* ծածկված checkbox-ը (absolute) մնում է քարտի ներսում՝ ցանկի scroll-ից դուրս չի գալիս և էջը չի երկարացնում */
     display: flex;
     align-items: center;
     justify-content: space-between;

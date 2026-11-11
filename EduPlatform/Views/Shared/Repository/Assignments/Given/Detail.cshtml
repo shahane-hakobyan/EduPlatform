@@ -164,14 +164,18 @@
                     @if (s.Status == "Graded")
                     {
                         <div class="ad-submission-score">
-                            @if (s.Score.HasValue)
+                            @{
+                                var hasScore = s.Score.HasValue || (s.GradingType == "Diagnostic" && s.MaxScore.HasValue);
+                            }
+                            @if (hasScore)
                             {
+                                // օր․ «7/10»; եթե նախնական միավորը դատարկ է՝ «–/10»
                                 <i class="bi bi-star-fill"></i>
-                                <span class="ad-score-value">@s.Score.Value.ToString("0.##")@(s.GradingType == "CurrentScore" ? "/" + s.MaxScore : "")</span>
+                                <span class="ad-score-value">@(s.Score.HasValue ? s.Score.Value.ToString("0.##") : "–")@(s.MaxScore.HasValue ? "/" + s.MaxScore.Value.ToString("0.##") : "")</span>
                             }
                             @if (!string.IsNullOrEmpty(s.ScoreFeedback))
                             {
-                                <span class="ad-score-feedback">@(s.Score.HasValue ? "· " : "")@s.ScoreFeedback</span>
+                                <span class="ad-score-feedback">@(hasScore ? "· " : "")@s.ScoreFeedback</span>
                             }
                         </div>
                     }
@@ -200,5 +204,6 @@
 }
 @section Scripts {
     <script src="~/js/assignments/group-picker.js"></script>
+    <script src="~/js/assignments/pupil-picker.js"></script>
     <script src="~/js/assignments/assignment-detail.js" data-assignment-id="@Model.Id"></script>
 }

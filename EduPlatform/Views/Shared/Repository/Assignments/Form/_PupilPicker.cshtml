@@ -1,0 +1,85 @@
+﻿@model EduPlatform.ViewModels.PupilPickerViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    var already = new HashSet<string>(Model.AlreadyAddedIds);
+    var selected = new HashSet<string>(Model.SelectedIds);
+}
+
+@* Ընդհանուր բլոկ՝ ներդիրներ, հաշվիչ, որոնում, «Իմ խմբերը» և «Իմ դասարանները»։ Տրամաբանությունը՝ pupil-picker.js *@
+<div class="ca-picker" data-pupil-picker>
+    <div class="ca-group-tabs">
+        <button type="button" class="ca-group-tab active" data-group-tab="classes">@Localizer["MyClassesTab"]</button>
+        <button type="button" class="ca-group-tab" data-group-tab="groups">@Localizer["MyGroupsTab"]</button>
+    </div>
+
+    <div class="ca-selected-summary d-flex align-items-center justify-content-between mt-3">
+        <span class="d-flex align-items-center gap-2">
+            <i class="bi bi-check-lg"></i>
+            <span data-selected-count>0</span> @Localizer["SelectedPupilsSuffix"]
+        </span>
+        <button type="button" class="ca-clear-btn" data-clear-all>@Localizer["ClearAllLabel"]</button>
+    </div>
+
+    <div class="ca-pupil-search position-relative mt-2">
+        <i class="bi bi-search"></i>
+        <input type="text" data-pupil-search placeholder="@Localizer["SearchPupilPlaceholder"]" />
+    </div>
+
+    <!-- «Իմ խմբերը»՝ սեղմելով ընտրվում են խմբի բոլոր սովորողները կամ միայն որոշները -->
+    <div class="ca-groups-pane mt-2" data-groups-pane style="display:none">
+        <partial name="Form/_GroupPicker" model="Model.Groups" />
+    </div>
+
+    <div class="ca-class-groups mt-2" data-classes-pane>
+        @foreach (var group in Model.ClassGroups)
+        {
+            // միայն դեռ չավելացված սովորողները են ընտրելի
+            var addableCount = group.Pupils.Count(p => !already.Contains(p.UserId));
+
+            <div class="ca-class-group" data-grade-id="@group.GradeId">
+                <button type="button" class="ca-class-group-head">
+                    <span class="d-flex align-items-center gap-2">
+                        <span class="ca-class-icon"><i class="bi bi-people"></i></span>
+                        <span class="ca-class-name">@group.GradeName</span>
+                        <span class="ca-class-selected-badge" data-selected-badge>0</span>
+                    </span>
+                    <span class="d-flex align-items-center gap-2">
+                        <span class="ca-class-count">@group.Pupils.Count @Localizer["PupilsCountSuffix"]</span>
+                        <i class="bi bi-chevron-right ca-class-caret"></i>
+                    </span>
+                </button>
+                <div class="ca-class-group-body">
+                    <div class="ca-class-group-toolbar">
+                        <button type="button" class="ca-select-all-btn" @(addableCount == 0 ? "disabled" : "")><i class="bi bi-square"></i> @Localizer["SelectAllLabel"]</button>
+                        <span class="ca-class-progress" data-progress-label>0 / @addableCount</span>
+                    </div>
+                    <div class="ca-pupil-grid">
+                        @foreach (var pupil in group.Pupils)
+                        {
+                            var alreadyAdded = already.Contains(pupil.UserId);
+                            <label class="ca-pupil-item @(alreadyAdded ? "ca-pupil-item-disabled" : "")">
+                                <input type="checkbox" name="@Model.FieldName" value="@pupil.UserId" data-pupil-checkbox @(alreadyAdded ? "checked disabled" : (selected.Contains(pupil.UserId) ? "checked" : "")) />
+                                <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
+                                <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
+                                <span class="ca-pupil-name">
+                                    @if (!string.IsNullOrEmpty(pupil.ProfileUrl))
+                                    {
+                                        <a href="@pupil.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@pupil.Name</a>
+                                    }
+                                    else
+                                    {
+                                        @pupil.Name
+                                    }
+                                </span>
+                                @if (alreadyAdded)
+                                {
+                                    <span class="ca-pupil-already-badge">@Localizer["AlreadyAddedLabel"]</span>
+                                }
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

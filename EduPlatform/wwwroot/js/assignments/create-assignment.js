@@ -172,112 +172,17 @@
         });
     }
 
-    // --- Class/group tabs ---
-    document.querySelectorAll('[data-group-tab]').forEach(function (tab) {
-        tab.addEventListener('click', function () {
-            document.querySelectorAll('[data-group-tab]').forEach(function (t) { t.classList.remove('active'); });
-            tab.classList.add('active');
-
-            const showGroups = tab.getAttribute('data-group-tab') === 'groups';
-            const classesPane = document.getElementById('caClassGroupsPane');
-            const groupsPane = document.getElementById('caGroupsPane');
-            if (classesPane) classesPane.style.display = showGroups ? 'none' : '';
-            if (groupsPane) groupsPane.style.display = showGroups ? '' : 'none';
-        });
-    });
-
-    // --- Class group expand/collapse ---
-    document.querySelectorAll('.ca-class-group-head').forEach(function (head) {
-        head.addEventListener('click', function () {
-            head.closest('.ca-class-group').classList.toggle('open');
-        });
-    });
-
-    // --- Pupil selection ---
+    // --- Սովորողների ընտրություն («Իմ դասարանները» / «Իմ խմբերը»)՝ ընդհանուր կոդը pupil-picker.js ---
     const submitBtn = document.getElementById('caSubmitBtn');
-    const selectedCountEl = document.getElementById('caSelectedCount');
     const selectedCountTopEl = document.getElementById('caSelectedCountTop');
+    const pickerRoot = document.querySelector('[data-pupil-picker]');
 
-    let groupPicker = null;
-
-    function refreshCounts() {
-        const checked = document.querySelectorAll('[data-pupil-checkbox]:checked');
-        const total = checked.length;
-        if (selectedCountEl) selectedCountEl.textContent = total;
-        if (selectedCountTopEl) selectedCountTopEl.textContent = total;
-
-        // խմբագրման ռեժիմում աշակերտներ չկան՝ կոճակը միշտ ակտիվ է
-        const pageForm = document.getElementById('createAssignmentForm');
-        const isEdit = pageForm && pageForm.getAttribute('data-mode') === 'Edit';
-        if (submitBtn && !isEdit) submitBtn.disabled = total === 0;
-
-        document.querySelectorAll('.ca-class-group').forEach(function (group) {
-            const groupChecked = group.querySelectorAll('[data-pupil-checkbox]:checked').length;
-            const groupTotal = group.querySelectorAll('[data-pupil-checkbox]').length;
-            const badge = group.querySelector('[data-selected-badge]');
-            badge.textContent = groupChecked;
-            badge.classList.toggle('show', groupChecked > 0);
-            group.querySelector('[data-progress-label]').textContent = groupChecked + ' / ' + groupTotal;
-        });
-
-        if (groupPicker) groupPicker.refresh();
-    }
-
-    // --- «Իմ խմբերը» (ընդհանուր կոդը՝ group-picker.js) ---
-    const pupilBoxByValue = {};
-    document.querySelectorAll('[data-pupil-checkbox]').forEach(function (cb) { pupilBoxByValue[cb.value] = cb; });
-
-    groupPicker = EduGroupPicker.init({
-        getBox: function (value) { return pupilBoxByValue[value]; },
-        onChange: refreshCounts
-    });
-
-    // աշակերտի checkbox-ը փոխվելիս թվերը և «Ուղարկել» կոճակը թարմացվում են
-    document.querySelectorAll('[data-pupil-checkbox]').forEach(function (cb) {
-        cb.addEventListener('change', refreshCounts);
-    });
-
-    document.querySelectorAll('.ca-class-group .ca-select-all-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-
-            const group = btn.closest('.ca-class-group');
-
-            if (!group) {
-                return;
+    if (pickerRoot) {
+        EduPupilPicker.init(pickerRoot, {
+            onChange: function (total) {
+                if (selectedCountTopEl) selectedCountTopEl.textContent = total;
+                if (submitBtn) submitBtn.disabled = total === 0;
             }
-
-            const boxes = group.querySelectorAll('[data-pupil-checkbox]');
-
-            const allChecked = Array.from(boxes).every(function (b) {
-                return b.checked;
-            });
-
-            boxes.forEach(function (b) {
-                b.checked = !allChecked;
-            });
-
-            refreshCounts();
-        });
-    });
-
-    const clearAllBtn = document.getElementById('caClearAllBtn');
-    if (clearAllBtn) {
-        clearAllBtn.addEventListener('click', function () {
-            document.querySelectorAll('[data-pupil-checkbox]:checked').forEach(function (cb) { cb.checked = false; });
-            refreshCounts();
-        });
-    }
-
-    // --- Pupil search filter ---
-    const pupilSearch = document.getElementById('caPupilSearch');
-    if (pupilSearch) {
-        pupilSearch.addEventListener('input', function () {
-            const q = pupilSearch.value.trim().toLowerCase();
-            document.querySelectorAll('.ca-pupil-item').forEach(function (item) {
-                const name = item.querySelector('.ca-pupil-name').textContent.toLowerCase();
-                item.style.display = name.includes(q) ? '' : 'none';
-            });
-            if (groupPicker) groupPicker.filter(q);
         });
     }
 
@@ -398,5 +303,4 @@
         grow();
     }
 
-    refreshCounts();
 });

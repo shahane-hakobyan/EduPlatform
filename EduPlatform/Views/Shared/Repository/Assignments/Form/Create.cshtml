@@ -4,6 +4,13 @@
     ViewData["Title"] = Localizer["CreateAssignment"].Value;
     var totalPupils = Model.ClassGroups.Sum(g => g.Pupils.Count);
     var isEdit = Model.Mode == "Edit";
+    var pupilPicker = new EduPlatform.ViewModels.PupilPickerViewModel
+    {
+        ClassGroups = Model.ClassGroups,
+        Groups = Model.Groups,
+        SelectedIds = Model.Prefill?.PupilIds ?? new List<string>(),
+        FieldName = "PupilIds"
+    };
     var pageTitle = Model.Mode switch
     {
         "Edit" => Localizer["EditAssignmentTitle"].Value,
@@ -27,12 +34,12 @@
     @if (Model.Prefill != null)
     {
         <script type="application/json" id="caPrefill">
-                        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new
-                                {
-                                                subjectIds = Model.Prefill.SubjectIds,
-                                                gradeLevels = Model.Prefill.GradeLevels,
-                                                types = Model.Prefill.Types,
-                                                gradingType = Model.Prefill.GradingType
+                            @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new
+                                    {
+                                                        subjectIds = Model.Prefill.SubjectIds,
+                                                        gradeLevels = Model.Prefill.GradeLevels,
+                                                        types = Model.Prefill.Types,
+                                                        gradingType = Model.Prefill.GradingType
             }))</script>
         }
         <div class="ca-topbar">
@@ -141,7 +148,7 @@
                         <div class="ca-field-row">
                             <div class="ca-field">
                                 <label class="ca-label">@Localizer["AssignmentStartLabel"] <span class="ca-required">*</span></label>
-                                <input type="datetime-local" name="StartDate" class="ca-input" value="@Model.Prefill?.StartDate" required />
+                                <input type="datetime-local" name="StartDate" class="ca-input" value="@(Model.Prefill?.StartDate ?? DateTime.Now.ToString("yyyy-MM-ddTHH:mm"))" required />
                             </div>
                             <div class="ca-field">
                                 <label class="ca-label">@Localizer["AssignmentDueLabel"] <span class="ca-required">*</span></label>
@@ -226,73 +233,7 @@
                         <h2 class="ca-section-title">@Localizer["SendToStudentsSection"]</h2>
                     </div>
                     <div class="ca-section-body">
-                        <div class="ca-group-tabs">
-                            <button type="button" class="ca-group-tab active" data-group-tab="classes">@Localizer["MyClassesTab"]</button>
-                            <button type="button" class="ca-group-tab" data-group-tab="groups">@Localizer["MyGroupsTab"]</button>
-                        </div>
-
-                        <div class="ca-selected-summary d-flex align-items-center justify-content-between mt-3">
-                            <span class="d-flex align-items-center gap-2">
-                                <i class="bi bi-check-lg"></i>
-                                <span id="caSelectedCount">0</span> @Localizer["SelectedPupilsSuffix"]
-                            </span>
-                            <button type="button" class="ca-clear-btn" id="caClearAllBtn">@Localizer["ClearAllLabel"]</button>
-                        </div>
-
-                        <div class="ca-pupil-search position-relative mt-2">
-                            <i class="bi bi-search"></i>
-                            <input type="text" id="caPupilSearch" placeholder="@Localizer["SearchPupilPlaceholder"]" />
-                        </div>
-
-                        <!-- «Իմ խմբերը»՝ սեղմելով ընտրվում են խմբի բոլոր սովորողները -->
-                        <div class="ca-groups-pane mt-2" id="caGroupsPane" style="display:none">
-                            <partial name="Form/_GroupPicker" model="Model.Groups" />
-                        </div>
-
-                        <div class="ca-class-groups mt-2" id="caClassGroupsPane">
-                            @foreach (var group in Model.ClassGroups)
-                            {
-                                <div class="ca-class-group" data-grade-id="@group.GradeId">
-                                    <button type="button" class="ca-class-group-head">
-                                        <span class="d-flex align-items-center gap-2">
-                                            <span class="ca-class-icon"><i class="bi bi-people"></i></span>
-                                            <span class="ca-class-name">@group.GradeName</span>
-                                            <span class="ca-class-selected-badge" data-selected-badge>0</span>
-                                        </span>
-                                        <span class="d-flex align-items-center gap-2">
-                                            <span class="ca-class-count">@group.Pupils.Count @Localizer["PupilsCountSuffix"]</span>
-                                            <i class="bi bi-chevron-right ca-class-caret"></i>
-                                        </span>
-                                    </button>
-                                    <div class="ca-class-group-body">
-                                        <div class="ca-class-group-toolbar">
-                                            <button type="button" class="ca-select-all-btn"><i class="bi bi-square"></i> @Localizer["SelectAllLabel"]</button>
-                                            <span class="ca-class-progress" data-progress-label>0 / @group.Pupils.Count</span>
-                                        </div>
-                                        <div class="ca-pupil-grid">
-                                            @foreach (var pupil in group.Pupils)
-                                            {
-                                                <label class="ca-pupil-item">
-                                                    <input type="checkbox" name="PupilIds" value="@pupil.UserId" data-pupil-checkbox @(Model.Prefill?.PupilIds.Contains(pupil.UserId) == true ? "checked" : "") />
-                                                    <img src="@pupil.PhotoUrl" alt="" class="ca-pupil-avatar" />
-                                                    <span class="ca-pupil-check"><i class="bi bi-check"></i></span>
-                                                    <span class="ca-pupil-name">
-                                                        @if (!string.IsNullOrEmpty(pupil.ProfileUrl))
-                                                        {
-                                                            <a href="@pupil.ProfileUrl" target="_blank" rel="noopener" onclick="event.stopPropagation()">@pupil.Name</a>
-                                                        }
-                                                        else
-                                                        {
-                                                            @pupil.Name
-                                                        }
-                                                    </span>
-                                                </label>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
+                        <partial name="Form/_PupilPicker" model="pupilPicker" />
                     </div>
                 </div>
 
@@ -337,5 +278,6 @@
     }
     @section Scripts {
         <script src="~/js/assignments/group-picker.js" asp-append-version="true"></script>
+        <script src="~/js/assignments/pupil-picker.js" asp-append-version="true"></script>
         <script src="~/js/assignments/create-assignment.js" asp-append-version="true"></script>
     }

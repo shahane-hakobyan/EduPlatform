@@ -34,6 +34,25 @@ window.EduGroupPicker = (function () {
                 card.classList.toggle('selected', list.length > 0 && checked === list.length);
                 card.classList.toggle('partial', checked > 0 && checked < list.length);
                 card.classList.toggle('empty', list.length === 0);
+
+                // ընտրվածների քանակը վերնագրում (ինչպես դասարանում)
+                const badge = card.querySelector('[data-selected-badge]');
+                if (badge) {
+                    badge.textContent = checked;
+                    badge.classList.toggle('show', checked > 0);
+                }
+
+                // «Ընտրել բոլորը»՝ երբ բոլորն ընտրված են, վանդակը լցված է
+                const allBtn = card.querySelector('[data-group-select]');
+                if (allBtn) {
+                    const all = list.length > 0 && checked === list.length;
+                    allBtn.classList.toggle('is-all', all);
+                    const icon = allBtn.querySelector('i');
+                    if (icon) {
+                        icon.classList.toggle('bi-check-square-fill', all);
+                        icon.classList.toggle('bi-square', !all);
+                    }
+                }
             });
         }
 

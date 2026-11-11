@@ -1,9 +1,29 @@
 ﻿@model List<SidebarMenuItem>
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 @{
-    var currentPath = Context.Request.Path.Value;
-    if (string.IsNullOrEmpty(currentPath) || currentPath == "/") currentPath = "/Teacher";
+    var currentPath = (Context.Request.Path.Value ?? "").TrimEnd('/');
+    if (string.IsNullOrEmpty(currentPath) || currentPath.Equals("/Teacher", StringComparison.OrdinalIgnoreCase)) currentPath = "/Teacher/Index";
     var footerItems = (List<SidebarMenuItem>)ViewBag.FooterItems;
+
+    // Ընթացիկ էջին համապատասխանող մենյուի կետը՝ ամենաերկար համընկնող հղումը։
+    // Օրինակ՝ /Repository/Assignments/Create և /Repository/Assignments/5 → «Տրված առաջադրանքներ»,
+    // /Repository/Assignments/Bank/12/Send → «Առաջադրանքների շտեմարան», /Groups/3 → «Խմբեր»։
+    static IEnumerable<SidebarMenuItem> Flatten(IEnumerable<SidebarMenuItem> items) =>
+        items.SelectMany(i => new[] { i }.Concat(Flatten(i.Children)));
+
+    bool Matches(string? url) =>
+        !string.IsNullOrEmpty(url) && url != "#"
+        && (currentPath.Equals(url, StringComparison.OrdinalIgnoreCase)
+            || currentPath.StartsWith(url.TrimEnd('/') + "/", StringComparison.OrdinalIgnoreCase));
+
+    var activeUrl = Flatten(Model).Concat(Flatten(footerItems))
+        .Select(i => i.Url)
+        .Where(Matches)
+        .OrderByDescending(u => u!.Length)
+        .FirstOrDefault();
+
+    bool IsActiveUrl(string? url) => activeUrl != null && string.Equals(url, activeUrl, StringComparison.OrdinalIgnoreCase);
+    bool HasActive(SidebarMenuItem item) => item.Children.Any(c => IsActiveUrl(c.Url) || HasActive(c));
 }
 
 <aside class="sidebar d-flex flex-column bg-light" id="sidebar">
@@ -22,9 +42,9 @@
     <ul class="list-unstyled flex-grow-1 mb-0">
         @foreach (var item in Model)
         {
-            var hasActiveChild = item.Children.Any(c => c.Url == currentPath || c.Children.Any(g => g.Url == currentPath));
+            var hasActiveChild = HasActive(item);
             <li class="sidebar-item position-relative @(hasActiveChild ? "open" : "")">
-                <a href="@(item.Url ?? "#")" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 text-decoration-none text-nowrap @((currentPath == item.Url || hasActiveChild) ? "active" : "")">
+                <a href="@(item.Url ?? "#")" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 text-decoration-none text-nowrap @((IsActiveUrl(item.Url) || hasActiveChild) ? "active" : "")">
                     @Html.Raw(item.IconSvg)
                     <span class="sidebar-label">@item.Label</span>
                     @if (item.Children.Any())
@@ -44,7 +64,7 @@
                         <li class="sidebar-submenu-header">@item.Label</li>
                         @foreach (var child in item.Children)
                         {
-                            var childHasActive = child.Children.Any(g => g.Url == currentPath);
+                            var childHasActive = HasActive(child);
 
                             if (child.Children.Any())
                             {
@@ -58,7 +78,7 @@
                                         @foreach (var grand in child.Children)
                                         {
                                             <li>
-                                                <a href="@grand.Url" class="d-flex align-items-center gap-2 py-2 text-decoration-none @(currentPath == grand.Url ? "active" : "")">
+                                                <a href="@grand.Url" class="d-flex align-items-center gap-2 py-2 text-decoration-none @(IsActiveUrl(grand.Url) ? "active" : "")">
                                                     @Html.Raw(grand.IconSvg)
                                                     <span>@grand.Label</span>
                                                 </a>
@@ -70,7 +90,7 @@
                             else
                             {
                                 <li>
-                                    <a href="@child.Url" class="d-flex align-items-center gap-2 py-2 text-decoration-none @(currentPath == child.Url ? "active" : "")">
+                                    <a href="@child.Url" class="d-flex align-items-center gap-2 py-2 text-decoration-none @(IsActiveUrl(child.Url) ? "active" : "")">
                                         @Html.Raw(child.IconSvg)
                                         <span>@child.Label</span>
                                     </a>
@@ -87,7 +107,7 @@
         @foreach (var item in footerItems)
         {
             <li class="sidebar-item position-relative">
-                <a href="@(item.Url ?? "#")" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 text-decoration-none text-nowrap @(currentPath == item.Url ? "active" : "")">
+                <a href="@(item.Url ?? "#")" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 text-decoration-none text-nowrap @(IsActiveUrl(item.Url) ? "active" : "")">
                     @Html.Raw(item.IconSvg)
                     <span class="sidebar-label">@item.Label</span>
                 </a>

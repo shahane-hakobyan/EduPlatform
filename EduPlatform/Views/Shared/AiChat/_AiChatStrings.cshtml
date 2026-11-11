@@ -1,0 +1,44 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    // Բրաուզերի համար՝ թարգմանված տեքստեր և հասցեներ (ai-chat*.js)
+    var i18n = new Dictionary<string, string>
+    {
+        ["placeholder"] = Localizer["AiChatPlaceholder"].Value,
+        ["send"] = Localizer["AiChatSend"].Value,
+        ["stop"] = Localizer["AiChatStop"].Value,
+        ["attach"] = Localizer["AiChatAttach"].Value,
+        ["record"] = Localizer["AiChatRecord"].Value,
+        ["stopRecord"] = Localizer["AiChatStopRecord"].Value,
+        ["copy"] = Localizer["AiChatCopy"].Value,
+        ["copied"] = Localizer["AiChatCopied"].Value,
+        ["edit"] = Localizer["AiChatEdit"].Value,
+        ["save"] = Localizer["AiChatSave"].Value,
+        ["cancel"] = Localizer["CancelBtn"].Value,
+        ["error"] = Localizer["AiChatError"].Value,
+        ["micDenied"] = Localizer["AiChatMicDenied"].Value,
+        ["fileTooBig"] = Localizer["AiChatFileTooBig"].Value,
+        ["tooManyFiles"] = Localizer["AiChatTooManyFiles"].Value,
+        ["badType"] = Localizer["AiChatBadType"].Value,
+        ["now"] = Localizer["AiChatNow"].Value,
+        ["yesterday"] = Localizer["AiChatYesterday"].Value,
+        ["pin"] = Localizer["AiChatPin"].Value,
+        ["unpin"] = Localizer["AiChatUnpin"].Value,
+        ["rename"] = Localizer["AiChatRename"].Value,
+        ["delete"] = Localizer["AiChatDelete"].Value,
+        ["confirmDelete"] = Localizer["AiChatConfirmDelete"].Value,
+        ["renamePrompt"] = Localizer["AiChatRenamePrompt"].Value,
+        ["edited"] = Localizer["AiChatEdited"].Value,
+        ["noChats"] = Localizer["AiChatNoChats"].Value,
+        ["limitReached"] = Localizer["AiChatLimitReached"].Value,
+        ["title"] = Localizer["AiChatTitle"].Value
+    };
+
+    var config = new Dictionary<string, object>
+    {
+        ["urls"] = new Dictionary<string, string> { ["base"] = Url.Content("~/Teacher/AIChat") },
+        ["i18n"] = i18n
+    };
+}
+<script>
+    window.__aiChat = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(config));
+</script>

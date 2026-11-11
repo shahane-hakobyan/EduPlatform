@@ -1,0 +1,40 @@
+﻿@model List<EduPlatform.ViewModels.AiAgentOption>
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+
+@* Զրույցի ընդհանուր մասը՝ հաղորդագրությունների ցանկ + գրելու դաշտ։ Օգտագործվում է էջում և լողացող պատուհանում։ Տրամաբանությունը՝ ai-chat.js *@
+<div class="aic" data-aic>
+    <div class="aic-messages" data-aic-messages>
+        <div class="aic-empty" data-aic-empty>
+            <div class="aic-empty-icon"><i class="bi bi-robot"></i></div>
+            <h3 class="aic-empty-title">@Localizer["AiChatEmptyTitle"]</h3>
+            <p class="aic-empty-text">@Localizer["AiChatEmptySubtitle"]</p>
+            <div class="aic-chips">
+                @foreach (var agent in Model)
+                {
+                    <button type="button" class="aic-chip" data-aic-agent-key="@agent.Key">@agent.Name</button>
+                }
+            </div>
+        </div>
+        <div class="aic-thread" data-aic-thread></div>
+    </div>
+
+    <div class="aic-composer">
+        <div class="aic-agent-pill" data-aic-agent-pill hidden>
+            <i class="bi bi-stars"></i>
+            <span data-aic-agent-name></span>
+            <button type="button" data-aic-agent-clear aria-label="@Localizer["CancelBtn"]"><i class="bi bi-x"></i></button>
+        </div>
+
+        <div class="aic-attachments" data-aic-attachments></div>
+
+        <div class="aic-composer-row">
+            <div class="aic-input-wrap">
+                <textarea rows="1" maxlength="8000" data-aic-input placeholder="@Localizer["AiChatPlaceholder"]"></textarea>
+                <button type="button" class="aic-icon-btn" data-aic-attach title="@Localizer["AiChatAttach"]"><i class="bi bi-paperclip"></i></button>
+                <button type="button" class="aic-icon-btn" data-aic-mic title="@Localizer["AiChatRecord"]"><i class="bi bi-mic"></i></button>
+                <input type="file" hidden multiple data-aic-file accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.md,.csv,.json,.docx,.xlsx,.pptx" />
+            </div>
+            <button type="button" class="aic-send" data-aic-send title="@Localizer["AiChatSend"]" disabled><i class="bi bi-send"></i></button>
+        </div>
+    </div>
+</div>

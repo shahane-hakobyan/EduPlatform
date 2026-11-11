@@ -1,0 +1,63 @@
+﻿@model EduPlatform.ViewModels.AiChatPageViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["AiChatTitle"].Value;
+    ViewData["HideAiWidget"] = true;   // էջն ինքն է զրուցարանը՝ լողացող կոճակ պետք չէ
+}
+
+<div class="aic-page" data-aic-page data-initial="@(Model.InitialConversationId?.ToString())">
+
+    <aside class="aic-side" id="aicSide">
+        <div class="aic-side-head">
+            <span class="aic-side-icon"><i class="bi bi-robot"></i></span>
+            <span class="aic-side-title">@Localizer["AiChatTitle"]</span>
+        </div>
+
+        <button type="button" class="aic-new-btn" data-aic-new>
+            <i class="bi bi-plus-lg"></i> @Localizer["AiChatNew"]
+        </button>
+
+        <div class="aic-side-scroll">
+            <button type="button" class="aic-section-row" data-aic-agents-toggle>
+                <span><i class="bi bi-stars"></i> @Localizer["AiChatAgents"]</span>
+                <i class="bi bi-chevron-right aic-row-caret"></i>
+            </button>
+            <div class="aic-agents" data-aic-agents hidden>
+                @foreach (var agent in Model.Agents)
+                {
+                    <button type="button" class="aic-agent-item" data-aic-agent-key="@agent.Key">
+                        <i class="bi bi-robot"></i> <span>@agent.Name</span>
+                    </button>
+                }
+            </div>
+
+            <div data-aic-pinned-section hidden>
+                <div class="aic-section-label"><i class="bi bi-pin-angle"></i> @Localizer["AiChatPinned"]</div>
+                <div class="aic-conv-list" data-aic-pinned></div>
+            </div>
+
+            <div class="aic-section-label"><i class="bi bi-clock-history"></i> @Localizer["AiChatHistory"]</div>
+            <div class="aic-conv-list" data-aic-history></div>
+            <div class="aic-side-empty" data-aic-side-empty hidden>@Localizer["AiChatNoChats"]</div>
+        </div>
+    </aside>
+
+    <section class="aic-main">
+        <div class="aic-topbar">
+            <button type="button" class="aic-back" data-aic-side-toggle aria-label="@Localizer["AiChatTitle"]"><i class="bi bi-chevron-left"></i></button>
+            <span class="aic-top-icon"><i class="bi bi-robot"></i></span>
+            <h2 class="aic-top-title" data-aic-title>@Localizer["AiChatTitle"]</h2>
+        </div>
+
+        <partial name="~/Views/Shared/AiChat/_AiChatBody.cshtml" model="Model.Agents" />
+    </section>
+</div>
+
+<partial name="~/Views/Shared/AiChat/_AiChatStrings.cshtml" />
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+    <script src="~/js/ai-chat/ai-chat.js" asp-append-version="true"></script>
+    <script src="~/js/ai-chat/ai-chat-page.js" asp-append-version="true"></script>
+}

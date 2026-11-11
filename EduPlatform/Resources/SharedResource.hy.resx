@@ -496,4 +496,46 @@
   <data name="ArchivedReadOnlyNote" xml:space="preserve"><value>Այս առաջադրանքը արխիվացված է՝ հասանելի է միայն դիտումը։</value></data>
   <data name="AssignmentTaskLabel" xml:space="preserve"><value>Առաջադրանքի տեքստ</value></data>
   <data name="ComingSoonLabel" xml:space="preserve"><value>Շուտով</value></data>
+  <data name="MaxScoreLabel" xml:space="preserve"><value>Առավելագույն միավոր</value></data>
+  <data name="ScoreExceedsMax" xml:space="preserve"><value>Նախնական միավորը չի կարող գերազանցել առավելագույնը</value></data>
+
+  <data name="AiChatTitle" xml:space="preserve"><value>ԱԲ զրուցարան</value></data>
+  <data name="AiChatNew" xml:space="preserve"><value>Նոր զրույց</value></data>
+  <data name="AiChatAgents" xml:space="preserve"><value>Ագենտներ</value></data>
+  <data name="AiChatPinned" xml:space="preserve"><value>Ամրացված</value></data>
+  <data name="AiChatHistory" xml:space="preserve"><value>Զրույցների պատմություն</value></data>
+  <data name="AiChatNoChats" xml:space="preserve"><value>Զրույցներ դեռ չկան</value></data>
+  <data name="AiChatEmptyTitle" xml:space="preserve"><value>Ինչով կարող եմ օգնել</value></data>
+  <data name="AiChatEmptySubtitle" xml:space="preserve"><value>Ձեր հուզող հարցերը կարող եք ուղղել այստեղ</value></data>
+  <data name="AiChatPlaceholder" xml:space="preserve"><value>Գրել այստեղ</value></data>
+  <data name="AiChatSend" xml:space="preserve"><value>Ուղարկել</value></data>
+  <data name="AiChatStop" xml:space="preserve"><value>Դադարեցնել</value></data>
+  <data name="AiChatAttach" xml:space="preserve"><value>Կցել ֆայլ</value></data>
+  <data name="AiChatRecord" xml:space="preserve"><value>Ձայնագրել</value></data>
+  <data name="AiChatStopRecord" xml:space="preserve"><value>Կանգնեցնել ձայնագրությունը</value></data>
+  <data name="AiChatCopy" xml:space="preserve"><value>Պատճենել</value></data>
+  <data name="AiChatCopied" xml:space="preserve"><value>Պատճենվեց</value></data>
+  <data name="AiChatEdit" xml:space="preserve"><value>Խմբագրել</value></data>
+  <data name="AiChatSave" xml:space="preserve"><value>Պահպանել</value></data>
+  <data name="AiChatEdited" xml:space="preserve"><value>խմբագրված</value></data>
+  <data name="AiChatPin" xml:space="preserve"><value>Ամրացնել</value></data>
+  <data name="AiChatUnpin" xml:space="preserve"><value>Ապամրացնել</value></data>
+  <data name="AiChatRename" xml:space="preserve"><value>Վերանվանել</value></data>
+  <data name="AiChatDelete" xml:space="preserve"><value>Ջնջել</value></data>
+  <data name="AiChatConfirmDelete" xml:space="preserve"><value>Ջնջե՞լ այս զրույցը։</value></data>
+  <data name="AiChatRenamePrompt" xml:space="preserve"><value>Զրույցի նոր անունը</value></data>
+  <data name="AiChatNewTitle" xml:space="preserve"><value>Նոր զրույց</value></data>
+  <data name="AiChatNow" xml:space="preserve"><value>Հիմա</value></data>
+  <data name="AiChatYesterday" xml:space="preserve"><value>Երեկ</value></data>
+  <data name="AiChatError" xml:space="preserve"><value>Չհաջողվեց ստանալ պատասխան։ Փորձեք կրկին։</value></data>
+  <data name="AiChatMicDenied" xml:space="preserve"><value>Խոսափողը հասանելի չէ։ Թույլատրեք մուտքը բրաուզերի կարգավորումներում։</value></data>
+  <data name="AiChatFileTooBig" xml:space="preserve"><value>Ֆայլը շատ մեծ է (առավելագույնը 10 ՄԲ)։</value></data>
+  <data name="AiChatTooManyFiles" xml:space="preserve"><value>Կարելի է կցել առավելագույնը 5 ֆայլ։</value></data>
+  <data name="AiChatBadType" xml:space="preserve"><value>Ֆայլի այս տեսակը չի ընդունվում</value></data>
+  <data name="AiChatOpenFull" xml:space="preserve"><value>Բացել ամբողջ էջով</value></data>
+  <data name="AiAgentMath" xml:space="preserve"><value>Մաթեմատիկա</value></data>
+  <data name="AiAgentHistory" xml:space="preserve"><value>Հայոց պատմություն</value></data>
+  <data name="AiAgentMaterials" xml:space="preserve"><value>Կազմել նյութեր</value></data>
+  <data name="AiAgentPhysics" xml:space="preserve"><value>Ֆիզիկա</value></data>
+  <data name="AiChatLimitReached" xml:space="preserve"><value>Այսօրվա սահմանաչափը լրացել է ({0} հարց)։ Փորձեք վաղը։</value></data>
 </root>

@@ -52,6 +52,7 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "");
 builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
 builder.Services.AddScoped<IClassRosterService, ClassRosterService>();
 builder.Services.AddSingleton<IAssignmentFileService, AssignmentFileService>();
+builder.Services.AddSingleton<IClaudeChatService, ClaudeChatService>();   // ԱԲ զրուցարան (Claude API)
 
 // ── Մուտք ───────────────────────────────────────────────────────────────────
 // Production՝ AuthServer-ի JWT (մուտքի տրամաբանությունը կավարտի մեկ այլ ծրագրավորող):

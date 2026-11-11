@@ -759,6 +759,7 @@
 .ca-group-card.open .ca-group-toggle i {
     transform: rotate(180deg);
 }
+
 .ca-group-body {
     display: none;
     padding: 12px 16px;
@@ -964,6 +965,15 @@
     --ca-page-bg: var(--surface);
 }
 
+/* shared pupil picker (also inside the "Add pupils" popup, which is outside .ca-redesign) */
+.ca-picker {
+    --ca-soft: #F9FAFB;
+}
+
+[data-theme="dark"] .ca-picker {
+    --ca-soft: var(--surface-alt);
+}
+
 /* top bar: full-width white strip under the app header */
 .ca-redesign .ca-topbar {
     display: flex;
@@ -1006,44 +1016,44 @@
 }
 
 /* soft grey (#F9FAFB) surfaces */
-.ca-redesign .ca-dropzone,
-.ca-redesign .ca-class-group-head,
-.ca-redesign .ca-pupil-item,
-.ca-redesign .ca-pupil-search input {
+:is(.ca-redesign, .ca-picker) .ca-dropzone,
+:is(.ca-redesign, .ca-picker) .ca-class-group-head,
+:is(.ca-redesign, .ca-picker) .ca-pupil-item,
+:is(.ca-redesign, .ca-picker) .ca-pupil-search input {
     background: var(--ca-soft);
 }
 
-.ca-redesign .ca-pupil-search input {
+:is(.ca-redesign, .ca-picker) .ca-pupil-search input {
     border-color: var(--surface-alt);
 }
 
 /* class group: chevron points right when closed, down when open */
-.ca-redesign .ca-class-group.open .ca-class-caret {
+:is(.ca-redesign, .ca-picker) .ca-class-group.open .ca-class-caret {
     transform: rotate(90deg);
 }
 
 /* pupils: two columns like the design, one column on phones */
-.ca-redesign .ca-pupil-grid {
+:is(.ca-redesign, .ca-picker) .ca-pupil-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 @media (max-width: 575.98px) {
-    .ca-redesign .ca-pupil-grid {
+    :is(.ca-redesign, .ca-picker) .ca-pupil-grid {
         grid-template-columns: minmax(0, 1fr);
     }
 }
 
 /* selected pupil: accent border + small check badge on the avatar */
-.ca-redesign .ca-pupil-item {
+:is(.ca-redesign, .ca-picker) .ca-pupil-item {
     position: relative;
 }
 
-    .ca-redesign .ca-pupil-item:has(input:checked) {
+    :is(.ca-redesign, .ca-picker) .ca-pupil-item:has(input:checked) {
         outline: none;
         box-shadow: inset 0 0 0 .8px var(--accent-strong);
     }
 
-.ca-redesign .ca-pupil-check {
+:is(.ca-redesign, .ca-picker) .ca-pupil-check {
     display: none;
     position: absolute;
     left: 32px;
@@ -1059,11 +1069,11 @@
     justify-content: center;
 }
 
-.ca-redesign .ca-pupil-item:has(input:checked) .ca-pupil-check {
+:is(.ca-redesign, .ca-picker) .ca-pupil-item:has(input:checked) .ca-pupil-check {
     display: flex;
 }
 
-.ca-redesign .ca-pupil-item:has(input:checked) .ca-pupil-name {
+:is(.ca-redesign, .ca-picker) .ca-pupil-item:has(input:checked) .ca-pupil-name {
     color: var(--text-secondary);
     font-weight: 400;
 }
@@ -1087,40 +1097,34 @@
 
 /* ── "My groups" picker: same look as the class accordions ──
    (markup and JS are shared with the "Add pupils" popup, so only CSS, scoped to .ca-redesign) */
-.ca-redesign .ca-group-card {
+:is(.ca-redesign, .ca-picker) .ca-group-card {
     border: .8px solid var(--surface-alt);
     border-radius: 14px;
     background: var(--surface);
     overflow: hidden;
 }
 
-    .ca-redesign .ca-group-card:hover {
+    :is(.ca-redesign, .ca-picker) .ca-group-card:hover {
         border-color: var(--surface-alt);
     }
 
-    .ca-redesign .ca-group-card.partial {
-        border-color: var(--accent);
-    }
-
-    .ca-redesign .ca-group-card.selected {
-        border: .8px solid var(--accent-strong);
+    /* ընտրված/մասամբ ընտրված խումբը՝ նույն չեզոք շրջանակով, ինչ դասարանը (ընտրությունը երևում է վերնագրի թվով) */
+    :is(.ca-redesign, .ca-picker) .ca-group-card.partial,
+    :is(.ca-redesign, .ca-picker) .ca-group-card.selected {
+        border: .8px solid var(--surface-alt);
         background: var(--surface);
     }
 
-.ca-redesign .ca-group-head {
+:is(.ca-redesign, .ca-picker) .ca-group-head {
     background: var(--ca-soft);
 }
 
-.ca-redesign .ca-group-card.selected .ca-group-head {
-    background: rgba(99, 105, 212, 0.05);
-}
-
-.ca-redesign .ca-group-select {
+:is(.ca-redesign, .ca-picker) .ca-group-select {
     gap: 10px;
     padding: 12px 16px;
 }
 
-.ca-redesign .ca-group-avatar {
+:is(.ca-redesign, .ca-picker) .ca-group-avatar {
     width: 24px;
     height: 24px;
     border-radius: 10px;
@@ -1129,45 +1133,54 @@
     font-size: 12px;
 }
 
-.ca-redesign .ca-group-main {
+:is(.ca-redesign, .ca-picker) .ca-group-main {
+    flex: 0 1 auto;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 8px;
 }
 
-.ca-redesign .ca-group-name {
-    font-size: 13px;
-}
-
-.ca-redesign .ca-group-sub {
+/* «N սովորողի»՝ վերնագրի աջ կողմում, ինչպես դասարանում */
+:is(.ca-redesign, .ca-picker) .ca-group-count {
+    align-self: center;
     font-size: 11px;
     color: var(--text-faint);
     white-space: nowrap;
 }
 
-.ca-redesign .ca-group-check {
+:is(.ca-redesign, .ca-picker) .ca-group-name {
+    font-size: 13px;
+}
+
+:is(.ca-redesign, .ca-picker) .ca-group-sub {
+    font-size: 11px;
+    color: var(--text-faint);
+    white-space: nowrap;
+}
+
+:is(.ca-redesign, .ca-picker) .ca-group-check {
     font-size: 14px;
     color: var(--accent-strong);
 }
 
 /* arrow: points right when closed, down when open */
-.ca-redesign .ca-group-toggle {
+:is(.ca-redesign, .ca-picker) .ca-group-toggle {
     width: 44px;
     border-left: none;
     color: var(--text-faint);
 }
 
-    .ca-redesign .ca-group-toggle i {
+    :is(.ca-redesign, .ca-picker) .ca-group-toggle i {
         transform: rotate(-90deg);
     }
 
-.ca-redesign .ca-group-card.open .ca-group-toggle i {
+:is(.ca-redesign, .ca-picker) .ca-group-card.open .ca-group-toggle i {
     transform: none;
 }
 
 /* members: two-column grid of pupil rows with the check badge */
-.ca-redesign .ca-group-members {
+:is(.ca-redesign, .ca-picker) .ca-group-members {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
@@ -1175,12 +1188,12 @@
 }
 
 @media (max-width: 575.98px) {
-    .ca-redesign .ca-group-members {
+    :is(.ca-redesign, .ca-picker) .ca-group-members {
         grid-template-columns: minmax(0, 1fr);
     }
 }
 
-.ca-redesign .ca-group-member {
+:is(.ca-redesign, .ca-picker) .ca-group-member {
     position: relative;
     gap: 10px;
     padding: 8px 12px;
@@ -1190,21 +1203,21 @@
     color: var(--text-secondary);
 }
 
-    .ca-redesign .ca-group-member input {
+    :is(.ca-redesign, .ca-picker) .ca-group-member input {
         display: none;
     }
 
-    .ca-redesign .ca-group-member .ca-pupil-avatar {
+    :is(.ca-redesign, .ca-picker) .ca-group-member .ca-pupil-avatar {
         width: 32px;
         height: 32px;
     }
 
-    .ca-redesign .ca-group-member:has(input:checked) {
+    :is(.ca-redesign, .ca-picker) .ca-group-member:has(input:checked) {
         background: rgba(99, 105, 212, 0.05);
         box-shadow: inset 0 0 0 .8px var(--accent-strong);
     }
 
-        .ca-redesign .ca-group-member:has(input:checked)::after {
+        :is(.ca-redesign, .ca-picker) .ca-group-member:has(input:checked)::after {
             content: "\2713";
             position: absolute;
             left: 32px;
@@ -1220,11 +1233,22 @@
         }
 
     /* already added pupils: shown, but not selectable */
-    .ca-redesign .ca-group-member.is-disabled:has(input:checked) {
+    :is(.ca-redesign, .ca-picker) .ca-group-member.is-disabled:has(input:checked) {
         background: var(--ca-soft);
         box-shadow: none;
     }
 
-        .ca-redesign .ca-group-member.is-disabled:has(input:checked)::after {
+        :is(.ca-redesign, .ca-picker) .ca-group-member.is-disabled:has(input:checked)::after {
             display: none;
         }
+
+/* already added class pupils: shown, but not selectable */
+:is(.ca-redesign, .ca-picker) .ca-pupil-item-disabled:has(input:checked) {
+    background: var(--ca-soft);
+    box-shadow: none;
+    opacity: .65;
+}
+
+    :is(.ca-redesign, .ca-picker) .ca-pupil-item-disabled:has(input:checked) .ca-pupil-check {
+        display: none;
+    }

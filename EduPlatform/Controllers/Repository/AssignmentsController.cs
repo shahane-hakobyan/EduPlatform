@@ -1073,6 +1073,7 @@ namespace EduPlatform.Controllers
                         r.SubmittedAt,
                         r.AnswerText,
                         r.Score,
+                        r.MaxScore,
                         r.Feedback,
                         GradeName = r.Grade != null ? r.Grade.GradeName : "",
                         Files = r.Files.OrderBy(f => f.Id).Select(f => new { f.Id, f.FileName }).ToList()
@@ -1144,6 +1145,7 @@ namespace EduPlatform.Controllers
                         _ => "Pending"
                     },
                     Score = r.Score,
+                    MaxScore = a.GradingType == AssignmentGradingType.CurrentScore ? 10 : r.MaxScore,
                     ScoreFeedback = r.Feedback ?? "",
                     AnswerText = r.AnswerText ?? "",
                     GradingType = a.GradingType.ToString(),
@@ -1211,6 +1213,9 @@ namespace EduPlatform.Controllers
         {
             public int SubmissionId { get; set; }   // AssignmentRecipient.Id
             public decimal? Score { get; set; }
+
+            /// <summary>Միայն հայտորոշիչ գնահատման համար՝ «Առավելագույն միավոր»</summary>
+            public decimal? MaxScore { get; set; }
             public string? Feedback { get; set; }
         }
 
@@ -1237,19 +1242,28 @@ namespace EduPlatform.Controllers
                         return BadRequest();
                     if (req.Score is null && feedback is null) return BadRequest();
                     r.Score = req.Score;
+                    r.MaxScore = null;
                     break;
 
                 case AssignmentGradingType.Diagnostic:
-                    // նախնական միավոր (ազատ թիվ) և/կամ հետադարձ կապ՝ առնվազն մեկը
+                    // «Առավելագույն միավոր» և «Նախնական միավոր» (ազատ թվեր) և/կամ հետադարձ կապ՝ առնվազն մեկը
+                    if (req.MaxScore is not null && (req.MaxScore <= 0 || req.MaxScore > 9999))
+                        return BadRequest();
                     if (req.Score is not null && (req.Score < 0 || req.Score > 9999))
                         return BadRequest();
-                    if (req.Score is null && feedback is null) return BadRequest();
+                    // նախնական միավորը չի կարող գերազանցել առավելագույնը
+                    if (req.Score is not null && req.MaxScore is not null && req.Score > req.MaxScore)
+                        return BadRequest();
+                    if (req.Score is null && req.MaxScore is null && feedback is null)
+                        return BadRequest();
                     r.Score = req.Score is null ? null : Math.Round(req.Score.Value, 2);
+                    r.MaxScore = req.MaxScore is null ? null : Math.Round(req.MaxScore.Value, 2);
                     break;
 
                 default: // Formative՝ միայն հետադարձ կապ
                     if (feedback is null) return BadRequest();
                     r.Score = null;
+                    r.MaxScore = null;
                     break;
             }
 
