@@ -25,7 +25,7 @@ namespace EduPlatform.Services
 
     /// <summary>
     /// «ԱԲ զրուցարան»՝ Claude API-ի միջոցով (պաշտոնական Anthropic SDK)։
-    /// Կարգավորումներ՝ Anthropic:ApiKey (պարտադիր), Anthropic:Model (կանխադրված՝ claude-sonnet-5-5), Anthropic:MaxTokens (կանխադրված՝ 8000)։
+    /// Կարգավորումներ՝ Anthropic:ApiKey (պարտադիր), Anthropic:Model (կանխադրված՝ claude-haiku-5-5՝ ամենաէժանը), Anthropic:Effort (low/medium/high, կանխադրված՝ low), Anthropic:MaxTokens (կանխադրված՝ 8000)։
     /// </summary>
     public class ClaudeChatService : IClaudeChatService
     {
@@ -34,6 +34,7 @@ namespace EduPlatform.Services
         private readonly AnthropicClient _client;
         private readonly string _model;
         private readonly int _maxTokens;
+        private readonly Effort _effort;
 
         public ClaudeChatService(IConfiguration config)
         {
@@ -42,8 +43,16 @@ namespace EduPlatform.Services
                 throw new InvalidOperationException("Anthropic:ApiKey is not configured.");
 
             _client = new AnthropicClient { ApiKey = apiKey };
-            _model = config["Anthropic:Model"] is { Length: > 0 } m ? m : "claude-sonnet-5-5";
+            _model = config["Anthropic:Model"] is { Length: > 0 } m ? m : "claude-haiku-5-5";
             _maxTokens = config.GetValue("Anthropic:MaxTokens", 8000);
+
+            // Effort՝ որքան «խորը մտածի» մոդելը. low՝ ամենաէժանը և արագը, high՝ ամենաթանկը
+            _effort = (config["Anthropic:Effort"] ?? "low").ToLowerInvariant() switch
+            {
+                "high" => Effort.High,
+                "medium" => Effort.Medium,
+                _ => Effort.Low
+            };
         }
 
         public async IAsyncEnumerable<string> StreamReplyAsync(
@@ -56,7 +65,7 @@ namespace EduPlatform.Services
                 MaxTokens = _maxTokens,
                 System = BuildSystemPrompt(agentKey, language),
                 Messages = BuildMessages(turns),
-                OutputConfig = new OutputConfig { Effort = Effort.Medium },
+                OutputConfig = new OutputConfig { Effort = _effort },
             };
 
             await foreach (RawMessageStreamEvent streamEvent in _client.Messages.CreateStreaming(parameters).WithCancellation(ct))
