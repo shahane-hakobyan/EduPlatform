@@ -1,10 +1,11 @@
-@model EduPlatform.ViewModels.Library.MaterialsPageViewModel
+﻿@model EduPlatform.ViewModels.Library.MaterialsPageViewModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 
 @{
     var uid = Guid.NewGuid().ToString("N")[..6];
 }
 
+<div class="materials-content">
 <div class="materials-filter-label">@Localizer["Filters"]</div>
 <div class="materials-filter-bar">
     <div class="materials-search position-relative">
@@ -110,7 +111,15 @@
                                         <i class="bi bi-archive-fill materials-table-archived" data-bs-toggle="tooltip" title="@Localizer["StatusArchived"]"></i>
                                     }
                                 </div>
-                                <div class="materials-table-sub">@material.Year &middot; @material.Pages @Localizer["Pages"]</div>
+                                @{
+                                    var sub = new List<string>();
+                                    if (material.Year.HasValue) sub.Add(material.Year.Value.ToString());
+                                    if (material.Pages > 0) sub.Add($"{material.Pages} {Localizer["Pages"]}");
+                                }
+                                @if (sub.Count > 0)
+                                {
+                                    <div class="materials-table-sub">@string.Join(" · ", sub)</div>
+                                }
                             </div>
                         </div>
                     </td>
@@ -148,10 +157,13 @@
     </table>
 </div>
 
-@if (!Model.Materials.Any())
-{
-    <div class="materials-empty text-center py-5">
-        <i class="bi bi-inbox materials-empty-icon"></i>
-        <p class="materials-empty-text">@Localizer["NoMaterialsSaved"]</p>
-    </div>
-}
+@* Դատարկ վիճակները՝ միշտ նկարվում են, ցույց/թաքցնում է materials.js-ը *@
+<div class="materials-empty text-center py-5" data-empty="none" style="@(Model.Materials.Any() ? "display:none" : "")">
+    <i class="bi bi-inbox materials-empty-icon"></i>
+    <p class="materials-empty-text">@Localizer["NoMaterialsSaved"]</p>
+</div>
+<div class="materials-empty text-center py-5" data-empty="filtered" style="display:none">
+    <i class="bi bi-funnel materials-empty-icon"></i>
+    <p class="materials-empty-text">@Localizer["NoMaterialsMatchFilters"]</p>
+</div>
+</div>

@@ -145,6 +145,7 @@
   <data name="PopularScienceBooks" xml:space="preserve"><value>Գիտահանրամատչելի գրքեր</value></data>
   <data name="MaterialType" xml:space="preserve"><value>Նյութի տեսակ</value></data>
   <data name="NoMaterialsSaved" xml:space="preserve"><value>Չկան նյութեր</value></data>
+  <data name="NoMaterialsMatchFilters" xml:space="preserve"><value>Ֆիլտրերին համապատասխանող նյութ չկա</value></data>
   <data name="Language" xml:space="preserve"><value>Լեզու</value></data>
   <data name="PersonalInformation" xml:space="preserve"><value>Անձնական տվյալներ</value></data>
   <data name="AddPhoto" xml:space="preserve"><value>Ավելացնել նկար</value></data>

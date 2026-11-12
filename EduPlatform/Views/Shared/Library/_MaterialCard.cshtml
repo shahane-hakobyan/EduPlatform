@@ -51,7 +51,10 @@
             {
                 <span><i class="bi bi-mortarboard-fill"></i> @string.Join(", ", Model.Grades)</span>
             }
-            <span><i class="bi bi-calendar3"></i> @Model.Year</span>
+            @if (Model.Year.HasValue)
+            {
+                <span><i class="bi bi-calendar3"></i> @Model.Year</span>
+            }
             @if (Model.Pages > 0)
             {
                 <span><i class="bi bi-file-earmark-text"></i> @Model.Pages @Localizer["Pages"]</span>

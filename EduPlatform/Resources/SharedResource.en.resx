@@ -145,6 +145,7 @@
   <data name="PopularScienceBooks" xml:space="preserve"><value>Popular Science Books</value></data>
   <data name="MaterialType" xml:space="preserve"><value>Material type</value></data>
   <data name="NoMaterialsSaved" xml:space="preserve"><value>Not materials saved</value></data>
+  <data name="NoMaterialsMatchFilters" xml:space="preserve"><value>No materials match the filters</value></data>
   <data name="Language" xml:space="preserve"><value>Language</value></data>
   <data name="PersonalInformation" xml:space="preserve"><value>Personal information</value></data>
   <data name="AddPhoto" xml:space="preserve"><value>Add photo</value></data>

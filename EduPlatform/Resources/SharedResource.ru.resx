@@ -145,6 +145,7 @@
   <data name="PopularScienceBooks" xml:space="preserve"><value>Научно-популярные книги</value></data>
   <data name="MaterialType" xml:space="preserve"><value>Тип материала</value></data>
   <data name="NoMaterialsSaved" xml:space="preserve"><value>Тип материала</value></data>
+  <data name="NoMaterialsMatchFilters" xml:space="preserve"><value>Нет материалов, соответствующих фильтрам</value></data>
   <data name="Language" xml:space="preserve"><value>Язык</value></data>
   <data name="PersonalInformation" xml:space="preserve"><value>Личная информация</value></data>
   <data name="AddPhoto" xml:space="preserve"><value>Добавить фото</value></data>

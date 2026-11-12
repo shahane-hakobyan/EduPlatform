@@ -60,7 +60,22 @@ namespace EduPlatform.Api.Controllers
                     MaterialType = req.MaterialType,
                     LibraryMaterialId = req.LibraryMaterialId
                 });
-                await _db.SaveChangesAsync();
+
+                try
+                {
+                    await _db.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    // Երկու արագ սեղմում՝ մյուս հարցումն արդեն պահել է (unique index)։
+                    // Եթե իսկապես պահված է՝ ամեն ինչ կարգին է, այլապես՝ իսկական սխալ է։
+                    _db.ChangeTracker.Clear();
+                    var savedByOther = await _db.UserLibraryMaterials.AnyAsync(x =>
+                        x.UserId == UserId &&
+                        x.MaterialType == req.MaterialType &&
+                        x.LibraryMaterialId == req.LibraryMaterialId);
+                    if (!savedByOther) throw;
+                }
             }
 
             return Ok(new { saved = true });

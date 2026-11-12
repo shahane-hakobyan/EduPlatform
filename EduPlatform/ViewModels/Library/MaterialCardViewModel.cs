@@ -16,7 +16,8 @@
         public string Publisher { get; set; } = "";
         public string? Language { get; set; }
         public int Pages { get; set; }
-        public int Year { get; set; }
+        /// <summary>Հրատարակման տարին, null՝ եթե հայտնի չէ</summary>
+        public int? Year { get; set; }
         public string ViewUrl { get; set; } = "";
         public string DownloadUrl { get; set; } = "";
 

@@ -1,7 +1,7 @@
 ﻿using EduPlatform.Data;
+using EduPlatform.Data.Models;
 using EduPlatform.Resources;
 using EduPlatform.Services;
-using EduPlatform.ViewModels;
 using EduPlatform.ViewModels.Library;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,13 +53,11 @@ namespace EduPlatform.Controllers
             ["OtherEducationalMaterials"] = "OtherMaterial",
         };
 
+        private const string OtherBookType = "OtherBook";
+
         private static readonly string[] CardColors =
             { "blue", "purple", "green", "orange", "pink", "red", "teal", "emerald", "indigo", "amber" };
 
-        /// <summary>
-        /// Ուսուցչի պահած նյութերը՝ EduPlatform-ի UserLibraryMaterials աղյուսակից,
-        /// իսկ նյութերի տվյալները՝ Library.Api-ից:
-        /// </summary>
         /// <summary>Library-ի OtherMaterial-ի տեսակի (Kind) անունը ընթացիկ լեզվով:</summary>
         private string? KindLabel(string? kind) => kind switch
         {
@@ -88,11 +86,12 @@ namespace EduPlatform.Controllers
         private List<MaterialFilterOption> BuildFilters(IReadOnlyCollection<MaterialCardViewModel> cards, params string[] keys)
         {
             var result = new List<MaterialFilterOption>();
+            var activeLabel = _l["StatusActive"].Value;
 
             foreach (var key in keys)
             {
                 string label;
-                IEnumerable<string> values;
+                IEnumerable<string?> values;
 
                 switch (key)
                 {
@@ -105,13 +104,13 @@ namespace EduPlatform.Controllers
                         values = cards.SelectMany(c => c.Authors.Split(", ", StringSplitOptions.RemoveEmptyEntries));
                         break;
                     case "year":
-                        label = _l["PublicationYear"]; values = cards.Select(c => c.Year.ToString()); break;
+                        label = _l["PublicationYear"]; values = cards.Select(c => c.Year?.ToString()); break;
                     case "publisher":
                         label = _l["Publisher"]; values = cards.Select(c => c.Publisher); break;
                     case "language":
-                        label = _l["Language"]; values = cards.Select(c => c.Language ?? ""); break;
+                        label = _l["Language"]; values = cards.Select(c => c.Language); break;
                     case "type":
-                        label = _l["MaterialType"]; values = cards.Select(c => c.TypeLabel ?? ""); break;
+                        label = _l["MaterialType"]; values = cards.Select(c => c.TypeLabel); break;
                     case "status":
                         label = _l["StatusFilter"]; values = cards.Select(c => c.StatusLabel); break;
                     default:
@@ -120,9 +119,10 @@ namespace EduPlatform.Controllers
 
                 var options = values
                     .Where(v => !string.IsNullOrWhiteSpace(v))
+                    .Select(v => v!)
                     .Distinct()
                     .OrderBy(v => int.TryParse(v, out var n) ? n : int.MaxValue)
-                    .ThenBy(v => key == "status" && v == _l["StatusActive"].Value ? 0 : 1)   // «Գործող»-ը առաջինը
+                    .ThenBy(v => v == activeLabel ? 0 : 1)   // կարգավիճակում «Գործող»-ը առաջինը
                     .ThenBy(v => v)
                     .ToList();
 
@@ -133,98 +133,91 @@ namespace EduPlatform.Controllers
             return result;
         }
 
-        private async Task<MaterialsPageViewModel> BuildSavedMaterialsPage(string route)
+        /// <summary>
+        /// Օգտատիրոջ տվյալ տեսակի պահվածները (նորերը՝ առաջինը)՝ Library.Api-ի տվյալներով։
+        /// Library-ում ջնջված նյութերը հեռացվում են մեր աղյուսակից։
+        /// Library-ն անհասանելի է → ոչինչ չենք հեռացնում, ցուցակը դատարկ է։
+        /// </summary>
+        private async Task<List<(UserLibraryMaterial Saved, LibraryBookDto Book)>> LoadSavedAsync(string materialType)
         {
-            var type = LibraryTypeByRoute[route];
-
             var saved = await _db.UserLibraryMaterials
-                .Where(x => x.UserId == CurrentUserId && x.MaterialType == type)
+                .Where(x => x.UserId == CurrentUserId && x.MaterialType == materialType)
                 .OrderByDescending(x => x.SavedAt)
                 .ToListAsync();
 
             var books = await _library.GetByIdsAsync(saved.Select(s => s.LibraryMaterialId));
+            if (books is null) return new();
 
-            if (books is not null)
+            var byId = books.ToDictionary(b => b.Id);
+
+            var orphans = saved.Where(s => !byId.ContainsKey(s.LibraryMaterialId)).ToList();
+            if (orphans.Count > 0)
             {
-                // Library-ն պատասխանել է → այնտեղ ջնջված նյութերը հեռացնում ենք մեր աղյուսակից:
-                var existing = books.Select(b => b.Id).ToHashSet();
-                var orphans = saved.Where(s => !existing.Contains(s.LibraryMaterialId)).ToList();
-                if (orphans.Count > 0)
-                {
-                    _db.UserLibraryMaterials.RemoveRange(orphans);
-                    await _db.SaveChangesAsync();
-                }
+                _db.UserLibraryMaterials.RemoveRange(orphans);
+                await _db.SaveChangesAsync();
             }
 
-            // Library-ն անհասանելի է → ոչինչ չենք հեռացնում, ցուցակը դատարկ է ցույց տրվում:
-            var byId = (books ?? new()).ToDictionary(b => b.Id);
-
-            var cards = saved
+            return saved
                 .Where(s => byId.ContainsKey(s.LibraryMaterialId))
-                .Select(s => byId[s.LibraryMaterialId])
-                .Select(b => new MaterialCardViewModel
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    MaterialType = b.MaterialType,
-                    TypeLabel = KindLabel(b.Kind),
-                    Grades = b.Grades.OrderBy(g => g).Select(g => g.ToString()).ToList(),
-                    Subjects = b.Subjects,
-                    ColorVariant = CardColors[Math.Abs(b.Id) % CardColors.Length],
-                    ThumbnailUrl = b.CoverUrl,
-                    Authors = string.Join(", ", b.Authors),
-                    Publisher = b.PublisherName,
-                    Language = b.Language,
-                    Pages = b.Pages ?? 0,
-                    Year = b.PublishedYear,
-                    ViewUrl = b.ViewUrl ?? "",
-                    DownloadUrl = b.DownloadUrl ?? "",
-                    StatusLabel = StatusLabel(b.Status),
-                    IsArchived = b.Status == "Archived"
-                })
+                .Select(s => (s, byId[s.LibraryMaterialId]))
                 .ToList();
-
-            // Դասագրքեր և մեթոդական ուղեցույցներ՝ սկզբում գործողները, ապա արխիվացվածները, ներսում՝ ըստ դասարանի
-            if (route is "Textbooks" or "MethodologicalGuidelines")
-            {
-                static int FirstGrade(MaterialCardViewModel m)
-                    => m.Grades.Count > 0 && int.TryParse(m.Grades[0], out var g) ? g : int.MaxValue;
-
-                cards = cards
-                    .OrderBy(m => m.IsArchived ? 1 : 0)
-                    .ThenBy(FirstGrade)
-                    .ThenBy(m => m.Title)
-                    .ToList();
-            }
-
-            // Կարգավիճակի ֆիլտրը՝ միայն դասագրքերի և մեթոդական ուղեցույցների համար
-            var filterKeys = route switch
-            {
-                "OtherEducationalMaterials" => new[] { "subject", "grade", "author", "year", "publisher", "type" },
-                "Textbooks" or "MethodologicalGuidelines" => new[] { "subject", "grade", "author", "year", "publisher", "status" },
-                _ => new[] { "subject", "grade", "author", "year", "publisher" }
-            };
-
-            return new MaterialsPageViewModel
-            {
-                Title = _l[route],
-                TotalCount = cards.Count,
-                Filters = BuildFilters(cards, filterKeys),
-                Materials = cards
-            };
         }
+
+        /// <summary>
+        /// Մեկ քարտի տվյալները։ MaterialType-ը վերցվում է մեր աղյուսակից, որ հեռացնելիս անպայման համընկնի։
+        /// <paramref name="withKindAndStatus"/>՝ տեսակ և կարգավիճակ (այլ գրքերի համար չեն ցուցադրվում)։
+        /// </summary>
+        private MaterialCardViewModel ToCard(UserLibraryMaterial saved, LibraryBookDto b, bool withKindAndStatus = true) => new()
+        {
+            Id = b.Id,
+            Title = b.Title,
+            MaterialType = saved.MaterialType,
+            TypeLabel = withKindAndStatus ? KindLabel(b.Kind) : null,
+            Grades = b.Grades.OrderBy(g => g).Select(g => g.ToString()).ToList(),
+            Subjects = b.Subjects,
+            ColorVariant = CardColors[Math.Abs(b.Id) % CardColors.Length],
+            ThumbnailUrl = b.CoverUrl,
+            Authors = string.Join(", ", b.Authors),
+            Publisher = b.PublisherName,
+            Language = b.Language,
+            Pages = b.Pages ?? 0,
+            Year = b.PublishedYear is > 0 ? b.PublishedYear : null,
+            ViewUrl = b.ViewUrl ?? "",
+            DownloadUrl = b.DownloadUrl ?? "",
+            StatusLabel = withKindAndStatus ? StatusLabel(b.Status) : "",
+            IsArchived = withKindAndStatus && b.Status == "Archived"
+        };
+
+        private MaterialsPageViewModel PageOf(string title, List<MaterialCardViewModel> cards, params string[] filterKeys) => new()
+        {
+            Title = title,
+            TotalCount = cards.Count,
+            Filters = BuildFilters(cards, filterKeys),
+            Materials = cards
+        };
 
         [HttpGet("Materials/{id}")]
         public async Task<IActionResult> Materials(string id)
         {
+            if (!LibraryTypeByRoute.TryGetValue(id, out var type))
+                return NotFound();
 
-            if (LibraryTypeByRoute.ContainsKey(id))
-            {
-                var page = await BuildSavedMaterialsPage(id);
-                return View(page);
-            }
+            var cards = (await LoadSavedAsync(type)).Select(x => ToCard(x.Saved, x.Book)).ToList();
 
-            return NotFound();
+            if (id == "OtherEducationalMaterials")
+                return View(PageOf(_l[id], cards, "subject", "grade", "author", "year", "publisher", "type"));
+
+            // Դասագրքեր և մեթոդական ուղեցույցներ՝ սկզբում գործողները, ապա արխիվացվածները, ներսում՝ ըստ դասարանի
+            static int FirstGrade(MaterialCardViewModel m)
+                => m.Grades.Count > 0 && int.TryParse(m.Grades[0], out var g) ? g : int.MaxValue;
+
+            cards = cards
+                .OrderBy(m => m.IsArchived ? 1 : 0)
+                .ThenBy(FirstGrade)
+                .ThenBy(m => m.Title)
+                .ToList();
+
+            return View(PageOf(_l[id], cards, "subject", "grade", "author", "year", "publisher", "status"));
         }
 
         public record RemoveSavedRequest(string MaterialType, int Id);
@@ -245,64 +238,20 @@ namespace EduPlatform.Controllers
         [HttpGet("OtherBooks")]
         public async Task<IActionResult> OtherBooks()
         {
+            var saved = await LoadSavedAsync(OtherBookType);
 
-            var saved = await _db.UserLibraryMaterials
-                .Where(x => x.UserId == CurrentUserId && x.MaterialType == "OtherBook")
-                .OrderByDescending(x => x.SavedAt)
-                .ToListAsync();
-
-            var books = await _library.GetByIdsAsync(saved.Select(s => s.LibraryMaterialId));
-
-            if (books is not null)
-            {
-                // Library-ում ջնջված նյութերը հեռացնում ենք մեր աղյուսակից
-                var existing = books.Select(b => b.Id).ToHashSet();
-                var orphans = saved.Where(s => !existing.Contains(s.LibraryMaterialId)).ToList();
-                if (orphans.Count > 0)
-                {
-                    _db.UserLibraryMaterials.RemoveRange(orphans);
-                    await _db.SaveChangesAsync();
-                }
-            }
-
-            // Library-ն անհասանելի է → ոչինչ չենք հեռացնում, ցուցակը դատարկ է
-            var byId = (books ?? new()).ToDictionary(b => b.Id);
-            var ordered = saved
-                .Where(s => byId.ContainsKey(s.LibraryMaterialId))
-                .Select(s => byId[s.LibraryMaterialId])
-                .ToList();
-
-            MaterialsPageViewModel TabContent(string category, string title, params string[] filterKeys)
-            {
-                var cards = ordered
-                    .Where(b => b.Category == category)
-                    .Select(b => new MaterialCardViewModel
-                    {
-                        Id = b.Id,
-                        Title = b.Title,
-                        MaterialType = b.MaterialType,
-                        Grades = b.Grades.OrderBy(g => g).Select(g => g.ToString()).ToList(),
-                        Subjects = b.Subjects,
-                        ColorVariant = CardColors[Math.Abs(b.Id) % CardColors.Length],
-                        ThumbnailUrl = b.CoverUrl,
-                        Authors = string.Join(", ", b.Authors),
-                        Publisher = b.PublisherName,
-                        Language = b.Language,
-                        Pages = b.Pages ?? 0,
-                        Year = b.PublishedYear,
-                        ViewUrl = b.ViewUrl ?? "",
-                        DownloadUrl = b.DownloadUrl ?? ""
-                    })
-                    .ToList();
-
-                return new MaterialsPageViewModel { Title = title, TotalCount = cards.Count, Filters = BuildFilters(cards, filterKeys), Materials = cards };
-            }
+            MaterialsPageViewModel Tab(string category, string title, params string[] filterKeys) =>
+                PageOf(title,
+                    saved.Where(x => x.Book.Category == category)
+                         .Select(x => ToCard(x.Saved, x.Book, withKindAndStatus: false))
+                         .ToList(),
+                    filterKeys);
 
             var tabs = new List<OtherBooksTabViewModel>
             {
-                new() { Key = "other-textbooks", Content = TabContent("Textbook", _l["OtherTextbooks"], "subject", "grade", "author", "year", "publisher", "language") },
-                new() { Key = "fiction", Content = TabContent("Fiction", _l["FictionBooks"], "author", "year", "publisher", "language") },
-                new() { Key = "popular-science", Content = TabContent("PopularScience", _l["PopularScienceBooks"], "author", "year", "publisher", "language") },
+                new() { Key = "other-textbooks", Content = Tab("Textbook", _l["OtherTextbooks"], "subject", "grade", "author", "year", "publisher", "language") },
+                new() { Key = "fiction", Content = Tab("Fiction", _l["FictionBooks"], "author", "year", "publisher", "language") },
+                new() { Key = "popular-science", Content = Tab("PopularScience", _l["PopularScienceBooks"], "author", "year", "publisher", "language") },
             };
 
             return View(tabs);

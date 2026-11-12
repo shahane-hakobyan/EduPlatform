@@ -16,7 +16,7 @@ namespace EduPlatform.Services
         public string? Kind { get; set; }
 
         public string PublisherName { get; set; } = "";
-        public int PublishedYear { get; set; }
+        public int? PublishedYear { get; set; }
         public List<string> Authors { get; set; } = new();
         public List<string> Subjects { get; set; } = new();
         public List<int> Grades { get; set; } = new();
