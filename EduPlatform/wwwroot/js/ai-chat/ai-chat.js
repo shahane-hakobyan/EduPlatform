@@ -2,7 +2,8 @@
 // Նշագրումը՝ Views/Shared/AiChat/_AiChatBody.cshtml, թարգմանությունները՝ window.__aiChat (_AiChatStrings.cshtml)։
 //
 // const chat = EduAiChat.init(rootElement, {
-//     onState: function (state) { }     // { conversationId, title, agentKey }՝ զրույցը ստեղծվելիս/բացվելիս/մաքրվելիս
+//     onState: function (state) { },    // { conversationId, title, agentKey }՝ զրույցը ստեղծվելիս/բացվելիս/մաքրվելիս
+//     onBackgroundDone: function () { } // ֆոնում շարունակվող (մեկ այլ զրույց բացելուց հետո) պատասխանն ավարտվեց
 // })  →  { open(id), reset(agentKey), currentId(), isStreaming() }
 window.EduAiChat = (function () {
     'use strict';
@@ -104,7 +105,8 @@ window.EduAiChat = (function () {
             agentLocked: false,
             pending: [],       // { file, kind, tr: { text } }
             streaming: false,
-            abort: null,
+            stop: null,        // ընթացիկ հոսքը դադարեցնելու ֆունկցիա (առանց AbortController-ի՝ որ AbortError չառաջանա)
+            run: 0,            // ընթացիկ հոսքի համարը՝ հին (չեղարկված) հոսքի արդյունքը անտեսելու համար
             recorder: null
         };
 
@@ -309,6 +311,16 @@ window.EduAiChat = (function () {
 
         // ── Պատասխանի հոսք ────────────────────────────────────────────────
 
+        // Մեկ այլ զրույց բացելիս / նոր զրույց սկսելիս ընթացիկ պատասխանը ՉԻ դադարեցվում․ այն շարունակվում է ֆոնում,
+        // սերվերը ավարտին հասցնում և պահում է այն (զրույցը նորից բացելիս կերևա)։ Էկրանին այլևս ոչինչ չի նկարվում։
+        function detachStream() {
+            if (!state.streaming) return;
+            state.run++;                       // հին հոսքը այլևս ոչինչ չի փոխում էկրանին
+            state.stop = null;
+            state.streaming = false;
+            updateSendState();
+        }
+
         function visible(text) {
             const i = text.indexOf(ERROR_MARKER);
             return i < 0 ? text : text.slice(0, i);
@@ -319,8 +331,14 @@ window.EduAiChat = (function () {
             updateSendState();
             showEmpty(false);
 
-            const ctrl = new AbortController();
-            state.abort = ctrl;
+            // Դադարեցումը՝ reader.cancel()-ով (սպասող read()-ը պարզապես ավարտվում է, սխալ/AbortError չկա)
+            const handle = { stopped: false, reader: null };
+            state.stop = function () {
+                handle.stopped = true;
+                if (handle.reader) { try { handle.reader.cancel().catch(function () { }); } catch (e) { } }
+            };
+            const myRun = ++state.run;
+            const stale = function () { return myRun !== state.run; };
 
             let bot = null;
             let full = '';
@@ -328,11 +346,17 @@ window.EduAiChat = (function () {
             let limitMessage = '';
             const paint = function () {
                 raf = 0;
-                if (bot) { paintAssistant(bot, visible(full), true); scrollBottom(false); }
+                if (bot && !stale()) { paintAssistant(bot, visible(full), true); scrollBottom(false); }
             };
 
             try {
-                const res = await fetch(url, Object.assign({ signal: ctrl.signal, credentials: 'same-origin' }, init));
+                const res = await fetch(url, Object.assign({ credentials: 'same-origin' }, init));
+
+                // պատասխանի վերնագրերը գալուց առաջ արդեն դադարեցրել են՝ հոսքը փակում ենք առանց կարդալու
+                if (handle.stopped) {
+                    if (res.body) { try { res.body.cancel().catch(function () { }); } catch (e) { } }
+                    return;
+                }
 
                 // օրական սահմանաչափը լրացել է՝ հաղորդագրությունը չի պահվել
                 if (res.status === 429) {
@@ -346,6 +370,7 @@ window.EduAiChat = (function () {
                 if (!res.ok || !res.body) throw new Error('HTTP ' + res.status);
 
                 const reader = res.body.getReader();
+                handle.reader = reader;
                 const decoder = new TextDecoder('utf-8');
                 let buf = '';
                 let metaDone = false;
@@ -363,22 +388,25 @@ window.EduAiChat = (function () {
                         buf = buf.slice(nl + 1);
                         metaDone = true;
 
-                        state.conversationId = meta.conversationId;
-                        state.title = meta.title || state.title;
-                        if (meta.agentKey) setAgent(meta.agentKey, true);
+                        // զրույցն արդեն փոխվել է (նոր զրույց)՝ էկրանին և վիճակում ոչինչ չենք փոխում, պարզապես հոսքը կարդում ենք մինչև վերջ
+                        if (!stale()) {
+                            state.conversationId = meta.conversationId;
+                            state.title = meta.title || state.title;
+                            if (meta.agentKey) setAgent(meta.agentKey, true);
 
-                        if (userWrap && meta.userMessage) {
-                            userWrap.dataset.id = meta.userMessage.id;
-                            userWrap._atts = meta.userMessage.attachments || [];
-                            userWrap._linked = true;
-                            fillUserBubble(userWrap);
+                            if (userWrap && meta.userMessage) {
+                                userWrap.dataset.id = meta.userMessage.id;
+                                userWrap._atts = meta.userMessage.attachments || [];
+                                userWrap._linked = true;
+                                fillUserBubble(userWrap);
+                            }
+
+                            bot = assistantEl({ id: meta.assistantMessageId, text: '' });
+                            paintAssistant(bot, '', true);
+                            el.thread.appendChild(bot);
+                            scrollBottom(true);
+                            emitState();
                         }
-
-                        bot = assistantEl({ id: meta.assistantMessageId, text: '' });
-                        paintAssistant(bot, '', true);
-                        el.thread.appendChild(bot);
-                        scrollBottom(true);
-                        emitState();
                     }
 
                     if (metaDone && buf) {
@@ -391,9 +419,16 @@ window.EduAiChat = (function () {
                 buf += decoder.decode();
                 if (metaDone && buf) full += buf;
             } catch (err) {
-                if (err.name !== 'AbortError') full += ERROR_MARKER;
+                // դադարեցված հոսքը սխալ չէ (օգտատերը ինքն է դադարեցրել՝ «Դադարեցնել» կամ նոր զրույց)
+                if (!handle.stopped) full += ERROR_MARKER;
             } finally {
                 if (raf) cancelAnimationFrame(raf);
+
+                // զրույցը արդեն փոխվել է (նոր զրույց / այլ զրույց)՝ էկրանին ոչինչ չենք փոխում, միայն ցուցակն ենք թարմացնում
+                if (stale()) {
+                    if (options.onBackgroundDone) options.onBackgroundDone();
+                    return;
+                }
 
                 const failed = full.indexOf(ERROR_MARKER) >= 0;
                 if (bot) {
@@ -415,7 +450,7 @@ window.EduAiChat = (function () {
                 }
 
                 state.streaming = false;
-                state.abort = null;
+                state.stop = null;
                 updateSendState();
                 scrollBottom(true);
                 emitState();
@@ -425,7 +460,7 @@ window.EduAiChat = (function () {
         // ── Ուղարկել ──────────────────────────────────────────────────────
 
         async function send() {
-            if (state.streaming) { if (state.abort) state.abort.abort(); return; }
+            if (state.streaming) { if (state.stop) state.stop(); return; }
             if (state.recorder) return;
 
             const text = el.input.value.trim();
@@ -611,30 +646,61 @@ window.EduAiChat = (function () {
 
         // ── Արտաքին API ───────────────────────────────────────────────────
 
-        async function open(id) {
-            if (state.streaming) return;
-            const res = await fetch(urls.base + '/Conversations/' + id, { credentials: 'same-origin' });
-            if (!res.ok) { reset(null); return; }
-            const c = await res.json();
+        let pollTimer = 0;
+        function stopPoll() { if (pollTimer) { clearTimeout(pollTimer); pollTimer = 0; } }
 
+        function renderConversation(c) {
             clearThread();
             state.conversationId = c.id;
             state.title = c.title;
             setAgent(c.agentKey, true);
             showEmpty(c.messages.length === 0);
 
-            c.messages.forEach(function (m) {
-                el.thread.appendChild(m.role === 'user'
-                    ? userEl({ id: m.id, text: m.text, createdAt: m.createdAt, editedAt: m.editedAt, attachments: m.attachments })
-                    : assistantEl({ id: m.id, text: m.text, createdAt: m.createdAt }));
+            let generating = false;
+            c.messages.forEach(function (m, i) {
+                if (m.role === 'user') {
+                    el.thread.appendChild(userEl({ id: m.id, text: m.text, createdAt: m.createdAt, editedAt: m.editedAt, attachments: m.attachments }));
+                } else {
+                    const bot = assistantEl({ id: m.id, text: m.text, createdAt: m.createdAt });
+                    // պատասխանը դեռ գրվում է (ֆոնում շարունակվող) → «գրում է...» նշան
+                    if (!m.text && i === c.messages.length - 1) { generating = true; paintAssistant(bot, '', true); }
+                    el.thread.appendChild(bot);
+                }
             });
 
             scrollBottom(true);
             emitState();
+            return generating;
+        }
+
+        // եթե բացված զրույցի վերջին պատասխանը դեռ գրվում է՝ ամեն 2 վայրկյանը մեկ ստուգում ենք, մինչև ավարտվի
+        function pollGenerating(id, tries) {
+            stopPoll();
+            if (tries > 60) return;
+            pollTimer = setTimeout(async function () {
+                if (state.conversationId !== id || state.streaming) return;
+                try {
+                    const res = await fetch(urls.base + '/Conversations/' + id, { credentials: 'same-origin' });
+                    if (!res.ok || state.conversationId !== id || state.streaming) return;
+                    const c = await res.json();
+                    if (renderConversation(c)) pollGenerating(id, tries + 1);
+                } catch (e) { /* ցանցի ժամանակավոր սխալ՝ կրկին կփորձենք */ pollGenerating(id, tries + 1); }
+            }, 2000);
+        }
+
+        async function open(id) {
+            detachStream();
+            stopPoll();
+            const res = await fetch(urls.base + '/Conversations/' + id, { credentials: 'same-origin' });
+            if (!res.ok) { reset(null); return; }
+            const c = await res.json();
+
+            if (renderConversation(c)) pollGenerating(c.id, 0);
         }
 
         function reset(agentKey) {
-            if (state.streaming && state.abort) state.abort.abort();
+            detachStream();
+            stopPoll();
             if (state.recorder) stopRecording();
 
             clearThread();

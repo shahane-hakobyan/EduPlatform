@@ -36,7 +36,12 @@
                 <div class="aic-conv-list" data-aic-pinned></div>
             </div>
 
-            <div class="aic-section-label"><i class="bi bi-clock-history"></i> @Localizer["AiChatHistory"]</div>
+            <div class="aic-section-label has-action">
+                <span><i class="bi bi-clock-history"></i> @Localizer["AiChatHistory"]</span>
+                <button type="button" class="aic-clear-history" data-aic-clear-history hidden title="@Localizer["AiChatClearHistory"]" aria-label="@Localizer["AiChatClearHistory"]">
+                    <i class="bi bi-trash3"></i>
+                </button>
+            </div>
             <div class="aic-conv-list" data-aic-history></div>
             <div class="aic-side-empty" data-aic-side-empty hidden>@Localizer["AiChatNoChats"]</div>
         </div>

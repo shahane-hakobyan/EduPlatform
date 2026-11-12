@@ -15,10 +15,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const historyList = page.querySelector('[data-aic-history]');
     const emptyNote = page.querySelector('[data-aic-side-empty]');
     const defaultTitle = titleEl.textContent;
+    const clearBtn = page.querySelector('[data-aic-clear-history]');
 
     let activeId = null;
 
     const chat = window.EduAiChat.init(page.querySelector('[data-aic]'), {
+        onBackgroundDone: function () { refreshList(); },
         onState: function (s) {
             const wasNew = activeId !== s.conversationId;
             activeId = s.conversationId;
@@ -31,12 +33,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // նոր զրույց ստեղծվեց կամ պատասխանն ավարտվեց՝ ցուցակը թարմացվում է (վերջին զրույցը՝ վերևում)
             markActive();
             const streaming = chat && chat.isStreaming();
-            if (s.conversationId && (wasNew || !streaming)) refreshList();
+            if (wasNew || !streaming) refreshList();
         }
     });
 
     // ── Ժամանակի ցուցադրում ───────────────────────────────────────────────
 
+    // Օրինակներ՝ «Հիմա», «Այսօր, 17:18», «Երեկ, 17:18», «18 սեպ. 2026 թ., 12:40» (լեզուն՝ միջերեսի լեզուն)
     function relTime(iso) {
         const d = new Date(iso);
         if (isNaN(d)) return '';
@@ -45,12 +48,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (now - d < 60 * 1000) return t('now');
 
+        const time = d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
         const startOf = function (x) { return new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime(); };
         const days = Math.round((startOf(now) - startOf(d)) / 86400000);
 
-        if (days === 0) return d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
-        if (days === 1) return t('yesterday');
-        return d.toLocaleDateString(lang, { day: 'numeric', month: 'short' });
+        // «այսօր» / «երեկ»՝ բրաուզերի լեզվական տվյալներից (առանց լրացուցիչ թարգմանության)
+        let dayWord = '';
+        if (days === 0 || days === 1) {
+            try { dayWord = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' }).format(-days, 'day'); } catch (e) { }
+            if (!dayWord || /\d/.test(dayWord)) dayWord = days === 1 ? t('yesterday') : '';
+            if (dayWord) dayWord = dayWord.charAt(0).toUpperCase() + dayWord.slice(1);
+        }
+        if (dayWord) return dayWord + ', ' + time;
+
+        // ավելի հին՝ ամբողջական ամսաթիվ (օր, ամիս, տարի) + ժամ
+        return d.toLocaleDateString(lang, { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' + time;
+    }
+
+    // Մկնիկը վրա տանելիս՝ ամբողջական ամսաթիվը և ժամը
+    function fullTime(iso) {
+        const d = new Date(iso);
+        if (isNaN(d)) return '';
+        return d.toLocaleString(window.EduAiChat.lang(), { dateStyle: 'long', timeStyle: 'short' });
     }
 
     // ── Ցուցակ ────────────────────────────────────────────────────────────
@@ -81,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const time = document.createElement('div');
         time.className = 'aic-conv-time';
         time.textContent = relTime(c.updatedAt);
+        time.title = fullTime(c.updatedAt);
 
         main.appendChild(title);
         main.appendChild(preview);
@@ -253,6 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
         (data.recent || []).forEach(function (c) { historyList.appendChild(convEl(c)); });
 
         pinnedSection.hidden = !(data.pinned && data.pinned.length);
+        clearBtn.hidden = !(data.recent && data.recent.length);   // «Ջնջել ամբողջ պատմությունը»՝ միայն երբ ջնջելու բան կա
         emptyNote.hidden = !!((data.pinned && data.pinned.length) || (data.recent && data.recent.length));
         markActive();
     }
@@ -261,6 +282,19 @@ document.addEventListener('DOMContentLoaded', function () {
         chat.open(id);
         side.classList.remove('is-open');
     }
+
+    // ── Ջնջել ամբողջ պատմությունը (ամրացված զրույցները մնում են) ──────────
+
+    clearBtn.addEventListener('click', async function () {
+        const ok = await confirmDialog(t('clearHistoryConfirm'), t('delete'), t('cancel'));
+        if (!ok) return;
+
+        await post('/Conversations/DeleteAll');
+        await refreshList();
+
+        // բացված զրույցը ջնջվեց՝ անցնում ենք դատարկ էկրանի
+        if (activeId && !page.querySelector('.aic-conv[data-id="' + activeId + '"]')) chat.reset(null);
+    });
 
     // ── Ձախ մասի կոճակներ ─────────────────────────────────────────────────
 

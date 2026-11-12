@@ -543,5 +543,7 @@
   <data name="AiAgentMaterials" xml:space="preserve"><value>Составить материалы</value></data>
   <data name="AiAgentPhysics" xml:space="preserve"><value>Физика</value></data>
   <data name="AiChatLimitReached" xml:space="preserve"><value>Вы достигли дневного лимита ({0} запросов). Попробуйте завтра.</value></data>
+  <data name="AiChatClearHistory" xml:space="preserve"><value>Удалить всю историю</value></data>
+  <data name="AiChatClearHistoryConfirm" xml:space="preserve"><value>Удалить всю историю чатов? Закреплённые чаты останутся.</value></data>
 
 </root>

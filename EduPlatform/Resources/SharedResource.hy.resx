@@ -505,8 +505,8 @@
   <data name="AiChatPinned" xml:space="preserve"><value>Ամրացված</value></data>
   <data name="AiChatHistory" xml:space="preserve"><value>Զրույցների պատմություն</value></data>
   <data name="AiChatNoChats" xml:space="preserve"><value>Զրույցներ դեռ չկան</value></data>
-  <data name="AiChatEmptyTitle" xml:space="preserve"><value>Ինչով կարող եմ օգնել</value></data>
-  <data name="AiChatEmptySubtitle" xml:space="preserve"><value>Ձեր հուզող հարցերը կարող եք ուղղել այստեղ</value></data>
+  <data name="AiChatEmptyTitle" xml:space="preserve"><value>Ինչո՞վ կարող եմ օգնել</value></data>
+  <data name="AiChatEmptySubtitle" xml:space="preserve"><value>Ձեզ հուզող հարցերը կարող եք ուղղել այստեղ</value></data>
   <data name="AiChatPlaceholder" xml:space="preserve"><value>Գրել այստեղ</value></data>
   <data name="AiChatSend" xml:space="preserve"><value>Ուղարկել</value></data>
   <data name="AiChatStop" xml:space="preserve"><value>Դադարեցնել</value></data>
@@ -538,4 +538,6 @@
   <data name="AiAgentMaterials" xml:space="preserve"><value>Կազմել նյութեր</value></data>
   <data name="AiAgentPhysics" xml:space="preserve"><value>Ֆիզիկա</value></data>
   <data name="AiChatLimitReached" xml:space="preserve"><value>Այսօրվա սահմանաչափը լրացել է ({0} հարց)։ Փորձեք վաղը։</value></data>
+  <data name="AiChatClearHistory" xml:space="preserve"><value>Ջնջել ամբողջ պատմությունը</value></data>
+  <data name="AiChatClearHistoryConfirm" xml:space="preserve"><value>Ջնջե՞լ ամբողջ պատմությունը։ Ամրացված զրույցները կմնան։</value></data>
 </root>

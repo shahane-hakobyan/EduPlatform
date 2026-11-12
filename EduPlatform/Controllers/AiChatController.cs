@@ -205,6 +205,24 @@ namespace EduPlatform.Controllers
             return affected > 0 ? Ok() : NotFound();
         }
 
+        // «Ջնջել ամբողջ պատմությունը»՝ ջնջվում են օգտատիրոջ բոլոր զրույցները, բացի ամրացվածներից
+        [HttpPost("Conversations/DeleteAll")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            var conversations = await _db.AiConversations
+                .Include(c => c.Messages).ThenInclude(m => m.Attachments)
+                .Where(c => c.UserId == CurrentUserId && !c.IsPinned)
+                .ToListAsync();
+
+            var files = conversations.SelectMany(c => c.Messages).SelectMany(m => m.Attachments).Select(a => a.StoredFileName).ToList();
+
+            _db.AiConversations.RemoveRange(conversations);   // հաղորդագրություններն ու կցումները ջնջվում են cascade-ով
+            await _db.SaveChangesAsync();
+
+            foreach (var f in files) _files.Delete(f);
+            return Ok(new { deleted = conversations.Count });
+        }
+
         [HttpPost("Conversations/{id:int}/Delete")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -506,7 +524,15 @@ namespace EduPlatform.Controllers
                     assistant.Text = sb.ToString();
                 }
                 conv.UpdatedAt = DateTime.Now;
-                await _db.SaveChangesAsync(CancellationToken.None);
+                try
+                {
+                    await _db.SaveChangesAsync(CancellationToken.None);
+                }
+                catch (Exception ex)
+                {
+                    // օր․ զրույցը ջնջվել է, մինչ պատասխանը դեռ գրվում էր
+                    _log.LogWarning(ex, "AI chat: could not save the answer (conversation {ConversationId})", conv.Id);
+                }
             }
 
             if (failed)

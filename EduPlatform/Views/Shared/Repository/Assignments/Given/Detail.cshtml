@@ -1,209 +1,82 @@
-@model EduPlatform.ViewModels.AssignmentDetailViewModel
+@model EduPlatform.ViewModels.GroupDetailViewModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 @{
-    ViewData["Title"] = Model.Title;
+    ViewData["Title"] = Model.Name;
 }
 
-<div class="ad-topbar d-flex align-items-center gap-3 mb-3">
-    <a href="@Url.Action("Index", "Assignments")" class="ad-back-btn d-flex align-items-center justify-content-center">
+<div class="gd-topbar d-flex align-items-center gap-3 mb-3">
+    <a href="@Model.BackUrl" class="ca-back-btn d-flex align-items-center justify-content-center">
         <i class="bi bi-arrow-left"></i>
     </a>
-    <div class="flex-grow-1">
-        <h1 class="ad-title mb-0">@Model.Title</h1>
-        <p class="ad-subtitle mb-0">@Model.Subject &middot; @Model.Grade</p>
+    <div class="gd-avatar">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="" />
+        }
+        else
+        {
+            <i class="bi bi-people"></i>
+        }
     </div>
-    @if (!Model.IsArchived)
+    <div class="flex-grow-1 min-w-0">
+        <h1 class="gd-title mb-1" title="@Model.Name">@Model.Name</h1>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="group-tag group-tag-@Model.TypeKey.ToLowerInvariant()">@Model.TypeLabel</span>
+            <span class="gd-count"><i class="bi bi-people"></i> @Model.MemberCount @Localizer["MembersCountLabel"]</span>
+        </div>
+    </div>
+
+    @if (Model.IsAdmin)
     {
-        <button type="button" id="adArchiveBtn" class="ad-archive-btn d-flex align-items-center gap-2"
-                data-assignment-id="@Model.Id"
-                data-confirm-text="@Localizer["ConfirmArchiveAssignment"]"
-                data-redirect-url="@Url.Action("Index", "Assignments")">
-            <i class="bi bi-archive"></i> @Localizer["ArchiveAssignment"]
-        </button>
+        @* Երեք կետ՝ սեղմելիս բացվում է «Խմբագրել» / «Ջնջել» մենյուն *@
+        <div class="gd-more" id="gdMore">
+            <button type="button" class="gd-more-btn" id="gdMoreBtn" aria-haspopup="true" aria-expanded="false" aria-label="@Localizer["Actions"]">
+                <i class="bi bi-three-dots"></i>
+            </button>
+            <div class="gd-menu" id="gdMenu" role="menu" hidden>
+                <a href="@Model.EditUrl" class="gd-menu-item" role="menuitem"><i class="bi bi-pencil"></i> @Localizer["Edit"]</a>
+                <button type="button" id="gdDelete" class="gd-menu-item is-danger" role="menuitem"
+                        data-group-id="@Model.Id"
+                        data-confirm-text="@Localizer["ConfirmDeleteGroup"]"
+                        data-ok-text="@Localizer["DeleteGroupBtn"]"
+                        data-cancel-text="@Localizer["CancelBtn"]"
+                        data-redirect-url="@Model.BackUrl">
+                    <i class="bi bi-trash"></i> @Localizer["DeleteGroupBtn"]
+                </button>
+            </div>
+        </div>
     }
 </div>
 
-@if (Model.IsArchived)
-{
-    <div class="ad-readonly-note"><i class="bi bi-archive"></i> @Localizer["ArchivedReadOnlyNote"]</div>
-}
-
-<div class="ad-card mb-3">
-    <div class="ad-card-head">
-        <i class="bi bi-file-earmark-text"></i>
-        <h2 class="ad-card-title">@Model.Title</h2>
+<div class="gd-layout">
+    <!-- Չաթի տեղը՝ «Հաղորդագրություններ» բաժնի մասն է, այս գործառույթը առանձին է իրականացվելու -->
+    <div class="gd-chat" id="groupChatPlaceholder">
+        <i class="bi bi-chat-dots"></i>
+        <div>@Localizer["GroupChatPlaceholder"]</div>
     </div>
-    <div class="ad-card-body">
-        <div class="ad-info-grid">
-            <div>
-                <div class="ad-info-label">@Localizer["AssignmentType"]</div>
-                <div class="ad-info-value">@Model.Type</div>
-            </div>
-            <div>
-                <div class="ad-info-label">@Localizer["Evaluation"]</div>
-                <div class="ad-info-value">@Model.GradingType</div>
-            </div>
-            <div>
-                <div class="ad-info-label">@Localizer["AssignmentStartLabel"]</div>
-                <div class="ad-info-value">@Model.StartDate.ToString("dd.MM.yyyy")</div>
-            </div>
-            <div>
-                <div class="ad-info-label">@Localizer["AssignmentResponseForm"]</div>
-                <div class="ad-info-value">
-                    @(string.Join(", ", new[]
-                    {
-                        Model.AllowTextAnswer ? Localizer["ResponseFormText"].Value : null,
-                        Model.AllowFileAnswer ? Localizer["ResponseFormFile"].Value : null
-                    }.Where(x => x != null)))
-                </div>
-            </div>
-            <div>
-                <div class="ad-info-label">@Localizer["AssignmentDueLabel"]</div>
-                <input type="datetime-local" id="adDueInput" class="ad-due-input"
-                       data-assignment-id="@Model.Id"
-                       data-original="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")"
-                       data-start="@(Model.StartDateRaw?.ToString("yyyy-MM-ddTHH:mm"))"
-                       data-invalid-msg="@Localizer["DeadlineInvalid"]"
-                       value="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")" @(Model.IsArchived ? "disabled" : "") />
-                <div id="adDueSaved" class="ad-due-saved" style="display:none"><i class="bi bi-check-circle"></i> @Localizer["DeadlineSaved"]</div>
-            </div>
+
+    <div class="gd-members">
+        <div class="gd-members-head">
+            <i class="bi bi-people"></i> @Localizer["GroupMembersTitle"] <span class="gd-members-count">@Model.Members.Count</span>
         </div>
-        <div class="ad-description-box mt-3">
-            @if (!string.IsNullOrWhiteSpace(Model.Description))
+        <div class="gd-members-list">
+            @foreach (var m in Model.Members)
             {
-                <div>@Model.Description</div>
-            }
-            @if (!string.IsNullOrWhiteSpace(Model.TaskText))
-            {
-                <div class="ad-files-title">@Localizer["AssignmentTaskLabel"]</div>
-                <div class="ad-task-text">@Model.TaskText</div>
-            }
-            @if (Model.Files.Any())
-            {
-                <div class="ad-files-title">@Localizer["AttachedFilesLabel"]</div>
-                @foreach (var f in Model.Files)
-                {
-                    <div class="ad-file-row">
-                        <i class="bi bi-paperclip"></i>
-                        <span class="ad-file-name">@f.Name</span>
-                        <a href="@f.ViewUrl" target="_blank" class="ad-file-link"><i class="bi bi-eye"></i> @Localizer["View"]</a>
-                        <a href="@f.DownloadUrl" class="ad-file-link"><i class="bi bi-download"></i> @Localizer["Download"]</a>
-                    </div>
-                }
+                <a href="@m.ProfileUrl" class="gd-member">
+                    <span class="gd-member-avatar"><i class="bi bi-person"></i></span>
+                    <span class="gd-member-name">@m.Name</span>
+                    <span class="group-tag group-tag-role @(m.IsAdmin ? "is-admin" : "is-member")">@m.RoleLabel</span>
+                </a>
             }
         </div>
     </div>
 </div>
 
-<div class="ad-card">
-    <div class="ad-card-head justify-content-between">
-        <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-people"></i>
-            <h2 class="ad-card-title">@Localizer["SendToStudentsSection"]</h2>
-        </div>
-        @if (!Model.IsArchived)
-        {
-            <button type="button" class="ad-add-btn" data-open-modal="addPupilsModal"><i class="bi bi-person-plus"></i> @Localizer["AddLabel"]</button>
-        }
-    </div>
-
-    <div class="ad-filter-bar">
-        <div class="ad-search position-relative">
-            <i class="bi bi-search"></i>
-            <input type="text" id="adSearch" placeholder="@Localizer["SearchPupilByNamePlaceholder"]" />
-        </div>
-        <select class="ad-filter-select" id="adGradeFilter">
-            <option value="">@Localizer["Grade"]</option>
-            @foreach (var g in Model.Submissions.Select(x => x.GradeName).Where(x => !string.IsNullOrEmpty(x)).Distinct().OrderBy(x => x))
-            {
-                <option value="@g">@g</option>
-            }
-        </select>
-        @if (Model.Submissions.Any(x => x.GroupNames.Count > 0))
-        {
-            <select class="ad-filter-select" id="adGroupFilter">
-                <option value="">@Localizer["GroupLabel"]</option>
-                @foreach (var g in Model.Submissions.SelectMany(x => x.GroupNames).Distinct().OrderBy(x => x))
-                {
-                    <option value="@g">@g</option>
-                }
-            </select>
-        }
-        <select class="ad-filter-select" id="adStatusFilter">
-            <option value="">@Localizer["StatusLabel"]</option>
-            <option value="Pending">@Localizer["SubmissionStatusPending"]</option>
-            <option value="Submitted">@Localizer["SubmissionStatusSubmitted"]</option>
-            <option value="Graded">@Localizer["SubmissionStatusGraded"]</option>
-        </select>
-    </div>
-
-    <div class="ad-submission-list">
-        @foreach (var s in Model.Submissions)
-        {
-            var badgeClass = s.Status switch { "Graded" => "ad-badge-graded", "Submitted" => "ad-badge-submitted", _ => "ad-badge-pending" };
-            var badgeLabel = s.Status switch { "Graded" => Localizer["SubmissionStatusGraded"], "Submitted" => Localizer["SubmissionStatusSubmitted"], _ => Localizer["SubmissionStatusPending"] };
-
-            <div class="ad-submission-row" data-name="@s.PupilName.ToLower()" data-grade="@s.GradeName" data-group="@string.Join("|", s.GroupNames)" data-status="@s.Status">
-                <img src="@s.PhotoUrl" alt="" class="ad-submission-avatar" />
-                <div class="ad-submission-info">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="ad-submission-name">@s.PupilName</span>
-                        <span class="ad-badge @badgeClass">@badgeLabel</span>
-                    </div>
-                    <div class="ad-submission-meta">
-                        @s.GradeName
-                        @if (!string.IsNullOrEmpty(s.GroupName))
-                        {
-                            <text> &middot; @Localizer["GroupLabel"] @s.GroupName</text>
-                        }
-                        @if (s.SubmittedDate.HasValue)
-                        {
-                            <text> &middot; @Localizer["SubmittedOn"] @s.SubmittedDate.Value.ToString("dd.MM.yyyy")</text>
-                        }
-                    </div>
-                    @if (s.Status == "Graded")
-                    {
-                        <div class="ad-submission-score">
-                            @{
-                                var hasScore = s.Score.HasValue || (s.GradingType == "Diagnostic" && s.MaxScore.HasValue);
-                            }
-                            @if (hasScore)
-                            {
-                                // օր․ «7/10»; եթե նախնական միավորը դատարկ է՝ «–/10»
-                                <i class="bi bi-star-fill"></i>
-                                <span class="ad-score-value">@(s.Score.HasValue ? s.Score.Value.ToString("0.##") : "–")@(s.MaxScore.HasValue ? "/" + s.MaxScore.Value.ToString("0.##") : "")</span>
-                            }
-                            @if (!string.IsNullOrEmpty(s.ScoreFeedback))
-                            {
-                                <span class="ad-score-feedback">@(hasScore ? "· " : "")@s.ScoreFeedback</span>
-                            }
-                        </div>
-                    }
-                </div>
-                <div class="ad-submission-actions">
-                    <button type="button" class="ad-grade-btn" data-open-modal="answerModal-@s.Id">
-                        <i class="bi bi-eye"></i> @(Model.IsArchived ? Localizer["ViewAnswer"] : Localizer["ViewAnswersAndGrade"])
-                    </button>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-
-@foreach (var s in Model.Submissions)
-{
-    <partial name="Given/_AnswerModal" model="s" />
-}
-@if (!Model.IsArchived)
-{
-    <partial name="Given/_AddPupilsModal" model="Model" />
-}
 @section Styles {
-    <link rel="stylesheet" href="~/css/assignments/assignment-detail.css" />
     <link rel="stylesheet" href="~/css/assignments/create-assignment.css" />
+    <link rel="stylesheet" href="~/css/groups/groups.css" />
+    <link rel="stylesheet" href="~/css/groups/group-detail.css" />
 }
 @section Scripts {
-    <script src="~/js/assignments/group-picker.js"></script>
-    <script src="~/js/assignments/pupil-picker.js"></script>
-    <script src="~/js/assignments/assignment-detail.js" data-assignment-id="@Model.Id"></script>
+    <script src="~/js/groups/group-detail.js"></script>
 }
