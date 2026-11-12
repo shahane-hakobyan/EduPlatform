@@ -28,14 +28,22 @@
 
     @if (Model.IsAdmin)
     {
-        <div class="gd-actions">
-            <a href="@Model.EditUrl" class="gd-btn"><i class="bi bi-pencil"></i> @Localizer["Edit"]</a>
-            <button type="button" id="gdDelete" class="gd-btn gd-btn-delete"
-                    data-group-id="@Model.Id"
-                    data-confirm-text="@Localizer["ConfirmDeleteGroup"]"
-                    data-redirect-url="@Model.BackUrl">
-                <i class="bi bi-trash"></i> @Localizer["DeleteGroupBtn"]
+        @* Երեք կետ՝ սեղմելիս բացվում է «Խմբագրել» / «Ջնջել» մենյուն *@
+        <div class="gd-more" id="gdMore">
+            <button type="button" class="gd-more-btn" id="gdMoreBtn" aria-haspopup="true" aria-expanded="false" aria-label="@Localizer["Actions"]">
+                <i class="bi bi-three-dots"></i>
             </button>
+            <div class="gd-menu" id="gdMenu" role="menu" hidden>
+                <a href="@Model.EditUrl" class="gd-menu-item" role="menuitem"><i class="bi bi-pencil"></i> @Localizer["Edit"]</a>
+                <button type="button" id="gdDelete" class="gd-menu-item is-danger" role="menuitem"
+                        data-group-id="@Model.Id"
+                        data-confirm-text="@Localizer["ConfirmDeleteGroup"]"
+                        data-ok-text="@Localizer["DeleteGroupBtn"]"
+                        data-cancel-text="@Localizer["CancelBtn"]"
+                        data-redirect-url="@Model.BackUrl">
+                    <i class="bi bi-trash"></i> @Localizer["DeleteGroupBtn"]
+                </button>
+            </div>
         </div>
     }
 </div>
