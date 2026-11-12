@@ -30,13 +30,27 @@ namespace EduPlatform.Services
         public string? Status { get; set; }
     }
 
+    /// <summary>Library.Api-ի by-ids պատասխանը:</summary>
+    public class LibraryByIdsResult
+    {
+        /// <summary>Ցուցադրվող նյութերը:</summary>
+        public List<LibraryBookDto> Items { get; set; } = new();
+
+        /// <summary>
+        /// Library-ում ԻՍԿԱՊԵՍ ջնջված նյութերի id-ները (Library-ն է հաստատում)։
+        /// Միայն սրանք են հեռացվում «Իմ գրադարան»-ից։
+        /// Թաքցված / չերաշխավորված նյութերն այստեղ չեն լինում։
+        /// </summary>
+        public List<int> DeletedIds { get; set; } = new();
+    }
+
     public interface ILibraryApiClient
     {
         /// <returns>
-        /// Library-ում դեռ գոյություն ունեցող նյութերը,
+        /// Ցուցադրվող նյութերը և ջնջվածների id-ները,
         /// կամ null՝ եթե Library-ն անհասանելի է (այդ դեպքում ոչինչ չհեռացնել):
         /// </returns>
-        Task<List<LibraryBookDto>?> GetByIdsAsync(IEnumerable<int> ids);
+        Task<LibraryByIdsResult?> GetByIdsAsync(IEnumerable<int> ids);
     }
 
     public class LibraryApiClient : ILibraryApiClient
@@ -46,32 +60,65 @@ namespace EduPlatform.Services
 
         private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
         private readonly HttpClient _http;
+        private readonly ILogger<LibraryApiClient> _log;
 
-        public LibraryApiClient(HttpClient http) => _http = http;
+        public LibraryApiClient(HttpClient http, ILogger<LibraryApiClient> log)
+        {
+            _http = http;
+            _log = log;
+        }
 
-        public async Task<List<LibraryBookDto>?> GetByIdsAsync(IEnumerable<int> ids)
+        public async Task<LibraryByIdsResult?> GetByIdsAsync(IEnumerable<int> ids)
         {
             var idList = ids.Distinct().ToList();
-            if (idList.Count == 0) return new();
-
-            var result = new List<LibraryBookDto>();
+            var result = new LibraryByIdsResult();
+            if (idList.Count == 0) return result;
 
             try
             {
                 foreach (var batch in idList.Chunk(BatchSize))
                 {
                     var res = await _http.PostAsJsonAsync("api/edu-materials/by-ids", new { ids = batch });
-                    if (!res.IsSuccessStatusCode) return null;
+                    if (!res.IsSuccessStatusCode)
+                    {
+                        _log.LogWarning("Library.Api by-ids returned {Status}", (int)res.StatusCode);
+                        return null;
+                    }
 
-                    var items = await res.Content.ReadFromJsonAsync<List<LibraryBookDto>>(Json);
-                    if (items is null) return null;
-                    result.AddRange(items);
+                    var part = await ReadResultAsync(res);
+                    if (part is null) return null;
+
+                    result.Items.AddRange(part.Items);
+
+                    // պաշտպանություն՝ ընդունում ենք միայն այն id-ները, որ մենք ենք հարցրել
+                    result.DeletedIds.AddRange(part.DeletedIds.Where(batch.Contains));
                 }
 
                 return result;
             }
-            catch (HttpRequestException) { return null; }
-            catch (TaskCanceledException) { return null; }
+            catch (HttpRequestException ex) { _log.LogWarning(ex, "Library.Api unreachable"); return null; }
+            catch (TaskCanceledException ex) { _log.LogWarning(ex, "Library.Api timeout"); return null; }
+            catch (JsonException ex) { _log.LogWarning(ex, "Library.Api returned invalid JSON"); return null; }
+        }
+
+        /// <summary>
+        /// Աջակցում է երկու ձևաչափի.
+        /// նոր՝ <c>{ items: [...], deletedIds: [...] }</c>,
+        /// հին՝ <c>[...]</c> (այդ դեպքում DeletedIds-ը դատարկ է → ոչինչ չի ջնջվում)։
+        /// </summary>
+        private static async Task<LibraryByIdsResult?> ReadResultAsync(HttpResponseMessage res)
+        {
+            var root = await res.Content.ReadFromJsonAsync<JsonElement>(Json);
+
+            return root.ValueKind switch
+            {
+                JsonValueKind.Object => root.Deserialize<LibraryByIdsResult>(Json),
+                JsonValueKind.Array => new LibraryByIdsResult
+                {
+                    Items = root.Deserialize<List<LibraryBookDto>>(Json) ?? new()
+                },
+                _ => null
+            };
         }
     }
 }

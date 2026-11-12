@@ -135,7 +135,9 @@ namespace EduPlatform.Controllers
 
         /// <summary>
         /// Օգտատիրոջ տվյալ տեսակի պահվածները (նորերը՝ առաջինը)՝ Library.Api-ի տվյալներով։
-        /// Library-ում ջնջված նյութերը հեռացվում են մեր աղյուսակից։
+        /// Մեր աղյուսակից հեռացվում են ՄԻԱՅՆ այն նյութերը, որոնց ջնջումը Library-ն հաստատել է (DeletedIds)։
+        /// Library-ն չվերադարձրած, բայց չջնջված նյութերը (թաքցված, չերաշխավորված) չեն ցուցադրվում, բայց մնում են
+        /// և կերևան, երբ Library-ում նորից հասանելի դառնան։
         /// Library-ն անհասանելի է → ոչինչ չենք հեռացնում, ցուցակը դատարկ է։
         /// </summary>
         private async Task<List<(UserLibraryMaterial Saved, LibraryBookDto Book)>> LoadSavedAsync(string materialType)
@@ -145,20 +147,25 @@ namespace EduPlatform.Controllers
                 .OrderByDescending(x => x.SavedAt)
                 .ToListAsync();
 
-            var books = await _library.GetByIdsAsync(saved.Select(s => s.LibraryMaterialId));
-            if (books is null) return new();
+            var result = await _library.GetByIdsAsync(saved.Select(s => s.LibraryMaterialId));
+            if (result is null) return new();
 
-            var byId = books.ToDictionary(b => b.Id);
-
-            var orphans = saved.Where(s => !byId.ContainsKey(s.LibraryMaterialId)).ToList();
-            if (orphans.Count > 0)
+            var deleted = result.DeletedIds.ToHashSet();
+            if (deleted.Count > 0)
             {
-                _db.UserLibraryMaterials.RemoveRange(orphans);
-                await _db.SaveChangesAsync();
+                await _db.UserLibraryMaterials
+                    .Where(x => x.UserId == CurrentUserId
+                             && x.MaterialType == materialType
+                             && deleted.Contains(x.LibraryMaterialId))
+                    .ExecuteDeleteAsync();
             }
 
+            var byId = result.Items
+                .GroupBy(b => b.Id)
+                .ToDictionary(g => g.Key, g => g.First());
+
             return saved
-                .Where(s => byId.ContainsKey(s.LibraryMaterialId))
+                .Where(s => !deleted.Contains(s.LibraryMaterialId) && byId.ContainsKey(s.LibraryMaterialId))
                 .Select(s => (s, byId[s.LibraryMaterialId]))
                 .ToList();
         }
