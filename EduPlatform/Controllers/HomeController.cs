@@ -1,4 +1,4 @@
-using EduPlatform.Data.Models;
+﻿using EduPlatform.Data.Models;
 using EduPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
@@ -21,12 +21,10 @@ namespace EduPlatform.Controllers
             return View();
         }
 
-        /// <summary>Մուտքից հետո մեկնարկային էջը՝ ըստ դերի (սովորող → իր անձնական էջ, մնացածը՝ ուսուցչի էջ)</summary>
+        /// <summary>Մուտքից հետո մեկնարկային էջը՝ անձնական էջ (ուսուցիչը և սովորողը՝ նույն հասցեով)</summary>
         public IActionResult Start()
         {
-            return User.IsInRole("Pupil")
-                ? RedirectToAction("Index", "Pupil")
-                : RedirectToAction("Index", "Teacher");
+            return RedirectToAction("Index", "Profile");
         }
 
         [AllowAnonymous]

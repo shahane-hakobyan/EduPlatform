@@ -16,11 +16,11 @@ using System.Text.Json;
 namespace EduPlatform.Controllers
 {
     /// <summary>
-    /// «ԱԲ զրուցարան»՝ զրույցներ Claude-ի հետ։ Էջը՝ /Teacher/AIChat, ձախ մասում՝ նոր զրույց, ԱԲ ագենտներ, ամրացված և նախկին զրույցներ։
+    /// «ԱԲ զրուցարան»՝ զրույցներ Claude-ի հետ։ Էջը՝ /AIChat, ձախ մասում՝ նոր զրույց, ԱԲ ագենտներ, ամրացված և նախկին զրույցներ։
     /// Պատասխանը հոսում է (streaming) բրաուզեր՝ տեքստային կտորներով։
     /// </summary>
     [Authorize(Roles = "Teacher")]
-    [Route("Teacher/AIChat")]
+    [Route("AIChat")]
     public class AiChatController : Controller
     {
         private const int MaxFiles = 5;

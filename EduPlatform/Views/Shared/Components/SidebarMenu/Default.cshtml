@@ -2,7 +2,7 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
 @{
     var currentPath = (Context.Request.Path.Value ?? "").TrimEnd('/');
-    if (string.IsNullOrEmpty(currentPath) || currentPath.Equals("/Teacher", StringComparison.OrdinalIgnoreCase)) currentPath = "/Teacher/Index";
+    if (string.IsNullOrEmpty(currentPath)) currentPath = "/Profile";
     var footerItems = (List<SidebarMenuItem>)ViewBag.FooterItems;
 
     // Ընթացիկ էջին համապատասխանող մենյուի կետը՝ ամենաերկար համընկնող հղումը։

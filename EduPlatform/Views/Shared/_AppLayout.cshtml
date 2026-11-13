@@ -25,7 +25,7 @@
 <body>
     @{
         var currentPath = Context.Request.Path.Value;
-        if (string.IsNullOrEmpty(currentPath) || currentPath == "/") currentPath = "/Teacher";
+        if (string.IsNullOrEmpty(currentPath) || currentPath == "/") currentPath = "/Profile";
         var sidebarItems = ViewBag.SidebarItems as List<SidebarMenuItem> ?? new();
         var sidebarFooterItems = ViewBag.SidebarFooterItems as List<SidebarMenuItem> ?? new();
 
