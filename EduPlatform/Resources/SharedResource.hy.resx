@@ -541,4 +541,7 @@
   <data name="AiChatLimitReached" xml:space="preserve"><value>Այսօրվա սահմանաչափը լրացել է ({0} հարց)։ Փորձեք վաղը։</value></data>
   <data name="AiChatClearHistory" xml:space="preserve"><value>Ջնջել ամբողջ պատմությունը</value></data>
   <data name="AiChatClearHistoryConfirm" xml:space="preserve"><value>Ջնջե՞լ ամբողջ պատմությունը։ Ամրացված զրույցները կմնան։</value></data>
+  <data name="Assessment" xml:space="preserve"><value>Գնահատում</value></data>
+  <data name="MyDiary" xml:space="preserve"><value>Իմ օրագիրը</value></data>
+  <data name="PageInDevelopment" xml:space="preserve"><value>Էջը մշակման փուլում է</value></data>
 </root>

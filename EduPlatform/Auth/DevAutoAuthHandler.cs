@@ -12,20 +12,27 @@ namespace EduPlatform.Auth;
 public class DevAutoAuthHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,
     ILoggerFactory logger,
-    UrlEncoder encoder) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
+    UrlEncoder encoder,
+    IConfiguration config) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
     public const string SchemeName = "DevAuto";
 
     // նույնն է, ինչ Library.Site-ի և EduPlatform.Api-ի թեստային ուսուցիչը
     public const string TestUserId = "11111111-1111-1111-1111-111111111111";
 
+    // թեստային սովորող
+    public const string TestPupilId = "22222222-2222-2222-2222-222222222222";
+
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
+        // appsettings-ում "DemoAutoLoginRole": "Pupil"՝ սովորողի տեսքը ստուգելու համար (լռելյայն՝ Teacher)
+        var isPupil = string.Equals(config["DemoAutoLoginRole"], "Pupil", StringComparison.OrdinalIgnoreCase);
+
         var identity = new ClaimsIdentity(new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, TestUserId),
-            new Claim(ClaimTypes.Name, "Test Teacher"),
-            new Claim(ClaimTypes.Role, "Teacher")
+            new Claim(ClaimTypes.NameIdentifier, isPupil ? TestPupilId : TestUserId),
+            new Claim(ClaimTypes.Name, isPupil ? "Test Pupil" : "Test Teacher"),
+            new Claim(ClaimTypes.Role, isPupil ? "Pupil" : "Teacher")
         }, SchemeName);
 
         var ticket = new AuthenticationTicket(new ClaimsPrincipal(identity), SchemeName);

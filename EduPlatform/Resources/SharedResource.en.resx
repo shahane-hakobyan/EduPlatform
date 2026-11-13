@@ -546,4 +546,7 @@
   <data name="AiChatLimitReached" xml:space="preserve"><value>You have reached today's limit ({0} requests). Please try again tomorrow.</value></data>
   <data name="AiChatClearHistory" xml:space="preserve"><value>Delete all history</value></data>
   <data name="AiChatClearHistoryConfirm" xml:space="preserve"><value>Delete all chat history? Pinned chats will stay.</value></data>
+  <data name="Assessment" xml:space="preserve"><value>Assessment</value></data>
+  <data name="MyDiary" xml:space="preserve"><value>My diary</value></data>
+  <data name="PageInDevelopment" xml:space="preserve"><value>This page is under development</value></data>
 </root>

@@ -546,5 +546,8 @@
   <data name="AiChatLimitReached" xml:space="preserve"><value>Вы достигли дневного лимита ({0} запросов). Попробуйте завтра.</value></data>
   <data name="AiChatClearHistory" xml:space="preserve"><value>Удалить всю историю</value></data>
   <data name="AiChatClearHistoryConfirm" xml:space="preserve"><value>Удалить всю историю чатов? Закреплённые чаты останутся.</value></data>
+  <data name="Assessment" xml:space="preserve"><value>Оценивание</value></data>
+  <data name="MyDiary" xml:space="preserve"><value>Мой дневник</value></data>
+  <data name="PageInDevelopment" xml:space="preserve"><value>Страница в разработке</value></data>
 
 </root>

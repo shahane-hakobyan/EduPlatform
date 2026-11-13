@@ -2,6 +2,7 @@ using EduPlatform.Helpers;
 using EduPlatform.Resources;
 using EduPlatform.ViewModels;
 using Microsoft.Extensions.Localization;
+using System.Security.Claims;
 
 namespace EduPlatform.Services
 {
@@ -9,6 +10,12 @@ namespace EduPlatform.Services
     {
         List<SidebarMenuItem> ForTeacher();
         List<SidebarMenuItem> FooterForTeacher();
+        List<SidebarMenuItem> ForPupil();
+        List<SidebarMenuItem> FooterForPupil();
+
+        /// <summary>Մենյուն՝ ըստ մուտք գործած օգտատիրոջ դերի (Pupil → սովորողի, մնացածը՝ ուսուցչի)</summary>
+        List<SidebarMenuItem> ForUser(ClaimsPrincipal user);
+        List<SidebarMenuItem> FooterForUser(ClaimsPrincipal user);
     }
 
     public class SidebarMenuBuilder : ISidebarMenuBuilder
@@ -69,5 +76,37 @@ namespace EduPlatform.Services
             Settings("/Teacher/Settings"),
             Logout(),
         };
+
+        // ── Սովորողի մենյու ───────────────────────────────────────────────
+        public List<SidebarMenuItem> ForPupil() => new() {
+            PersonalPage("/Pupil/Index"),
+            MyLibrary("/Library"),
+            new() { Label = _l["MyBookshelf"], IconSvg = SidebarIcons.Repository, Children = {
+                new() { Label = _l["MyTools"], IconSvg = SidebarIcons.Tools, Url = "/Repository/MyTools" },
+                new() { Label = _l["MyCreatedMaterials"], IconSvg = SidebarIcons.CreatedMaterials, Url = "/Repository/MyCreatedMaterials" },
+            }},
+            new() { Label = _l["Assignments"], IconSvg = SidebarIcons.Assignments, Url = "/Pupil/Assignments" },
+            new() { Label = _l["Assessment"], IconSvg = SidebarIcons.Assessment, Children = {
+                new() { Label = _l["MyDiary"], IconSvg = SidebarIcons.Journal, Url = "/Pupil/Assessment/MyDiary" },
+                new() { Label = _l["AIAssessment"], IconSvg = SidebarIcons.AIScore, Url = "/Pupil/Assessment/AIAssessment" },
+            }},
+            Groups("/Groups"),
+            new() { Label = _l["Messages"], IconSvg = SidebarIcons.Messages, Url = "/Pupil/Messages" },
+            new() { Label = _l["AIChat"], IconSvg = SidebarIcons.AIChat, Url = "/Pupil/AIChat" },
+        };
+
+        public List<SidebarMenuItem> FooterForPupil() => new() {
+            new() { Label = _l["MyStatistics"], IconSvg = SidebarIcons.Statistics, Url = "/Pupil/MyStatistics" },
+            Settings("/Pupil/Settings"),
+            Logout(),
+        };
+
+        // ── Ըստ դերի ─────────────────────────────────────────────────────
+        public List<SidebarMenuItem> ForUser(ClaimsPrincipal user) =>
+            user.IsInRole("Pupil") ? ForPupil() : ForTeacher();
+
+        public List<SidebarMenuItem> FooterForUser(ClaimsPrincipal user) =>
+            user.IsInRole("Pupil") ? FooterForPupil() : FooterForTeacher();
     }
 }
+

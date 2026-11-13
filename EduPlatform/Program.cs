@@ -120,7 +120,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Teacher}/{action=Index}/{id?}")
+    pattern: "{controller=Home}/{action=Start}/{id?}")
     .WithStaticAssets();
 
 // ԺԱՄԱՆԱԿԱՎՈՐ՝ ստուգելու համար, թե սերվերում ինչ build և ինչ կարգավորում է աշխատում: Ստուգելուց հետո ջնջել:

@@ -21,6 +21,14 @@ namespace EduPlatform.Controllers
             return View();
         }
 
+        /// <summary>Մուտքից հետո մեկնարկային էջը՝ ըստ դերի (սովորող → իր անձնական էջ, մնացածը՝ ուսուցչի էջ)</summary>
+        public IActionResult Start()
+        {
+            return User.IsInRole("Pupil")
+                ? RedirectToAction("Index", "Pupil")
+                : RedirectToAction("Index", "Teacher");
+        }
+
         [AllowAnonymous]
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
