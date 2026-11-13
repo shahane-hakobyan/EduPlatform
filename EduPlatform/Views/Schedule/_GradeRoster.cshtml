@@ -1,0 +1,27 @@
+﻿@model EduPlatform.ViewModels.GradeRosterViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+
+<div id="gradeRosterBackdrop" class="grade-roster-backdrop"></div>
+<div id="gradeRosterModal" class="grade-roster-modal">
+    <div class="grade-roster-header">
+        <div class="d-flex align-items-center gap-2">
+            <span class="grade-roster-icon"><i class="bi bi-people-fill"></i></span>
+            <div>
+                <h3 class="grade-roster-title mb-0">@Model.GradeName @Localizer["Grade"]</h3>
+                <p class="grade-roster-sub mb-0">@Model.Pupils.Count @Localizer["Pupils"]</p>
+            </div>
+        </div>
+        <button type="button" id="gradeRosterCloseBtn" class="grade-roster-close-btn" aria-label="@Localizer["Close"]">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+    <div class="grade-roster-grid">
+        @foreach (var p in Model.Pupils)
+        {
+            <div class="grade-roster-pupil">
+                <div class="grade-roster-avatar" style="background-image:url('@p.PhotoUrl')"></div>
+                <div class="grade-roster-name">@p.Name</div>
+            </div>
+        }
+    </div>
+</div>
