@@ -78,7 +78,7 @@
         const gradeId = gradeEl.getAttribute('data-grade-id');
         if (!gradeId) return;
 
-        fetch('/Teacher/GradeRoster?gradeId=' + encodeURIComponent(gradeId))
+        fetch('/Schedule/GradeRoster?gradeId=' + encodeURIComponent(gradeId))
             .then(r => r.text())
             .then(html => {
                 document.getElementById('gradeRosterContainer').innerHTML = html;
@@ -166,7 +166,7 @@
         document.querySelectorAll('.schedule-week-row').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 const day = btn.getAttribute('data-day');
-                fetch('/Teacher/ScheduleDayContent?day=' + encodeURIComponent(day))
+                fetch('/Schedule/DayContent?day=' + encodeURIComponent(day))
                     .then(r => r.text())
                     .then(html => {
                         document.getElementById('teacherScheduleCard').outerHTML = html;
@@ -184,7 +184,7 @@
 
         openBtn.addEventListener('click', function () {
             const day = openBtn.getAttribute('data-day');
-            fetch('/Teacher/ScheduleEdit?day=' + encodeURIComponent(day))
+            fetch('/Schedule/Edit?day=' + encodeURIComponent(day))
                 .then(r => r.text())
                 .then(html => {
                     document.getElementById('scheduleEditModalContainer').innerHTML = html;
@@ -453,7 +453,7 @@
                 return;
             }
 
-            fetch('/Teacher/ScheduleSave', {
+            fetch('/Schedule/Save', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ day: day, rows: rows })
@@ -461,7 +461,7 @@
                 .then(r => r.json())
                 .then(function () {
                     closeModal();
-                    return fetch('/Teacher/ScheduleDayContent?day=' + encodeURIComponent(day));
+                    return fetch('/Schedule/DayContent?day=' + encodeURIComponent(day));
                 })
                 .then(r => r.text())
                 .then(html => {

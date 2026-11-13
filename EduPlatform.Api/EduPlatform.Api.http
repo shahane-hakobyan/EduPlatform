@@ -1,6 +1,9 @@
 @EduPlatform.Api_HostAddress = http://localhost:5207
 
-GET {{EduPlatform.Api_HostAddress}}/weatherforecast/
+# ընթացիկ թեստային ուսուցչի պահած նյութերը (Development / DemoAutoLogin)
+GET {{EduPlatform.Api_HostAddress}}/api/user-library
+X-Test-User: 11111111-1111-1111-1111-111111111111
+X-Test-Role: Teacher
 Accept: application/json
 
 ###

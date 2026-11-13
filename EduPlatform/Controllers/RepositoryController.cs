@@ -1,4 +1,4 @@
-using EduPlatform.Services;
+﻿using EduPlatform.Services;
 using EduPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,12 +24,11 @@ namespace EduPlatform.Controllers
             _config = config;
         }
 
-        // Կողային մենյուն ամեն էջի համար
-        // TODO (սովորողի քայլ)՝ սովորողի համար՝ ForPupil()
+        // Կողային մենյուն ամեն էջի համար  (ըստ դերի՝ ուսուցչի կամ սովորողի)
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+            ViewBag.SidebarItems = _menuBuilder.ForUser(User);
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForUser(User);
             base.OnActionExecuting(context);
         }
 

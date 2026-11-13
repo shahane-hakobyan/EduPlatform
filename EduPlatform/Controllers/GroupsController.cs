@@ -1,4 +1,4 @@
-using EduPlatform.Data;
+﻿using EduPlatform.Data;
 using EduPlatform.Data.Models;
 using EduPlatform.Resources;
 using EduPlatform.Services;
@@ -39,12 +39,11 @@ namespace EduPlatform.Controllers
             _roster = roster;
         }
 
-        // Կողային մենյուն ամեն էջի համար
-        // TODO (սովորողի քայլ)՝ սովորողի համար՝ ForPupil()
+        // Կողային մենյուն ամեն էջի համար  (ըստ դերի՝ ուսուցչի կամ սովորողի)
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+            ViewBag.SidebarItems = _menuBuilder.ForUser(User);
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForUser(User);
             base.OnActionExecuting(context);
         }
 
