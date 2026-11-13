@@ -37,8 +37,8 @@ namespace EduPlatform.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+            ViewBag.SidebarItems = _menuBuilder.ForUser(User);
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForUser(User);
             ViewBag.Schedule = BuildScheduleViewModel(null);
 
             var profile = new TeacherProfileViewModel
@@ -217,8 +217,8 @@ namespace EduPlatform.Controllers
         [HttpGet]
         public IActionResult Messages()
         {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+            ViewBag.SidebarItems = _menuBuilder.ForUser(User);
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForUser(User);
             return View("~/Views/Teacher/Messages.cshtml");
         }
 

@@ -40,8 +40,8 @@ namespace EduPlatform.Controllers
         // TODO (հաջորդ քայլ)՝ սովորողի համար՝ ForPupil()
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            ViewBag.SidebarItems = _menuBuilder.ForTeacher();
-            ViewBag.SidebarFooterItems = _menuBuilder.FooterForTeacher();
+            ViewBag.SidebarItems = _menuBuilder.ForUser(User);
+            ViewBag.SidebarFooterItems = _menuBuilder.FooterForUser(User);
             base.OnActionExecuting(context);
         }
 
