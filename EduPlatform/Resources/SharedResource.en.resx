@@ -549,4 +549,41 @@
   <data name="Assessment" xml:space="preserve"><value>Assessment</value></data>
   <data name="MyDiary" xml:space="preserve"><value>My diary</value></data>
   <data name="PageInDevelopment" xml:space="preserve"><value>This page is under development</value></data>
+
+  <data name="StatisticsSubtitle" xml:space="preserve"><value>Overall activity of your materials</value></data>
+  <data name="Analytics" xml:space="preserve"><value>Analytics</value></data>
+  <data name="AllTypes" xml:space="preserve"><value>All</value></data>
+  <data name="FoldersFilter" xml:space="preserve"><value>Folders</value></data>
+  <data name="CrosswordsFilter" xml:space="preserve"><value>Crosswords</value></data>
+  <data name="DigitizedFilter" xml:space="preserve"><value>Digitized materials</value></data>
+  <data name="StatsPeriod7d" xml:space="preserve"><value>7 days</value></data>
+  <data name="StatsPeriod30d" xml:space="preserve"><value>30 days</value></data>
+  <data name="StatsPeriod3m" xml:space="preserve"><value>3 months</value></data>
+  <data name="StatsPeriodYear" xml:space="preserve"><value>1 year</value></data>
+  <data name="MyMaterials" xml:space="preserve"><value>My materials</value></data>
+  <data name="TotalPublished" xml:space="preserve"><value>Total published</value></data>
+  <data name="TotalViews" xml:space="preserve"><value>Total views</value></data>
+  <data name="TotalLikes" xml:space="preserve"><value>Total likes</value></data>
+  <data name="TotalShares" xml:space="preserve"><value>Total shares</value></data>
+  <data name="FromPreviousMonth" xml:space="preserve"><value>from previous month</value></data>
+  <data name="ViewsDynamics" xml:space="preserve"><value>Views dynamics</value></data>
+  <data name="Last12Months" xml:space="preserve"><value>Last 12 months</value></data>
+  <data name="Likes" xml:space="preserve"><value>Likes</value></data>
+  <data name="TopMaterials" xml:space="preserve"><value>Top materials</value></data>
+  <data name="ByViews" xml:space="preserve"><value>By number of views</value></data>
+  <data name="TopNBadge" xml:space="preserve"><value>Top {0}</value></data>
+  <data name="NoTopMaterials" xml:space="preserve"><value>No views yet</value></data>
+  <data name="StatsSourcesUnavailable" xml:space="preserve"><value>Some data is temporarily unavailable</value></data>
+  <data name="MonthJan" xml:space="preserve"><value>Jan</value></data>
+  <data name="MonthFeb" xml:space="preserve"><value>Feb</value></data>
+  <data name="MonthMar" xml:space="preserve"><value>Mar</value></data>
+  <data name="MonthApr" xml:space="preserve"><value>Apr</value></data>
+  <data name="MonthMay" xml:space="preserve"><value>May</value></data>
+  <data name="MonthJun" xml:space="preserve"><value>Jun</value></data>
+  <data name="MonthJul" xml:space="preserve"><value>Jul</value></data>
+  <data name="MonthAug" xml:space="preserve"><value>Aug</value></data>
+  <data name="MonthSep" xml:space="preserve"><value>Sep</value></data>
+  <data name="MonthOct" xml:space="preserve"><value>Oct</value></data>
+  <data name="MonthNov" xml:space="preserve"><value>Nov</value></data>
+  <data name="MonthDec" xml:space="preserve"><value>Dec</value></data>
 </root>

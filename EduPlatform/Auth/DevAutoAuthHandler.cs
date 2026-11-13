@@ -18,7 +18,7 @@ public class DevAutoAuthHandler(
     public const string SchemeName = "DevAuto";
 
     // նույնն է, ինչ Library.Site-ի և EduPlatform.Api-ի թեստային ուսուցիչը
-    public const string TestUserId = "11111111-1111-1111-1111-111111111111";
+    public const string TestUserId = "b8a39b93-c8f8-42d2-aba5-5005baf3f1f4";
 
     // թեստային սովորող
     public const string TestPupilId = "22222222-2222-2222-2222-222222222222";

@@ -18,7 +18,7 @@ namespace EduPlatform.Controllers
         // Թույլատրված էջերը (թարգմանության բանալիներ)՝ մնացածը 404
         private static readonly HashSet<string> Pages = new(StringComparer.OrdinalIgnoreCase)
         {
-            "Messages", "MyStatistics", "Settings",                       // երկուսի համար
+                       "Messages", "Settings",                                       // երկուսի համար
             "MyExpertise", "MyLogbook", "AIAssessment",                    // ուսուցիչ
             "Assignments", "MyDiary", "Groups", "AIChat",                  // սովորող
         };

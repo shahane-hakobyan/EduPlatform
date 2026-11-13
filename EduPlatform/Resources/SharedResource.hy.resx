@@ -544,4 +544,41 @@
   <data name="Assessment" xml:space="preserve"><value>Գնահատում</value></data>
   <data name="MyDiary" xml:space="preserve"><value>Իմ օրագիրը</value></data>
   <data name="PageInDevelopment" xml:space="preserve"><value>Էջը մշակման փուլում է</value></data>
+
+  <data name="StatisticsSubtitle" xml:space="preserve"><value>Ձեր նյութերի ընդհանուր ակտիվությունը</value></data>
+  <data name="Analytics" xml:space="preserve"><value>Վերլուծություն</value></data>
+  <data name="AllTypes" xml:space="preserve"><value>Բոլորը</value></data>
+  <data name="FoldersFilter" xml:space="preserve"><value>Թղթապանակներ</value></data>
+  <data name="CrosswordsFilter" xml:space="preserve"><value>Խաչբառներ</value></data>
+  <data name="DigitizedFilter" xml:space="preserve"><value>Թվայնացված նյութեր</value></data>
+  <data name="StatsPeriod7d" xml:space="preserve"><value>7 օր</value></data>
+  <data name="StatsPeriod30d" xml:space="preserve"><value>30 օր</value></data>
+  <data name="StatsPeriod3m" xml:space="preserve"><value>3 ամիս</value></data>
+  <data name="StatsPeriodYear" xml:space="preserve"><value>1 տարի</value></data>
+  <data name="MyMaterials" xml:space="preserve"><value>Իմ նյութերը</value></data>
+  <data name="TotalPublished" xml:space="preserve"><value>Ընդամենը հրապարակված</value></data>
+  <data name="TotalViews" xml:space="preserve"><value>Ընդհանուր դիտումներ</value></data>
+  <data name="TotalLikes" xml:space="preserve"><value>Ընդհանուր հավանումներ</value></data>
+  <data name="TotalShares" xml:space="preserve"><value>Ընդհանուր տարածումներ</value></data>
+  <data name="FromPreviousMonth" xml:space="preserve"><value>նախորդ ամսից</value></data>
+  <data name="ViewsDynamics" xml:space="preserve"><value>Դիտումների դինամիկա</value></data>
+  <data name="Last12Months" xml:space="preserve"><value>Վերջին 12 ամիսների ընթացքում</value></data>
+  <data name="Likes" xml:space="preserve"><value>Հավանումներ</value></data>
+  <data name="TopMaterials" xml:space="preserve"><value>Թոփ նյութեր</value></data>
+  <data name="ByViews" xml:space="preserve"><value>Ըստ դիտումների քանակի</value></data>
+  <data name="TopNBadge" xml:space="preserve"><value>Լավագույնը {0}-ը</value></data>
+  <data name="NoTopMaterials" xml:space="preserve"><value>Դեռ դիտումներ չկան</value></data>
+  <data name="StatsSourcesUnavailable" xml:space="preserve"><value>Որոշ տվյալներ ժամանակավորապես հասանելի չեն</value></data>
+  <data name="MonthJan" xml:space="preserve"><value>Հնվ</value></data>
+  <data name="MonthFeb" xml:space="preserve"><value>Փտր</value></data>
+  <data name="MonthMar" xml:space="preserve"><value>Մրտ</value></data>
+  <data name="MonthApr" xml:space="preserve"><value>Ապր</value></data>
+  <data name="MonthMay" xml:space="preserve"><value>Մյս</value></data>
+  <data name="MonthJun" xml:space="preserve"><value>Հնս</value></data>
+  <data name="MonthJul" xml:space="preserve"><value>Հլս</value></data>
+  <data name="MonthAug" xml:space="preserve"><value>Օգս</value></data>
+  <data name="MonthSep" xml:space="preserve"><value>Սեպ</value></data>
+  <data name="MonthOct" xml:space="preserve"><value>Հոկ</value></data>
+  <data name="MonthNov" xml:space="preserve"><value>Նոյ</value></data>
+  <data name="MonthDec" xml:space="preserve"><value>Դեկ</value></data>
 </root>

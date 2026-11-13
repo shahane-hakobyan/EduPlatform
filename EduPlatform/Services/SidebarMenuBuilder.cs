@@ -72,7 +72,7 @@ namespace EduPlatform.Services
         };
 
         public List<SidebarMenuItem> FooterForTeacher() => new() {
-            new() { Label = _l["MyStatistics"], IconSvg = SidebarIcons.Statistics, Url = "/Soon/MyStatistics" },
+            new() { Label = _l["MyStatistics"], IconSvg = SidebarIcons.Statistics, Url = "/Statistics" },
             Settings("/Soon/Settings"),
             Logout(),
         };
@@ -96,7 +96,7 @@ namespace EduPlatform.Services
         };
 
         public List<SidebarMenuItem> FooterForPupil() => new() {
-            new() { Label = _l["MyStatistics"], IconSvg = SidebarIcons.Statistics, Url = "/Soon/MyStatistics" },
+            new() { Label = _l["MyStatistics"], IconSvg = SidebarIcons.Statistics, Url = "/Statistics" },
             Settings("/Soon/Settings"),
             Logout(),
         };

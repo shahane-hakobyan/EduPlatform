@@ -1,0 +1,203 @@
+﻿@model EduPlatform.ViewModels.Statistics.StatisticsPageViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduPlatform.Resources.SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["Statistics"].Value;
+
+    // Նյութի տեսակի ֆիլտրը (նույնն է ուսուցչի և սովորողի համար)
+    var types = new (string Value, string Label)[]
+    {
+        ("", Localizer["AllTypes"].Value),
+        ("folder", Localizer["FoldersFilter"].Value),
+        ("crossword", Localizer["CrosswordsFilter"].Value),
+        ("digitized", Localizer["DigitizedFilter"].Value),
+    };
+    var currentTypeLabel = types.First(t => t.Value == Model.Type).Label;
+
+    var periods = new (string Value, string Label)[]
+    {
+        ("7d", Localizer["StatsPeriod7d"].Value),
+        ("month", Localizer["StatsPeriod30d"].Value),
+        ("3m", Localizer["StatsPeriod3m"].Value),
+        ("year", Localizer["StatsPeriodYear"].Value),
+    };
+
+    string PeriodUrl(string period) => Url.Action("Index", new { period, type = Model.Type == "" ? null : Model.Type })!;
+    string TypeUrl(string type) => Url.Action("Index", new { period = Model.Period, type = type == "" ? null : type })!;
+
+    var maxTop = Model.TopMaterials.Count > 0 ? Math.Max(Model.TopMaterials.Max(m => m.ViewCount), 1) : 1;
+
+    // Գրաֆիկի տվյալները՝ JS-ի համար (JSON, ոչ HTML)
+    var chartData = new
+    {
+        labels = new[] { "MonthJan", "MonthFeb", "MonthMar", "MonthApr", "MonthMay", "MonthJun",
+                         "MonthJul", "MonthAug", "MonthSep", "MonthOct", "MonthNov", "MonthDec" }
+                 .Select(k => Localizer[k].Value),
+        views = Model.MonthlyViews,
+        likes = Model.MonthlyLikes,
+        viewsLabel = Localizer["Views"].Value,
+        likesLabel = Localizer["Likes"].Value
+    };
+}
+
+@functions {
+    // Փոփոխության տող՝ «↗ 12% նախորդ ամսից»
+    private Microsoft.AspNetCore.Html.IHtmlContent Trend(int percent)
+    {
+        var up = percent >= 0;
+        var icon = up ? "bi-graph-up-arrow" : "bi-graph-down-arrow";
+        var css = up ? "stats-trend-up" : "stats-trend-down";
+        return new Microsoft.AspNetCore.Html.HtmlString(
+            $"<div class=\"stats-trend {css}\"><i class=\"bi {icon}\"></i> {Math.Abs(percent)}% " +
+            System.Net.WebUtility.HtmlEncode(Localizer["FromPreviousMonth"].Value) + "</div>");
+    }
+}
+
+<div class="stats-page">
+
+    @* ── Վերնագիր և ֆիլտրեր ── *@
+    <div class="stats-header">
+        <div>
+            <div class="stats-eyebrow">@Localizer["Analytics"]</div>
+            <h1 class="stats-title">@Localizer["Statistics"]</h1>
+            <div class="stats-subtitle">@Localizer["StatisticsSubtitle"]</div>
+        </div>
+
+        <div class="stats-filters">
+            <div class="dropdown">
+                <button class="stats-type-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-funnel"></i>
+                    <span>@currentTypeLabel</span>
+                    <i class="bi bi-chevron-down stats-type-chevron"></i>
+                </button>
+                <ul class="dropdown-menu stats-type-menu">
+                    @foreach (var t in types)
+                    {
+                        <li>
+                            <a class="dropdown-item @(t.Value == Model.Type ? "active" : "")" href="@TypeUrl(t.Value)">@t.Label</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <div class="stats-period-tabs">
+                @foreach (var p in periods)
+                {
+                    <a href="@PeriodUrl(p.Value)" class="stats-period-tab @(p.Value == Model.Period ? "active" : "")">@p.Label</a>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (Model.FailedSources > 0)
+    {
+        <div class="stats-warning">
+            <i class="bi bi-exclamation-triangle"></i> @Localizer["StatsSourcesUnavailable"]
+        </div>
+    }
+
+    @* ── Ցուցիչ քարտեր ── *@
+    <div class="stats-cards">
+        <div class="stats-card">
+            <div class="stats-card-top">
+                <span class="stats-card-label">@Localizer["MyMaterials"]</span>
+                <span class="stats-card-icon stats-icon-purple"><i class="bi bi-folder2"></i></span>
+            </div>
+            <div class="stats-card-value">@Model.TotalMaterials.ToString("N0")</div>
+            <div class="stats-card-note">@Localizer["TotalPublished"]</div>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-card-top">
+                <span class="stats-card-label">@Localizer["TotalViews"]</span>
+                <span class="stats-card-icon stats-icon-green"><i class="bi bi-eye"></i></span>
+            </div>
+            <div class="stats-card-value">@Model.TotalViews.ToString("N0")</div>
+            @Trend(Model.ViewsChangePercent)
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-card-top">
+                <span class="stats-card-label">@Localizer["TotalLikes"]</span>
+                <span class="stats-card-icon stats-icon-orange"><i class="bi bi-heart"></i></span>
+            </div>
+            <div class="stats-card-value">@Model.TotalLikes.ToString("N0")</div>
+            @Trend(Model.LikesChangePercent)
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-card-top">
+                <span class="stats-card-label">@Localizer["TotalShares"]</span>
+                <span class="stats-card-icon stats-icon-blue"><i class="bi bi-share"></i></span>
+            </div>
+            <div class="stats-card-value">@Model.TotalShares.ToString("N0")</div>
+            @Trend(Model.SharesChangePercent)
+        </div>
+    </div>
+
+    @* ── Դիտումների դինամիկա ── *@
+    <div class="stats-panel">
+        <div class="stats-panel-header">
+            <div>
+                <div class="stats-panel-title">@Localizer["ViewsDynamics"]</div>
+                <div class="stats-panel-sub">@Localizer["Last12Months"]</div>
+            </div>
+            <div class="stats-legend">
+                <span><i class="stats-legend-dot stats-dot-views"></i> @Localizer["Views"]</span>
+                <span><i class="stats-legend-dot stats-dot-likes"></i> @Localizer["Likes"]</span>
+            </div>
+        </div>
+        <div class="stats-chart-wrap">
+            <canvas id="statsLineChart"></canvas>
+        </div>
+    </div>
+
+    @* ── Թոփ նյութեր ── *@
+    <div class="stats-panel">
+        <div class="stats-panel-header">
+            <div>
+                <div class="stats-panel-title">@Localizer["TopMaterials"]</div>
+                <div class="stats-panel-sub">@Localizer["ByViews"]</div>
+            </div>
+            @if (Model.TopMaterials.Count > 0)
+            {
+                <span class="stats-badge">@string.Format(Localizer["TopNBadge"].Value, Model.TopMaterials.Count)</span>
+            }
+        </div>
+
+        @if (Model.TopMaterials.Count == 0)
+        {
+            <div class="stats-empty">
+                <i class="bi bi-bar-chart"></i>
+                <p>@Localizer["NoTopMaterials"]</p>
+            </div>
+        }
+        else
+        {
+            <div class="stats-top-list">
+                @for (var i = 0; i < Model.TopMaterials.Count; i++)
+                {
+                    var m = Model.TopMaterials[i];
+                    var pct = (int)Math.Round(m.ViewCount * 100.0 / maxTop);
+                    <div class="stats-top-row">
+                        <span class="stats-top-rank">@(i + 1)</span>
+                        <span class="stats-top-title" title="@m.Title">@m.Title</span>
+                        <div class="stats-top-bar">
+                            <div class="stats-top-bar-fill" style="width:@pct%"></div>
+                        </div>
+                        <span class="stats-top-value">@m.ViewCount.ToString("N0")</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<script type="application/json" id="statsChartData">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(chartData))</script>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/statistics/statistics.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="~/js/statistics/statistics.js" asp-append-version="true"></script>
+}

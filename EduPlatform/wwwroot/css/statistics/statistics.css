@@ -1,0 +1,431 @@
+﻿/* «Իմ վիճակագրությունը» (/Statistics) */
+
+.stats-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ── Վերնագիր ── */
+.stats-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.stats-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.stats-title {
+    font-size: 28px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    color: var(--text-primary);
+    margin: 2px 0 4px;
+}
+
+.stats-subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.stats-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* տեսակի ֆիլտր */
+.stats-type-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+    height: 46px;
+    padding: 0 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: var(--shadow-sm);
+}
+
+.stats-type-chevron {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.stats-type-menu {
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    padding: 6px;
+    min-width: 200px;
+}
+
+    .stats-type-menu .dropdown-item {
+        border-radius: 8px;
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+        .stats-type-menu .dropdown-item.active,
+        .stats-type-menu .dropdown-item:active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+/* ժամանակաշրջան */
+.stats-period-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+}
+
+.stats-period-tab {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background .15s ease, color .15s ease;
+}
+
+    .stats-period-tab:hover {
+        background: var(--surface-alt);
+        color: var(--text-primary);
+    }
+
+    .stats-period-tab.active {
+        background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+        color: #fff;
+        font-weight: 600;
+    }
+
+.stats-warning {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: #FFF7ED;
+    border: 1px solid #FFEDD4;
+    color: #9A3412;
+    font-size: 14px;
+}
+
+/* ── Քարտեր ── */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.stats-card {
+    position: relative;
+    overflow: hidden;
+    padding: 24px;
+    min-height: 170px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+    /* դեկորատիվ շրջան ներքևի աջ անկյունում */
+    .stats-card::after {
+        content: "";
+        position: absolute;
+        right: -30px;
+        bottom: -40px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: var(--surface-alt);
+        opacity: .7;
+    }
+
+.stats-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.stats-card-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.stats-card-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.stats-icon-purple {
+    background: #EEF0FF;
+    color: var(--accent-strong);
+}
+
+.stats-icon-green {
+    background: #ECFDF5;
+    color: #10B981;
+}
+
+.stats-icon-orange {
+    background: #FFF7ED;
+    color: #F59E0B;
+}
+
+.stats-icon-blue {
+    background: #EFF6FF;
+    color: #3B82F6;
+}
+
+.stats-card-value {
+    position: relative;
+    z-index: 1;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-top: 8px;
+}
+
+.stats-card-note {
+    position: relative;
+    z-index: 1;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 10px;
+}
+
+.stats-trend {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.stats-trend-up {
+    color: #10B981;
+}
+
+.stats-trend-down {
+    color: #EF4444;
+}
+
+/* ── Վահանակներ (գրաֆիկ, թոփ) ── */
+.stats-panel {
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.stats-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.stats-panel-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stats-panel-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.stats-legend {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+    .stats-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+.stats-legend-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.stats-dot-views {
+    background: #6369D4;
+}
+
+.stats-dot-likes {
+    background: #c084fc;
+}
+
+.stats-chart-wrap {
+    position: relative;
+    height: 380px;
+}
+
+.stats-badge {
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: #EEF0FF;
+    color: var(--accent-strong);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* թոփ նյութերի ցուցակ */
+.stats-top-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.stats-top-row {
+    display: grid;
+    grid-template-columns: 32px minmax(120px, 220px) 1fr 48px;
+    align-items: center;
+    gap: 16px;
+}
+
+.stats-top-rank {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #EEF0FF;
+    color: var(--accent-strong);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stats-top-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stats-top-bar {
+    height: 18px;
+    border-radius: 999px;
+    background: var(--surface-alt);
+    overflow: hidden;
+}
+
+.stats-top-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #6369D4, #A78BFA);
+    min-width: 0;
+}
+
+.stats-top-value {
+    text-align: right;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stats-empty {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--text-muted);
+}
+
+    .stats-empty i {
+        font-size: 32px;
+        color: var(--text-faint);
+    }
+
+    .stats-empty p {
+        margin: 8px 0 0;
+        font-size: 14px;
+    }
+
+/* ── Փոքր էկրաններ ── */
+@media (max-width: 1100px) {
+    .stats-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-filters, .stats-type-btn, .stats-period-tabs {
+        width: 100%;
+    }
+
+    .stats-period-tab {
+        flex: 1;
+        text-align: center;
+        padding: 8px 6px;
+    }
+
+    .stats-panel {
+        padding: 18px;
+    }
+
+    .stats-chart-wrap {
+        height: 260px;
+    }
+
+    .stats-top-row {
+        grid-template-columns: 28px 1fr 40px;
+    }
+
+    .stats-top-bar {
+        grid-column: 2 / 4;
+        grid-row: 2;
+    }
+}

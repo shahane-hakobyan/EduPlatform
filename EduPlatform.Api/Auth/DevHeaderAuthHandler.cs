@@ -20,7 +20,7 @@ public class DevHeaderAuthHandler(
 
     // demo սերվերի (Production + DemoAutoLogin) համար թույլատրվում է ՄԻԱՅՆ այս թեստային օգտատերը,
     // որպեսզի header-ով չլինի ներկայանալ ուրիշ օգտատիրոջ անունից
-    public const string TestUserId = "11111111-1111-1111-1111-111111111111";
+    public const string TestUserId = "b8a39b93-c8f8-42d2-aba5-5005baf3f1f4";
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {

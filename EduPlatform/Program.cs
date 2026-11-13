@@ -51,6 +51,9 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "");
 builder.Services.AddScoped<ISidebarMenuBuilder, SidebarMenuBuilder>();
 builder.Services.AddScoped<IClassRosterService, ClassRosterService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
+
+// «Իմ վիճակագրությունը»՝ գործիքների (IBook, խաչբառ, ...) վիճակագրության API-ներ
+builder.Services.AddHttpClient<IMaterialStatsService, MaterialStatsService>(c => c.Timeout = TimeSpan.FromSeconds(10));
 builder.Services.AddSingleton<IFileStorageService, FileStorageService>();
 // ԱԲ զրուցարան. Claude API՝ երբ Anthropic:ApiKey-ը կարգավորված է։
 // Բանալի չկա + Development (կամ DemoAutoLogin)՝ ԴԵՄՈ ռեժիմ (պատրաստի պատասխաններ), որ կարողանաք տեսնել և փորձարկել էջը։
