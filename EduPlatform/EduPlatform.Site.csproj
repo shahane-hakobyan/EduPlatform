@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>EduPlatform</RootNamespace>
+    <UserSecretsId>3e48859b-d27f-44af-81bc-6131e4de681b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
