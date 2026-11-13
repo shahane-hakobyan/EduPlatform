@@ -17,6 +17,9 @@ public class DevAutoAuthHandler(
 {
     public const string SchemeName = "DevAuto";
 
+    /// <summary>Էջի վերևի «Ուսուցիչ / Սովորող» փոխարկիչի cookie-ն</summary>
+    public const string RoleCookie = "demo_role";
+
     // նույնն է, ինչ Library.Site-ի և EduPlatform.Api-ի թեստային ուսուցիչը
     public const string TestUserId = "b8a39b93-c8f8-42d2-aba5-5005baf3f1f4";
 
@@ -25,8 +28,9 @@ public class DevAutoAuthHandler(
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        // appsettings-ում "DemoAutoLoginRole": "Pupil"՝ սովորողի տեսքը ստուգելու համար (լռելյայն՝ Teacher)
-        var isPupil = string.Equals(config["DemoAutoLoginRole"], "Pupil", StringComparison.OrdinalIgnoreCase);
+        // Դերը՝ էջի վերևի փոխարկիչից (cookie), այլապես appsettings-ի "DemoAutoLoginRole"-ից (լռելյայն՝ Teacher)
+        var role = Request.Cookies[RoleCookie] ?? config["DemoAutoLoginRole"];
+        var isPupil = string.Equals(role, "Pupil", StringComparison.OrdinalIgnoreCase);
 
         var identity = new ClaimsIdentity(new[]
         {

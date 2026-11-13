@@ -47,6 +47,7 @@
         @await Component.InvokeAsync("SidebarMenu", new { items = sidebarItems, footerItems = sidebarFooterItems, userIp = Context.Connection.RemoteIpAddress?.ToString() })
 
         <div class="d-flex flex-column flex-grow-1">
+            <partial name="_DemoRoleSwitcher" />
             <header class="app-header d-flex align-items-center justify-content-between">
                 <h1 class="app-header-title mb-0">@pageTitle</h1>
 

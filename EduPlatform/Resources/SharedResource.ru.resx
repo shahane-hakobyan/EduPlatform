@@ -586,5 +586,9 @@
   <data name="MonthOct" xml:space="preserve"><value>Окт</value></data>
   <data name="MonthNov" xml:space="preserve"><value>Ноя</value></data>
   <data name="MonthDec" xml:space="preserve"><value>Дек</value></data>
+  <data name="CompareToPrev7d" xml:space="preserve"><value>по сравнению с предыдущими 7 днями</value></data>
+  <data name="CompareToPrevMonth" xml:space="preserve"><value>по сравнению с предыдущим месяцем</value></data>
+  <data name="CompareToPrev3m" xml:space="preserve"><value>по сравнению с предыдущими 3 месяцами</value></data>
+  <data name="CompareToPrevYear" xml:space="preserve"><value>по сравнению с предыдущим годом</value></data>
 
 </root>

@@ -581,4 +581,8 @@
   <data name="MonthOct" xml:space="preserve"><value>Հոկ</value></data>
   <data name="MonthNov" xml:space="preserve"><value>Նոյ</value></data>
   <data name="MonthDec" xml:space="preserve"><value>Դեկ</value></data>
+  <data name="CompareToPrev7d" xml:space="preserve"><value>նախորդ 7 օրվա համեմատ</value></data>
+  <data name="CompareToPrevMonth" xml:space="preserve"><value>նախորդ ամսվա համեմատ</value></data>
+  <data name="CompareToPrev3m" xml:space="preserve"><value>նախորդ 3 ամսվա համեմատ</value></data>
+  <data name="CompareToPrevYear" xml:space="preserve"><value>նախորդ տարվա համեմատ</value></data>
 </root>

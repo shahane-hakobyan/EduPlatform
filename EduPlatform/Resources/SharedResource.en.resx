@@ -586,4 +586,8 @@
   <data name="MonthOct" xml:space="preserve"><value>Oct</value></data>
   <data name="MonthNov" xml:space="preserve"><value>Nov</value></data>
   <data name="MonthDec" xml:space="preserve"><value>Dec</value></data>
+  <data name="CompareToPrev7d" xml:space="preserve"><value>vs previous 7 days</value></data>
+  <data name="CompareToPrevMonth" xml:space="preserve"><value>vs previous month</value></data>
+  <data name="CompareToPrev3m" xml:space="preserve"><value>vs previous 3 months</value></data>
+  <data name="CompareToPrevYear" xml:space="preserve"><value>vs previous year</value></data>
 </root>

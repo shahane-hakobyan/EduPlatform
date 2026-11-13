@@ -40,15 +40,24 @@
 }
 
 @functions {
-    // Փոփոխության տող՝ «↗ 12% նախորդ ամսից»
+    // Փոփոխության տող՝ «↗ 12% նախորդ 7 օրվա համեմատ» (տեքստը՝ ըստ ընտրված ժամանակաշրջանի)
     private Microsoft.AspNetCore.Html.IHtmlContent Trend(int percent)
     {
         var up = percent >= 0;
         var icon = up ? "bi-graph-up-arrow" : "bi-graph-down-arrow";
         var css = up ? "stats-trend-up" : "stats-trend-down";
+
+        var compareKey = Model.Period switch
+        {
+            "7d" => "CompareToPrev7d",
+            "3m" => "CompareToPrev3m",
+            "year" => "CompareToPrevYear",
+            _ => "CompareToPrevMonth"
+        };
+
         return new Microsoft.AspNetCore.Html.HtmlString(
             $"<div class=\"stats-trend {css}\"><i class=\"bi {icon}\"></i> {Math.Abs(percent)}% " +
-            System.Net.WebUtility.HtmlEncode(Localizer["FromPreviousMonth"].Value) + "</div>");
+            System.Net.WebUtility.HtmlEncode(Localizer[compareKey].Value) + "</div>");
     }
 }
 

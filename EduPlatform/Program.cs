@@ -137,4 +137,25 @@ app.MapGet("/diag", (HttpContext ctx) => Results.Json(new
     name = ctx.User.Identity?.Name,
     isTeacher = ctx.User.IsInRole("Teacher")
 }));
+// ՄԻԱՅՆ թեստային մուտքի ժամանակ՝ «Ուսուցիչ / Սովորող» փոխարկում (պահվում է cookie-ում, տես _DemoRoleSwitcher)
+if (autoLogin)
+{
+    app.MapGet("/demo-role/{role}", (string role, string? returnUrl, HttpContext ctx) =>
+    {
+        var value = role.Equals("Pupil", StringComparison.OrdinalIgnoreCase) ? "Pupil" : "Teacher";
+        ctx.Response.Cookies.Append(DevAutoAuthHandler.RoleCookie, value, new CookieOptions
+        {
+            HttpOnly = true,
+            IsEssential = true,
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTimeOffset.UtcNow.AddDays(30)
+        });
+
+        // միայն նույն կայքի հասցե (ոչ արտաքին հղում)
+        var isLocal = !string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith('/')
+                      && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\");
+        return Results.LocalRedirect(isLocal ? returnUrl! : "/");
+    });
+}
+
 app.Run();

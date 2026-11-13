@@ -1,0 +1,15 @@
+﻿@* ՄԻԱՅՆ թեստային մուտքի ժամանակ (DevAuto)՝ «Ուսուցիչ / Սովորող» փոխարկիչ։ Իրական մուտքի դեպքում չի երևում։ *@
+@if (User.Identity?.AuthenticationType == "DevAuto")
+{
+    var isPupil = User.IsInRole("Pupil");
+    var back = Uri.EscapeDataString("/");
+    const string pill = "padding:4px 12px;border-radius:999px;text-decoration:none;";
+    const string on = "background:#ea580c;color:#fff;font-weight:600;";
+    const string off = "color:#9a3412;";
+
+    <div style="position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:2000;display:flex;align-items:center;gap:2px;padding:3px;background:#fff7ed;border:1px solid #fdba74;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.12);font-size:13px;">
+        <span style="padding:0 8px;color:#9a3412;font-weight:600;"><i class="bi bi-person-badge"></i> Թեստ՝</span>
+        <a href="@Url.Content($"~/demo-role/Teacher?returnUrl={back}")" style="@pill@(isPupil ? off : on)">Ուսուցիչ</a>
+        <a href="@Url.Content($"~/demo-role/Pupil?returnUrl={back}")" style="@pill@(isPupil ? on : off)">Սովորող</a>
+    </div>
+}

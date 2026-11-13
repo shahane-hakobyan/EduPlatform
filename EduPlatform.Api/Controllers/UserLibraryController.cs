@@ -14,7 +14,7 @@ namespace EduPlatform.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("api/user-library")]
-    [Authorize(Roles = "Teacher")] // աշակերտների համար հետագայում՝ "Teacher,Pupil"
+    [Authorize(Roles = "Teacher,Pupil")]
     public class UserLibraryController : ControllerBase
     {
         private static readonly HashSet<string> AllowedTypes =
