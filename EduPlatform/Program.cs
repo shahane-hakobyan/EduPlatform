@@ -19,8 +19,7 @@ builder.Services.AddControllersWithViews()
     {
         // Views/Shared-ի ենթաթղթապանակները՝ կարճ անուններով գտնելու համար
         options.ViewLocationFormats.Add("/Views/Shared/{1}/{0}.cshtml");   // Views/Shared/<Controller>/
-        options.ViewLocationFormats.Add("/Views/Shared/Repository/{1}/{0}.cshtml");   // Views/Shared/Repository/<Controller>/ («Իմ գրապահոց»-ի ենթաբաժիններ)
-        options.ViewLocationFormats.Add("/Views/Shared/Layouts/{0}.cshtml");
+            options.ViewLocationFormats.Add("/Views/Shared/Layouts/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Shared/Partials/{0}.cshtml");
     });
 
